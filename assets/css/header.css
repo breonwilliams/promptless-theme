@@ -1,0 +1,394 @@
+/**
+ * Header Styles
+ *
+ * Uses scoped CSS variables following the same pattern as Promptless WP plugin sections.
+ * Header theme variant (light/dark) is controlled via Customizer settings.
+ *
+ * @package Promptless_Theme
+ * @since 1.0.0
+ */
+
+/* ==========================================================================
+   Theme Variant Scoped Variables
+   Same pattern as plugin sections - header controls its own theme independently
+   ========================================================================== */
+
+.promptless-header.aisb-section--light {
+    --section-bg: var(--aisb-color-background, #ffffff);
+    --section-surface: var(--aisb-color-surface, #f9fafb);
+    --section-text: var(--aisb-color-text, #1f2937);
+    --section-text-muted: var(--aisb-color-text-muted, #6b7280);
+    --section-border: var(--aisb-color-border, #e5e7eb);
+    --section-primary: var(--aisb-color-primary, #6366f1);
+}
+
+.promptless-header.aisb-section--dark {
+    --section-bg: var(--aisb-color-dark-background, #111827);
+    --section-surface: var(--aisb-color-dark-surface, #1f2937);
+    --section-text: var(--aisb-color-dark-text, #f9fafb);
+    --section-text-muted: var(--aisb-color-dark-text-muted, #9ca3af);
+    --section-border: var(--aisb-color-dark-border, #374151);
+    --section-primary: var(--aisb-color-primary, #6366f1);
+}
+
+/* ==========================================================================
+   Header Container
+   ========================================================================== */
+
+.promptless-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: var(--section-bg);
+    border-bottom: 1px solid var(--section-border);
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.promptless-header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    min-height: 4rem;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+}
+
+/* ==========================================================================
+   Brand / Logo
+   ========================================================================== */
+
+.promptless-header__brand {
+    flex-shrink: 0;
+}
+
+.promptless-header__brand a {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.promptless-header__brand img {
+    max-height: 40px;
+    width: auto;
+}
+
+.promptless-header__site-title {
+    font-family: var(--aisb-section-font-heading, inherit);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--section-text);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.promptless-header__site-title:hover,
+.promptless-header__site-title:focus {
+    color: var(--section-primary);
+    text-decoration: none;
+}
+
+/* Smart Color accessibility overrides for site title */
+.promptless-header.aisb-section--light .promptless-header__site-title:hover,
+.promptless-header.aisb-section--light .promptless-header__site-title:focus {
+    color: var(--aisb-smart-light-section-link, var(--section-primary));
+}
+
+.promptless-header.aisb-section--dark .promptless-header__site-title:hover,
+.promptless-header.aisb-section--dark .promptless-header__site-title:focus {
+    color: var(--aisb-smart-dark-section-link, var(--section-primary));
+}
+
+/* ==========================================================================
+   Navigation
+   ========================================================================== */
+
+.promptless-header__nav-wrapper {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.promptless-header__nav {
+    display: none;
+}
+
+@media (min-width: 768px) {
+    .promptless-header__nav {
+        display: block;
+    }
+}
+
+.promptless-header__nav-list {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.promptless-header__nav-list li {
+    margin: 0;
+    position: relative;
+}
+
+.promptless-header__nav-list a {
+    display: block;
+    padding: 0.5rem 0.75rem;
+    font-family: var(--aisb-section-font-body, inherit);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--section-text);
+    text-decoration: none;
+    /* No border-radius - minimal nav styling */
+    transition: color 0.2s ease;
+}
+
+.promptless-header__nav-list a:hover,
+.promptless-header__nav-list a:focus {
+    color: var(--aisb-smart-light-section-link, var(--section-primary));
+    background-color: transparent;
+    text-decoration: none;
+}
+
+.promptless-header__nav-list .current-menu-item > a,
+.promptless-header__nav-list .current_page_item > a {
+    color: var(--aisb-smart-light-section-link, var(--section-primary));
+}
+
+/* High-specificity override for plugin link colors on navigation
+   Specificity 0-3-1 beats plugin's 0-2-1 (.aisb-section--light a:not(.aisb-btn))
+   Nav links should use text color by default, primary color only on hover/active */
+.promptless-header.aisb-section--light .promptless-header__nav-list a {
+    color: var(--section-text);
+}
+
+.promptless-header.aisb-section--light .promptless-header__nav-list a:hover,
+.promptless-header.aisb-section--light .promptless-header__nav-list a:focus {
+    color: var(--aisb-smart-light-section-link, var(--section-primary));
+    text-decoration: none;
+}
+
+.promptless-header.aisb-section--light .promptless-header__nav-list .current-menu-item > a,
+.promptless-header.aisb-section--light .promptless-header__nav-list .current_page_item > a {
+    color: var(--aisb-smart-light-section-link, var(--section-primary));
+}
+
+/* Dark mode header link colors */
+.promptless-header.aisb-section--dark .promptless-header__nav-list a {
+    color: var(--section-text);
+}
+
+.promptless-header.aisb-section--dark .promptless-header__nav-list a:hover,
+.promptless-header.aisb-section--dark .promptless-header__nav-list a:focus {
+    color: var(--aisb-smart-dark-section-link, var(--section-primary));
+    text-decoration: none;
+}
+
+.promptless-header.aisb-section--dark .promptless-header__nav-list .current-menu-item > a,
+.promptless-header.aisb-section--dark .promptless-header__nav-list .current_page_item > a {
+    color: var(--aisb-smart-dark-section-link, var(--section-primary));
+}
+
+/* Submenu */
+.promptless-header__nav-list .sub-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 200px;
+    margin: 0;
+    padding: 0.5rem 0;
+    list-style: none;
+    background-color: var(--section-surface);
+    border: 1px solid var(--section-border);
+    border-radius: var(--aisb-section-radius-card, 8px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
+}
+
+.promptless-header__nav-list li:hover > .sub-menu,
+.promptless-header__nav-list li:focus-within > .sub-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.promptless-header__nav-list .sub-menu a {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+}
+
+/* ==========================================================================
+   Header Actions
+   ========================================================================== */
+
+.promptless-header__actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-shrink: 0;
+}
+
+/* CTA Button - Uses plugin button styles */
+.promptless-header__cta {
+    display: inline-flex;
+}
+
+/* ==========================================================================
+   Mobile Menu Toggle
+   ========================================================================== */
+
+.promptless-header__menu-toggle {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0; /* Prevent compression in flex container */
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: 4px; /* Fixed minimal radius, not tied to button settings */
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+@media (min-width: 768px) {
+    .promptless-header__menu-toggle {
+        display: none;
+    }
+}
+
+.promptless-header__menu-toggle:hover,
+.promptless-header__menu-toggle:focus {
+    background-color: var(--section-surface);
+}
+
+.promptless-header__menu-toggle-bar {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background-color: var(--section-text);
+    border-radius: 1px;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+/* Active state - X icon */
+.promptless-header__menu-toggle[aria-expanded="true"] .promptless-header__menu-toggle-bar:nth-child(1) {
+    transform: translateY(6px) rotate(45deg);
+}
+
+.promptless-header__menu-toggle[aria-expanded="true"] .promptless-header__menu-toggle-bar:nth-child(2) {
+    opacity: 0;
+}
+
+.promptless-header__menu-toggle[aria-expanded="true"] .promptless-header__menu-toggle-bar:nth-child(3) {
+    transform: translateY(-6px) rotate(-45deg);
+}
+
+/* ==========================================================================
+   Mobile Navigation
+   ========================================================================== */
+
+@media (max-width: 767px) {
+    .promptless-header__nav-wrapper {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background-color: var(--section-bg);
+        border-bottom: 1px solid var(--section-border);
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+        /* Override desktop flexbox centering for full-width mobile menu */
+        display: block;
+    }
+
+    .promptless-header__nav-wrapper.is-open {
+        max-height: 70vh;
+        overflow-y: auto;
+    }
+
+    .promptless-header__nav {
+        display: block;
+        padding: 0.5rem 0;
+    }
+
+    .promptless-header__nav-list {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+    }
+
+    .promptless-header__nav-list li {
+        width: 100%;
+    }
+
+    .promptless-header__nav-list a {
+        display: block;
+        width: 100%;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0;
+        text-align: left;
+    }
+
+    .promptless-header__nav-list .sub-menu {
+        position: static;
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+        box-shadow: none;
+        border: none;
+        border-radius: 0;
+        padding: 0;
+        background-color: transparent;
+    }
+
+    .promptless-header__nav-list .sub-menu a {
+        padding-left: 2.5rem;
+    }
+}
+
+/* ==========================================================================
+   Admin Bar Offset
+   ========================================================================== */
+
+.admin-bar .promptless-header {
+    top: 32px;
+}
+
+@media (max-width: 782px) {
+    .admin-bar .promptless-header {
+        top: 46px;
+    }
+}
+
+/* ==========================================================================
+   Skip Link
+   ========================================================================== */
+
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--section-primary);
+    color: #ffffff;
+    padding: 8px 16px;
+    z-index: 100000;
+    text-decoration: none;
+    font-weight: 500;
+    border-radius: 0 0 var(--aisb-section-radius-button, 6px) 0;
+}
+
+.skip-link:focus {
+    top: 0;
+    outline: 2px solid var(--section-primary);
+    outline-offset: 2px;
+}

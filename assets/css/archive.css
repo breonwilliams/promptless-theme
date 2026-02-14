@@ -1,0 +1,1511 @@
+/**
+ * Archive Styles
+ *
+ * Uses Post Grid section class names and styling from the Promptless WP plugin
+ * for EXACT visual consistency. NO hover animations on cards - only arrow move on links.
+ *
+ * @package Promptless_Theme
+ * @since 1.0.0
+ */
+
+/* ==========================================================================
+   Theme Variant Scoped Variables
+   ========================================================================== */
+
+.promptless-content.aisb-section--light {
+    --section-bg: var(--aisb-color-background, #ffffff);
+    --section-surface: var(--aisb-color-surface, #f9fafb);
+    --section-text: var(--aisb-color-text, #1f2937);
+    --section-text-muted: var(--aisb-color-text-muted, #6b7280);
+    --section-border: var(--aisb-color-border, #e5e7eb);
+    --section-primary: var(--aisb-color-primary, #6366f1);
+    --section-link: var(--aisb-smart-light-section-link, var(--aisb-color-primary, #6366f1));
+    --section-surface-link: var(--aisb-smart-light-surface-link, var(--aisb-color-primary, #6366f1));
+}
+
+.promptless-content.aisb-section--dark {
+    --section-bg: var(--aisb-color-dark-background, #111827);
+    --section-surface: var(--aisb-color-dark-surface, #1f2937);
+    --section-text: var(--aisb-color-dark-text, #f9fafb);
+    --section-text-muted: var(--aisb-color-dark-text-muted, #9ca3af);
+    --section-border: var(--aisb-color-dark-border, #374151);
+    --section-primary: var(--aisb-color-primary, #6366f1);
+    --section-link: var(--aisb-smart-dark-section-link, var(--aisb-color-primary, #6366f1));
+    --section-surface-link: var(--aisb-smart-dark-surface-link, var(--aisb-color-primary, #6366f1));
+}
+
+.promptless-content {
+    background-color: var(--section-bg);
+    transition: background-color 0.2s ease;
+}
+
+/* ==========================================================================
+   Entry Content Typography - Dark/Light Mode Support
+   Applies to all WordPress content rendered via the_content()
+   ========================================================================== */
+
+/* Base text color for all entry content */
+.promptless-content .entry-content {
+    color: var(--section-text);
+}
+
+/* Paragraphs */
+.promptless-content .entry-content p {
+    color: var(--section-text);
+    margin-bottom: var(--aisb-section-space-md, 1rem);
+}
+
+/* Headings */
+.promptless-content .entry-content h1,
+.promptless-content .entry-content h2,
+.promptless-content .entry-content h3,
+.promptless-content .entry-content h4,
+.promptless-content .entry-content h5,
+.promptless-content .entry-content h6 {
+    color: var(--section-text);
+}
+
+/* Lists */
+.promptless-content .entry-content ul,
+.promptless-content .entry-content ol {
+    color: var(--section-text);
+}
+
+.promptless-content .entry-content li {
+    color: var(--section-text);
+}
+
+/* Links inside content */
+.promptless-content .entry-content a {
+    color: var(--section-link);
+}
+
+.promptless-content .entry-content a:hover {
+    text-decoration: underline;
+}
+
+/* Blockquotes */
+.promptless-content .entry-content blockquote {
+    border-left: 4px solid var(--section-primary);
+    padding-left: var(--aisb-section-space-md, 1rem);
+    margin: var(--aisb-section-space-lg, 1.5rem) 0;
+    color: var(--section-text-muted);
+    font-style: italic;
+}
+
+.promptless-content .entry-content blockquote p {
+    color: var(--section-text-muted);
+}
+
+.promptless-content .entry-content blockquote cite {
+    display: block;
+    margin-top: var(--aisb-section-space-sm, 0.5rem);
+    color: var(--section-text-muted);
+    font-size: var(--aisb-section-text-sm, 0.875rem);
+    font-style: normal;
+}
+
+/* Code - Inline */
+.promptless-content .entry-content code {
+    background: var(--section-surface);
+    color: var(--section-text);
+    padding: 0.125rem 0.375rem;
+    border-radius: 4px;
+    font-size: 0.875em;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+/* Code - Block */
+.promptless-content .entry-content pre {
+    background: var(--section-surface);
+    color: var(--section-text);
+    padding: var(--aisb-section-space-md, 1rem);
+    border-radius: var(--aisb-section-radius-card, 8px);
+    overflow-x: auto;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: var(--aisb-section-text-sm, 0.875rem);
+    line-height: 1.6;
+    margin: var(--aisb-section-space-lg, 1.5rem) 0;
+}
+
+.promptless-content .entry-content pre code {
+    background: none;
+    padding: 0;
+    font-size: inherit;
+}
+
+/* Tables */
+.promptless-content .entry-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: var(--aisb-section-space-lg, 1.5rem) 0;
+}
+
+.promptless-content .entry-content th,
+.promptless-content .entry-content td {
+    padding: var(--aisb-section-space-sm, 0.75rem);
+    border: 1px solid var(--section-border);
+    text-align: left;
+    color: var(--section-text);
+}
+
+.promptless-content .entry-content th {
+    background: var(--section-surface);
+    font-weight: 600;
+}
+
+.promptless-content .entry-content thead {
+    background: var(--section-surface);
+}
+
+.promptless-content .entry-content tbody tr:nth-child(even) {
+    background: var(--section-surface);
+}
+
+/* Figures and Captions */
+.promptless-content .entry-content figure {
+    margin: var(--aisb-section-space-lg, 1.5rem) 0;
+}
+
+.promptless-content .entry-content figcaption {
+    color: var(--section-text-muted);
+    font-size: var(--aisb-section-text-sm, 0.875rem);
+    margin-top: var(--aisb-section-space-xs, 0.5rem);
+    text-align: center;
+}
+
+/* Horizontal Rules */
+.promptless-content .entry-content hr {
+    border: none;
+    border-top: 1px solid var(--section-border);
+    margin: var(--aisb-section-space-xl, 2rem) 0;
+}
+
+/* Definition Lists */
+.promptless-content .entry-content dl {
+    margin: var(--aisb-section-space-md, 1rem) 0;
+}
+
+.promptless-content .entry-content dt {
+    color: var(--section-text);
+    font-weight: 600;
+    margin-top: var(--aisb-section-space-sm, 0.5rem);
+}
+
+.promptless-content .entry-content dd {
+    color: var(--section-text);
+    margin-left: var(--aisb-section-space-md, 1rem);
+}
+
+/* Mark/Highlight */
+.promptless-content .entry-content mark {
+    background: rgba(99, 102, 241, 0.2);
+    color: var(--section-text);
+    padding: 0.125rem 0.25rem;
+    border-radius: 2px;
+}
+
+/* Keyboard Input */
+.promptless-content .entry-content kbd {
+    background: var(--section-surface);
+    color: var(--section-text);
+    padding: 0.125rem 0.375rem;
+    border: 1px solid var(--section-border);
+    border-radius: 4px;
+    font-size: 0.875em;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    box-shadow: 0 1px 0 var(--section-border);
+}
+
+/* Abbreviations */
+.promptless-content .entry-content abbr[title] {
+    color: var(--section-text);
+    text-decoration: underline dotted;
+    cursor: help;
+}
+
+/* Address */
+.promptless-content .entry-content address {
+    color: var(--section-text);
+    font-style: normal;
+    margin: var(--aisb-section-space-md, 1rem) 0;
+}
+
+/* WordPress Block-Specific Styles */
+
+/* Block Quote (Gutenberg) */
+.promptless-content .entry-content .wp-block-quote {
+    border-left: 4px solid var(--section-primary);
+    padding-left: var(--aisb-section-space-md, 1rem);
+    color: var(--section-text-muted);
+}
+
+.promptless-content .entry-content .wp-block-quote cite {
+    color: var(--section-text-muted);
+}
+
+/* Pullquote */
+.promptless-content .entry-content .wp-block-pullquote {
+    border-top: 4px solid var(--section-primary);
+    border-bottom: 4px solid var(--section-primary);
+    padding: var(--aisb-section-space-lg, 1.5rem) 0;
+    color: var(--section-text);
+}
+
+/* Code Block (Gutenberg) */
+.promptless-content .entry-content .wp-block-code {
+    background: var(--section-surface);
+    color: var(--section-text);
+}
+
+/* Preformatted */
+.promptless-content .entry-content .wp-block-preformatted {
+    background: var(--section-surface);
+    color: var(--section-text);
+}
+
+/* Table Block */
+.promptless-content .entry-content .wp-block-table table {
+    border-color: var(--section-border);
+}
+
+.promptless-content .entry-content .wp-block-table th,
+.promptless-content .entry-content .wp-block-table td {
+    border-color: var(--section-border);
+    color: var(--section-text);
+}
+
+/* Separator */
+.promptless-content .entry-content .wp-block-separator {
+    border-color: var(--section-border);
+}
+
+/* Image Caption */
+.promptless-content .entry-content .wp-block-image figcaption {
+    color: var(--section-text-muted);
+}
+
+/* Gallery Caption */
+.promptless-content .entry-content .wp-block-gallery figcaption {
+    color: var(--section-text-muted);
+}
+
+/* Details/Summary (Accordion) */
+.promptless-content .entry-content details {
+    border: 1px solid var(--section-border);
+    border-radius: var(--aisb-section-radius-card, 8px);
+    padding: var(--aisb-section-space-sm, 0.5rem) var(--aisb-section-space-md, 1rem);
+    margin: var(--aisb-section-space-md, 1rem) 0;
+}
+
+.promptless-content .entry-content summary {
+    color: var(--section-text);
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.promptless-content .entry-content details[open] summary {
+    margin-bottom: var(--aisb-section-space-sm, 0.5rem);
+}
+
+/* ==========================================================================
+   Archive Header
+   ========================================================================== */
+
+.promptless-archive__header {
+    text-align: center;
+    padding: var(--aisb-section-space-2xl, 3rem) 0;
+}
+
+.promptless-archive__title {
+    font-family: var(--aisb-section-font-heading, inherit);
+    font-size: var(--aisb-section-text-4xl, 2.5rem);
+    font-weight: var(--aisb-section-font-heading-weight, 700);
+    color: var(--section-text);
+    margin: 0;
+    line-height: var(--aisb-section-leading-tight, 1.2);
+}
+
+.promptless-archive__description {
+    max-width: 65ch;
+    margin: 0 auto;
+    font-family: var(--aisb-section-font-body, inherit);
+    font-size: var(--aisb-section-text-lg, 1.125rem);
+    color: var(--section-text-muted);
+    line-height: var(--aisb-section-leading-relaxed, 1.6);
+}
+
+@media (max-width: 640px) {
+    .promptless-archive__header {
+        padding: var(--aisb-section-space-xl, 2rem) 0;
+    }
+
+    .promptless-archive__title {
+        font-size: var(--aisb-section-text-2xl, 1.875rem);
+    }
+
+    .promptless-archive__description {
+        font-size: var(--aisb-section-text-base, 1rem);
+    }
+}
+
+/* ==========================================================================
+   Archive Grid - Matches Post Grid section flexbox layout
+   ========================================================================== */
+
+.promptless-archive__grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--aisb-section-space-lg, 2rem);
+    justify-content: flex-start;
+    margin-bottom: var(--aisb-section-space-2xl, 3rem);
+}
+
+/* 3 columns by default (matching Post Grid default) */
+.promptless-archive__grid .aisb-features__item {
+    flex: 0 1 calc(33.333% - var(--aisb-section-space-lg, 2rem) * 2/3);
+}
+
+/* Responsive: 2 columns on tablets */
+@media (max-width: 900px) {
+    .promptless-archive__grid .aisb-features__item {
+        flex: 0 1 calc(50% - var(--aisb-section-space-lg, 2rem) / 2);
+    }
+}
+
+/* Responsive: 1 column on mobile */
+@media (max-width: 640px) {
+    .promptless-archive__grid .aisb-features__item {
+        flex: 1 1 100%;
+    }
+}
+
+/* ==========================================================================
+   Post Card - Uses exact Post Grid/Features section classes
+   NO hover animations - matches plugin exactly
+   ========================================================================== */
+
+/* Card styles are inherited from plugin's features.css and postgrid.css
+   via the aisb-features__item and aisb-postgrid__item classes */
+
+/* Archive-specific overrides to ensure proper display when plugin CSS is loaded */
+.promptless-archive__grid .aisb-features__item {
+    background: var(--section-surface);
+    border: 1px solid var(--section-border);
+    border-radius: var(--aisb-section-radius-card, 8px);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ==========================================================================
+   Neo-Brutalist Card Support for Archive Pages
+   Applies when Neo-Brutalist cards are enabled in plugin Global Settings
+   ========================================================================== */
+
+.aisb-neo-brutalist-cards .promptless-archive__grid .aisb-features__item {
+    border: var(--aisb-neo-border-width, 4px) solid var(--section-border, var(--aisb-color-border));
+    box-shadow: var(--aisb-neo-shadow-offset, 8px) var(--aisb-neo-shadow-offset, 8px) 0 var(--section-border, var(--aisb-color-border));
+}
+
+/* Dark mode Neo-Brutalist support */
+.aisb-neo-brutalist-cards .promptless-content.aisb-section--dark .promptless-archive__grid .aisb-features__item {
+    border-color: var(--aisb-color-dark-border);
+    box-shadow: var(--aisb-neo-shadow-offset, 8px) var(--aisb-neo-shadow-offset, 8px) 0 var(--aisb-color-dark-border);
+}
+
+.promptless-archive__grid .aisb-features__item-image-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: var(--section-surface);
+    overflow: hidden;
+}
+
+.promptless-archive__grid .aisb-features__item-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* NO transform or scale on hover - matches Post Grid */
+}
+
+.promptless-archive__grid .aisb-features__item-content {
+    padding: var(--aisb-section-space-md, 1.5rem);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--aisb-section-space-sm, 1rem);
+}
+
+.promptless-archive__grid .aisb-features__item-title {
+    font-family: var(--aisb-section-font-heading, inherit);
+    font-size: var(--aisb-section-text-xl, 1.25rem);
+    font-weight: var(--aisb-section-font-heading-weight, 700);
+    color: var(--section-text);
+    margin: 0;
+    line-height: var(--aisb-section-leading-tight, 1.2);
+}
+
+.promptless-archive__grid .aisb-features__item-description {
+    font-family: var(--aisb-section-font-body, inherit);
+    font-weight: var(--aisb-section-font-body-weight, 400);
+    font-size: var(--aisb-section-text-base, 1rem);
+    line-height: var(--aisb-section-leading-normal, 1.5);
+    color: var(--section-text);
+    margin: 0;
+    flex: 1;
+}
+
+.promptless-archive__grid .aisb-features__item-description p {
+    margin: 0;
+}
+
+/* Read More Link - ONLY animation is arrow move (matches Post Grid exactly) */
+.promptless-archive__grid .aisb-features__item-link {
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    color: var(--section-surface-link);
+    text-decoration: none;
+    font-family: var(--aisb-section-font-body, inherit);
+    font-weight: var(--aisb-section-font-body-weight, 400);
+    margin-top: auto;
+    font-size: var(--aisb-section-text-base, 1rem);
+    position: relative;
+    padding-right: 18px;
+}
+
+/* Arrow icon using pseudo element */
+.promptless-archive__grid .aisb-features__item-link::after {
+    content: '\2192';
+    position: absolute;
+    right: 0;
+    font-size: 1.2em;
+    line-height: 1;
+    transition: transform 0.2s ease;
+}
+
+/* ONLY hover animation: arrow moves 3px right */
+.promptless-archive__grid .aisb-features__item-link:hover::after {
+    transform: translateX(3px);
+}
+
+.promptless-archive__grid .aisb-features__item-link:hover {
+    color: var(--section-surface-link);
+    filter: brightness(0.9);
+    text-decoration: underline;
+}
+
+/* ==========================================================================
+   Post Metadata - Uses exact Post Grid classes
+   Matches plugin postgrid.css structure exactly for visual consistency
+   ========================================================================== */
+
+.promptless-archive__grid .aisb-postgrid__metadata {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--aisb-section-space-sm, 1rem);
+    /* NO margin-bottom - content gap handles spacing to title */
+    margin-bottom: 0;
+    font-family: var(--aisb-section-font-body, inherit);
+    font-size: var(--aisb-section-text-sm, 0.875rem);
+    color: var(--section-text-muted);
+}
+
+/* Meta icons (calendar, user) - matches PostGrid */
+.promptless-archive__grid .aisb-postgrid__meta-icon {
+    display: inline-block;
+    width: calc(var(--aisb-section-space-sm, 1rem) - 2px); /* 14px */
+    height: calc(var(--aisb-section-space-sm, 1rem) - 2px); /* 14px */
+    margin-right: calc(var(--aisb-section-space-xs, 0.5rem) / 2); /* 4px */
+    vertical-align: middle;
+    opacity: 0.6;
+}
+
+.promptless-archive__grid .aisb-postgrid__date,
+.promptless-archive__grid .aisb-postgrid__author {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+}
+
+/* Category Badge - Inside metadata wrapper, matches PostGrid exactly */
+.promptless-archive__grid .aisb-postgrid__categories {
+    display: inline-flex;
+    gap: calc(var(--aisb-section-space-xs, 0.5rem) * 0.75); /* 6px */
+    flex-wrap: wrap;
+    flex-basis: 100%; /* Force categories to their own line within metadata */
+    margin-left: 0; /* Ensure flush left with content */
+    margin-top: calc(var(--aisb-section-space-xs, 0.5rem) * -0.5); /* Tighter gap since on own line */
+}
+
+.promptless-archive__grid .aisb-postgrid__category {
+    display: inline-block;
+    /* Remove left padding so badge text aligns flush left with date/author text above */
+    padding: calc(var(--aisb-section-space-xs, 0.5rem) / 4) var(--aisb-section-space-xs, 0.5rem) calc(var(--aisb-section-space-xs, 0.5rem) / 4) 0; /* 2px 8px 2px 0 */
+    background: var(--section-surface);
+    border-radius: var(--aisb-section-radius-sm, 4px);
+    font-size: var(--aisb-section-text-xs, 0.75rem);
+    line-height: 1.4;
+    color: var(--section-text);
+}
+
+/* ==========================================================================
+   Pagination - Uses plugin styling
+
+   IMPORTANT: Uses --aisb-color-primary directly (NOT --section-primary or smart colors)
+   This ensures pagination buttons display in indigo, not the accessibility-adjusted
+   orange/coral colors that smart colors use for links.
+
+   Pattern matches PostGrid pagination in postgrid.css:
+   - Ghost buttons (inactive): Use primary color for text/border
+   - Filled buttons (current/hover): Use primary background with calculated contrast text
+   ========================================================================== */
+
+.navigation.pagination {
+    padding-bottom: var(--aisb-section-space-2xl, 3rem);
+}
+
+.nav-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--aisb-section-space-xs, 0.5rem);
+    flex-wrap: wrap;
+}
+
+/* Inactive page numbers - ghost button style using primary color directly */
+.page-numbers {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 40px;
+    padding: 0 0.75rem;
+    font-size: var(--aisb-section-text-base, 0.875rem);
+    font-weight: var(--aisb-section-font-button-weight, 500);
+    color: var(--aisb-color-primary, #6366f1);
+    background-color: transparent;
+    border: 1px solid var(--aisb-color-primary, #6366f1);
+    border-radius: var(--aisb-section-radius-base, 6px);
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+/* Hover/focus - filled button with primary background and calculated contrast text */
+.page-numbers:hover,
+.page-numbers:focus {
+    background-color: var(--aisb-color-primary, #6366f1);
+    border-color: var(--aisb-color-primary, #6366f1);
+    color: var(--aisb-button-primary-text, #ffffff);
+    text-decoration: none;
+}
+
+/* High-specificity overrides for plugin link colors on pagination
+   Specificity 0-3-1 beats plugin's 0-2-1 (.aisb-section--light a:not(.aisb-btn))
+   Uses --aisb-color-primary directly to avoid smart color adjustments */
+.promptless-content.aisb-section--light .page-numbers {
+    color: var(--aisb-color-primary, #6366f1);
+    border-color: var(--aisb-color-primary, #6366f1);
+}
+
+.promptless-content.aisb-section--light .page-numbers:hover,
+.promptless-content.aisb-section--light .page-numbers:focus {
+    background-color: var(--aisb-color-primary, #6366f1);
+    border-color: var(--aisb-color-primary, #6366f1);
+    color: var(--aisb-button-primary-text, #ffffff);
+    text-decoration: none;
+}
+
+.promptless-content.aisb-section--light .page-numbers.current {
+    background-color: var(--aisb-color-primary, #6366f1);
+    border-color: var(--aisb-color-primary, #6366f1);
+    color: var(--aisb-button-primary-text, #ffffff);
+}
+
+.promptless-content.aisb-section--dark .page-numbers {
+    color: var(--aisb-color-primary, #6366f1);
+    border-color: var(--aisb-color-primary, #6366f1);
+}
+
+.promptless-content.aisb-section--dark .page-numbers:hover,
+.promptless-content.aisb-section--dark .page-numbers:focus {
+    background-color: var(--aisb-color-primary, #6366f1);
+    border-color: var(--aisb-color-primary, #6366f1);
+    color: var(--aisb-button-primary-text, #ffffff);
+    text-decoration: none;
+}
+
+.promptless-content.aisb-section--dark .page-numbers.current {
+    background-color: var(--aisb-color-primary, #6366f1);
+    border-color: var(--aisb-color-primary, #6366f1);
+    color: var(--aisb-button-primary-text, #ffffff);
+}
+
+/* Current page - filled button uses primary directly with calculated contrast text */
+.page-numbers.current {
+    background-color: var(--aisb-color-primary, #6366f1);
+    border-color: var(--aisb-color-primary, #6366f1);
+    color: var(--aisb-button-primary-text, #ffffff);
+}
+
+/* Dots (ellipsis) - muted text, no border */
+.page-numbers.dots {
+    border: none;
+    background: transparent;
+    color: var(--section-text-muted);
+    cursor: default;
+}
+
+.page-numbers.dots:hover {
+    background: transparent;
+    color: var(--section-text-muted);
+}
+
+/* ==========================================================================
+   No Results
+   ========================================================================== */
+
+.promptless-no-results,
+.promptless-search__no-results {
+    text-align: center;
+    padding: var(--aisb-section-space-2xl, 4rem) var(--aisb-section-space-md, 1rem);
+}
+
+.promptless-no-results__title {
+    font-family: var(--aisb-section-font-heading, inherit);
+    font-size: var(--aisb-section-text-3xl, 2rem);
+    color: var(--section-text);
+    margin-bottom: var(--aisb-section-space-md, 1rem);
+}
+
+.promptless-no-results__content,
+.promptless-search__no-results {
+    max-width: 500px;
+    margin: 0 auto;
+    font-size: var(--aisb-section-text-base, 1rem);
+    color: var(--section-text-muted);
+}
+
+.promptless-no-results__content a,
+.promptless-search__no-results a {
+    color: var(--section-link);
+}
+
+/* Search Form */
+.search-form {
+    display: flex;
+    max-width: 400px;
+    margin: var(--aisb-section-space-lg, 1.5rem) auto 0;
+}
+
+.search-form .search-field {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    font-size: var(--aisb-section-text-base, 1rem);
+    color: var(--section-text);
+    background-color: var(--section-bg);
+    border: 1px solid var(--section-border);
+    border-radius: var(--aisb-section-radius-button, 6px) 0 0 var(--aisb-section-radius-button, 6px);
+    border-right: none;
+}
+
+.search-form .search-field:focus {
+    outline: none;
+    border-color: var(--section-primary);
+}
+
+.search-form .search-submit {
+    padding: 0.75rem 1.5rem;
+    font-size: var(--aisb-section-text-base, 1rem);
+    font-weight: var(--aisb-section-font-button-weight, 500);
+    color: var(--aisb-button-primary-text, #ffffff);
+    background-color: var(--section-primary);
+    border: 1px solid var(--section-primary);
+    border-radius: 0 var(--aisb-section-radius-button, 6px) var(--aisb-section-radius-button, 6px) 0;
+    cursor: pointer;
+    transition: filter 0.2s ease;
+}
+
+.search-form .search-submit:hover,
+.search-form .search-submit:focus {
+    filter: brightness(0.9);
+}
+
+/* ==========================================================================
+   404 Page
+   ========================================================================== */
+
+.promptless-404 {
+    text-align: center;
+    padding: var(--aisb-section-space-2xl, 4rem) var(--aisb-section-space-md, 1rem);
+}
+
+.promptless-404__title {
+    font-family: var(--aisb-section-font-heading, inherit);
+    font-size: 8rem;
+    font-weight: 700;
+    color: var(--section-primary);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+}
+
+.promptless-404__subtitle {
+    font-family: var(--aisb-section-font-heading, inherit);
+    font-size: var(--aisb-section-text-2xl, 1.5rem);
+    color: var(--section-text);
+    margin-bottom: var(--aisb-section-space-lg, 1.5rem);
+}
+
+.promptless-404__content {
+    max-width: 500px;
+    margin: 0 auto var(--aisb-section-space-xl, 2rem);
+    color: var(--section-text-muted);
+}
+
+.promptless-404__actions {
+    margin-bottom: var(--aisb-section-space-2xl, 3rem);
+}
+
+.promptless-404__search p {
+    color: var(--section-text-muted);
+    margin-bottom: var(--aisb-section-space-md, 1rem);
+}
+
+@media (max-width: 640px) {
+    .promptless-404__title {
+        font-size: 5rem;
+    }
+
+    .promptless-404__subtitle {
+        font-size: var(--aisb-section-text-xl, 1.25rem);
+    }
+}
+
+/* ==========================================================================
+   Single Post Styles
+   ========================================================================== */
+
+.promptless-single__header {
+    text-align: left;
+    padding: var(--aisb-section-space-2xl, 3rem) 0 var(--aisb-section-space-xl, 2rem);
+}
+
+.promptless-single__header .aisb-postgrid__category {
+    font-size: 0.8125rem;
+    margin-bottom: var(--aisb-section-space-md, 1rem);
+}
+
+.promptless-single__title {
+    font-family: var(--aisb-section-font-heading, inherit);
+    font-size: var(--aisb-section-text-4xl, 2.5rem);
+    font-weight: var(--aisb-section-font-heading-weight, 700);
+    color: var(--section-text);
+    max-width: 800px;
+    margin: 0;
+    line-height: var(--aisb-section-leading-tight, 1.2);
+}
+
+.promptless-single__meta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 0.5rem 1rem;
+    font-size: 0.9375rem;
+    color: var(--section-text-muted);
+}
+
+.promptless-single__meta a {
+    color: var(--section-text-muted);
+}
+
+.promptless-single__meta a:hover {
+    color: var(--section-link);
+}
+
+/* ==========================================================================
+   Single Post Header - Two Column Layout (matches section patterns)
+   ========================================================================== */
+
+/* Grid container for header content */
+.promptless-single__header-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--aisb-section-space-lg, 2rem);
+    align-items: center;
+}
+
+/* Desktop: Two columns */
+@media (min-width: 768px) {
+    .promptless-single__header-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* Content column - title + meta */
+.promptless-single__header-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--aisb-section-space-md, 1rem);
+}
+
+/* Media column - featured image */
+.promptless-single__header-media {
+    position: relative;
+}
+
+.promptless-single__header-media .promptless-single__image {
+    width: 100%;
+    height: auto;
+    border-radius: var(--aisb-section-radius-image, 8px);
+    box-shadow: var(--aisb-image-shadow, 0 10px 15px -3px rgb(0 0 0 / 0.1));
+}
+
+.promptless-single__content {
+    padding-bottom: var(--aisb-section-space-xl, 2rem);
+}
+
+.promptless-single__content > .promptless-container {
+    max-width: var(--aisb-section-max-width, 1280px);
+}
+
+.promptless-single__footer {
+    padding: var(--aisb-section-space-xl, 2rem) 0;
+    border-top: 1px solid var(--section-border);
+}
+
+.promptless-single__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+    margin-bottom: var(--aisb-section-space-xl, 2rem);
+}
+
+.promptless-single__tags-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--section-text);
+    margin-right: 0.5rem;
+}
+
+.promptless-single__tag {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.8125rem;
+    color: var(--section-text-muted);
+    background-color: var(--section-surface);
+    border-radius: var(--aisb-section-radius-button, 6px);
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.promptless-single__tag:hover,
+.promptless-single__tag:focus {
+    color: var(--section-link);
+    background-color: var(--section-border);
+    text-decoration: none;
+}
+
+/* Ensure no underline on tag links - high specificity to override plugin link styles */
+.promptless-content.aisb-section--light a.promptless-single__tag,
+.promptless-content.aisb-section--light a.promptless-single__tag:hover,
+.promptless-content.aisb-section--light a.promptless-single__tag:focus,
+.promptless-content.aisb-section--dark a.promptless-single__tag,
+.promptless-content.aisb-section--dark a.promptless-single__tag:hover,
+.promptless-content.aisb-section--dark a.promptless-single__tag:focus {
+    text-decoration: none;
+}
+
+/* Post Navigation */
+.promptless-single__nav {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--aisb-section-space-md, 1rem);
+}
+
+@media (min-width: 640px) {
+    .promptless-single__nav {
+        grid-template-columns: 1fr 1fr;
+        gap: var(--aisb-section-space-xl, 2rem);
+    }
+}
+
+.promptless-single__nav-link {
+    display: block;
+    padding: var(--aisb-section-space-md, 1rem);
+    background-color: var(--section-surface);
+    border: 1px solid var(--section-border);
+    border-radius: var(--aisb-section-radius-card, 8px);
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.promptless-single__nav-link:hover,
+.promptless-single__nav-link:focus {
+    background-color: var(--section-surface);
+    border-color: var(--section-link);
+    text-decoration: none;
+}
+
+.promptless-single__nav-link--next {
+    text-align: right;
+}
+
+.promptless-single__nav-label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--section-text-muted);
+    margin-bottom: 0.25rem;
+    text-decoration: none;
+}
+
+.promptless-single__nav-title {
+    display: block;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--section-text);
+    text-decoration: none;
+}
+
+/* Ensure no underline on post navigation links - high specificity to override plugin link styles */
+.promptless-content.aisb-section--light a.promptless-single__nav-link,
+.promptless-content.aisb-section--light a.promptless-single__nav-link:hover,
+.promptless-content.aisb-section--light a.promptless-single__nav-link:focus,
+.promptless-content.aisb-section--light a.promptless-single__nav-link *,
+.promptless-content.aisb-section--light a.promptless-single__nav-link:hover *,
+.promptless-content.aisb-section--light a.promptless-single__nav-link:focus *,
+.promptless-content.aisb-section--dark a.promptless-single__nav-link,
+.promptless-content.aisb-section--dark a.promptless-single__nav-link:hover,
+.promptless-content.aisb-section--dark a.promptless-single__nav-link:focus,
+.promptless-content.aisb-section--dark a.promptless-single__nav-link *,
+.promptless-content.aisb-section--dark a.promptless-single__nav-link:hover *,
+.promptless-content.aisb-section--dark a.promptless-single__nav-link:focus * {
+    text-decoration: none;
+}
+
+@media (max-width: 640px) {
+    .promptless-single__header {
+        padding: var(--aisb-section-space-xl, 2rem) 0 var(--aisb-section-space-lg, 1.5rem);
+    }
+
+    .promptless-single__title {
+        font-size: var(--aisb-section-text-2xl, 1.75rem);
+    }
+
+    .promptless-single__header-grid {
+        gap: var(--aisb-section-space-md, 1.5rem);
+    }
+}
+
+/* ==========================================================================
+   Page Styles
+   ========================================================================== */
+
+.promptless-page__header {
+    padding: var(--aisb-section-space-2xl, 3rem) 0 var(--aisb-section-space-xl, 2rem);
+}
+
+.promptless-page__title {
+    font-family: var(--aisb-section-font-heading, inherit);
+    font-size: var(--aisb-section-text-4xl, 2.5rem);
+    font-weight: var(--aisb-section-font-heading-weight, 700);
+    color: var(--section-text);
+    margin: 0;
+    line-height: var(--aisb-section-leading-tight, 1.2);
+}
+
+/* ==========================================================================
+   Page Header - Two Column Layout (matches single post pattern)
+   ========================================================================== */
+
+/* Grid container for header content */
+.promptless-page__header-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--aisb-section-space-lg, 2rem);
+    align-items: center;
+}
+
+/* Desktop: Two columns when featured image exists */
+@media (min-width: 768px) {
+    .promptless-page__header-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* Content column - title */
+.promptless-page__header-content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--aisb-section-space-md, 1rem);
+}
+
+/* Media column - featured image */
+.promptless-page__header-media {
+    position: relative;
+}
+
+.promptless-page__header-media .promptless-page__image {
+    width: 100%;
+    height: auto;
+    border-radius: var(--aisb-section-radius-image, 8px);
+    box-shadow: var(--aisb-image-shadow, 0 10px 15px -3px rgb(0 0 0 / 0.1));
+}
+
+/* ==========================================================================
+   Page Content
+   ========================================================================== */
+
+.promptless-page__content {
+    padding-bottom: var(--aisb-section-space-2xl, 3rem);
+}
+
+.promptless-page__content > .promptless-container {
+    max-width: var(--aisb-section-max-width, 1280px);
+}
+
+/* ==========================================================================
+   Page Responsive Styles
+   ========================================================================== */
+
+@media (max-width: 640px) {
+    .promptless-page__header {
+        padding: var(--aisb-section-space-xl, 2rem) 0 var(--aisb-section-space-lg, 1.5rem);
+    }
+
+    .promptless-page__title {
+        font-size: var(--aisb-section-text-2xl, 1.75rem);
+    }
+
+    .promptless-page__header-grid {
+        gap: var(--aisb-section-space-md, 1.5rem);
+    }
+}
+
+/* ==========================================================================
+   Comments Section Styling
+
+   Fixes applied:
+   1. Form inputs use fixed 6px border radius (not tied to button settings)
+   2. Ordered list numbering properly removed with explicit targeting
+   3. Submit button uses full button system with Neo-Brutalist support
+   4. All links use smart color system for WCAG AA compliance
+   5. Comment cards have visible borders for consistency
+   6. Comments wrapped in .promptless-container for consistent width
+   7. Targets BOTH .comment-list (WordPress standard) AND .commentlist (legacy)
+   8. Nested comments have left border for visual hierarchy
+   ========================================================================== */
+
+/* Comments section wrapper - matches other single post sections */
+.promptless-single__comments {
+    border-top: 1px solid var(--section-border);
+    padding: var(--aisb-section-space-xl, 2rem) 0;
+}
+
+/* Comments container - width handled by parent .promptless-container */
+.comments-area {
+    /* No max-width here - parent container handles it */
+    padding: 0;
+    margin: 0;
+}
+
+/* Comments title */
+.comments-title {
+    font-family: var(--aisb-section-font-heading, inherit);
+    font-size: var(--aisb-section-text-2xl, 1.75rem);
+    font-weight: var(--aisb-section-font-heading-weight, 700);
+    color: var(--section-text);
+    margin-bottom: var(--aisb-section-space-xl, 2rem);
+}
+
+/* Comment list - explicit ordered list reset to remove numbering
+   Targets BOTH .comment-list (WordPress standard) AND .commentlist (legacy) */
+.comment-list,
+.commentlist,
+ol.comment-list,
+ol.commentlist {
+    list-style: none !important;
+    list-style-type: none !important;
+    padding: 0 !important;
+    margin: 0 0 var(--aisb-section-space-xl, 2rem) 0;
+}
+
+.comment-list > li,
+.commentlist > li,
+ol.comment-list > li,
+ol.commentlist > li {
+    list-style: none !important;
+    list-style-type: none !important;
+    display: block;
+    margin: 0;
+    padding: 0;
+}
+
+/* Hide markers completely */
+.comment-list li::marker,
+.commentlist li::marker,
+ol.comment-list > li::marker,
+ol.commentlist > li::marker {
+    content: none !important;
+    display: none !important;
+    font-size: 0 !important;
+}
+
+/* Comment card - with border for visual consistency */
+.comment-body,
+.commentlist .comment-body {
+    padding: var(--aisb-section-space-lg, 1.5rem);
+    background: var(--section-surface);
+    border: 1px solid var(--section-border);
+    border-radius: var(--aisb-section-radius-card, 8px);
+    margin-bottom: var(--aisb-section-space-md, 1rem);
+}
+
+/* Nested comments - explicit list reset with left border for visual hierarchy */
+.children,
+ol.children,
+ul.children,
+.commentlist .children {
+    list-style: none !important;
+    list-style-type: none !important;
+    padding-left: var(--aisb-section-space-xl, 2rem);
+    margin-top: var(--aisb-section-space-md, 1rem);
+    border-left: 2px solid var(--section-border);
+}
+
+.children > li,
+ol.children > li,
+ul.children > li,
+.commentlist .children > li {
+    list-style: none !important;
+    list-style-type: none !important;
+}
+
+.children > li::marker,
+ol.children > li::marker,
+ul.children > li::marker,
+.children li::marker,
+.commentlist .children li::marker {
+    content: none !important;
+    display: none !important;
+}
+
+/* Comment metadata */
+.comment-author {
+    font-family: var(--aisb-section-font-body, inherit);
+    font-weight: 600;
+    color: var(--section-text);
+}
+
+.comment-author .fn {
+    font-style: normal;
+}
+
+.comment-author .avatar {
+    border-radius: 50%;
+    margin-right: var(--aisb-section-space-sm, 0.5rem);
+    vertical-align: middle;
+}
+
+/* Comment author name link - uses smart surface link color */
+.comment-author a,
+.comment-author .fn a {
+    color: var(--section-surface-link);
+    text-decoration: none;
+}
+
+.comment-author a:hover,
+.comment-author .fn a:hover {
+    text-decoration: underline;
+}
+
+.comment-metadata {
+    font-size: var(--aisb-section-text-sm, 0.875rem);
+    color: var(--section-text-muted);
+    margin-top: var(--aisb-section-space-xs, 0.25rem);
+}
+
+.comment-metadata a {
+    color: var(--section-text-muted);
+    text-decoration: none;
+}
+
+/* Use smart colors for hover states */
+.comment-metadata a:hover {
+    color: var(--section-link);
+}
+
+/* Comment content */
+.comment-content {
+    font-family: var(--aisb-section-font-body, inherit);
+    color: var(--section-text);
+    line-height: var(--aisb-section-leading-relaxed, 1.625);
+    margin-top: var(--aisb-section-space-sm, 0.5rem);
+}
+
+.comment-content p {
+    margin: 0 0 var(--aisb-section-space-sm, 0.5rem);
+}
+
+.comment-content p:last-child {
+    margin-bottom: 0;
+}
+
+/* Links inside comment content (on surface background) use surface link color */
+.comment-content a {
+    color: var(--section-surface-link);
+    text-decoration: none;
+}
+
+.comment-content a:hover {
+    text-decoration: underline;
+}
+
+/* Reply link - uses section link color (on page background) */
+.reply {
+    margin-top: var(--aisb-section-space-sm, 0.5rem);
+}
+
+.reply a,
+.comment-reply-link {
+    font-size: var(--aisb-section-text-sm, 0.875rem);
+    color: var(--section-link);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.reply a:hover,
+.comment-reply-link:hover {
+    text-decoration: underline;
+}
+
+/* Comment form */
+.comment-respond {
+    margin-top: var(--aisb-section-space-xl, 2rem);
+}
+
+.comment-reply-title {
+    font-family: var(--aisb-section-font-heading, inherit);
+    font-size: var(--aisb-section-text-xl, 1.25rem);
+    font-weight: var(--aisb-section-font-heading-weight, 700);
+    color: var(--section-text);
+    margin-bottom: var(--aisb-section-space-md, 1rem);
+}
+
+.comment-reply-title small {
+    font-size: var(--aisb-section-text-sm, 0.875rem);
+    font-weight: 400;
+    margin-left: var(--aisb-section-space-sm, 0.5rem);
+}
+
+/* Cancel reply link uses smart colors */
+.comment-reply-title small a {
+    color: var(--section-link);
+    text-decoration: none;
+}
+
+.comment-reply-title small a:hover {
+    text-decoration: underline;
+}
+
+/* Form field wrappers */
+.comment-form-comment,
+.comment-form-author,
+.comment-form-email,
+.comment-form-url {
+    margin-bottom: var(--aisb-section-space-md, 1rem);
+}
+
+/* Form labels */
+.comment-form label {
+    display: block;
+    font-family: var(--aisb-section-font-body, inherit);
+    font-size: var(--aisb-section-text-sm, 0.875rem);
+    font-weight: 500;
+    color: var(--section-text);
+    margin-bottom: var(--aisb-section-space-xs, 0.25rem);
+}
+
+/* Form inputs and textarea - fixed 6px border radius (not tied to button settings) */
+.comment-form input[type="text"],
+.comment-form input[type="email"],
+.comment-form input[type="url"],
+.comment-form textarea {
+    width: 100%;
+    padding: var(--aisb-section-space-sm, 0.75rem);
+    font-family: var(--aisb-section-font-body, inherit);
+    font-size: var(--aisb-section-text-base, 1rem);
+    color: var(--section-text);
+    background: var(--section-bg);
+    border: 1px solid var(--section-border);
+    border-radius: 6px; /* Fixed default for form inputs - not tied to button settings */
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    box-sizing: border-box;
+}
+
+.comment-form input[type="text"]:focus,
+.comment-form input[type="email"]:focus,
+.comment-form input[type="url"]:focus,
+.comment-form textarea:focus {
+    outline: none;
+    border-color: var(--section-primary);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.comment-form textarea {
+    min-height: 150px;
+    resize: vertical;
+}
+
+/* Submit button - mirrors .aisb-btn .aisb-btn-primary for full button system integration */
+.comment-form .submit,
+.comment-form input[type="submit"] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--aisb-section-space-sm, 0.75rem) var(--aisb-section-space-lg, 1.5rem);
+    font-family: var(--aisb-section-font-button, inherit);
+    font-size: var(--aisb-section-text-base, 1rem);
+    font-weight: var(--aisb-section-font-button-weight, 500);
+    color: var(--aisb-button-primary-text, #fff);
+    background: var(--aisb-button-primary-bg, var(--aisb-color-primary, #6366f1));
+    border: 2px solid var(--aisb-button-primary-bg, var(--aisb-color-primary, #6366f1));
+    border-radius: var(--aisb-section-radius-button, 8px);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.comment-form .submit:hover,
+.comment-form input[type="submit"]:hover {
+    filter: brightness(0.9);
+}
+
+.comment-form .submit:active,
+.comment-form input[type="submit"]:active {
+    transform: scale(0.98);
+}
+
+/* Neo-Brutalist button support for submit button */
+.aisb-neo-brutalist-buttons .comment-form .submit,
+.aisb-neo-brutalist-buttons .comment-form input[type="submit"] {
+    border: var(--aisb-neo-border-width-button, 3px) solid var(--aisb-neo-brutalist-primary-border, #000);
+    box-shadow: var(--aisb-neo-shadow-offset-button, 4px) var(--aisb-neo-shadow-offset-button, 4px) 0 var(--aisb-neo-brutalist-primary-border, #000);
+}
+
+.aisb-neo-brutalist-buttons .comment-form .submit:hover,
+.aisb-neo-brutalist-buttons .comment-form input[type="submit"]:hover {
+    transform: translate(1px, 1px);
+    box-shadow: var(--aisb-neo-shadow-offset-button-hover, 3px) var(--aisb-neo-shadow-offset-button-hover, 3px) 0 var(--aisb-neo-brutalist-primary-border, #000);
+    filter: none;
+}
+
+/* Logged in message - links use smart colors */
+.logged-in-as {
+    font-size: var(--aisb-section-text-sm, 0.875rem);
+    color: var(--section-text-muted);
+    margin-bottom: var(--aisb-section-space-md, 1rem);
+}
+
+.logged-in-as a {
+    color: var(--section-link);
+    text-decoration: none;
+}
+
+.logged-in-as a:hover {
+    text-decoration: underline;
+}
+
+/* Comment notes */
+.comment-notes {
+    font-size: var(--aisb-section-text-sm, 0.875rem);
+    color: var(--section-text-muted);
+    margin-bottom: var(--aisb-section-space-md, 1rem);
+}
+
+/* Required field indicator */
+.required {
+    color: #dc2626;
+}
+
+/* No comments message */
+.no-comments {
+    font-size: var(--aisb-section-text-base, 1rem);
+    color: var(--section-text-muted);
+    text-align: center;
+    padding: var(--aisb-section-space-xl, 2rem);
+}
+
+/* Cookie consent checkbox */
+.comment-form-cookies-consent {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--aisb-section-space-sm, 0.5rem);
+    margin-bottom: var(--aisb-section-space-md, 1rem);
+}
+
+.comment-form-cookies-consent input[type="checkbox"] {
+    margin-top: 0.25rem;
+    accent-color: var(--section-primary);
+}
+
+.comment-form-cookies-consent label {
+    font-size: var(--aisb-section-text-sm, 0.875rem);
+    color: var(--section-text-muted);
+    display: inline;
+    margin-bottom: 0;
+}
+
+/* Comments closed message */
+.comments-closed {
+    font-size: var(--aisb-section-text-base, 1rem);
+    color: var(--section-text-muted);
+    text-align: center;
+    padding: var(--aisb-section-space-lg, 1.5rem);
+    background: var(--section-surface);
+    border: 1px solid var(--section-border);
+    border-radius: var(--aisb-section-radius-card, 8px);
+}
+
+/* Responsive adjustments for comments */
+@media (max-width: 640px) {
+    .promptless-single__comments {
+        padding: var(--aisb-section-space-lg, 1.5rem) 0;
+    }
+
+    .comments-title {
+        font-size: var(--aisb-section-text-xl, 1.25rem);
+    }
+
+    .comment-body,
+    .commentlist .comment-body {
+        padding: var(--aisb-section-space-md, 1rem);
+    }
+
+    .children,
+    .commentlist .children {
+        padding-left: var(--aisb-section-space-md, 1rem);
+    }
+}
+
+/* ==========================================================================
+   Neo-Brutalist Button Support for Dark Theme
+   Note: Dark mode colors are now handled via scoped variables (.aisb-section--dark)
+   Only Neo-Brutalist specific overrides remain here
+   ========================================================================== */
+
+.promptless-content.aisb-section--dark.aisb-neo-brutalist-buttons .comment-form .submit,
+.promptless-content.aisb-section--dark.aisb-neo-brutalist-buttons .comment-form input[type="submit"] {
+    border-color: var(--aisb-neo-brutalist-primary-border-dark, #000);
+    box-shadow: var(--aisb-neo-shadow-offset-button, 4px) var(--aisb-neo-shadow-offset-button, 4px) 0 var(--aisb-neo-brutalist-primary-border-dark, #000);
+}
+
+.promptless-content.aisb-section--dark.aisb-neo-brutalist-buttons .comment-form .submit:hover,
+.promptless-content.aisb-section--dark.aisb-neo-brutalist-buttons .comment-form input[type="submit"]:hover {
+    transform: translate(1px, 1px);
+    box-shadow: var(--aisb-neo-shadow-offset-button-hover, 3px) var(--aisb-neo-shadow-offset-button-hover, 3px) 0 var(--aisb-neo-brutalist-primary-border-dark, #000);
+}

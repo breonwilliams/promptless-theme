@@ -1,0 +1,311 @@
+/**
+ * Footer Styles
+ *
+ * Uses scoped CSS variables following the same pattern as Promptless WP plugin sections.
+ * Footer theme variant (light/dark) is controlled via Customizer settings.
+ *
+ * @package Promptless_Theme
+ * @since 1.0.0
+ */
+
+/* ==========================================================================
+   Theme Variant Scoped Variables
+   Same pattern as plugin sections - footer controls its own theme independently
+   ========================================================================== */
+
+.promptless-footer.aisb-section--light {
+    --section-bg: var(--aisb-color-surface, #f9fafb);
+    --section-surface: var(--aisb-color-background, #ffffff);
+    --section-text: var(--aisb-color-text, #1f2937);
+    --section-text-muted: var(--aisb-color-text-muted, #6b7280);
+    --section-border: var(--aisb-color-border, #e5e7eb);
+    --section-primary: var(--aisb-color-primary, #6366f1);
+}
+
+.promptless-footer.aisb-section--dark {
+    --section-bg: var(--aisb-color-dark-background, #111827);
+    --section-surface: var(--aisb-color-dark-surface, #1f2937);
+    --section-text: var(--aisb-color-dark-text, #f9fafb);
+    --section-text-muted: var(--aisb-color-dark-text-muted, #9ca3af);
+    --section-border: var(--aisb-color-dark-border, #374151);
+    --section-primary: var(--aisb-color-primary, #6366f1);
+}
+
+/* ==========================================================================
+   Footer Container
+   ========================================================================== */
+
+.promptless-footer {
+    background-color: var(--section-bg);
+    border-top: 1px solid var(--section-border);
+    padding-top: 3rem;
+    padding-bottom: 1.5rem;
+    margin-top: auto;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+/* ==========================================================================
+   Footer Main Content
+   ========================================================================== */
+
+.promptless-footer__main {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--section-border);
+}
+
+@media (min-width: 640px) {
+    .promptless-footer__main {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .promptless-footer__main {
+        grid-template-columns: 2fr repeat(2, 1fr) 1fr;
+        gap: 3rem;
+    }
+}
+
+/* ==========================================================================
+   Footer Brand
+   ========================================================================== */
+
+.promptless-footer__brand {
+    max-width: 280px;
+}
+
+.promptless-footer__brand a {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    margin-bottom: 0.75rem;
+}
+
+.promptless-footer__brand img {
+    max-height: 36px;
+    width: auto;
+}
+
+.promptless-footer__brand .promptless-header__site-title {
+    font-size: 1.125rem;
+    color: var(--section-text);
+}
+
+.promptless-footer.aisb-section--light .promptless-footer__brand .promptless-header__site-title:hover,
+.promptless-footer.aisb-section--light .promptless-footer__brand .promptless-header__site-title:focus {
+    color: var(--aisb-smart-light-section-link, var(--section-primary));
+}
+
+.promptless-footer.aisb-section--dark .promptless-footer__brand .promptless-header__site-title:hover,
+.promptless-footer.aisb-section--dark .promptless-footer__brand .promptless-header__site-title:focus {
+    color: var(--aisb-smart-dark-section-link, var(--section-primary));
+}
+
+.promptless-footer__tagline {
+    font-size: 0.9375rem;
+    color: var(--section-text-muted);
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* ==========================================================================
+   Footer Navigation Columns
+   ========================================================================== */
+
+.promptless-footer__nav-columns {
+    display: contents;
+}
+
+@media (max-width: 639px) {
+    .promptless-footer__nav-columns {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+}
+
+.promptless-footer__nav-column {
+    min-width: 0;
+}
+
+.promptless-footer__nav {
+    display: block;
+}
+
+.promptless-footer__nav-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.promptless-footer__nav-list li {
+    margin-bottom: 0.5rem;
+}
+
+.promptless-footer__nav-list a {
+    display: inline-block;
+    font-size: 0.9375rem;
+    color: var(--section-text);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.promptless-footer__nav-list a:hover,
+.promptless-footer__nav-list a:focus {
+    color: var(--section-primary);
+    text-decoration: none;
+}
+
+/* High-specificity override for plugin link colors on footer navigation
+   Specificity 0-3-1 beats plugin's 0-2-1 (.aisb-section--light a:not(.aisb-btn))
+   Footer nav links should use text color by default, primary color only on hover */
+.promptless-footer.aisb-section--light .promptless-footer__nav-list a {
+    color: var(--section-text);
+}
+
+.promptless-footer.aisb-section--light .promptless-footer__nav-list a:hover,
+.promptless-footer.aisb-section--light .promptless-footer__nav-list a:focus {
+    color: var(--aisb-smart-light-section-link, var(--section-primary));
+    text-decoration: none;
+}
+
+.promptless-footer.aisb-section--dark .promptless-footer__nav-list a {
+    color: var(--section-text);
+}
+
+.promptless-footer.aisb-section--dark .promptless-footer__nav-list a:hover,
+.promptless-footer.aisb-section--dark .promptless-footer__nav-list a:focus {
+    color: var(--aisb-smart-dark-section-link, var(--section-primary));
+    text-decoration: none;
+}
+
+/* ==========================================================================
+   Footer Social / Widgets
+   ========================================================================== */
+
+.promptless-footer__social-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.promptless-footer__social {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.promptless-footer__social a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    color: var(--section-text-muted);
+    background-color: var(--section-surface);
+    border-radius: var(--aisb-section-radius-button, 6px);
+    transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.promptless-footer.aisb-section--light .promptless-footer__social a:hover,
+.promptless-footer.aisb-section--light .promptless-footer__social a:focus {
+    color: var(--aisb-smart-light-section-link, var(--section-primary));
+}
+
+.promptless-footer.aisb-section--dark .promptless-footer__social a:hover,
+.promptless-footer.aisb-section--dark .promptless-footer__social a:focus {
+    color: var(--aisb-smart-dark-section-link, var(--section-primary));
+}
+
+.promptless-footer__widget {
+    margin-bottom: 1rem;
+}
+
+.promptless-footer__widget-title {
+    font-family: var(--aisb-section-font-heading, inherit);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--section-text);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+}
+
+/* ==========================================================================
+   Footer Bottom Bar
+   ========================================================================== */
+
+.promptless-footer__bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-top: 1.5rem;
+    text-align: center;
+}
+
+@media (min-width: 768px) {
+    .promptless-footer__bottom {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        text-align: left;
+    }
+}
+
+.promptless-footer__copyright {
+    font-size: 0.875rem;
+    color: var(--section-text-muted);
+}
+
+.promptless-footer__bottom-nav .promptless-footer__nav-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem 1.5rem;
+}
+
+@media (min-width: 768px) {
+    .promptless-footer__bottom-nav .promptless-footer__nav-list {
+        justify-content: flex-end;
+    }
+}
+
+.promptless-footer__bottom-nav .promptless-footer__nav-list li {
+    margin-bottom: 0;
+}
+
+.promptless-footer__bottom-nav .promptless-footer__nav-list a {
+    font-size: 0.875rem;
+    color: var(--section-text-muted);
+}
+
+.promptless-footer__bottom-nav .promptless-footer__nav-list a:hover,
+.promptless-footer__bottom-nav .promptless-footer__nav-list a:focus {
+    color: var(--section-primary);
+    text-decoration: none;
+}
+
+/* High-specificity override for bottom nav links - uses muted text color
+   Specificity 0-4-1 beats plugin's 0-2-1 */
+.promptless-footer.aisb-section--light .promptless-footer__bottom-nav .promptless-footer__nav-list a {
+    color: var(--section-text-muted);
+}
+
+.promptless-footer.aisb-section--light .promptless-footer__bottom-nav .promptless-footer__nav-list a:hover,
+.promptless-footer.aisb-section--light .promptless-footer__bottom-nav .promptless-footer__nav-list a:focus {
+    color: var(--aisb-smart-light-section-link, var(--section-primary));
+    text-decoration: none;
+}
+
+.promptless-footer.aisb-section--dark .promptless-footer__bottom-nav .promptless-footer__nav-list a {
+    color: var(--section-text-muted);
+}
+
+.promptless-footer.aisb-section--dark .promptless-footer__bottom-nav .promptless-footer__nav-list a:hover,
+.promptless-footer.aisb-section--dark .promptless-footer__bottom-nav .promptless-footer__nav-list a:focus {
+    color: var(--aisb-smart-dark-section-link, var(--section-primary));
+    text-decoration: none;
+}

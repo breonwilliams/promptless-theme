@@ -1,0 +1,202 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/theme.json",
+    "version": 3,
+    "settings": {
+        "appearanceTools": true,
+        "color": {
+            "custom": true,
+            "customDuotone": true,
+            "customGradient": true,
+            "defaultGradients": true,
+            "defaultPalette": false,
+            "palette": [
+                {
+                    "name": "Primary",
+                    "slug": "primary",
+                    "color": "var(--aisb-color-primary, #6366f1)"
+                },
+                {
+                    "name": "Secondary",
+                    "slug": "secondary",
+                    "color": "var(--aisb-color-secondary, #8b5cf6)"
+                },
+                {
+                    "name": "Text",
+                    "slug": "text",
+                    "color": "var(--aisb-color-text, #1f2937)"
+                },
+                {
+                    "name": "Text Muted",
+                    "slug": "text-muted",
+                    "color": "var(--aisb-color-text-muted, #6b7280)"
+                },
+                {
+                    "name": "Background",
+                    "slug": "background",
+                    "color": "var(--aisb-color-background, #ffffff)"
+                },
+                {
+                    "name": "Surface",
+                    "slug": "surface",
+                    "color": "var(--aisb-color-surface, #f9fafb)"
+                },
+                {
+                    "name": "Border",
+                    "slug": "border",
+                    "color": "var(--aisb-color-border, #e5e7eb)"
+                }
+            ]
+        },
+        "layout": {
+            "contentSize": "65ch",
+            "wideSize": "var(--aisb-section-max-width, 1280px)"
+        },
+        "spacing": {
+            "units": ["px", "em", "rem", "%", "vw", "vh"],
+            "spacingScale": {
+                "steps": 7
+            }
+        },
+        "typography": {
+            "customFontSize": true,
+            "fluid": true,
+            "fontFamilies": [
+                {
+                    "fontFamily": "var(--aisb-section-font-heading, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif)",
+                    "name": "Heading",
+                    "slug": "heading"
+                },
+                {
+                    "fontFamily": "var(--aisb-section-font-body, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif)",
+                    "name": "Body",
+                    "slug": "body"
+                },
+                {
+                    "fontFamily": "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif",
+                    "name": "System",
+                    "slug": "system"
+                }
+            ],
+            "fontSizes": [
+                {
+                    "fluid": false,
+                    "name": "Small",
+                    "size": "0.875rem",
+                    "slug": "small"
+                },
+                {
+                    "fluid": {
+                        "min": "1rem",
+                        "max": "1rem"
+                    },
+                    "name": "Medium",
+                    "size": "1rem",
+                    "slug": "medium"
+                },
+                {
+                    "fluid": {
+                        "min": "1.125rem",
+                        "max": "1.25rem"
+                    },
+                    "name": "Large",
+                    "size": "1.25rem",
+                    "slug": "large"
+                },
+                {
+                    "fluid": {
+                        "min": "1.5rem",
+                        "max": "2rem"
+                    },
+                    "name": "Extra Large",
+                    "size": "2rem",
+                    "slug": "x-large"
+                },
+                {
+                    "fluid": {
+                        "min": "2rem",
+                        "max": "2.5rem"
+                    },
+                    "name": "Huge",
+                    "size": "2.5rem",
+                    "slug": "huge"
+                }
+            ]
+        },
+        "useRootPaddingAwareAlignments": true
+    },
+    "styles": {
+        "color": {
+            "background": "var(--aisb-color-background, #ffffff)",
+            "text": "var(--aisb-color-text, #1f2937)"
+        },
+        "elements": {
+            "button": {
+                "border": {
+                    "radius": "var(--aisb-section-radius-button, 6px)"
+                },
+                "color": {
+                    "background": "var(--aisb-color-primary, #6366f1)",
+                    "text": "#ffffff"
+                },
+                ":hover": {
+                    "color": {
+                        "background": "var(--aisb-color-primary-hover, #4f46e5)"
+                    }
+                },
+                ":focus": {
+                    "color": {
+                        "background": "var(--aisb-color-primary-hover, #4f46e5)"
+                    }
+                }
+            },
+            "heading": {
+                "typography": {
+                    "fontFamily": "var(--aisb-section-font-heading, inherit)",
+                    "fontWeight": "700"
+                },
+                "color": {
+                    "text": "var(--aisb-color-text, #1f2937)"
+                }
+            },
+            "link": {
+                "color": {
+                    "text": "var(--aisb-color-primary, #6366f1)"
+                },
+                ":hover": {
+                    "color": {
+                        "text": "var(--aisb-color-primary-hover, #4f46e5)"
+                    }
+                },
+                ":focus": {
+                    "color": {
+                        "text": "var(--aisb-color-primary-hover, #4f46e5)"
+                    }
+                }
+            }
+        },
+        "spacing": {
+            "blockGap": "1.5rem",
+            "padding": {
+                "left": "clamp(1rem, 5vw, 2rem)",
+                "right": "clamp(1rem, 5vw, 2rem)"
+            }
+        },
+        "typography": {
+            "fontFamily": "var(--aisb-section-font-body, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif)",
+            "fontSize": "1rem",
+            "lineHeight": "1.6"
+        }
+    },
+    "templateParts": [
+        {
+            "area": "header",
+            "name": "header",
+            "title": "Header"
+        },
+        {
+            "area": "footer",
+            "name": "footer",
+            "title": "Footer"
+        }
+    ]
+}
