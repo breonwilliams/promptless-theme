@@ -61,6 +61,17 @@ class Promptless_Assets {
             array( 'promptless-theme-style' ),
             PROMPTLESS_THEME_VERSION
         );
+
+        // WooCommerce styles - only load when WooCommerce is active
+        // Follows official WooCommerce theme integration pattern
+        if ( class_exists( 'WooCommerce' ) ) {
+            wp_enqueue_style(
+                'promptless-theme-woocommerce',
+                PROMPTLESS_THEME_URI . '/assets/css/woocommerce.css',
+                array( 'promptless-theme-style', 'woocommerce-general' ),
+                PROMPTLESS_THEME_VERSION
+            );
+        }
     }
 
     /**
