@@ -31,6 +31,9 @@ class Promptless_Setup {
 
         // Disable WooCommerce's default page title - theme provides its own via woocommerce.php
         add_filter( 'woocommerce_show_page_title', '__return_false' );
+
+        // Change sale badge text from "Sale!" to "Sale" to match Product Grid section
+        add_filter( 'woocommerce_sale_flash', array( $this, 'custom_sale_flash' ), 10, 3 );
     }
 
     /**
@@ -201,5 +204,20 @@ class Promptless_Setup {
     public function woocommerce_wrapper_end() {
         echo '</div><!-- .promptless-woocommerce -->';
         echo '</div><!-- .promptless-container -->';
+    }
+
+    /**
+     * Customize sale flash badge text
+     *
+     * Changes "Sale!" to "Sale" to match Product Grid section styling.
+     *
+     * @since 1.0.0
+     * @param string $html    Sale flash HTML.
+     * @param object $post    Post object.
+     * @param object $product Product object.
+     * @return string Modified sale flash HTML.
+     */
+    public function custom_sale_flash( $html, $post, $product ) {
+        return '<span class="onsale">' . esc_html__( 'Sale', 'promptless-theme' ) . '</span>';
     }
 }

@@ -147,13 +147,13 @@ body.woocommerce-page .aisb-section--dark .woocommerce {
    Uses plugin's font system for consistent typography
    ========================================================================== */
 
-/* Product titles in archive/shop pages */
+/* Product titles in archive/shop pages - matches Product Grid section (text-xl = 20px) */
 .woocommerce ul.products li.product .woocommerce-loop-product__title,
 .woocommerce ul.products li.product h2,
 .woocommerce ul.products li.product h3 {
     font-family: var(--aisb-section-font-heading, inherit);
     font-weight: var(--aisb-section-font-heading-weight, 700);
-    font-size: var(--aisb-section-text-lg, 1.125rem);
+    font-size: var(--aisb-section-text-xl, 1.25rem);
     line-height: var(--aisb-section-leading-tight, 1.25);
     color: var(--wc-text);
     margin: 0 0 var(--aisb-section-space-xs, 0.5rem);
@@ -215,7 +215,7 @@ body.woocommerce-page .aisb-section--dark .woocommerce {
    Uses plugin's button system for consistent CTAs
    ========================================================================== */
 
-/* Primary buttons (Add to Cart, Checkout, etc.) */
+/* Primary buttons (Checkout, single product Add to Cart, etc.) - Full size */
 .woocommerce button.button,
 .woocommerce button.button.alt,
 .woocommerce a.button,
@@ -242,6 +242,13 @@ body.woocommerce-page .aisb-section--dark .woocommerce {
     text-decoration: none;
     transition: all 0.2s ease;
     line-height: 1.5;
+}
+
+/* Product card Add to Cart buttons - Compact size to match Product Grid section */
+.woocommerce ul.products li.product .button,
+.woocommerce ul.products li.product .add_to_cart_button {
+    padding: var(--aisb-section-space-xs, 0.5rem) var(--aisb-section-space-md, 1.5rem);
+    font-size: var(--aisb-section-text-sm, 0.875rem);
 }
 
 .woocommerce button.button:hover,
@@ -273,8 +280,7 @@ body.woocommerce-page .aisb-section--dark .woocommerce {
     cursor: not-allowed;
 }
 
-/* Secondary/Ghost buttons (View Cart, Continue Shopping) */
-.woocommerce a.added_to_cart,
+/* Secondary/Ghost buttons (View Cart in mini cart, Continue Shopping) - Full size */
 .woocommerce .woocommerce-mini-cart__buttons .button:not(.checkout) {
     display: inline-flex;
     align-items: center;
@@ -292,7 +298,45 @@ body.woocommerce-page .aisb-section--dark .woocommerce {
     transition: all 0.2s ease;
 }
 
+/* Product card View Cart button - Compact size to match Product Grid section */
+.woocommerce ul.products li.product a.added_to_cart {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--aisb-section-space-xs, 0.5rem) var(--aisb-section-space-md, 1.5rem);
+    font-family: var(--aisb-section-font-button, inherit);
+    font-size: var(--aisb-section-text-sm, 0.875rem);
+    font-weight: var(--aisb-section-font-button-weight, 500);
+    color: var(--aisb-ghost-button-color, var(--aisb-color-primary, #6366f1));
+    background: transparent;
+    border: 2px solid var(--aisb-ghost-button-color, var(--aisb-color-primary, #6366f1));
+    border-radius: var(--aisb-section-radius-button, 8px);
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    line-height: 1.5;
+}
+
+/* General View Cart button (not in product cards) */
+.woocommerce a.added_to_cart {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--aisb-section-space-sm, 0.75rem) var(--aisb-section-space-lg, 1.5rem);
+    font-family: var(--aisb-section-font-button, inherit);
+    font-size: var(--aisb-section-text-base, 1rem);
+    font-weight: var(--aisb-section-font-button-weight, 500);
+    color: var(--aisb-ghost-button-color, var(--aisb-color-primary, #6366f1));
+    background: transparent;
+    border: 2px solid var(--aisb-ghost-button-color, var(--aisb-color-primary, #6366f1));
+    border-radius: var(--aisb-section-radius-button, 8px);
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
 .woocommerce a.added_to_cart:hover,
+.woocommerce ul.products li.product a.added_to_cart:hover,
 .woocommerce .woocommerce-mini-cart__buttons .button:not(.checkout):hover {
     background: var(--aisb-ghost-button-color, var(--aisb-color-primary, #6366f1));
     color: var(--aisb-button-primary-text, #ffffff);
@@ -372,15 +416,18 @@ body.woocommerce-page ul.products li.product {
     border: 1px solid var(--wc-border, var(--aisb-color-border, #e5e7eb));
     border-radius: var(--aisb-section-radius-card, 12px);
     overflow: hidden;
-    transition: all 0.2s ease;
+    position: relative; /* For absolute positioned sale badge */
     padding: 0;
     margin-bottom: var(--aisb-section-space-lg, 2rem);
 }
 
-body.woocommerce ul.products li.product:hover,
+/* REMOVED: Card hover effect - Product Grid section has no card hover
+ * Keeping cards consistent with plugin behavior
+ */
+/* body.woocommerce ul.products li.product:hover,
 body.woocommerce-page ul.products li.product:hover {
     border-color: var(--wc-primary, var(--aisb-color-primary, #6366f1));
-}
+} */
 
 /* Dark mode product cards
  * .aisb-section--dark may be on body or on a descendant element (main)
@@ -393,12 +440,15 @@ body.woocommerce-page .aisb-section--dark ul.products li.product {
     border-color: var(--wc-border, var(--aisb-color-dark-border, #4b5563));
 }
 
-body.aisb-section--dark.woocommerce ul.products li.product:hover,
+/* REMOVED: Dark mode card hover effect - Product Grid section has no card hover
+ * Keeping cards consistent with plugin behavior
+ */
+/* body.aisb-section--dark.woocommerce ul.products li.product:hover,
 body.aisb-section--dark.woocommerce-page ul.products li.product:hover,
 body.woocommerce .aisb-section--dark ul.products li.product:hover,
 body.woocommerce-page .aisb-section--dark ul.products li.product:hover {
     border-color: var(--wc-primary, var(--aisb-color-primary, #6366f1));
-}
+} */
 
 /* Product image wrapper */
 .woocommerce ul.products li.product a img {
@@ -520,20 +570,28 @@ body.aisb-neo-brutalist-cards #reviews .comment-text {
 }
 
 /* ==========================================================================
-   Sale Badge
+   Sale Badge - Matches Product Grid section exactly
    ========================================================================== */
 
+.woocommerce ul.products li.product span.onsale,
 .woocommerce span.onsale {
-    background: var(--wc-primary);
+    position: absolute;
+    top: var(--aisb-section-space-sm, 1rem);
+    left: var(--aisb-section-space-sm, 1rem);
+    right: auto; /* Override any right positioning */
+    background: var(--wc-primary, var(--aisb-color-primary, #6366f1));
     color: var(--aisb-button-primary-text, #ffffff);
-    font-family: var(--aisb-section-font-button, inherit);
-    font-size: var(--aisb-section-text-sm, 0.875rem);
-    font-weight: var(--aisb-section-font-button-weight, 500);
-    border-radius: var(--aisb-section-radius-button, 8px);
-    padding: var(--aisb-section-space-xs, 0.5rem) var(--aisb-section-space-sm, 1rem);
+    font-family: var(--aisb-section-font-body, inherit);
+    font-size: var(--aisb-section-text-xs, 0.75rem);
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: var(--aisb-section-radius-sm, 4px);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    line-height: 1.6;
     min-width: auto;
     min-height: auto;
-    line-height: 1.2;
+    z-index: 1;
 }
 
 /* ==========================================================================
