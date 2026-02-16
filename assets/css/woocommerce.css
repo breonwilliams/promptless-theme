@@ -421,13 +421,11 @@ body.woocommerce-page ul.products li.product {
     margin-bottom: var(--aisb-section-space-lg, 2rem);
 }
 
-/* REMOVED: Card hover effect - Product Grid section has no card hover
- * Keeping cards consistent with plugin behavior
- */
-/* body.woocommerce ul.products li.product:hover,
+/* Card hover effect - provides UX feedback since entire card is clickable */
+body.woocommerce ul.products li.product:hover,
 body.woocommerce-page ul.products li.product:hover {
     border-color: var(--wc-primary, var(--aisb-color-primary, #6366f1));
-} */
+}
 
 /* Dark mode product cards
  * .aisb-section--dark may be on body or on a descendant element (main)
@@ -440,15 +438,13 @@ body.woocommerce-page .aisb-section--dark ul.products li.product {
     border-color: var(--wc-border, var(--aisb-color-dark-border, #4b5563));
 }
 
-/* REMOVED: Dark mode card hover effect - Product Grid section has no card hover
- * Keeping cards consistent with plugin behavior
- */
-/* body.aisb-section--dark.woocommerce ul.products li.product:hover,
+/* Dark mode card hover effect */
+body.aisb-section--dark.woocommerce ul.products li.product:hover,
 body.aisb-section--dark.woocommerce-page ul.products li.product:hover,
 body.woocommerce .aisb-section--dark ul.products li.product:hover,
 body.woocommerce-page .aisb-section--dark ul.products li.product:hover {
     border-color: var(--wc-primary, var(--aisb-color-primary, #6366f1));
-} */
+}
 
 /* Product image wrapper */
 .woocommerce ul.products li.product a img {
@@ -469,16 +465,27 @@ body.woocommerce-page .aisb-section--dark ul.products li.product:hover {
 .woocommerce ul.products li.product .woocommerce-loop-product__title,
 .woocommerce ul.products li.product .price,
 .woocommerce ul.products li.product .star-rating,
-.woocommerce ul.products li.product .button {
+.woocommerce ul.products li.product .button,
+.woocommerce ul.products li.product .added_to_cart {
     padding-left: var(--aisb-section-space-md, 1.5rem);
     padding-right: var(--aisb-section-space-md, 1.5rem);
+}
+
+/* Star rating - explicit rule for proper alignment */
+.woocommerce ul.products li.product .star-rating {
+    display: block;
+    margin-left: var(--aisb-section-space-md, 1.5rem);
+    margin-right: var(--aisb-section-space-md, 1.5rem);
+    padding-left: 0;
+    padding-right: 0;
 }
 
 .woocommerce ul.products li.product .woocommerce-loop-product__title {
     padding-top: var(--aisb-section-space-md, 1.5rem);
 }
 
-.woocommerce ul.products li.product .button {
+.woocommerce ul.products li.product .button,
+.woocommerce ul.products li.product .added_to_cart {
     margin: var(--aisb-section-space-md, 1.5rem);
     margin-top: var(--aisb-section-space-sm, 1rem);
 }
