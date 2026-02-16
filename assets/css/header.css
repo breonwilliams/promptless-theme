@@ -88,15 +88,34 @@
     text-decoration: none;
 }
 
-/* Smart Color accessibility overrides for site title */
-.promptless-header.aisb-section--light .promptless-header__site-title:hover,
-.promptless-header.aisb-section--light .promptless-header__site-title:focus {
-    color: var(--aisb-smart-light-section-link, var(--section-primary));
+/* Site title link - high specificity overrides for plugin link colors
+   Uses 8x [href] attribute selectors to beat plugin specificity 0,10,1 */
+.promptless-header.aisb-section--light .promptless-header__site-title[href][href][href][href][href][href][href][href] {
+    color: var(--section-text);
+    text-decoration: none;
 }
 
-.promptless-header.aisb-section--dark .promptless-header__site-title:hover,
-.promptless-header.aisb-section--dark .promptless-header__site-title:focus {
+.promptless-header.aisb-section--light .promptless-header__site-title[href][href][href][href][href][href][href][href]:hover,
+.promptless-header.aisb-section--light .promptless-header__site-title[href][href][href][href][href][href][href][href]:focus {
+    color: var(--aisb-smart-light-section-link, var(--section-primary));
+    text-decoration: none;
+}
+
+.promptless-header.aisb-section--dark .promptless-header__site-title[href][href][href][href][href][href][href][href] {
+    color: var(--section-text);
+    text-decoration: none;
+}
+
+.promptless-header.aisb-section--dark .promptless-header__site-title[href][href][href][href][href][href][href][href]:hover,
+.promptless-header.aisb-section--dark .promptless-header__site-title[href][href][href][href][href][href][href][href]:focus {
     color: var(--aisb-smart-dark-section-link, var(--section-primary));
+    text-decoration: none;
+}
+
+/* Brand link wrapper - high specificity override */
+.promptless-header.aisb-section--light .promptless-header__brand a[href][href][href][href][href][href][href][href],
+.promptless-header.aisb-section--dark .promptless-header__brand a[href][href][href][href][href][href][href][href] {
+    text-decoration: none;
 }
 
 /* ==========================================================================
@@ -157,37 +176,48 @@
     color: var(--aisb-smart-light-section-link, var(--section-primary));
 }
 
-/* High-specificity override for plugin link colors on navigation
-   Specificity 0-3-1 beats plugin's 0-2-1 (.aisb-section--light a:not(.aisb-btn))
-   Nav links should use text color by default, primary color only on hover/active */
-.promptless-header.aisb-section--light .promptless-header__nav-list a {
+/* ==========================================================================
+   HIGH-SPECIFICITY NAVIGATION LINK OVERRIDES
+   Plugin core-components.css link rules have specificity 0,10,1 due to 9 :not() clauses.
+   We use 8x [href] attribute selectors to achieve 0,11,1 and override.
+   See docs/standards/WOOCOMMERCE_DESIGN_ALIGNMENT.md Part 8.3
+   ========================================================================== */
+
+/* Light mode navigation - base state */
+.promptless-header.aisb-section--light .promptless-header__nav-list a[href][href][href][href][href][href][href][href] {
     color: var(--section-text);
+    text-decoration: none;
 }
 
-.promptless-header.aisb-section--light .promptless-header__nav-list a:hover,
-.promptless-header.aisb-section--light .promptless-header__nav-list a:focus {
+/* Light mode navigation - hover/focus */
+.promptless-header.aisb-section--light .promptless-header__nav-list a[href][href][href][href][href][href][href][href]:hover,
+.promptless-header.aisb-section--light .promptless-header__nav-list a[href][href][href][href][href][href][href][href]:focus {
     color: var(--aisb-smart-light-section-link, var(--section-primary));
     text-decoration: none;
 }
 
-.promptless-header.aisb-section--light .promptless-header__nav-list .current-menu-item > a,
-.promptless-header.aisb-section--light .promptless-header__nav-list .current_page_item > a {
+/* Light mode navigation - current item */
+.promptless-header.aisb-section--light .promptless-header__nav-list .current-menu-item > a[href][href][href][href][href][href][href][href],
+.promptless-header.aisb-section--light .promptless-header__nav-list .current_page_item > a[href][href][href][href][href][href][href][href] {
     color: var(--aisb-smart-light-section-link, var(--section-primary));
 }
 
-/* Dark mode header link colors */
-.promptless-header.aisb-section--dark .promptless-header__nav-list a {
+/* Dark mode navigation - base state */
+.promptless-header.aisb-section--dark .promptless-header__nav-list a[href][href][href][href][href][href][href][href] {
     color: var(--section-text);
+    text-decoration: none;
 }
 
-.promptless-header.aisb-section--dark .promptless-header__nav-list a:hover,
-.promptless-header.aisb-section--dark .promptless-header__nav-list a:focus {
+/* Dark mode navigation - hover/focus */
+.promptless-header.aisb-section--dark .promptless-header__nav-list a[href][href][href][href][href][href][href][href]:hover,
+.promptless-header.aisb-section--dark .promptless-header__nav-list a[href][href][href][href][href][href][href][href]:focus {
     color: var(--aisb-smart-dark-section-link, var(--section-primary));
     text-decoration: none;
 }
 
-.promptless-header.aisb-section--dark .promptless-header__nav-list .current-menu-item > a,
-.promptless-header.aisb-section--dark .promptless-header__nav-list .current_page_item > a {
+/* Dark mode navigation - current item */
+.promptless-header.aisb-section--dark .promptless-header__nav-list .current-menu-item > a[href][href][href][href][href][href][href][href],
+.promptless-header.aisb-section--dark .promptless-header__nav-list .current_page_item > a[href][href][href][href][href][href][href][href] {
     color: var(--aisb-smart-dark-section-link, var(--section-primary));
 }
 

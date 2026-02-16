@@ -494,7 +494,15 @@
 .promptless-archive__grid .aisb-features__item-link:hover {
     color: var(--section-surface-link);
     filter: brightness(0.9);
-    text-decoration: underline;
+    text-decoration: none;
+}
+
+/* High-specificity override for read more links to prevent plugin underline */
+.promptless-content.aisb-section--light .promptless-archive__grid .aisb-features__item-link[href][href][href][href][href][href][href][href],
+.promptless-content.aisb-section--light .promptless-archive__grid .aisb-features__item-link[href][href][href][href][href][href][href][href]:hover,
+.promptless-content.aisb-section--dark .promptless-archive__grid .aisb-features__item-link[href][href][href][href][href][href][href][href],
+.promptless-content.aisb-section--dark .promptless-archive__grid .aisb-features__item-link[href][href][href][href][href][href][href][href]:hover {
+    text-decoration: none;
 }
 
 /* ==========================================================================
@@ -603,41 +611,53 @@
     text-decoration: none;
 }
 
-/* High-specificity overrides for plugin link colors on pagination
-   Specificity 0-3-1 beats plugin's 0-2-1 (.aisb-section--light a:not(.aisb-btn))
-   Uses --aisb-color-primary directly to avoid smart color adjustments */
-.promptless-content.aisb-section--light .page-numbers {
+/* ==========================================================================
+   HIGH-SPECIFICITY PAGINATION LINK OVERRIDES
+   Plugin core-components.css link rules have specificity 0,10,1 due to 9 :not() clauses.
+   We use 8x [href] attribute selectors to achieve 0,11,1 and override.
+   Uses --aisb-color-primary directly to avoid smart color adjustments.
+   ========================================================================== */
+
+/* Light mode pagination - base state */
+.promptless-content.aisb-section--light a.page-numbers[href][href][href][href][href][href][href][href] {
     color: var(--aisb-color-primary, #6366f1);
     border-color: var(--aisb-color-primary, #6366f1);
+    text-decoration: none;
 }
 
-.promptless-content.aisb-section--light .page-numbers:hover,
-.promptless-content.aisb-section--light .page-numbers:focus {
+/* Light mode pagination - hover/focus */
+.promptless-content.aisb-section--light a.page-numbers[href][href][href][href][href][href][href][href]:hover,
+.promptless-content.aisb-section--light a.page-numbers[href][href][href][href][href][href][href][href]:focus {
     background-color: var(--aisb-color-primary, #6366f1);
     border-color: var(--aisb-color-primary, #6366f1);
     color: var(--aisb-button-primary-text, #ffffff);
     text-decoration: none;
 }
 
+/* Light mode pagination - current (span, not a) */
 .promptless-content.aisb-section--light .page-numbers.current {
     background-color: var(--aisb-color-primary, #6366f1);
     border-color: var(--aisb-color-primary, #6366f1);
     color: var(--aisb-button-primary-text, #ffffff);
 }
 
-.promptless-content.aisb-section--dark .page-numbers {
+/* Dark mode pagination - base state */
+.promptless-content.aisb-section--dark a.page-numbers[href][href][href][href][href][href][href][href] {
     color: var(--aisb-color-primary, #6366f1);
     border-color: var(--aisb-color-primary, #6366f1);
+    text-decoration: none;
 }
 
-.promptless-content.aisb-section--dark .page-numbers:hover,
-.promptless-content.aisb-section--dark .page-numbers:focus {
+/* Dark mode pagination - hover/focus */
+.promptless-content.aisb-section--dark a.page-numbers[href][href][href][href][href][href][href][href]:hover,
+.promptless-content.aisb-section--dark a.page-numbers[href][href][href][href][href][href][href][href]:focus {
     background-color: var(--aisb-color-primary, #6366f1);
     border-color: var(--aisb-color-primary, #6366f1);
     color: var(--aisb-button-primary-text, #ffffff);
     text-decoration: none;
 }
 
+/* Dark mode pagination - current (span, not a) */
 .promptless-content.aisb-section--dark .page-numbers.current {
     background-color: var(--aisb-color-primary, #6366f1);
     border-color: var(--aisb-color-primary, #6366f1);
@@ -909,13 +929,35 @@
     text-decoration: none;
 }
 
-/* Ensure no underline on tag links - high specificity to override plugin link styles */
-.promptless-content.aisb-section--light a.promptless-single__tag,
-.promptless-content.aisb-section--light a.promptless-single__tag:hover,
-.promptless-content.aisb-section--light a.promptless-single__tag:focus,
-.promptless-content.aisb-section--dark a.promptless-single__tag,
-.promptless-content.aisb-section--dark a.promptless-single__tag:hover,
-.promptless-content.aisb-section--dark a.promptless-single__tag:focus {
+/* ==========================================================================
+   HIGH-SPECIFICITY TAG LINK OVERRIDES
+   Plugin core-components.css link rules have specificity 0,10,1 due to 9 :not() clauses.
+   We use 8x [href] attribute selectors to achieve 0,11,1 and override.
+   ========================================================================== */
+
+/* Light mode tag links - base state */
+.promptless-content.aisb-section--light a.promptless-single__tag[href][href][href][href][href][href][href][href] {
+    color: var(--section-text-muted);
+    text-decoration: none;
+}
+
+/* Light mode tag links - hover/focus */
+.promptless-content.aisb-section--light a.promptless-single__tag[href][href][href][href][href][href][href][href]:hover,
+.promptless-content.aisb-section--light a.promptless-single__tag[href][href][href][href][href][href][href][href]:focus {
+    color: var(--section-link);
+    text-decoration: none;
+}
+
+/* Dark mode tag links - base state */
+.promptless-content.aisb-section--dark a.promptless-single__tag[href][href][href][href][href][href][href][href] {
+    color: var(--section-text-muted);
+    text-decoration: none;
+}
+
+/* Dark mode tag links - hover/focus */
+.promptless-content.aisb-section--dark a.promptless-single__tag[href][href][href][href][href][href][href][href]:hover,
+.promptless-content.aisb-section--dark a.promptless-single__tag[href][href][href][href][href][href][href][href]:focus {
+    color: var(--section-link);
     text-decoration: none;
 }
 
@@ -973,19 +1015,31 @@
     text-decoration: none;
 }
 
-/* Ensure no underline on post navigation links - high specificity to override plugin link styles */
-.promptless-content.aisb-section--light a.promptless-single__nav-link,
-.promptless-content.aisb-section--light a.promptless-single__nav-link:hover,
-.promptless-content.aisb-section--light a.promptless-single__nav-link:focus,
-.promptless-content.aisb-section--light a.promptless-single__nav-link *,
-.promptless-content.aisb-section--light a.promptless-single__nav-link:hover *,
-.promptless-content.aisb-section--light a.promptless-single__nav-link:focus *,
-.promptless-content.aisb-section--dark a.promptless-single__nav-link,
-.promptless-content.aisb-section--dark a.promptless-single__nav-link:hover,
-.promptless-content.aisb-section--dark a.promptless-single__nav-link:focus,
-.promptless-content.aisb-section--dark a.promptless-single__nav-link *,
-.promptless-content.aisb-section--dark a.promptless-single__nav-link:hover *,
-.promptless-content.aisb-section--dark a.promptless-single__nav-link:focus * {
+/* ==========================================================================
+   HIGH-SPECIFICITY POST NAVIGATION LINK OVERRIDES
+   Plugin core-components.css link rules have specificity 0,10,1 due to 9 :not() clauses.
+   We use 8x [href] attribute selectors to achieve 0,11,1 and override.
+   ========================================================================== */
+
+/* Light mode post navigation - base state */
+.promptless-content.aisb-section--light a.promptless-single__nav-link[href][href][href][href][href][href][href][href] {
+    text-decoration: none;
+}
+
+/* Light mode post navigation - hover/focus */
+.promptless-content.aisb-section--light a.promptless-single__nav-link[href][href][href][href][href][href][href][href]:hover,
+.promptless-content.aisb-section--light a.promptless-single__nav-link[href][href][href][href][href][href][href][href]:focus {
+    text-decoration: none;
+}
+
+/* Dark mode post navigation - base state */
+.promptless-content.aisb-section--dark a.promptless-single__nav-link[href][href][href][href][href][href][href][href] {
+    text-decoration: none;
+}
+
+/* Dark mode post navigation - hover/focus */
+.promptless-content.aisb-section--dark a.promptless-single__nav-link[href][href][href][href][href][href][href][href]:hover,
+.promptless-content.aisb-section--dark a.promptless-single__nav-link[href][href][href][href][href][href][href][href]:focus {
     text-decoration: none;
 }
 

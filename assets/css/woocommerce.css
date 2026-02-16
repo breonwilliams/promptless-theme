@@ -2001,3 +2001,160 @@ body.woocommerce-page .aisb-section--dark .widget_shopping_cart .total {
         color: var(--wc-text, var(--aisb-color-dark-text, #f9fafb));
     }
 }
+
+/* ==========================================================================
+   HIGH-SPECIFICITY UI/NAVIGATION LINK OVERRIDES
+   Plugin core-components.css link rules have specificity 0,10,1 due to 9 :not() clauses.
+   We use 8x [href] attribute selectors to achieve 0,11,1 and override.
+   This ensures breadcrumbs, widget links, and other UI elements use correct colors
+   and do NOT get underline on hover (which is meant for content links only).
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Breadcrumbs - High Specificity Override
+   -------------------------------------------------------------------------- */
+
+/* Light mode breadcrumbs */
+.aisb-section--light .woocommerce-breadcrumb a[href][href][href][href][href][href][href][href] {
+    color: var(--wc-text-muted, var(--aisb-color-text-muted, #6b7280));
+    text-decoration: none;
+}
+
+.aisb-section--light .woocommerce-breadcrumb a[href][href][href][href][href][href][href][href]:hover,
+.aisb-section--light .woocommerce-breadcrumb a[href][href][href][href][href][href][href][href]:focus {
+    color: var(--wc-link, var(--aisb-color-primary, #6366f1));
+    text-decoration: none;
+}
+
+/* Dark mode breadcrumbs */
+.aisb-section--dark .woocommerce-breadcrumb a[href][href][href][href][href][href][href][href] {
+    color: var(--wc-text-muted, var(--aisb-color-dark-text-muted, #9ca3af));
+    text-decoration: none;
+}
+
+.aisb-section--dark .woocommerce-breadcrumb a[href][href][href][href][href][href][href][href]:hover,
+.aisb-section--dark .woocommerce-breadcrumb a[href][href][href][href][href][href][href][href]:focus {
+    color: var(--wc-link, var(--aisb-color-primary, #6366f1));
+    text-decoration: none;
+}
+
+/* --------------------------------------------------------------------------
+   Product Widget Links - High Specificity Override
+   -------------------------------------------------------------------------- */
+
+/* Light mode product widget links */
+.aisb-section--light .widget ul.product_list_widget li a[href][href][href][href][href][href][href][href] {
+    color: var(--wc-text, var(--aisb-color-text, #1f2937));
+    text-decoration: none;
+}
+
+.aisb-section--light .widget ul.product_list_widget li a[href][href][href][href][href][href][href][href]:hover,
+.aisb-section--light .widget ul.product_list_widget li a[href][href][href][href][href][href][href][href]:focus {
+    color: var(--wc-link, var(--aisb-color-primary, #6366f1));
+    text-decoration: none;
+}
+
+/* Dark mode product widget links */
+.aisb-section--dark .widget ul.product_list_widget li a[href][href][href][href][href][href][href][href] {
+    color: var(--wc-text, var(--aisb-color-dark-text, #f9fafb));
+    text-decoration: none;
+}
+
+.aisb-section--dark .widget ul.product_list_widget li a[href][href][href][href][href][href][href][href]:hover,
+.aisb-section--dark .widget ul.product_list_widget li a[href][href][href][href][href][href][href][href]:focus {
+    color: var(--wc-link, var(--aisb-color-primary, #6366f1));
+    text-decoration: none;
+}
+
+/* --------------------------------------------------------------------------
+   Mini Cart Widget Links - High Specificity Override
+   -------------------------------------------------------------------------- */
+
+/* Light mode mini cart links */
+.aisb-section--light .widget_shopping_cart .cart_list li a[href][href][href][href][href][href][href][href] {
+    color: var(--wc-text, var(--aisb-color-text, #1f2937));
+    text-decoration: none;
+}
+
+.aisb-section--light .widget_shopping_cart .cart_list li a[href][href][href][href][href][href][href][href]:hover,
+.aisb-section--light .widget_shopping_cart .cart_list li a[href][href][href][href][href][href][href][href]:focus {
+    color: var(--wc-link, var(--aisb-color-primary, #6366f1));
+    text-decoration: none;
+}
+
+/* Dark mode mini cart links */
+.aisb-section--dark .widget_shopping_cart .cart_list li a[href][href][href][href][href][href][href][href] {
+    color: var(--wc-text, var(--aisb-color-dark-text, #f9fafb));
+    text-decoration: none;
+}
+
+.aisb-section--dark .widget_shopping_cart .cart_list li a[href][href][href][href][href][href][href][href]:hover,
+.aisb-section--dark .widget_shopping_cart .cart_list li a[href][href][href][href][href][href][href][href]:focus {
+    color: var(--wc-link, var(--aisb-color-primary, #6366f1));
+    text-decoration: none;
+}
+
+/* --------------------------------------------------------------------------
+   WooCommerce Pagination Links - High Specificity Override
+   -------------------------------------------------------------------------- */
+
+/* Light mode pagination */
+.aisb-section--light .woocommerce-pagination a.page-numbers[href][href][href][href][href][href][href][href] {
+    color: var(--aisb-color-primary, #6366f1);
+    text-decoration: none;
+}
+
+.aisb-section--light .woocommerce-pagination a.page-numbers[href][href][href][href][href][href][href][href]:hover,
+.aisb-section--light .woocommerce-pagination a.page-numbers[href][href][href][href][href][href][href][href]:focus {
+    text-decoration: none;
+}
+
+/* Dark mode pagination */
+.aisb-section--dark .woocommerce-pagination a.page-numbers[href][href][href][href][href][href][href][href] {
+    color: var(--aisb-color-primary, #6366f1);
+    text-decoration: none;
+}
+
+.aisb-section--dark .woocommerce-pagination a.page-numbers[href][href][href][href][href][href][href][href]:hover,
+.aisb-section--dark .woocommerce-pagination a.page-numbers[href][href][href][href][href][href][href][href]:focus {
+    text-decoration: none;
+}
+
+/* --------------------------------------------------------------------------
+   Product Title Links - High Specificity Override
+   Ensures product titles in grids use text color, not link color
+   -------------------------------------------------------------------------- */
+
+/* Light mode product titles */
+.aisb-section--light ul.products li.product a[href][href][href][href][href][href][href][href] .woocommerce-loop-product__title,
+.aisb-section--light ul.products li.product a[href][href][href][href][href][href][href][href] h2,
+.aisb-section--light ul.products li.product a[href][href][href][href][href][href][href][href] h3 {
+    color: var(--wc-text, var(--aisb-color-text, #1f2937));
+}
+
+/* Product card link wrapper - no underline */
+.aisb-section--light ul.products li.product > a[href][href][href][href][href][href][href][href] {
+    text-decoration: none;
+}
+
+.aisb-section--light ul.products li.product > a[href][href][href][href][href][href][href][href]:hover,
+.aisb-section--light ul.products li.product > a[href][href][href][href][href][href][href][href]:focus {
+    text-decoration: none;
+}
+
+/* Dark mode product titles */
+.aisb-section--dark ul.products li.product a[href][href][href][href][href][href][href][href] .woocommerce-loop-product__title,
+.aisb-section--dark ul.products li.product a[href][href][href][href][href][href][href][href] h2,
+.aisb-section--dark ul.products li.product a[href][href][href][href][href][href][href][href] h3 {
+    color: var(--wc-text, var(--aisb-color-dark-text, #f9fafb));
+}
+
+/* Product card link wrapper - no underline */
+.aisb-section--dark ul.products li.product > a[href][href][href][href][href][href][href][href] {
+    text-decoration: none;
+}
+
+.aisb-section--dark ul.products li.product > a[href][href][href][href][href][href][href][href]:hover,
+.aisb-section--dark ul.products li.product > a[href][href][href][href][href][href][href][href]:focus {
+    text-decoration: none;
+}
