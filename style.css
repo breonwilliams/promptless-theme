@@ -84,11 +84,11 @@ a:focus {
 
 /* Content links - underline on hover (excludes nav, buttons, pagination)
    Targets ONLY content areas where underline makes sense
-   Excludes: .aisb-btn* (plugin buttons), .button (WooCommerce buttons) */
-.entry-content a:not(.aisb-btn):not(.aisb-btn-primary):not(.aisb-btn-secondary):not(.aisb-btn-ghost):not(.button):hover,
-.entry-content a:not(.aisb-btn):not(.aisb-btn-primary):not(.aisb-btn-secondary):not(.aisb-btn-ghost):not(.button):focus,
-.promptless-content p a:not(.aisb-btn):not(.button):hover,
-.promptless-content p a:not(.aisb-btn):not(.button):focus {
+   Excludes: .aisb-btn* (plugin buttons), .button (WooCommerce buttons), .remove (WooCommerce cart remove) */
+.entry-content a:not(.aisb-btn):not(.aisb-btn-primary):not(.aisb-btn-secondary):not(.aisb-btn-ghost):not(.button):not(.remove):hover,
+.entry-content a:not(.aisb-btn):not(.aisb-btn-primary):not(.aisb-btn-secondary):not(.aisb-btn-ghost):not(.button):not(.remove):focus,
+.promptless-content p a:not(.aisb-btn):not(.button):not(.remove):hover,
+.promptless-content p a:not(.aisb-btn):not(.button):not(.remove):focus {
   text-decoration: underline;
 }
 

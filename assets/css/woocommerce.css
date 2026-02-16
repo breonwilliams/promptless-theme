@@ -693,6 +693,18 @@ body.aisb-neo-brutalist-cards #reviews .comment-text {
     color: var(--wc-primary);
 }
 
+/* Notice base styles - message, info, notice
+ * Mirrors .woocommerce-error structure but uses primary color accent */
+.woocommerce-message,
+.woocommerce-info,
+.woocommerce-notice {
+    background: var(--wc-surface);
+    border: 1px solid var(--wc-primary, var(--aisb-color-primary, #6366f1));
+    border-left-width: 4px;
+    color: var(--wc-text);
+    font-family: var(--aisb-section-font-body, inherit);
+}
+
 .woocommerce-error {
     background: var(--wc-surface);
     border: 1px solid var(--aisb-color-error, #dc2626);
@@ -712,6 +724,38 @@ body.aisb-neo-brutalist-cards #reviews .comment-text {
 .woocommerce-info li,
 .woocommerce-message li {
     list-style: none;
+}
+
+/* Notice buttons - "View cart" button in add-to-cart notices
+   These need explicit styling because notices may appear outside .woocommerce wrapper */
+.woocommerce-message a.button,
+.woocommerce-info a.button,
+.woocommerce-error a.button,
+.woocommerce-notice a.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--aisb-section-space-xs, 0.5rem) var(--aisb-section-space-md, 1rem);
+    font-family: var(--aisb-section-font-button, inherit);
+    font-size: var(--aisb-section-text-sm, 0.875rem);
+    font-weight: var(--aisb-section-font-button-weight, 500);
+    color: var(--aisb-button-primary-text, #ffffff);
+    background: var(--aisb-button-primary-bg, var(--aisb-color-primary, #6366f1));
+    border: 2px solid var(--aisb-button-primary-bg, var(--aisb-color-primary, #6366f1));
+    border-radius: var(--aisb-section-radius-button, 8px);
+    text-decoration: none;
+    transition: all 0.2s ease;
+    line-height: 1.5;
+    margin-left: var(--aisb-section-space-sm, 0.5rem);
+}
+
+.woocommerce-message a.button:hover,
+.woocommerce-info a.button:hover,
+.woocommerce-error a.button:hover,
+.woocommerce-notice a.button:hover {
+    filter: brightness(0.9);
+    text-decoration: none;
+    color: var(--aisb-button-primary-text, #ffffff);
 }
 
 /* ==========================================================================
@@ -787,12 +831,14 @@ body.aisb-neo-brutalist-cards #reviews .comment-text {
     justify-content: center;
     width: 24px;
     height: 24px;
+    text-decoration: none;
 }
 
 .woocommerce a.remove:hover {
     background: var(--aisb-color-error, #dc2626);
     color: var(--aisb-color-text-inverse, #ffffff);
     border-radius: 50%;
+    text-decoration: none;
 }
 
 /* Quantity input
@@ -899,6 +945,7 @@ body.aisb-neo-brutalist-cards #reviews .comment-text {
 
 .woocommerce-MyAccount-navigation ul li {
     border-bottom: 1px solid var(--wc-border);
+    margin: 0;
 }
 
 .woocommerce-MyAccount-navigation ul li:last-child {
@@ -1484,6 +1531,28 @@ body.woocommerce-page .aisb-section--dark textarea::placeholder {
     color: var(--wc-text-muted, var(--aisb-color-dark-text-muted, #9ca3af));
 }
 
+/* Dark mode - Checkout form inputs with higher specificity
+ * These rules override the light mode .woocommerce form .form-row selectors
+ * Specificity: (0,4,2) vs light mode (0,2,2)
+ */
+body.woocommerce .aisb-section--dark .woocommerce form .form-row input.input-text,
+body.woocommerce .aisb-section--dark .woocommerce form .form-row textarea,
+body.woocommerce .aisb-section--dark .woocommerce form .form-row select,
+body.woocommerce-page .aisb-section--dark .woocommerce form .form-row input.input-text,
+body.woocommerce-page .aisb-section--dark .woocommerce form .form-row textarea,
+body.woocommerce-page .aisb-section--dark .woocommerce form .form-row select {
+    background-color: var(--wc-surface, var(--aisb-color-dark-surface, #1f2937));
+    color: var(--wc-text, var(--aisb-color-dark-text, #f9fafb));
+    border-color: var(--wc-border, var(--aisb-color-dark-border, #374151));
+}
+
+body.woocommerce .aisb-section--dark .woocommerce form .form-row input::placeholder,
+body.woocommerce .aisb-section--dark .woocommerce form .form-row textarea::placeholder,
+body.woocommerce-page .aisb-section--dark .woocommerce form .form-row input::placeholder,
+body.woocommerce-page .aisb-section--dark .woocommerce form .form-row textarea::placeholder {
+    color: var(--wc-text-muted, var(--aisb-color-dark-text-muted, #9ca3af));
+}
+
 /* Select2 dropdowns dark mode */
 body.woocommerce .aisb-section--dark .select2-container--default .select2-selection--single,
 body.woocommerce-page .aisb-section--dark .select2-container--default .select2-selection--single {
@@ -1586,11 +1655,38 @@ body.woocommerce-page .aisb-section--dark .woocommerce-notice {
     border-color: var(--wc-border, var(--aisb-color-dark-border, #374151));
 }
 
-body.woocommerce .aisb-section--dark .woocommerce-message a,
-body.woocommerce .aisb-section--dark .woocommerce-info a,
-body.woocommerce-page .aisb-section--dark .woocommerce-message a,
-body.woocommerce-page .aisb-section--dark .woocommerce-info a {
+body.woocommerce .aisb-section--dark .woocommerce-message a:not(.button),
+body.woocommerce .aisb-section--dark .woocommerce-info a:not(.button),
+body.woocommerce-page .aisb-section--dark .woocommerce-message a:not(.button),
+body.woocommerce-page .aisb-section--dark .woocommerce-info a:not(.button) {
     color: var(--wc-link, var(--aisb-color-primary, #6366f1));
+}
+
+/* Dark mode link styles for error and notice types */
+body.woocommerce .aisb-section--dark .woocommerce-error a:not(.button),
+body.woocommerce .aisb-section--dark .woocommerce-notice a:not(.button),
+body.woocommerce-page .aisb-section--dark .woocommerce-error a:not(.button),
+body.woocommerce-page .aisb-section--dark .woocommerce-notice a:not(.button) {
+    color: var(--wc-link, var(--aisb-color-primary, #6366f1));
+}
+
+/* Dark mode notice buttons */
+body.woocommerce .aisb-section--dark .woocommerce-message a.button,
+body.woocommerce .aisb-section--dark .woocommerce-info a.button,
+body.woocommerce-page .aisb-section--dark .woocommerce-message a.button,
+body.woocommerce-page .aisb-section--dark .woocommerce-info a.button,
+.aisb-section--dark .woocommerce-message a.button,
+.aisb-section--dark .woocommerce-info a.button {
+    color: var(--aisb-button-primary-text, #ffffff);
+    background: var(--aisb-button-primary-bg, var(--aisb-color-primary, #6366f1));
+    border-color: var(--aisb-button-primary-bg, var(--aisb-color-primary, #6366f1));
+}
+
+.aisb-section--dark .woocommerce-message a.button:hover,
+.aisb-section--dark .woocommerce-info a.button:hover {
+    filter: brightness(0.9);
+    color: var(--aisb-button-primary-text, #ffffff);
+    text-decoration: none;
 }
 
 /* ==========================================================================

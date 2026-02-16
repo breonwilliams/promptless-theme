@@ -80,8 +80,8 @@
     color: var(--section-link);
 }
 
-/* Excludes: .aisb-btn* (plugin buttons), .button (WooCommerce buttons) */
-.promptless-content .entry-content a:not(.aisb-btn):not(.aisb-btn-primary):not(.aisb-btn-secondary):not(.aisb-btn-ghost):not(.button):hover {
+/* Excludes: .aisb-btn* (plugin buttons), .button (WooCommerce buttons), .remove (WooCommerce cart remove link) */
+.promptless-content .entry-content a:not(.aisb-btn):not(.aisb-btn-primary):not(.aisb-btn-secondary):not(.aisb-btn-ghost):not(.button):not(.remove):hover {
     text-decoration: underline;
 }
 
