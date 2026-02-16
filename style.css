@@ -83,11 +83,12 @@ a:focus {
 }
 
 /* Content links - underline on hover (excludes nav, buttons, pagination)
-   Targets ONLY content areas where underline makes sense */
-.entry-content a:not(.aisb-btn):not(.aisb-btn-primary):not(.aisb-btn-secondary):not(.aisb-btn-ghost):hover,
-.entry-content a:not(.aisb-btn):not(.aisb-btn-primary):not(.aisb-btn-secondary):not(.aisb-btn-ghost):focus,
-.promptless-content p a:not(.aisb-btn):hover,
-.promptless-content p a:not(.aisb-btn):focus {
+   Targets ONLY content areas where underline makes sense
+   Excludes: .aisb-btn* (plugin buttons), .button (WooCommerce buttons) */
+.entry-content a:not(.aisb-btn):not(.aisb-btn-primary):not(.aisb-btn-secondary):not(.aisb-btn-ghost):not(.button):hover,
+.entry-content a:not(.aisb-btn):not(.aisb-btn-primary):not(.aisb-btn-secondary):not(.aisb-btn-ghost):not(.button):focus,
+.promptless-content p a:not(.aisb-btn):not(.button):hover,
+.promptless-content p a:not(.aisb-btn):not(.button):focus {
   text-decoration: underline;
 }
 

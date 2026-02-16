@@ -385,17 +385,13 @@ body.aisb-neo-brutalist-buttons.woocommerce-page input.button:hover {
     filter: none;
 }
 
-/* Neo-Brutalist ghost/secondary buttons */
-body.aisb-neo-brutalist-buttons.woocommerce a.added_to_cart,
-body.aisb-neo-brutalist-buttons.woocommerce .woocommerce-mini-cart__buttons .button:not(.checkout),
-body.aisb-neo-brutalist-buttons.woocommerce-page a.added_to_cart {
+/* Neo-Brutalist mini-cart buttons (excludes ghost/View Cart button) */
+body.aisb-neo-brutalist-buttons.woocommerce .woocommerce-mini-cart__buttons .button:not(.checkout) {
     border: var(--aisb-neo-border-width-button, 3px) solid var(--aisb-neo-brutalist-primary-border, #000);
     box-shadow: var(--aisb-neo-shadow-offset-button, 4px) var(--aisb-neo-shadow-offset-button, 4px) 0 var(--aisb-neo-brutalist-primary-border, #000);
 }
 
-body.aisb-neo-brutalist-buttons.woocommerce a.added_to_cart:hover,
-body.aisb-neo-brutalist-buttons.woocommerce .woocommerce-mini-cart__buttons .button:not(.checkout):hover,
-body.aisb-neo-brutalist-buttons.woocommerce-page a.added_to_cart:hover {
+body.aisb-neo-brutalist-buttons.woocommerce .woocommerce-mini-cart__buttons .button:not(.checkout):hover {
     transform: translate(1px, 1px);
     box-shadow: var(--aisb-neo-shadow-offset-button-hover, 3px) var(--aisb-neo-shadow-offset-button-hover, 3px) 0 var(--aisb-neo-brutalist-primary-border, #000);
 }
@@ -419,6 +415,7 @@ body.woocommerce-page ul.products li.product {
     position: relative; /* For absolute positioned sale badge */
     padding: 0;
     margin-bottom: var(--aisb-section-space-lg, 2rem);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 /* Card hover effect - provides UX feedback since entire card is clickable */
@@ -763,6 +760,20 @@ body.aisb-neo-brutalist-cards #reviews .comment-text {
 
 .woocommerce-cart table.cart td.product-name a:hover {
     color: var(--wc-link);
+    text-decoration: none;
+}
+
+/* Cart page link hover states - explicitly prevent underlines */
+.woocommerce-cart .cart_totals a:hover,
+.woocommerce-cart .shipping-calculator-button:hover {
+    text-decoration: none;
+}
+
+/* Cart table action buttons - compact sizing */
+.woocommerce-cart table.cart td.actions .coupon button,
+.woocommerce-cart table.cart td.actions button[name="update_cart"] {
+    padding: var(--aisb-section-space-xs, 0.5rem) var(--aisb-section-space-md, 1rem);
+    font-size: var(--aisb-section-text-sm, 0.875rem);
 }
 
 /* Remove item link - uses semantic color token */

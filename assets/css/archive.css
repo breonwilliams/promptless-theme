@@ -80,7 +80,8 @@
     color: var(--section-link);
 }
 
-.promptless-content .entry-content a:hover {
+/* Excludes: .aisb-btn* (plugin buttons), .button (WooCommerce buttons) */
+.promptless-content .entry-content a:not(.aisb-btn):not(.aisb-btn-primary):not(.aisb-btn-secondary):not(.aisb-btn-ghost):not(.button):hover {
     text-decoration: underline;
 }
 

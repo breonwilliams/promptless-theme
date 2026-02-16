@@ -53,3 +53,17 @@ function promptless_content_width() {
     $GLOBALS['content_width'] = apply_filters( 'promptless_content_width', 1280 );
 }
 add_action( 'after_setup_theme', 'promptless_content_width', 0 );
+
+/**
+ * Add body class to disable WooCommerce default button styles
+ *
+ * This tells WooCommerce that the theme handles its own button styling,
+ * which disables WooCommerce's :where() selector default button CSS.
+ * Without this, WooCommerce applies gray text color to buttons.
+ */
+add_filter( 'body_class', function( $classes ) {
+    if ( class_exists( 'WooCommerce' ) ) {
+        $classes[] = 'woocommerce-block-theme-has-button-styles';
+    }
+    return $classes;
+} );
