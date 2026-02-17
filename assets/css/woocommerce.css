@@ -781,13 +781,10 @@ body.aisb-neo-brutalist-cards #reviews .comment-text {
    Cart Page
    ========================================================================== */
 
-/* Cart table */
+/* Cart table - uses collapse for clean 1px borders */
 .woocommerce table.shop_table {
-    border: 1px solid var(--wc-border);
-    border-radius: 0;
-    overflow: hidden;
-    border-collapse: separate;
-    border-spacing: 0;
+    border-collapse: collapse;
+    width: 100%;
 }
 
 .woocommerce table.shop_table th {
@@ -846,6 +843,18 @@ body.aisb-neo-brutalist-cards #reviews .comment-text {
     filter: brightness(0.85);
 }
 
+/* Coupon form layout */
+.woocommerce-cart table.cart td.actions .coupon {
+    display: flex;
+    gap: var(--aisb-section-space-sm, 0.75rem);
+    align-items: center;
+}
+
+.woocommerce-cart table.cart td.actions .coupon button {
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
 /* Cart table action buttons - compact sizing */
 .woocommerce-cart table.cart td.actions .coupon button,
 .woocommerce-cart table.cart td.actions button[name="update_cart"] {
@@ -898,9 +907,21 @@ body.aisb-neo-brutalist-cards #reviews .comment-text {
     margin-bottom: var(--aisb-section-space-md, 1rem);
 }
 
+/* Cart totals table - consistent collapse rule */
 .woocommerce-cart .cart-collaterals .cart_totals table {
-    border: 1px solid var(--wc-border);
-    border-radius: 0;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.woocommerce-cart .cart-collaterals .cart_totals th,
+.woocommerce-cart .cart-collaterals .cart_totals td {
+    border-bottom: 1px solid var(--wc-border);
+    padding: var(--aisb-section-space-sm, 0.75rem) var(--aisb-section-space-md, 1rem);
+}
+
+.woocommerce-cart .cart-collaterals .cart_totals tr:last-child th,
+.woocommerce-cart .cart-collaterals .cart_totals tr:last-child td {
+    border-bottom: none;
 }
 
 /* ==========================================================================
@@ -920,6 +941,12 @@ body.aisb-neo-brutalist-cards #reviews .comment-text {
     font-size: var(--aisb-section-text-xl, 1.25rem);
     color: var(--wc-text);
     margin-bottom: var(--aisb-section-space-md, 1rem);
+}
+
+/* Checkout order review table - explicit collapse for consistent borders */
+.woocommerce-checkout #order_review table.shop_table {
+    border-collapse: collapse;
+    width: 100%;
 }
 
 /* Payment methods */
