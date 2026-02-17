@@ -92,6 +92,25 @@ body.woocommerce-page .aisb-section--light {
     --wc-surface-link: var(--aisb-smart-light-surface-link, var(--aisb-color-primary, #6366f1));
 }
 
+/* Light mode for div.woocommerce inside light sections
+ * CRITICAL FIX: Mirrors the dark mode pattern (lines 119-130).
+ * When .woocommerce div is a descendant of .aisb-section--light,
+ * the default fallback rule (.woocommerce { --wc-link: primary; }) overrides
+ * inherited smart colors. This rule ensures accessible link colors cascade properly.
+ */
+.aisb-section--light .woocommerce,
+body.woocommerce .aisb-section--light .woocommerce,
+body.woocommerce-page .aisb-section--light .woocommerce {
+    --wc-bg: var(--aisb-color-background, #ffffff);
+    --wc-surface: var(--aisb-color-surface, #f9fafb);
+    --wc-text: var(--aisb-color-text, #1f2937);
+    --wc-text-muted: var(--aisb-color-text-muted, #6b7280);
+    --wc-border: var(--aisb-color-border, #e5e7eb);
+    --wc-primary: var(--aisb-color-primary, #6366f1);
+    --wc-link: var(--aisb-smart-light-section-link, var(--aisb-color-primary, #6366f1));
+    --wc-surface-link: var(--aisb-smart-light-surface-link, var(--aisb-color-primary, #6366f1));
+}
+
 /* Dark mode - compound selectors (when dark class is on same element as woocommerce) */
 .woocommerce.aisb-section--dark,
 .woocommerce-page.aisb-section--dark,
@@ -819,7 +838,8 @@ body.aisb-neo-brutalist-cards #reviews .comment-text {
 }
 
 /* Cart page link hover states - explicitly prevent underlines */
-.woocommerce-cart .cart_totals a:hover,
+/* Excludes .button to preserve button text colors */
+.woocommerce-cart .cart_totals a:not(.button):hover,
 .woocommerce-cart .shipping-calculator-button:hover {
     color: var(--wc-link);
     text-decoration: none;
