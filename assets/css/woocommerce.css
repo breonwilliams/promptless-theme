@@ -582,6 +582,7 @@ body.aisb-neo-brutalist-cards #reviews .comment-text {
     background: none;
     color: var(--wc-text);
     font-weight: 600;
+    text-decoration: none;
 }
 
 /* Single product price */
@@ -1133,11 +1134,21 @@ body.aisb-neo-brutalist-cards #reviews .comment-text {
     gap: var(--aisb-section-space-md, 1rem);
 }
 
-.woocommerce div.product .woocommerce-tabs ul.tabs li {
+.woocommerce div.product .woocommerce-tabs ul.tabs li,
+.woocommerce div.product .woocommerce-tabs ul.tabs li.active {
     margin: 0;
     padding: 0;
-    background: none;
+    background: transparent;
     border: none;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.woocommerce div.product .woocommerce-tabs ul.tabs li::before,
+.woocommerce div.product .woocommerce-tabs ul.tabs li::after,
+.woocommerce div.product .woocommerce-tabs ul.tabs li.active::before,
+.woocommerce div.product .woocommerce-tabs ul.tabs li.active::after {
+    display: none;
 }
 
 .woocommerce div.product .woocommerce-tabs ul.tabs li a {
@@ -1973,6 +1984,13 @@ body.woocommerce-page .aisb-section--dark div.product .product_meta {
 body.woocommerce .aisb-section--dark div.product .woocommerce-tabs ul.tabs,
 body.woocommerce-page .aisb-section--dark div.product .woocommerce-tabs ul.tabs {
     border-color: var(--wc-border, var(--aisb-color-dark-border, #374151));
+}
+
+body.woocommerce .aisb-section--dark div.product .woocommerce-tabs ul.tabs li,
+body.woocommerce-page .aisb-section--dark div.product .woocommerce-tabs ul.tabs li,
+body.woocommerce .aisb-section--dark div.product .woocommerce-tabs ul.tabs li.active,
+body.woocommerce-page .aisb-section--dark div.product .woocommerce-tabs ul.tabs li.active {
+    background: transparent;
 }
 
 body.woocommerce .aisb-section--dark div.product .woocommerce-tabs ul.tabs li a,
