@@ -863,8 +863,9 @@ body.aisb-neo-brutalist-cards #reviews .comment-text {
     font-size: var(--aisb-section-text-sm, 0.875rem);
 }
 
-/* Remove item link - uses semantic color token */
-.woocommerce a.remove {
+/* Remove item link - uses semantic color token
+   Excludes header mini-cart which has its own scoped styling in header.css */
+.woocommerce a.remove:not(.promptless-cart-item__remove) {
     color: var(--aisb-color-error, #dc2626);
     font-size: var(--aisb-section-text-xl, 1.25rem);
     font-weight: 700;
@@ -877,7 +878,7 @@ body.aisb-neo-brutalist-cards #reviews .comment-text {
     text-decoration: none;
 }
 
-.woocommerce a.remove:hover {
+.woocommerce a.remove:not(.promptless-cart-item__remove):hover {
     background: var(--aisb-color-error, #dc2626);
     color: var(--aisb-color-text-inverse, #ffffff);
     border-radius: 50%;
@@ -1353,14 +1354,15 @@ body.aisb-neo-brutalist-buttons.woocommerce-page nav.woocommerce-pagination ul l
    Mini Cart Widget
    ========================================================================== */
 
-.woocommerce .widget_shopping_cart .cart_list li,
-.woocommerce.widget_shopping_cart .cart_list li {
+/* Exclude header mini-cart items from widget styling */
+.woocommerce .widget_shopping_cart .cart_list li:not(.promptless-cart-item),
+.woocommerce.widget_shopping_cart .cart_list li:not(.promptless-cart-item) {
     border-bottom: 1px solid var(--wc-border);
     padding-bottom: var(--aisb-section-space-sm, 1rem);
     margin-bottom: var(--aisb-section-space-sm, 1rem);
 }
 
-.woocommerce .widget_shopping_cart .cart_list li a {
+.woocommerce .widget_shopping_cart .cart_list li:not(.promptless-cart-item) a {
     color: var(--wc-text);
     font-weight: 500;
 }
@@ -1376,26 +1378,27 @@ body.aisb-neo-brutalist-buttons.woocommerce-page nav.woocommerce-pagination ul l
    Product Widgets
    ========================================================================== */
 
-.woocommerce .widget ul.product_list_widget li {
+/* Exclude header mini-cart items from product widget styling */
+.woocommerce .widget ul.product_list_widget li:not(.promptless-cart-item) {
     padding: var(--aisb-section-space-sm, 1rem) 0;
     border-bottom: 1px solid var(--wc-border);
 }
 
-.woocommerce .widget ul.product_list_widget li:last-child {
+.woocommerce .widget ul.product_list_widget li:not(.promptless-cart-item):last-child {
     border-bottom: none;
 }
 
-.woocommerce .widget ul.product_list_widget li a {
+.woocommerce .widget ul.product_list_widget li:not(.promptless-cart-item) a {
     color: var(--wc-text);
     text-decoration: none;
     font-weight: 500;
 }
 
-.woocommerce .widget ul.product_list_widget li a:hover {
+.woocommerce .widget ul.product_list_widget li:not(.promptless-cart-item) a:hover {
     color: var(--wc-link);
 }
 
-.woocommerce .widget ul.product_list_widget li .amount {
+.woocommerce .widget ul.product_list_widget li:not(.promptless-cart-item) .amount {
     color: var(--wc-text-muted);
 }
 
@@ -2059,36 +2062,37 @@ body.woocommerce-page .aisb-section--dark .woocommerce-breadcrumb a:hover {
 
 /* ==========================================================================
    Widgets - Dark Mode
+   Excludes header mini-cart items which have their own scoped styling
    ========================================================================== */
 
-body.woocommerce .aisb-section--dark .widget ul.product_list_widget li,
-body.woocommerce-page .aisb-section--dark .widget ul.product_list_widget li {
+body.woocommerce .aisb-section--dark .widget ul.product_list_widget li:not(.promptless-cart-item),
+body.woocommerce-page .aisb-section--dark .widget ul.product_list_widget li:not(.promptless-cart-item) {
     border-color: var(--wc-border, var(--aisb-color-dark-border, #374151));
 }
 
-body.woocommerce .aisb-section--dark .widget ul.product_list_widget li a,
-body.woocommerce-page .aisb-section--dark .widget ul.product_list_widget li a {
+body.woocommerce .aisb-section--dark .widget ul.product_list_widget li:not(.promptless-cart-item) a,
+body.woocommerce-page .aisb-section--dark .widget ul.product_list_widget li:not(.promptless-cart-item) a {
     color: var(--wc-text, var(--aisb-color-dark-text, #f9fafb));
 }
 
-body.woocommerce .aisb-section--dark .widget ul.product_list_widget li a:hover,
-body.woocommerce-page .aisb-section--dark .widget ul.product_list_widget li a:hover {
+body.woocommerce .aisb-section--dark .widget ul.product_list_widget li:not(.promptless-cart-item) a:hover,
+body.woocommerce-page .aisb-section--dark .widget ul.product_list_widget li:not(.promptless-cart-item) a:hover {
     color: var(--wc-link, var(--aisb-color-primary, #6366f1));
 }
 
-body.woocommerce .aisb-section--dark .widget ul.product_list_widget li .amount,
-body.woocommerce-page .aisb-section--dark .widget ul.product_list_widget li .amount {
+body.woocommerce .aisb-section--dark .widget ul.product_list_widget li:not(.promptless-cart-item) .amount,
+body.woocommerce-page .aisb-section--dark .widget ul.product_list_widget li:not(.promptless-cart-item) .amount {
     color: var(--wc-text-muted, var(--aisb-color-dark-text-muted, #9ca3af));
 }
 
 /* Mini Cart Widget - Dark Mode */
-body.woocommerce .aisb-section--dark .widget_shopping_cart .cart_list li,
-body.woocommerce-page .aisb-section--dark .widget_shopping_cart .cart_list li {
+body.woocommerce .aisb-section--dark .widget_shopping_cart .cart_list li:not(.promptless-cart-item),
+body.woocommerce-page .aisb-section--dark .widget_shopping_cart .cart_list li:not(.promptless-cart-item) {
     border-color: var(--wc-border, var(--aisb-color-dark-border, #374151));
 }
 
-body.woocommerce .aisb-section--dark .widget_shopping_cart .cart_list li a,
-body.woocommerce-page .aisb-section--dark .widget_shopping_cart .cart_list li a {
+body.woocommerce .aisb-section--dark .widget_shopping_cart .cart_list li:not(.promptless-cart-item) a,
+body.woocommerce-page .aisb-section--dark .widget_shopping_cart .cart_list li:not(.promptless-cart-item) a {
     color: var(--wc-text, var(--aisb-color-dark-text, #f9fafb));
 }
 
@@ -2152,56 +2156,58 @@ body.woocommerce-page .aisb-section--dark .widget_shopping_cart .total {
 
 /* --------------------------------------------------------------------------
    Product Widget Links - High Specificity Override
+   Excludes header mini-cart items which have their own scoped styling
    -------------------------------------------------------------------------- */
 
 /* Light mode product widget links */
-.aisb-section--light .widget ul.product_list_widget li a[href][href][href][href][href][href][href][href] {
+.aisb-section--light .widget ul.product_list_widget li:not(.promptless-cart-item) a[href][href][href][href][href][href][href][href] {
     color: var(--wc-text, var(--aisb-color-text, #1f2937));
     text-decoration: none;
 }
 
-.aisb-section--light .widget ul.product_list_widget li a[href][href][href][href][href][href][href][href]:hover,
-.aisb-section--light .widget ul.product_list_widget li a[href][href][href][href][href][href][href][href]:focus {
+.aisb-section--light .widget ul.product_list_widget li:not(.promptless-cart-item) a[href][href][href][href][href][href][href][href]:hover,
+.aisb-section--light .widget ul.product_list_widget li:not(.promptless-cart-item) a[href][href][href][href][href][href][href][href]:focus {
     color: var(--wc-link, var(--aisb-color-primary, #6366f1));
     text-decoration: none;
 }
 
 /* Dark mode product widget links */
-.aisb-section--dark .widget ul.product_list_widget li a[href][href][href][href][href][href][href][href] {
+.aisb-section--dark .widget ul.product_list_widget li:not(.promptless-cart-item) a[href][href][href][href][href][href][href][href] {
     color: var(--wc-text, var(--aisb-color-dark-text, #f9fafb));
     text-decoration: none;
 }
 
-.aisb-section--dark .widget ul.product_list_widget li a[href][href][href][href][href][href][href][href]:hover,
-.aisb-section--dark .widget ul.product_list_widget li a[href][href][href][href][href][href][href][href]:focus {
+.aisb-section--dark .widget ul.product_list_widget li:not(.promptless-cart-item) a[href][href][href][href][href][href][href][href]:hover,
+.aisb-section--dark .widget ul.product_list_widget li:not(.promptless-cart-item) a[href][href][href][href][href][href][href][href]:focus {
     color: var(--wc-link, var(--aisb-color-primary, #6366f1));
     text-decoration: none;
 }
 
 /* --------------------------------------------------------------------------
    Mini Cart Widget Links - High Specificity Override
+   Excludes header mini-cart items which have their own scoped styling
    -------------------------------------------------------------------------- */
 
 /* Light mode mini cart links */
-.aisb-section--light .widget_shopping_cart .cart_list li a[href][href][href][href][href][href][href][href] {
+.aisb-section--light .widget_shopping_cart .cart_list li:not(.promptless-cart-item) a[href][href][href][href][href][href][href][href] {
     color: var(--wc-text, var(--aisb-color-text, #1f2937));
     text-decoration: none;
 }
 
-.aisb-section--light .widget_shopping_cart .cart_list li a[href][href][href][href][href][href][href][href]:hover,
-.aisb-section--light .widget_shopping_cart .cart_list li a[href][href][href][href][href][href][href][href]:focus {
+.aisb-section--light .widget_shopping_cart .cart_list li:not(.promptless-cart-item) a[href][href][href][href][href][href][href][href]:hover,
+.aisb-section--light .widget_shopping_cart .cart_list li:not(.promptless-cart-item) a[href][href][href][href][href][href][href][href]:focus {
     color: var(--wc-link, var(--aisb-color-primary, #6366f1));
     text-decoration: none;
 }
 
 /* Dark mode mini cart links */
-.aisb-section--dark .widget_shopping_cart .cart_list li a[href][href][href][href][href][href][href][href] {
+.aisb-section--dark .widget_shopping_cart .cart_list li:not(.promptless-cart-item) a[href][href][href][href][href][href][href][href] {
     color: var(--wc-text, var(--aisb-color-dark-text, #f9fafb));
     text-decoration: none;
 }
 
-.aisb-section--dark .widget_shopping_cart .cart_list li a[href][href][href][href][href][href][href][href]:hover,
-.aisb-section--dark .widget_shopping_cart .cart_list li a[href][href][href][href][href][href][href][href]:focus {
+.aisb-section--dark .widget_shopping_cart .cart_list li:not(.promptless-cart-item) a[href][href][href][href][href][href][href][href]:hover,
+.aisb-section--dark .widget_shopping_cart .cart_list li:not(.promptless-cart-item) a[href][href][href][href][href][href][href][href]:focus {
     color: var(--wc-link, var(--aisb-color-primary, #6366f1));
     text-decoration: none;
 }

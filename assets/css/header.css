@@ -569,8 +569,10 @@
     box-sizing: border-box;
 }
 
-/* Mini-cart product list styling */
-.promptless-header__mini-cart .woocommerce-mini-cart {
+/* Mini-cart product list styling
+   Uses promptless-mini-cart-list to avoid WooCommerce widget style conflicts */
+.promptless-header__mini-cart .woocommerce-mini-cart,
+.promptless-header__mini-cart .promptless-mini-cart-list {
     margin: 0;
     padding: 0;
     list-style: none;
@@ -596,6 +598,7 @@
     align-items: center;
     padding: 12px 0;
     border-bottom: 1px solid var(--section-border);
+    margin: 0;
 }
 
 .promptless-header__mini-cart .promptless-cart-item:last-child {
@@ -654,6 +657,16 @@
     font-size: 13px;
     color: var(--section-text-muted);
     line-height: 1.3;
+}
+
+/* Reset WooCommerce price styling within mini-cart
+   Prevents .woocommerce .amount from overriding on shop pages */
+.promptless-header__mini-cart .promptless-cart-item__qty .amount,
+.promptless-header__mini-cart .promptless-cart-item__qty .woocommerce-Price-amount {
+    font-size: inherit;
+    font-weight: inherit;
+    color: inherit;
+    font-family: inherit;
 }
 
 /* Remove Button */
@@ -728,10 +741,16 @@
 /* Mini-cart buttons - use plugin styling */
 .promptless-header__mini-cart .woocommerce-mini-cart__buttons {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: 0.5rem;
     margin-top: 0.75rem;
     padding-top: 0.5rem;
+}
+
+/* Mini-cart buttons share equal width - targets both aisb-btn and WooCommerce .button classes */
+.promptless-header__mini-cart .woocommerce-mini-cart__buttons .aisb-btn {
+    flex: 1;
+    width: auto;
 }
 
 /* ==========================================================================
@@ -745,20 +764,20 @@
    briefly before AJAX replaces the content.
    ========================================================================== */
 
-/* Base button styles for ALL mini-cart buttons */
+/* Base button styles for ALL mini-cart buttons - uses compact button sizing */
 .promptless-header__mini-cart .woocommerce-mini-cart__buttons .button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 100%;
+    flex: 1;
     box-sizing: border-box;
-    padding: 0.625rem 1.25rem;
+    padding: var(--aisb-section-space-xs) var(--aisb-section-space-md);
     font-family: var(--aisb-section-font-button, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
-    font-size: 0.875rem;
-    font-weight: 500;
+    font-size: var(--aisb-section-text-sm);
+    font-weight: var(--aisb-section-font-button-weight, var(--aisb-section-font-medium));
     text-decoration: none;
-    border-radius: var(--aisb-section-radius-button, 6px);
-    transition: all 0.2s ease;
+    border-radius: var(--aisb-section-radius-button, var(--aisb-section-radius-md));
+    transition: all var(--aisb-section-transition-base);
     cursor: pointer;
 }
 

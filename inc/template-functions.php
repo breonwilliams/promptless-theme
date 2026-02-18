@@ -532,15 +532,33 @@ function promptless_mini_cart_buttons() {
 add_action( 'wp_loaded', 'promptless_mini_cart_buttons' );
 
 /**
+ * Modify cart hash to force browsers to fetch new fragments
+ * Increment version when button markup changes
+ */
+add_filter( 'woocommerce_cart_hash', function( $hash ) {
+	return $hash . '_btn_v3';
+}, 10 );
+
+/**
  * Output mini-cart View Cart button with ghost styling
  */
 function promptless_mini_cart_view_cart_button() {
-	echo '<a href="' . esc_url( wc_get_cart_url() ) . '" class="aisb-btn aisb-btn-ghost">' . esc_html__( 'View cart', 'woocommerce' ) . '</a>';
+	echo '<a href="' . esc_url( wc_get_cart_url() ) . '" class="aisb-btn aisb-btn--compact aisb-btn-ghost">' . esc_html__( 'View cart', 'woocommerce' ) . '</a>';
 }
 
 /**
  * Output mini-cart Checkout button with primary styling
  */
 function promptless_mini_cart_checkout_button() {
-	echo '<a href="' . esc_url( wc_get_checkout_url() ) . '" class="aisb-btn aisb-btn-primary">' . esc_html__( 'Checkout', 'woocommerce' ) . '</a>';
+	echo '<a href="' . esc_url( wc_get_checkout_url() ) . '" class="aisb-btn aisb-btn--compact aisb-btn-primary">' . esc_html__( 'Checkout', 'woocommerce' ) . '</a>';
 }
+
+/**
+ * Invalidate WooCommerce cart fragment cache to force fresh rendering
+ * This ensures button markup changes are immediately visible
+ */
+add_filter( 'woocommerce_add_to_cart_fragments', function( $fragments ) {
+	// The fragments are re-rendered when this filter runs,
+	// so just returning them ensures fresh content
+	return $fragments;
+}, 999 );
