@@ -466,7 +466,6 @@
     padding: 0;
     background: transparent;
     border: none;
-    border-radius: 4px;
     color: var(--section-text);
     cursor: pointer;
     transition: background-color 0.2s ease, color 0.2s ease;
@@ -477,7 +476,6 @@
 .promptless-header__cart-toggle:focus,
 .promptless-header__cart-link:hover,
 .promptless-header__cart-link:focus {
-    background-color: var(--section-surface);
     color: var(--section-primary);
     text-decoration: none;
 }
@@ -781,28 +779,18 @@
     cursor: pointer;
 }
 
-/* Ghost button - View Cart (Light mode) */
-.promptless-header.aisb-section--light .promptless-header__mini-cart .button.wc-forward:not(.checkout) {
-    background: transparent;
-    color: var(--aisb-smart-light-section-link, var(--aisb-color-primary, #6366f1));
-    border: 2px solid var(--aisb-smart-light-section-link, var(--aisb-color-primary, #6366f1));
-}
-
-.promptless-header.aisb-section--light .promptless-header__mini-cart .button.wc-forward:not(.checkout):hover {
-    background: var(--aisb-color-primary, #6366f1);
-    color: var(--aisb-button-primary-text, #ffffff);
-    border-color: var(--aisb-color-primary, #6366f1);
-    text-decoration: none;
-}
-
-/* Ghost button - View Cart (Dark mode) */
-.promptless-header.aisb-section--dark .promptless-header__mini-cart .button.wc-forward:not(.checkout) {
+/* Ghost button - View Cart
+ * ALWAYS uses dark surface colors because mini-cart dropdown has dark background
+ * regardless of header theme. The button sits on a dark surface, so needs
+ * dark-context-appropriate colors for accessibility.
+ */
+.promptless-header__mini-cart .button.wc-forward:not(.checkout) {
     background: transparent;
     color: var(--aisb-smart-dark-section-link, var(--aisb-color-primary, #6366f1));
     border: 2px solid var(--aisb-smart-dark-section-link, var(--aisb-color-primary, #6366f1));
 }
 
-.promptless-header.aisb-section--dark .promptless-header__mini-cart .button.wc-forward:not(.checkout):hover {
+.promptless-header__mini-cart .button.wc-forward:not(.checkout):hover {
     background: var(--aisb-color-primary, #6366f1);
     color: var(--aisb-button-primary-text, #ffffff);
     border-color: var(--aisb-color-primary, #6366f1);
@@ -818,6 +806,25 @@
 
 .promptless-header__mini-cart .button.checkout.wc-forward:hover {
     filter: brightness(0.9);
+    color: var(--aisb-button-primary-text, #ffffff);
+    text-decoration: none;
+}
+
+/* Ghost button focus - View Cart
+ * Uses dark surface colors since mini-cart always has dark background
+ */
+.promptless-header__mini-cart .button.wc-forward:not(.checkout):focus {
+    outline: 2px solid var(--aisb-smart-dark-section-link, var(--aisb-color-primary, #6366f1));
+    outline-offset: 2px;
+    color: var(--aisb-smart-dark-section-link, var(--aisb-color-primary, #6366f1));
+    text-decoration: none;
+}
+
+/* Primary button focus - Checkout */
+.promptless-header__mini-cart .button.checkout.wc-forward:focus {
+    outline: 2px solid var(--aisb-color-primary, #6366f1);
+    outline-offset: 2px;
+    color: var(--aisb-button-primary-text, #ffffff);
     text-decoration: none;
 }
 

@@ -280,8 +280,11 @@ body.woocommerce-page .aisb-section--dark .woocommerce {
 .woocommerce .checkout-button:hover,
 .woocommerce #place_order:hover,
 .woocommerce .woocommerce-Button:hover,
-.woocommerce .single_add_to_cart_button:hover {
+.woocommerce .single_add_to_cart_button:hover,
+.woocommerce ul.products li.product .button:hover,
+.woocommerce ul.products li.product .add_to_cart_button:hover {
     filter: brightness(0.9);
+    color: var(--aisb-button-primary-text, #ffffff);
     text-decoration: none;
 }
 
@@ -289,6 +292,48 @@ body.woocommerce-page .aisb-section--dark .woocommerce {
 .woocommerce a.button:active,
 .woocommerce input.button:active {
     transform: scale(0.98);
+}
+
+/* Focus states - preserve button text colors for keyboard navigation */
+.woocommerce button.button:focus,
+.woocommerce button.button.alt:focus,
+.woocommerce a.button:focus,
+.woocommerce a.button.alt:focus,
+.woocommerce input.button:focus,
+.woocommerce input.button.alt:focus,
+.woocommerce #respond input#submit:focus,
+.woocommerce .checkout-button:focus,
+.woocommerce #place_order:focus,
+.woocommerce .woocommerce-Button:focus,
+.woocommerce .single_add_to_cart_button:focus,
+.woocommerce ul.products li.product .button:focus,
+.woocommerce ul.products li.product .add_to_cart_button:focus {
+    outline: 2px solid var(--aisb-color-primary, #6366f1);
+    outline-offset: 2px;
+    color: var(--aisb-button-primary-text, #ffffff);
+    text-decoration: none;
+}
+
+/* Ghost/secondary button focus states - Light mode */
+.aisb-section--light .woocommerce .woocommerce-mini-cart__buttons .button:not(.checkout):focus,
+.aisb-section--light .woocommerce ul.products li.product a.added_to_cart:focus,
+body.woocommerce.aisb-section--light ul.products li.product a.added_to_cart:focus,
+body.woocommerce-page.aisb-section--light ul.products li.product a.added_to_cart:focus {
+    outline: 2px solid var(--aisb-smart-light-section-link, var(--aisb-color-primary, #6366f1));
+    outline-offset: 2px;
+    color: var(--aisb-smart-light-section-link, var(--aisb-color-primary, #6366f1));
+    text-decoration: none;
+}
+
+/* Ghost/secondary button focus states - Dark mode */
+.aisb-section--dark .woocommerce .woocommerce-mini-cart__buttons .button:not(.checkout):focus,
+.aisb-section--dark .woocommerce ul.products li.product a.added_to_cart:focus,
+body.woocommerce.aisb-section--dark ul.products li.product a.added_to_cart:focus,
+body.woocommerce-page.aisb-section--dark ul.products li.product a.added_to_cart:focus {
+    outline: 2px solid var(--aisb-smart-dark-section-link, var(--aisb-color-primary, #6366f1));
+    outline-offset: 2px;
+    color: var(--aisb-smart-dark-section-link, var(--aisb-color-primary, #6366f1));
+    text-decoration: none;
 }
 
 /* Disabled state */
@@ -300,6 +345,7 @@ body.woocommerce-page .aisb-section--dark .woocommerce {
 }
 
 /* Secondary/Ghost buttons (View Cart in mini cart, Continue Shopping) - Full size */
+/* Base styles (shared across themes) */
 .woocommerce .woocommerce-mini-cart__buttons .button:not(.checkout) {
     display: inline-flex;
     align-items: center;
@@ -308,16 +354,27 @@ body.woocommerce-page .aisb-section--dark .woocommerce {
     font-family: var(--aisb-section-font-button, inherit);
     font-size: var(--aisb-section-text-base, 1rem);
     font-weight: var(--aisb-section-font-button-weight, 500);
-    color: var(--aisb-ghost-button-color, var(--aisb-color-primary, #6366f1));
     background: transparent;
-    border: 2px solid var(--aisb-ghost-button-color, var(--aisb-color-primary, #6366f1));
     border-radius: var(--aisb-section-radius-button, 8px);
     cursor: pointer;
     text-decoration: none;
     transition: all 0.2s ease;
 }
 
+/* Light mode ghost button colors */
+.aisb-section--light .woocommerce .woocommerce-mini-cart__buttons .button:not(.checkout) {
+    color: var(--aisb-smart-light-section-link, var(--aisb-color-primary, #6366f1));
+    border: 2px solid var(--aisb-smart-light-section-link, var(--aisb-color-primary, #6366f1));
+}
+
+/* Dark mode ghost button colors */
+.aisb-section--dark .woocommerce .woocommerce-mini-cart__buttons .button:not(.checkout) {
+    color: var(--aisb-smart-dark-section-link, var(--aisb-color-primary, #6366f1));
+    border: 2px solid var(--aisb-smart-dark-section-link, var(--aisb-color-primary, #6366f1));
+}
+
 /* Product card View Cart button - Compact size to match Product Grid section */
+/* Base styles (shared across themes) */
 .woocommerce ul.products li.product a.added_to_cart {
     display: inline-flex;
     align-items: center;
@@ -326,9 +383,7 @@ body.woocommerce-page .aisb-section--dark .woocommerce {
     font-family: var(--aisb-section-font-button, inherit);
     font-size: var(--aisb-section-text-sm, 0.875rem);
     font-weight: var(--aisb-section-font-button-weight, 500);
-    color: var(--aisb-ghost-button-color, var(--aisb-color-primary, #6366f1));
     background: transparent;
-    border: 2px solid var(--aisb-ghost-button-color, var(--aisb-color-primary, #6366f1));
     border-radius: var(--aisb-section-radius-button, 8px);
     cursor: pointer;
     text-decoration: none;
@@ -336,7 +391,24 @@ body.woocommerce-page .aisb-section--dark .woocommerce {
     line-height: 1.5;
 }
 
+/* Light mode - product card View Cart ghost button */
+.aisb-section--light .woocommerce ul.products li.product a.added_to_cart,
+body.woocommerce.aisb-section--light ul.products li.product a.added_to_cart,
+body.woocommerce-page.aisb-section--light ul.products li.product a.added_to_cart {
+    color: var(--aisb-smart-light-section-link, var(--aisb-color-primary, #6366f1));
+    border: 2px solid var(--aisb-smart-light-section-link, var(--aisb-color-primary, #6366f1));
+}
+
+/* Dark mode - product card View Cart ghost button */
+.aisb-section--dark .woocommerce ul.products li.product a.added_to_cart,
+body.woocommerce.aisb-section--dark ul.products li.product a.added_to_cart,
+body.woocommerce-page.aisb-section--dark ul.products li.product a.added_to_cart {
+    color: var(--aisb-smart-dark-section-link, var(--aisb-color-primary, #6366f1));
+    border: 2px solid var(--aisb-smart-dark-section-link, var(--aisb-color-primary, #6366f1));
+}
+
 /* General View Cart button (not in product cards) */
+/* Base styles (shared across themes) */
 .woocommerce a.added_to_cart {
     display: inline-flex;
     align-items: center;
@@ -345,20 +417,32 @@ body.woocommerce-page .aisb-section--dark .woocommerce {
     font-family: var(--aisb-section-font-button, inherit);
     font-size: var(--aisb-section-text-base, 1rem);
     font-weight: var(--aisb-section-font-button-weight, 500);
-    color: var(--aisb-ghost-button-color, var(--aisb-color-primary, #6366f1));
     background: transparent;
-    border: 2px solid var(--aisb-ghost-button-color, var(--aisb-color-primary, #6366f1));
     border-radius: var(--aisb-section-radius-button, 8px);
     cursor: pointer;
     text-decoration: none;
     transition: all 0.2s ease;
 }
 
+/* Light mode - general View Cart ghost button */
+.aisb-section--light .woocommerce a.added_to_cart {
+    color: var(--aisb-smart-light-section-link, var(--aisb-color-primary, #6366f1));
+    border: 2px solid var(--aisb-smart-light-section-link, var(--aisb-color-primary, #6366f1));
+}
+
+/* Dark mode - general View Cart ghost button */
+.aisb-section--dark .woocommerce a.added_to_cart {
+    color: var(--aisb-smart-dark-section-link, var(--aisb-color-primary, #6366f1));
+    border: 2px solid var(--aisb-smart-dark-section-link, var(--aisb-color-primary, #6366f1));
+}
+
+/* Ghost button hover states - fills with primary color */
 .woocommerce a.added_to_cart:hover,
 .woocommerce ul.products li.product a.added_to_cart:hover,
 .woocommerce .woocommerce-mini-cart__buttons .button:not(.checkout):hover {
-    background: var(--aisb-ghost-button-color, var(--aisb-color-primary, #6366f1));
+    background: var(--aisb-color-primary, #6366f1);
     color: var(--aisb-button-primary-text, #ffffff);
+    border-color: var(--aisb-color-primary, #6366f1);
     text-decoration: none;
 }
 
@@ -380,7 +464,9 @@ body.aisb-neo-brutalist-buttons.woocommerce #place_order,
 body.aisb-neo-brutalist-buttons.woocommerce .woocommerce-Button,
 body.aisb-neo-brutalist-buttons.woocommerce-page button.button,
 body.aisb-neo-brutalist-buttons.woocommerce-page a.button,
-body.aisb-neo-brutalist-buttons.woocommerce-page input.button {
+body.aisb-neo-brutalist-buttons.woocommerce-page input.button,
+body.aisb-neo-brutalist-buttons.woocommerce-page #place_order,
+body.aisb-neo-brutalist-buttons.woocommerce-page .checkout-button {
     border: var(--aisb-neo-border-width-button, 3px) solid var(--aisb-neo-brutalist-primary-border, #000);
     box-shadow: var(--aisb-neo-shadow-offset-button, 4px) var(--aisb-neo-shadow-offset-button, 4px) 0 var(--aisb-neo-brutalist-primary-border, #000);
 }
@@ -398,7 +484,9 @@ body.aisb-neo-brutalist-buttons.woocommerce #place_order:hover,
 body.aisb-neo-brutalist-buttons.woocommerce .woocommerce-Button:hover,
 body.aisb-neo-brutalist-buttons.woocommerce-page button.button:hover,
 body.aisb-neo-brutalist-buttons.woocommerce-page a.button:hover,
-body.aisb-neo-brutalist-buttons.woocommerce-page input.button:hover {
+body.aisb-neo-brutalist-buttons.woocommerce-page input.button:hover,
+body.aisb-neo-brutalist-buttons.woocommerce-page #place_order:hover,
+body.aisb-neo-brutalist-buttons.woocommerce-page .checkout-button:hover {
     transform: translate(1px, 1px);
     box-shadow: var(--aisb-neo-shadow-offset-button-hover, 3px) var(--aisb-neo-shadow-offset-button-hover, 3px) 0 var(--aisb-neo-brutalist-primary-border, #000);
     filter: none;
@@ -1329,25 +1417,6 @@ body.aisb-section--dark .woocommerce nav.woocommerce-pagination ul li span.curre
     background-color: var(--wc-link, var(--aisb-color-primary, #6366f1));
     border-color: var(--wc-link, var(--aisb-color-primary, #6366f1));
     color: var(--aisb-button-primary-text, #ffffff);
-}
-
-/* Neo-Brutalist pagination
- * SELECTOR FIX: .woocommerce is on body, use compound selector
- */
-body.aisb-neo-brutalist-buttons.woocommerce nav.woocommerce-pagination ul li a,
-body.aisb-neo-brutalist-buttons.woocommerce nav.woocommerce-pagination ul li span,
-body.aisb-neo-brutalist-buttons.woocommerce-page nav.woocommerce-pagination ul li a,
-body.aisb-neo-brutalist-buttons.woocommerce-page nav.woocommerce-pagination ul li span {
-    border: var(--aisb-neo-border-width-button, 3px) solid var(--aisb-neo-brutalist-primary-border, #000);
-    box-shadow: var(--aisb-neo-shadow-offset-button, 4px) var(--aisb-neo-shadow-offset-button, 4px) 0 var(--aisb-neo-brutalist-primary-border, #000);
-}
-
-body.aisb-neo-brutalist-buttons.woocommerce nav.woocommerce-pagination ul li a:hover,
-body.aisb-neo-brutalist-buttons.woocommerce nav.woocommerce-pagination ul li a:focus,
-body.aisb-neo-brutalist-buttons.woocommerce-page nav.woocommerce-pagination ul li a:hover,
-body.aisb-neo-brutalist-buttons.woocommerce-page nav.woocommerce-pagination ul li a:focus {
-    transform: translate(1px, 1px);
-    box-shadow: var(--aisb-neo-shadow-offset-button-hover, 3px) var(--aisb-neo-shadow-offset-button-hover, 3px) 0 var(--aisb-neo-brutalist-primary-border, #000);
 }
 
 /* ==========================================================================

@@ -77,8 +77,8 @@ a {
   transition: color 0.2s ease;
 }
 
-a:hover,
-a:focus {
+a:not(.aisb-btn):not(.aisb-btn-primary):not(.aisb-btn-secondary):not(.aisb-btn-ghost):hover,
+a:not(.aisb-btn):not(.aisb-btn-primary):not(.aisb-btn-secondary):not(.aisb-btn-ghost):focus {
   color: var(--aisb-color-primary, #6366f1);
 }
 
