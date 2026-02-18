@@ -77,8 +77,8 @@ a {
   transition: color 0.2s ease;
 }
 
-a:not(.aisb-btn):not(.aisb-btn-primary):not(.aisb-btn-secondary):not(.aisb-btn-ghost):hover,
-a:not(.aisb-btn):not(.aisb-btn-primary):not(.aisb-btn-secondary):not(.aisb-btn-ghost):focus {
+a:not(.aisb-btn):not(.aisb-btn-primary):not(.aisb-btn-secondary):not(.aisb-btn-ghost):not(.button):not(.checkout-button):not(.wc-forward):not(.add_to_cart_button):not(.added_to_cart):hover,
+a:not(.aisb-btn):not(.aisb-btn-primary):not(.aisb-btn-secondary):not(.aisb-btn-ghost):not(.button):not(.checkout-button):not(.wc-forward):not(.add_to_cart_button):not(.added_to_cart):focus {
   color: var(--aisb-color-primary, #6366f1);
 }
 

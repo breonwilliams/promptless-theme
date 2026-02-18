@@ -489,7 +489,7 @@ body.aisb-neo-brutalist-buttons.woocommerce-page #place_order:hover,
 body.aisb-neo-brutalist-buttons.woocommerce-page .checkout-button:hover {
     transform: translate(1px, 1px);
     box-shadow: var(--aisb-neo-shadow-offset-button-hover, 3px) var(--aisb-neo-shadow-offset-button-hover, 3px) 0 var(--aisb-neo-brutalist-primary-border, #000);
-    filter: none;
+    filter: brightness(0.9);
 }
 
 /* Neo-Brutalist mini-cart buttons (excludes ghost/View Cart button) */
