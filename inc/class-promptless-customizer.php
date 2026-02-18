@@ -161,6 +161,83 @@ class Promptless_Customizer {
                 'type'        => 'url',
             )
         );
+
+        // =============================================
+        // Navigation Position
+        // =============================================
+        $wp_customize->add_setting(
+            'promptless_nav_position',
+            array(
+                'default'           => 'center',
+                'sanitize_callback' => array( $this, 'sanitize_nav_position' ),
+                'transport'         => 'refresh',
+            )
+        );
+
+        $wp_customize->add_control(
+            'promptless_nav_position',
+            array(
+                'label'       => __( 'Navigation Position', 'promptless-theme' ),
+                'description' => __( 'Align the primary navigation menu within the header.', 'promptless-theme' ),
+                'section'     => 'promptless_theme_settings',
+                'type'        => 'select',
+                'choices'     => array(
+                    'left'   => __( 'Left', 'promptless-theme' ),
+                    'center' => __( 'Center', 'promptless-theme' ),
+                    'right'  => __( 'Right', 'promptless-theme' ),
+                ),
+            )
+        );
+
+        // =============================================
+        // WooCommerce Header Cart Settings
+        // Only show if WooCommerce is active
+        // =============================================
+        if ( class_exists( 'WooCommerce' ) ) {
+            // Enable cart icon toggle
+            $wp_customize->add_setting(
+                'promptless_header_cart_enabled',
+                array(
+                    'default'           => false,
+                    'sanitize_callback' => array( $this, 'sanitize_checkbox' ),
+                    'transport'         => 'refresh',
+                )
+            );
+
+            $wp_customize->add_control(
+                'promptless_header_cart_enabled',
+                array(
+                    'label'       => __( 'Show Cart Icon', 'promptless-theme' ),
+                    'description' => __( 'Display a shopping cart icon in the header.', 'promptless-theme' ),
+                    'section'     => 'promptless_theme_settings',
+                    'type'        => 'checkbox',
+                )
+            );
+
+            // Cart behavior: link or dropdown
+            $wp_customize->add_setting(
+                'promptless_header_cart_style',
+                array(
+                    'default'           => 'dropdown',
+                    'sanitize_callback' => array( $this, 'sanitize_cart_style' ),
+                    'transport'         => 'refresh',
+                )
+            );
+
+            $wp_customize->add_control(
+                'promptless_header_cart_style',
+                array(
+                    'label'       => __( 'Cart Icon Behavior', 'promptless-theme' ),
+                    'description' => __( 'Choose whether the cart icon opens a mini-cart dropdown or links directly to the cart page.', 'promptless-theme' ),
+                    'section'     => 'promptless_theme_settings',
+                    'type'        => 'select',
+                    'choices'     => array(
+                        'dropdown' => __( 'Mini-Cart Dropdown', 'promptless-theme' ),
+                        'link'     => __( 'Link to Cart Page', 'promptless-theme' ),
+                    ),
+                )
+            );
+        }
     }
 
     /**
@@ -177,5 +254,47 @@ class Promptless_Customizer {
         }
 
         return 'light';
+    }
+
+    /**
+     * Sanitize navigation position setting
+     *
+     * @param string $value Setting value.
+     * @return string Sanitized value.
+     */
+    public function sanitize_nav_position( $value ) {
+        $valid = array( 'left', 'center', 'right' );
+
+        if ( in_array( $value, $valid, true ) ) {
+            return $value;
+        }
+
+        return 'center';
+    }
+
+    /**
+     * Sanitize checkbox setting
+     *
+     * @param mixed $value Setting value.
+     * @return bool Sanitized value.
+     */
+    public function sanitize_checkbox( $value ) {
+        return (bool) $value;
+    }
+
+    /**
+     * Sanitize cart style setting
+     *
+     * @param string $value Setting value.
+     * @return string Sanitized value.
+     */
+    public function sanitize_cart_style( $value ) {
+        $valid = array( 'link', 'dropdown' );
+
+        if ( in_array( $value, $valid, true ) ) {
+            return $value;
+        }
+
+        return 'dropdown';
     }
 }

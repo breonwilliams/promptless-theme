@@ -15,14 +15,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Output the site logo or site title
+ *
+ * Enhanced accessibility:
+ * - Adds aria-current="page" on homepage (matching WordPress core pattern)
+ * - Logo images get role="img" via filter in class-promptless-setup.php
  */
 function promptless_site_logo() {
     if ( has_custom_logo() ) {
         the_custom_logo();
     } else {
+        $site_name    = get_bloginfo( 'name' );
+        $aria_current = ( is_front_page() && ! is_paged() ) ? ' aria-current="page"' : '';
         ?>
-        <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="promptless-header__site-title" rel="home">
-            <?php bloginfo( 'name' ); ?>
+        <a href="<?php echo esc_url( home_url( '/' ) ); ?>"
+           class="promptless-header__site-title"
+           rel="home"<?php echo $aria_current; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+            <?php echo esc_html( $site_name ); ?>
         </a>
         <?php
     }
@@ -312,7 +320,16 @@ function promptless_get_footer_theme() {
 }
 
 /**
- * Get header CSS classes including theme variant
+ * Get the navigation position setting
+ *
+ * @return string 'left', 'center', or 'right'
+ */
+function promptless_get_nav_position() {
+    return get_theme_mod( 'promptless_nav_position', 'center' );
+}
+
+/**
+ * Get header CSS classes including theme variant and navigation position
  *
  * @return string CSS classes for header element
  */
@@ -322,6 +339,10 @@ function promptless_get_header_classes() {
 
     // Add theme variant class (same pattern as plugin sections)
     $classes[] = 'aisb-section--' . esc_attr( $theme );
+
+    // Add navigation position class
+    $nav_position = promptless_get_nav_position();
+    $classes[]    = 'promptless-header--nav-' . esc_attr( $nav_position );
 
     return implode( ' ', $classes );
 }
@@ -363,4 +384,163 @@ function promptless_get_content_classes() {
     $classes[] = 'aisb-section--' . esc_attr( $theme );
 
     return implode( ' ', $classes );
+}
+
+/**
+ * Check if header cart should be displayed
+ *
+ * @return bool True if WooCommerce is active and cart is enabled.
+ */
+function promptless_has_header_cart() {
+    if ( ! class_exists( 'WooCommerce' ) ) {
+        return false;
+    }
+
+    return (bool) get_theme_mod( 'promptless_header_cart_enabled', false );
+}
+
+/**
+ * Get header cart style setting
+ *
+ * @return string 'link' or 'dropdown'
+ */
+function promptless_get_header_cart_style() {
+    return get_theme_mod( 'promptless_header_cart_style', 'dropdown' );
+}
+
+/**
+ * Output header cart icon with optional mini-cart dropdown
+ *
+ * Features:
+ * - Shopping bag icon with item count badge
+ * - Badge hidden when cart is empty
+ * - Dropdown mini-cart or direct link based on settings
+ * - Full accessibility support (aria-label, aria-expanded, screen-reader text)
+ * - AJAX cart fragment support for real-time updates
+ */
+function promptless_header_cart() {
+    // Only display if WooCommerce active and setting enabled
+    if ( ! promptless_has_header_cart() ) {
+        return;
+    }
+
+    $cart_count = WC()->cart ? WC()->cart->get_cart_contents_count() : 0;
+    $cart_url   = wc_get_cart_url();
+    $cart_style = promptless_get_header_cart_style();
+
+    // Translators: %d is the number of items in cart
+    $aria_label = sprintf(
+        _n(
+            'Shopping cart, %d item',
+            'Shopping cart, %d items',
+            $cart_count,
+            'promptless-theme'
+        ),
+        $cart_count
+    );
+
+    ?>
+    <div class="promptless-header__cart<?php echo 'dropdown' === $cart_style ? ' promptless-header__cart--dropdown' : ''; ?>">
+        <?php if ( 'dropdown' === $cart_style ) : ?>
+            <button
+                type="button"
+                class="promptless-header__cart-toggle"
+                aria-label="<?php echo esc_attr( $aria_label ); ?>"
+                aria-expanded="false"
+                aria-controls="header-mini-cart"
+            >
+                <?php promptless_cart_icon(); ?>
+                <?php promptless_cart_count_badge( $cart_count ); ?>
+            </button>
+            <div id="header-mini-cart" class="promptless-header__mini-cart" aria-hidden="true">
+                <div class="promptless-header__mini-cart-inner widget_shopping_cart_content">
+                    <?php woocommerce_mini_cart(); ?>
+                </div>
+            </div>
+        <?php else : ?>
+            <a
+                href="<?php echo esc_url( $cart_url ); ?>"
+                class="promptless-header__cart-link"
+                aria-label="<?php echo esc_attr( $aria_label ); ?>"
+            >
+                <?php promptless_cart_icon(); ?>
+                <?php promptless_cart_count_badge( $cart_count ); ?>
+            </a>
+        <?php endif; ?>
+    </div>
+    <?php
+}
+
+/**
+ * Output cart icon SVG
+ *
+ * Modern shopping bag icon matching the design system.
+ */
+function promptless_cart_icon() {
+    ?>
+    <svg class="promptless-header__cart-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <path d="M16 10a4 4 0 0 1-8 0"></path>
+    </svg>
+    <?php
+}
+
+/**
+ * Output cart count badge
+ *
+ * Hidden when cart is empty (count is 0).
+ *
+ * @param int $count Number of items in cart.
+ */
+function promptless_cart_count_badge( $count ) {
+    $hidden = 0 === $count ? ' style="display: none;"' : '';
+    ?>
+    <span class="promptless-header__cart-count" aria-hidden="true"<?php echo $hidden; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+        <?php echo esc_html( $count ); ?>
+    </span>
+    <span class="screen-reader-text">
+        <?php
+        printf(
+            /* translators: %d is the number of items */
+            esc_html( _n( '%d item in cart', '%d items in cart', $count, 'promptless-theme' ) ),
+            (int) $count
+        );
+        ?>
+    </span>
+    <?php
+}
+
+/**
+ * Custom mini-cart buttons with plugin styling
+ *
+ * Replaces WooCommerce's default mini-cart buttons with buttons
+ * that use the Promptless WP plugin's button classes for consistent
+ * styling across the theme.
+ *
+ * @since 1.0.0
+ */
+function promptless_mini_cart_buttons() {
+	// Remove default WooCommerce button hooks
+	remove_action( 'woocommerce_widget_shopping_cart_buttons', 'woocommerce_widget_shopping_cart_button_view_cart', 10 );
+	remove_action( 'woocommerce_widget_shopping_cart_buttons', 'woocommerce_widget_shopping_cart_proceed_to_checkout', 20 );
+
+	// Add custom buttons with plugin classes
+	add_action( 'woocommerce_widget_shopping_cart_buttons', 'promptless_mini_cart_view_cart_button', 10 );
+	add_action( 'woocommerce_widget_shopping_cart_buttons', 'promptless_mini_cart_checkout_button', 20 );
+}
+add_action( 'wp_loaded', 'promptless_mini_cart_buttons' );
+
+/**
+ * Output mini-cart View Cart button with ghost styling
+ */
+function promptless_mini_cart_view_cart_button() {
+	echo '<a href="' . esc_url( wc_get_cart_url() ) . '" class="aisb-btn aisb-btn-ghost">' . esc_html__( 'View cart', 'woocommerce' ) . '</a>';
+}
+
+/**
+ * Output mini-cart Checkout button with primary styling
+ */
+function promptless_mini_cart_checkout_button() {
+	echo '<a href="' . esc_url( wc_get_checkout_url() ) . '" class="aisb-btn aisb-btn-primary">' . esc_html__( 'Checkout', 'woocommerce' ) . '</a>';
 }

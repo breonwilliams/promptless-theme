@@ -38,8 +38,9 @@
                 <?php promptless_primary_nav(); ?>
             </div>
 
-            <!-- Header Actions (CTA, Mobile Menu) -->
+            <!-- Header Actions (Cart, CTA, Mobile Menu) -->
             <div class="promptless-header__actions">
+                <?php promptless_header_cart(); ?>
                 <?php promptless_header_cta(); ?>
                 <?php promptless_mobile_menu_toggle(); ?>
             </div>

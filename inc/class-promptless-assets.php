@@ -78,7 +78,7 @@ class Promptless_Assets {
      * Enqueue scripts
      */
     public function enqueue_scripts() {
-        // Navigation script (mobile menu toggle)
+        // Navigation script (mobile menu toggle, mini-cart)
         wp_enqueue_script(
             'promptless-theme-navigation',
             PROMPTLESS_THEME_URI . '/assets/js/navigation.js',
@@ -86,6 +86,11 @@ class Promptless_Assets {
             PROMPTLESS_THEME_VERSION,
             true
         );
+
+        // WooCommerce cart fragments for AJAX updates
+        if ( function_exists( 'promptless_has_header_cart' ) && promptless_has_header_cart() ) {
+            wp_enqueue_script( 'wc-cart-fragments' );
+        }
 
         // Comment reply script
         if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {

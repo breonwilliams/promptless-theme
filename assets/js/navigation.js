@@ -1,7 +1,7 @@
 /**
  * Navigation JavaScript
  *
- * Handles mobile menu toggle and keyboard navigation.
+ * Handles mobile menu toggle, keyboard navigation, and mini-cart dropdown.
  *
  * @package Promptless_Theme
  * @since 1.0.0
@@ -34,6 +34,9 @@
 
             navWrapper.classList.toggle('is-open');
 
+            // Close mini-cart if open
+            closeMiniCart();
+
             // Focus first menu item when opening
             if (!isExpanded && primaryNav) {
                 const firstLink = primaryNav.querySelector('a');
@@ -47,11 +50,16 @@
 
         // Close menu on escape key
         document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape' && navWrapper.classList.contains('is-open')) {
-                menuToggle.setAttribute('aria-expanded', 'false');
-                menuToggle.setAttribute('aria-label', 'Open menu');
-                navWrapper.classList.remove('is-open');
-                menuToggle.focus();
+            if (event.key === 'Escape') {
+                // Close mobile menu if open
+                if (navWrapper.classList.contains('is-open')) {
+                    menuToggle.setAttribute('aria-expanded', 'false');
+                    menuToggle.setAttribute('aria-label', 'Open menu');
+                    navWrapper.classList.remove('is-open');
+                    menuToggle.focus();
+                }
+                // Close mini-cart if open
+                closeMiniCart();
             }
         });
 
@@ -71,6 +79,9 @@
 
         // Handle submenu accessibility
         initSubmenuAccessibility();
+
+        // Initialize mini-cart
+        initMiniCart();
 
         // Close mobile menu on resize to desktop
         let resizeTimer;
@@ -144,6 +155,71 @@
                 }
             });
         });
+    }
+
+    /**
+     * Initialize mini-cart dropdown functionality
+     */
+    function initMiniCart() {
+        const cartToggle = document.querySelector('.promptless-header__cart-toggle');
+        const miniCart = document.getElementById('header-mini-cart');
+
+        if (!cartToggle || !miniCart) {
+            return;
+        }
+
+        // Toggle mini-cart on button click
+        cartToggle.addEventListener('click', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            const isExpanded = this.getAttribute('aria-expanded') === 'true';
+
+            if (isExpanded) {
+                closeMiniCart();
+            } else {
+                openMiniCart();
+            }
+        });
+
+        // Close mini-cart when clicking outside
+        document.addEventListener('click', function(event) {
+            const cartContainer = document.querySelector('.promptless-header__cart');
+            if (cartContainer && !cartContainer.contains(event.target)) {
+                closeMiniCart();
+            }
+        });
+
+        // Prevent clicks inside mini-cart from closing it
+        miniCart.addEventListener('click', function(event) {
+            event.stopPropagation();
+        });
+    }
+
+    /**
+     * Open the mini-cart dropdown
+     */
+    function openMiniCart() {
+        const cartToggle = document.querySelector('.promptless-header__cart-toggle');
+        const miniCart = document.getElementById('header-mini-cart');
+
+        if (cartToggle && miniCart) {
+            cartToggle.setAttribute('aria-expanded', 'true');
+            miniCart.setAttribute('aria-hidden', 'false');
+        }
+    }
+
+    /**
+     * Close the mini-cart dropdown
+     */
+    function closeMiniCart() {
+        const cartToggle = document.querySelector('.promptless-header__cart-toggle');
+        const miniCart = document.getElementById('header-mini-cart');
+
+        if (cartToggle && miniCart) {
+            cartToggle.setAttribute('aria-expanded', 'false');
+            miniCart.setAttribute('aria-hidden', 'true');
+        }
     }
 
     // Initialize when DOM is ready

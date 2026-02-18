@@ -25,6 +25,9 @@ class Promptless_Setup {
         add_action( 'after_setup_theme', array( $this, 'setup' ) );
         add_action( 'widgets_init', array( $this, 'register_sidebars' ) );
 
+        // Enhance logo accessibility with role="img" for SVG edge cases
+        add_filter( 'get_custom_logo_image_attributes', array( $this, 'enhance_logo_accessibility' ), 10, 3 );
+
         // WooCommerce wrapper hooks - add our container structure
         add_action( 'woocommerce_before_main_content', array( $this, 'woocommerce_wrapper_start' ), 10 );
         add_action( 'woocommerce_after_main_content', array( $this, 'woocommerce_wrapper_end' ), 10 );
@@ -219,5 +222,23 @@ class Promptless_Setup {
      */
     public function custom_sale_flash( $html, $post, $product ) {
         return '<span class="onsale">' . esc_html__( 'Sale', 'promptless-theme' ) . '</span>';
+    }
+
+    /**
+     * Enhance custom logo image accessibility attributes
+     *
+     * Adds role="img" for better SVG logo accessibility support.
+     *
+     * @since 1.0.0
+     * @param array $custom_logo_attr Custom logo image attributes.
+     * @param int   $custom_logo_id   Custom logo attachment ID.
+     * @param int   $blog_id          ID of the blog to get the custom logo for.
+     * @return array Modified attributes.
+     */
+    public function enhance_logo_accessibility( $custom_logo_attr, $custom_logo_id, $blog_id ) {
+        // Add role="img" for SVG logos and general accessibility
+        $custom_logo_attr['role'] = 'img';
+
+        return $custom_logo_attr;
     }
 }

@@ -1178,42 +1178,37 @@
     margin-bottom: var(--aisb-section-space-xl, 2rem);
 }
 
-/* Comment list - explicit ordered list reset to remove numbering
-   Targets BOTH .comment-list (WordPress standard) AND .commentlist (legacy) */
-.comment-list,
-.commentlist,
-ol.comment-list,
-ol.commentlist {
-    list-style: none !important;
-    list-style-type: none !important;
-    padding: 0 !important;
+/* Comment list - scoped under .promptless-single__comments for sufficient specificity
+   Resets ordered list styles without !important by using higher-specificity selectors */
+.promptless-single__comments .comment-list,
+.promptless-single__comments .commentlist,
+.promptless-single__comments ol.comment-list,
+.promptless-single__comments ol.commentlist {
+    list-style: none;
+    list-style-type: none;
+    padding: 0;
     margin: 0 0 var(--aisb-section-space-xl, 2rem) 0;
 }
 
-.comment-list > li,
-.commentlist > li,
-ol.comment-list > li,
-ol.commentlist > li {
-    list-style: none !important;
-    list-style-type: none !important;
+.promptless-single__comments .comment-list > li,
+.promptless-single__comments .commentlist > li {
+    list-style: none;
+    list-style-type: none;
     display: block;
     margin: 0;
     padding: 0;
 }
 
-/* Hide markers completely */
-.comment-list li::marker,
-.commentlist li::marker,
-ol.comment-list > li::marker,
-ol.commentlist > li::marker {
-    content: none !important;
-    display: none !important;
-    font-size: 0 !important;
+/* Hide markers - pseudo-element approach works without !important */
+.promptless-single__comments .comment-list li::marker,
+.promptless-single__comments .commentlist li::marker {
+    content: none;
+    display: none;
+    font-size: 0;
 }
 
 /* Comment card - with border for visual consistency */
-.comment-body,
-.commentlist .comment-body {
+.promptless-single__comments .comment-body {
     padding: var(--aisb-section-space-lg, 1.5rem);
     background: var(--section-surface);
     border: 1px solid var(--section-border);
@@ -1221,33 +1216,23 @@ ol.commentlist > li::marker {
     margin-bottom: var(--aisb-section-space-md, 1rem);
 }
 
-/* Nested comments - explicit list reset with left border for visual hierarchy */
-.children,
-ol.children,
-ul.children,
-.commentlist .children {
-    list-style: none !important;
-    list-style-type: none !important;
+/* Nested comments - scoped for higher specificity */
+.promptless-single__comments .children {
+    list-style: none;
+    list-style-type: none;
     padding-left: var(--aisb-section-space-xl, 2rem);
     margin-top: var(--aisb-section-space-md, 1rem);
     border-left: 2px solid var(--section-border);
 }
 
-.children > li,
-ol.children > li,
-ul.children > li,
-.commentlist .children > li {
-    list-style: none !important;
-    list-style-type: none !important;
+.promptless-single__comments .children > li {
+    list-style: none;
+    list-style-type: none;
 }
 
-.children > li::marker,
-ol.children > li::marker,
-ul.children > li::marker,
-.children li::marker,
-.commentlist .children li::marker {
-    content: none !important;
-    display: none !important;
+.promptless-single__comments .children li::marker {
+    content: none;
+    display: none;
 }
 
 /* Comment metadata */
