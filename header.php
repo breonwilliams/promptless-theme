@@ -25,6 +25,8 @@
     <?php esc_html_e( 'Skip to content', 'promptless-theme' ); ?>
 </a>
 
+<?php promptless_topbar(); ?>
+
 <header class="<?php echo esc_attr( promptless_get_header_classes() ); ?>" role="banner">
     <div class="promptless-container">
         <div class="promptless-header__inner">
@@ -35,6 +37,7 @@
 
             <!-- Primary Navigation -->
             <div class="promptless-header__nav-wrapper">
+                <?php promptless_mobile_topbar_section(); ?>
                 <?php promptless_primary_nav(); ?>
             </div>
 

@@ -190,6 +190,137 @@ class Promptless_Customizer {
         );
 
         // =============================================
+        // Header Border
+        // =============================================
+        $wp_customize->add_setting(
+            'promptless_header_border',
+            array(
+                'default'           => true,
+                'sanitize_callback' => array( $this, 'sanitize_checkbox' ),
+                'transport'         => 'refresh',
+            )
+        );
+
+        $wp_customize->add_control(
+            'promptless_header_border',
+            array(
+                'label'       => __( 'Show Header Border', 'promptless-theme' ),
+                'description' => __( 'Display a bottom border on the header.', 'promptless-theme' ),
+                'section'     => 'promptless_theme_settings',
+                'type'        => 'checkbox',
+            )
+        );
+
+        // =============================================
+        // Sticky Header
+        // =============================================
+        $wp_customize->add_setting(
+            'promptless_header_sticky',
+            array(
+                'default'           => true,
+                'sanitize_callback' => array( $this, 'sanitize_checkbox' ),
+                'transport'         => 'refresh',
+            )
+        );
+
+        $wp_customize->add_control(
+            'promptless_header_sticky',
+            array(
+                'label'       => __( 'Sticky Header', 'promptless-theme' ),
+                'description' => __( 'Keep the header fixed at the top when scrolling.', 'promptless-theme' ),
+                'section'     => 'promptless_theme_settings',
+                'type'        => 'checkbox',
+            )
+        );
+
+        // =============================================
+        // Top Bar Settings
+        // =============================================
+        $wp_customize->add_setting(
+            'promptless_topbar_enabled',
+            array(
+                'default'           => false,
+                'sanitize_callback' => array( $this, 'sanitize_checkbox' ),
+                'transport'         => 'refresh',
+            )
+        );
+
+        $wp_customize->add_control(
+            'promptless_topbar_enabled',
+            array(
+                'label'       => __( 'Enable Top Bar', 'promptless-theme' ),
+                'description' => __( 'Display a utility bar above the header with left/right menus.', 'promptless-theme' ),
+                'section'     => 'promptless_theme_settings',
+                'type'        => 'checkbox',
+            )
+        );
+
+        $wp_customize->add_setting(
+            'promptless_topbar_theme',
+            array(
+                'default'           => 'dark',
+                'sanitize_callback' => array( $this, 'sanitize_theme_variant' ),
+                'transport'         => 'refresh',
+            )
+        );
+
+        $wp_customize->add_control(
+            'promptless_topbar_theme',
+            array(
+                'label'       => __( 'Top Bar Theme', 'promptless-theme' ),
+                'description' => __( 'Choose light or dark styling for the top bar.', 'promptless-theme' ),
+                'section'     => 'promptless_theme_settings',
+                'type'        => 'select',
+                'choices'     => array(
+                    'light' => __( 'Light', 'promptless-theme' ),
+                    'dark'  => __( 'Dark', 'promptless-theme' ),
+                ),
+            )
+        );
+
+        $wp_customize->add_setting(
+            'promptless_topbar_sticky',
+            array(
+                'default'           => false,
+                'sanitize_callback' => array( $this, 'sanitize_checkbox' ),
+                'transport'         => 'refresh',
+            )
+        );
+
+        $wp_customize->add_control(
+            'promptless_topbar_sticky',
+            array(
+                'label'       => __( 'Sticky Top Bar', 'promptless-theme' ),
+                'description' => __( 'Keep the top bar fixed when scrolling. Only works when header is also sticky.', 'promptless-theme' ),
+                'section'     => 'promptless_theme_settings',
+                'type'        => 'checkbox',
+            )
+        );
+
+        $wp_customize->add_setting(
+            'promptless_topbar_mobile',
+            array(
+                'default'           => 'hide',
+                'sanitize_callback' => array( $this, 'sanitize_topbar_mobile' ),
+                'transport'         => 'refresh',
+            )
+        );
+
+        $wp_customize->add_control(
+            'promptless_topbar_mobile',
+            array(
+                'label'       => __( 'Top Bar Mobile Behavior', 'promptless-theme' ),
+                'description' => __( 'Choose how the top bar behaves on mobile devices.', 'promptless-theme' ),
+                'section'     => 'promptless_theme_settings',
+                'type'        => 'select',
+                'choices'     => array(
+                    'hide'     => __( 'Hide on Mobile', 'promptless-theme' ),
+                    'collapse' => __( 'Collapse into Hamburger Menu', 'promptless-theme' ),
+                ),
+            )
+        );
+
+        // =============================================
         // WooCommerce Header Cart Settings
         // Only show if WooCommerce is active
         // =============================================
@@ -296,5 +427,21 @@ class Promptless_Customizer {
         }
 
         return 'dropdown';
+    }
+
+    /**
+     * Sanitize top bar mobile behavior setting
+     *
+     * @param string $value Setting value.
+     * @return string Sanitized value.
+     */
+    public function sanitize_topbar_mobile( $value ) {
+        $valid = array( 'hide', 'collapse' );
+
+        if ( in_array( $value, $valid, true ) ) {
+            return $value;
+        }
+
+        return 'hide';
     }
 }

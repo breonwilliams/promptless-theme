@@ -329,6 +329,24 @@ function promptless_get_nav_position() {
 }
 
 /**
+ * Check if header border should be displayed
+ *
+ * @return bool True if header border is enabled.
+ */
+function promptless_has_header_border() {
+    return (bool) get_theme_mod( 'promptless_header_border', true );
+}
+
+/**
+ * Check if header should be sticky
+ *
+ * @return bool True if sticky header is enabled.
+ */
+function promptless_is_header_sticky() {
+    return (bool) get_theme_mod( 'promptless_header_sticky', true );
+}
+
+/**
  * Get header CSS classes including theme variant and navigation position
  *
  * @return string CSS classes for header element
@@ -343,6 +361,16 @@ function promptless_get_header_classes() {
     // Add navigation position class
     $nav_position = promptless_get_nav_position();
     $classes[]    = 'promptless-header--nav-' . esc_attr( $nav_position );
+
+    // Border (no-border class when disabled)
+    if ( ! promptless_has_header_border() ) {
+        $classes[] = 'promptless-header--no-border';
+    }
+
+    // Sticky (sticky class when enabled)
+    if ( promptless_is_header_sticky() ) {
+        $classes[] = 'promptless-header--sticky';
+    }
 
     return implode( ' ', $classes );
 }
@@ -562,3 +590,177 @@ add_filter( 'woocommerce_add_to_cart_fragments', function( $fragments ) {
 	// so just returning them ensures fresh content
 	return $fragments;
 }, 999 );
+
+/**
+ * Check if top bar should be displayed
+ *
+ * @return bool True if top bar is enabled.
+ */
+function promptless_has_topbar() {
+    return (bool) get_theme_mod( 'promptless_topbar_enabled', false );
+}
+
+/**
+ * Get the top bar theme variant setting
+ *
+ * @return string 'light' or 'dark'
+ */
+function promptless_get_topbar_theme() {
+    return get_theme_mod( 'promptless_topbar_theme', 'dark' );
+}
+
+/**
+ * Check if top bar should be sticky
+ *
+ * Requires header to also be sticky for top bar sticky to work.
+ *
+ * @return bool True if top bar sticky is enabled and header is sticky.
+ */
+function promptless_is_topbar_sticky() {
+    // Top bar can only be sticky if header is also sticky
+    if ( ! promptless_is_header_sticky() ) {
+        return false;
+    }
+
+    return (bool) get_theme_mod( 'promptless_topbar_sticky', false );
+}
+
+/**
+ * Get top bar CSS classes
+ *
+ * @return string CSS classes for top bar element.
+ */
+function promptless_get_topbar_classes() {
+    $classes = array( 'promptless-topbar' );
+    $theme   = promptless_get_topbar_theme();
+
+    // Add theme variant class (same pattern as plugin sections)
+    $classes[] = 'aisb-section--' . esc_attr( $theme );
+
+    // Sticky (sticky class when enabled)
+    if ( promptless_is_topbar_sticky() ) {
+        $classes[] = 'promptless-topbar--sticky';
+    }
+
+    return implode( ' ', $classes );
+}
+
+/**
+ * Output the top bar left navigation
+ */
+function promptless_topbar_nav_left() {
+    if ( has_nav_menu( 'topbar-left' ) ) {
+        wp_nav_menu(
+            array(
+                'theme_location'  => 'topbar-left',
+                'menu_class'      => 'promptless-topbar__nav-list',
+                'container'       => 'nav',
+                'container_class' => 'promptless-topbar__nav promptless-topbar__nav--left',
+                'depth'           => 1,
+                'fallback_cb'     => false,
+            )
+        );
+    }
+}
+
+/**
+ * Output the top bar right navigation
+ */
+function promptless_topbar_nav_right() {
+    if ( has_nav_menu( 'topbar-right' ) ) {
+        wp_nav_menu(
+            array(
+                'theme_location'  => 'topbar-right',
+                'menu_class'      => 'promptless-topbar__nav-list',
+                'container'       => 'nav',
+                'container_class' => 'promptless-topbar__nav promptless-topbar__nav--right',
+                'depth'           => 1,
+                'fallback_cb'     => false,
+            )
+        );
+    }
+}
+
+/**
+ * Output the top bar HTML
+ *
+ * Displays a compact utility bar above the header with left and right menus.
+ * Only outputs if top bar is enabled in Customizer settings.
+ */
+function promptless_topbar() {
+    // Only display if top bar is enabled
+    if ( ! promptless_has_topbar() ) {
+        return;
+    }
+
+    // Check if at least one menu is assigned
+    if ( ! has_nav_menu( 'topbar-left' ) && ! has_nav_menu( 'topbar-right' ) ) {
+        return;
+    }
+    ?>
+    <div class="<?php echo esc_attr( promptless_get_topbar_classes() ); ?>">
+        <div class="promptless-container">
+            <div class="promptless-topbar__inner">
+                <?php promptless_topbar_nav_left(); ?>
+                <?php promptless_topbar_nav_right(); ?>
+            </div>
+        </div>
+    </div>
+    <?php
+}
+
+/**
+ * Get top bar mobile behavior setting
+ *
+ * @return string 'hide' or 'collapse'
+ */
+function promptless_get_topbar_mobile_behavior() {
+    return get_theme_mod( 'promptless_topbar_mobile', 'hide' );
+}
+
+/**
+ * Output collapsed top bar section for mobile hamburger menu
+ *
+ * Only outputs when:
+ * - Top bar is enabled
+ * - Mobile behavior is set to 'collapse'
+ * - At least one top bar menu is assigned
+ */
+function promptless_mobile_topbar_section() {
+    // Only output if top bar enabled and collapse mode selected
+    if ( ! promptless_has_topbar() ) {
+        return;
+    }
+
+    if ( 'collapse' !== promptless_get_topbar_mobile_behavior() ) {
+        return;
+    }
+
+    // Check if at least one menu exists
+    if ( ! has_nav_menu( 'topbar-left' ) && ! has_nav_menu( 'topbar-right' ) ) {
+        return;
+    }
+    ?>
+    <div class="promptless-mobile-topbar">
+        <?php if ( has_nav_menu( 'topbar-left' ) ) : ?>
+            <?php wp_nav_menu( array(
+                'theme_location'  => 'topbar-left',
+                'menu_class'      => 'promptless-mobile-topbar__list',
+                'container'       => false,
+                'depth'           => 1,
+                'fallback_cb'     => false,
+            ) ); ?>
+        <?php endif; ?>
+
+        <?php if ( has_nav_menu( 'topbar-right' ) ) : ?>
+            <?php wp_nav_menu( array(
+                'theme_location'  => 'topbar-right',
+                'menu_class'      => 'promptless-mobile-topbar__list',
+                'container'       => false,
+                'depth'           => 1,
+                'fallback_cb'     => false,
+            ) ); ?>
+        <?php endif; ?>
+    </div>
+    <?php
+}

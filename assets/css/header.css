@@ -36,12 +36,22 @@
    ========================================================================== */
 
 .promptless-header {
-    position: sticky;
-    top: 0;
+    position: relative;
     z-index: 100;
     background-color: var(--section-bg);
     border-bottom: 1px solid var(--section-border);
     transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+/* Sticky Header */
+.promptless-header--sticky {
+    position: sticky;
+    top: 0;
+}
+
+/* No Border */
+.promptless-header--no-border {
+    border-bottom: none;
 }
 
 .promptless-header__inner {
@@ -348,10 +358,12 @@
         top: 100%;
         left: 0;
         right: 0;
+        z-index: 99; /* Explicit z-index for proper stacking below cart dropdown (z-index: 200) */
         background-color: var(--section-bg);
         border-bottom: 1px solid var(--section-border);
         max-height: 0;
         overflow: hidden;
+        overflow-x: hidden; /* Prevent horizontal scroll from long menu items */
         transition: max-height 0.3s ease;
         /* Override desktop flexbox centering for full-width mobile menu */
         display: block;
@@ -367,11 +379,19 @@
     .promptless-header__nav-wrapper.is-open {
         max-height: 70vh;
         overflow-y: auto;
+        overflow-x: hidden; /* Ensure no horizontal scroll when menu is open */
     }
 
     .promptless-header__nav {
         display: block;
         padding: 0.5rem 0;
+    }
+
+    /* When collapsed topbar exists above, add top border to primary nav for visual separation */
+    .promptless-mobile-topbar + .promptless-header__nav {
+        border-top: 1px solid var(--section-border);
+        margin-top: 0.25rem;
+        padding-top: 0.75rem;
     }
 
     .promptless-header__nav-list {
@@ -390,6 +410,8 @@
         padding: 0.75rem 1.5rem;
         border-radius: 0;
         text-align: left;
+        word-wrap: break-word; /* Long text protection */
+        overflow-wrap: break-word; /* Long text protection - modern property */
     }
 
     .promptless-header__nav-list .sub-menu {
@@ -413,12 +435,12 @@
    Admin Bar Offset
    ========================================================================== */
 
-.admin-bar .promptless-header {
+.admin-bar .promptless-header--sticky {
     top: 32px;
 }
 
 @media (max-width: 782px) {
-    .admin-bar .promptless-header {
+    .admin-bar .promptless-header--sticky {
         top: 46px;
     }
 }
@@ -882,5 +904,263 @@
 
     .promptless-header__mini-cart .widget_shopping_cart_content {
         padding: 1.5rem;
+    }
+}
+
+/* ==========================================================================
+   Top Bar Theme Variant Scoped Variables
+   Same pattern as header/footer - uses plugin design system tokens
+   ========================================================================== */
+
+.promptless-topbar.aisb-section--light {
+    --topbar-bg: var(--aisb-color-surface, #f9fafb);
+    --topbar-text: var(--aisb-color-text, #1f2937);
+    --topbar-text-muted: var(--aisb-color-text-muted, #6b7280);
+    --topbar-border: var(--aisb-color-border, #e5e7eb);
+    --topbar-primary: var(--aisb-color-primary, #6366f1);
+}
+
+.promptless-topbar.aisb-section--dark {
+    --topbar-bg: var(--aisb-color-dark-surface, #1f2937);
+    --topbar-text: var(--aisb-color-dark-text, #f9fafb);
+    --topbar-text-muted: var(--aisb-color-dark-text-muted, #9ca3af);
+    --topbar-border: var(--aisb-color-dark-border, #374151);
+    --topbar-primary: var(--aisb-color-primary, #6366f1);
+}
+
+/* ==========================================================================
+   Top Bar Container
+   ========================================================================== */
+
+.promptless-topbar {
+    position: relative;
+    z-index: 101;
+    background-color: var(--topbar-bg);
+    border-bottom: 1px solid var(--topbar-border);
+    font-size: 0.8125rem; /* 13px - compact */
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.promptless-topbar--sticky {
+    position: sticky;
+    top: 0;
+}
+
+/* Header offset when both top bar and header are sticky */
+.promptless-topbar--sticky + .promptless-header--sticky {
+    top: var(--topbar-height, 36px);
+}
+
+/* ==========================================================================
+   Top Bar Inner Layout
+   ========================================================================== */
+
+.promptless-topbar__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 36px;
+    padding-top: 0.375rem;
+    padding-bottom: 0.375rem;
+    gap: 1rem;
+}
+
+/* ==========================================================================
+   Top Bar Navigation
+   ========================================================================== */
+
+.promptless-topbar__nav {
+    display: flex;
+    align-items: center;
+}
+
+.promptless-topbar__nav--left {
+    justify-content: flex-start;
+}
+
+.promptless-topbar__nav--right {
+    justify-content: flex-end;
+    margin-left: auto;
+}
+
+.promptless-topbar__nav-list {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.promptless-topbar__nav-list li {
+    margin: 0;
+}
+
+.promptless-topbar__nav-list a {
+    display: block;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--topbar-text-muted);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.promptless-topbar__nav-list a:hover,
+.promptless-topbar__nav-list a:focus {
+    color: var(--topbar-text);
+    text-decoration: none;
+}
+
+/* ==========================================================================
+   SMART COLOR CONTRAST SYSTEM - High-Specificity Link Overrides
+   Uses 8x [href] attribute selectors (specificity 0,11,1) to override
+   plugin core-components.css link rules (specificity 0,10,1)
+   ========================================================================== */
+
+/* LIGHT MODE - Base state */
+.promptless-topbar.aisb-section--light .promptless-topbar__nav-list a[href][href][href][href][href][href][href][href] {
+    color: var(--topbar-text-muted);
+    text-decoration: none;
+}
+
+/* LIGHT MODE - Hover/Focus - Uses smart accessible link color */
+.promptless-topbar.aisb-section--light .promptless-topbar__nav-list a[href][href][href][href][href][href][href][href]:hover,
+.promptless-topbar.aisb-section--light .promptless-topbar__nav-list a[href][href][href][href][href][href][href][href]:focus {
+    color: var(--aisb-smart-light-section-link, var(--topbar-primary));
+    text-decoration: none;
+}
+
+/* LIGHT MODE - Current menu item */
+.promptless-topbar.aisb-section--light .promptless-topbar__nav-list .current-menu-item > a[href][href][href][href][href][href][href][href],
+.promptless-topbar.aisb-section--light .promptless-topbar__nav-list .current_page_item > a[href][href][href][href][href][href][href][href] {
+    color: var(--aisb-smart-light-section-link, var(--topbar-primary));
+}
+
+/* DARK MODE - Base state */
+.promptless-topbar.aisb-section--dark .promptless-topbar__nav-list a[href][href][href][href][href][href][href][href] {
+    color: var(--topbar-text-muted);
+    text-decoration: none;
+}
+
+/* DARK MODE - Hover/Focus - Uses smart accessible link color */
+.promptless-topbar.aisb-section--dark .promptless-topbar__nav-list a[href][href][href][href][href][href][href][href]:hover,
+.promptless-topbar.aisb-section--dark .promptless-topbar__nav-list a[href][href][href][href][href][href][href][href]:focus {
+    color: var(--aisb-smart-dark-section-link, var(--topbar-primary));
+    text-decoration: none;
+}
+
+/* DARK MODE - Current menu item */
+.promptless-topbar.aisb-section--dark .promptless-topbar__nav-list .current-menu-item > a[href][href][href][href][href][href][href][href],
+.promptless-topbar.aisb-section--dark .promptless-topbar__nav-list .current_page_item > a[href][href][href][href][href][href][href][href] {
+    color: var(--aisb-smart-dark-section-link, var(--topbar-primary));
+}
+
+/* ==========================================================================
+   Admin Bar Offsets for Sticky Top Bar
+   ========================================================================== */
+
+.admin-bar .promptless-topbar--sticky {
+    top: 32px;
+}
+
+.admin-bar .promptless-topbar--sticky + .promptless-header--sticky {
+    top: calc(32px + var(--topbar-height, 36px));
+}
+
+@media (max-width: 782px) {
+    .admin-bar .promptless-topbar--sticky {
+        top: 46px;
+    }
+
+    .admin-bar .promptless-topbar--sticky + .promptless-header--sticky {
+        top: calc(46px + var(--topbar-height, 36px));
+    }
+}
+
+/* ==========================================================================
+   Top Bar Responsive - Hide on Mobile
+   ========================================================================== */
+
+@media (max-width: 767px) {
+    .promptless-topbar {
+        display: none;
+    }
+}
+
+/* ==========================================================================
+   Mobile Collapsed Top Bar (inside hamburger menu)
+   Only visible on mobile when topbar_mobile setting is 'collapse'
+   ========================================================================== */
+
+.promptless-mobile-topbar {
+    display: none; /* Hidden on desktop */
+}
+
+@media (max-width: 767px) {
+    .promptless-mobile-topbar {
+        display: block;
+        padding: 0.75rem 1.5rem 0.5rem; /* Reduced bottom padding */
+        /* REMOVED: border-bottom - primary nav provides visual separation via border-top below */
+    }
+
+    .promptless-mobile-topbar__list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.625rem 1.25rem; /* Better visual balance when items wrap */
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .promptless-mobile-topbar__list li {
+        margin: 0;
+    }
+
+    .promptless-mobile-topbar__list a {
+        display: block;
+        font-size: 0.8125rem; /* 13px - smaller than main nav */
+        font-weight: 500;
+        color: var(--section-text-muted);
+        text-decoration: none;
+        transition: color 0.2s ease;
+        word-wrap: break-word; /* Long text protection */
+        overflow-wrap: break-word; /* Long text protection - modern property */
+    }
+
+    .promptless-mobile-topbar__list a:hover,
+    .promptless-mobile-topbar__list a:focus {
+        color: var(--section-text);
+        text-decoration: none;
+    }
+
+    /* High-specificity overrides for plugin link colors */
+    .promptless-header.aisb-section--light .promptless-mobile-topbar__list a[href][href][href][href][href][href][href][href] {
+        color: var(--section-text-muted);
+    }
+
+    .promptless-header.aisb-section--light .promptless-mobile-topbar__list a[href][href][href][href][href][href][href][href]:hover,
+    .promptless-header.aisb-section--light .promptless-mobile-topbar__list a[href][href][href][href][href][href][href][href]:focus {
+        color: var(--aisb-smart-light-section-link, var(--section-primary));
+    }
+
+    .promptless-header.aisb-section--dark .promptless-mobile-topbar__list a[href][href][href][href][href][href][href][href] {
+        color: var(--section-text-muted);
+    }
+
+    .promptless-header.aisb-section--dark .promptless-mobile-topbar__list a[href][href][href][href][href][href][href][href]:hover,
+    .promptless-header.aisb-section--dark .promptless-mobile-topbar__list a[href][href][href][href][href][href][href][href]:focus {
+        color: var(--aisb-smart-dark-section-link, var(--section-primary));
+    }
+
+    /* Current menu item highlighting */
+    .promptless-header.aisb-section--light .promptless-mobile-topbar__list .current-menu-item > a[href][href][href][href][href][href][href][href],
+    .promptless-header.aisb-section--light .promptless-mobile-topbar__list .current_page_item > a[href][href][href][href][href][href][href][href] {
+        color: var(--aisb-smart-light-section-link, var(--section-primary));
+    }
+
+    .promptless-header.aisb-section--dark .promptless-mobile-topbar__list .current-menu-item > a[href][href][href][href][href][href][href][href],
+    .promptless-header.aisb-section--dark .promptless-mobile-topbar__list .current_page_item > a[href][href][href][href][href][href][href][href] {
+        color: var(--aisb-smart-dark-section-link, var(--section-primary));
     }
 }

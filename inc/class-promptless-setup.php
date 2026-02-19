@@ -69,6 +69,8 @@ class Promptless_Setup {
                 'footer'       => esc_html__( 'Footer Menu', 'promptless-theme' ),
                 'footer-col-1' => esc_html__( 'Footer Column 1', 'promptless-theme' ),
                 'footer-col-2' => esc_html__( 'Footer Column 2', 'promptless-theme' ),
+                'topbar-left'  => esc_html__( 'Top Bar Left', 'promptless-theme' ),
+                'topbar-right' => esc_html__( 'Top Bar Right', 'promptless-theme' ),
             )
         );
 
