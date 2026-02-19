@@ -1,5 +1,5 @@
 /*
-Theme Name: Promptless Theme
+Theme Name: Promptless
 Theme URI: https://promptlesswp.com/theme
 Author: Promptless WP
 Author URI: https://promptlesswp.com
@@ -82,9 +82,14 @@ a {
    Forcing a color on hover would break accessibility calculations.
    Underline behavior is handled by .entry-content rules below. */
 
-/* Content links - underline on hover (excludes nav, buttons, pagination)
-   Targets ONLY content areas where underline makes sense
+/* Content links - must be underlined by default for accessibility-ready tag
+   WordPress accessibility guidelines require links within content to be underlined
    Excludes: .aisb-btn* (plugin buttons), .button (WooCommerce buttons), .remove (WooCommerce cart remove) */
+.entry-content a:not(.aisb-btn):not(.aisb-btn-primary):not(.aisb-btn-secondary):not(.aisb-btn-ghost):not(.button):not(.remove),
+.promptless-content p a:not(.aisb-btn):not(.button):not(.remove) {
+  text-decoration: underline;
+}
+
 .entry-content a:not(.aisb-btn):not(.aisb-btn-primary):not(.aisb-btn-secondary):not(.aisb-btn-ghost):not(.button):not(.remove):hover,
 .entry-content a:not(.aisb-btn):not(.aisb-btn-primary):not(.aisb-btn-secondary):not(.aisb-btn-ghost):not(.button):not(.remove):focus,
 .promptless-content p a:not(.aisb-btn):not(.button):not(.remove):hover,

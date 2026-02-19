@@ -1,4 +1,4 @@
-=== Promptless Theme ===
+=== Promptless ===
 Contributors: promptlesswp
 Tags: one-column, custom-logo, custom-menu, featured-images, full-width-template, block-styles, wide-blocks, accessibility-ready, blog, portfolio
 Requires at least: 6.0
@@ -12,7 +12,7 @@ A minimal WordPress theme designed to work seamlessly with the Promptless WP plu
 
 == Description ==
 
-Promptless Theme is a clean, minimal WordPress theme built specifically as a companion to the Promptless WP page builder plugin. It inherits all styling—colors, typography, and border radius—from the plugin's Global Settings, creating a unified brand experience across your entire website.
+Promptless is a clean, minimal WordPress theme built specifically as a companion to the Promptless WP page builder plugin. It inherits all styling—colors, typography, and border radius—from the plugin's Global Settings, creating a unified brand experience across your entire website.
 
 **Key Features:**
 
@@ -99,8 +99,8 @@ Use the Promptless WP plugin's Canvas display mode, which provides a full-screen
 
 == Copyright ==
 
-Promptless Theme, Copyright 2025 Promptless WP
-Promptless Theme is distributed under the terms of the GNU GPL
+Promptless, Copyright 2025 Promptless WP
+Promptless is distributed under the terms of the GNU GPL
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
