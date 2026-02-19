@@ -74,13 +74,13 @@ p {
 a {
   color: var(--aisb-color-primary, #6366f1);
   text-decoration: none;
-  transition: color 0.2s ease;
+  transition: color 0.2s ease, filter 0.2s ease;
 }
 
-a:not(.aisb-btn):not(.aisb-btn-primary):not(.aisb-btn-secondary):not(.aisb-btn-ghost):not(.button):not(.checkout-button):not(.wc-forward):not(.add_to_cart_button):not(.added_to_cart):hover,
-a:not(.aisb-btn):not(.aisb-btn-primary):not(.aisb-btn-secondary):not(.aisb-btn-ghost):not(.button):not(.checkout-button):not(.wc-forward):not(.add_to_cart_button):not(.added_to_cart):focus {
-  color: var(--aisb-color-primary, #6366f1);
-}
+/* NOTE: Hover color override intentionally removed.
+   The plugin's smart color system handles link colors based on background contrast.
+   Forcing a color on hover would break accessibility calculations.
+   Underline behavior is handled by .entry-content rules below. */
 
 /* Content links - underline on hover (excludes nav, buttons, pagination)
    Targets ONLY content areas where underline makes sense
