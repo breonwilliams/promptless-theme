@@ -1612,6 +1612,7 @@ body.woocommerce-page nav.woocommerce-pagination ul.page-numbers:hover {
     margin: 0;
 }
 
+/* Ghost button style - uses smart colors for accessibility on light backgrounds */
 .woocommerce nav.woocommerce-pagination ul li a,
 .woocommerce nav.woocommerce-pagination ul li span {
     display: inline-flex;
@@ -1622,9 +1623,9 @@ body.woocommerce-page nav.woocommerce-pagination ul.page-numbers:hover {
     padding: 0 0.75rem;
     font-size: var(--aisb-section-text-base, 0.875rem);
     font-weight: var(--aisb-section-font-button-weight, 500);
-    color: var(--wc-link, var(--aisb-color-primary, #6366f1));
+    color: var(--aisb-smart-light-section-link, var(--wc-link, var(--aisb-color-primary, #6366f1)));
     background-color: transparent;
-    border: 1px solid var(--wc-link, var(--aisb-color-primary, #6366f1));
+    border: 1px solid var(--aisb-smart-light-section-link, var(--wc-link, var(--aisb-color-primary, #6366f1)));
     border-radius: var(--aisb-section-radius-base, 6px);
     text-decoration: none;
     transition: all 0.2s ease;
@@ -1643,13 +1644,13 @@ body.woocommerce-page nav.woocommerce-pagination ul.page-numbers:hover {
     color: var(--aisb-button-primary-text, #ffffff);
 }
 
-/* Dark mode pagination */
+/* Dark mode pagination - uses smart colors for accessibility on dark backgrounds */
 .aisb-section--dark .woocommerce nav.woocommerce-pagination ul li a,
 .aisb-section--dark .woocommerce nav.woocommerce-pagination ul li span,
 body.aisb-section--dark .woocommerce nav.woocommerce-pagination ul li a,
 body.aisb-section--dark .woocommerce nav.woocommerce-pagination ul li span {
-    color: var(--wc-link, var(--aisb-color-primary, #6366f1));
-    border-color: var(--wc-link, var(--aisb-color-primary, #6366f1));
+    color: var(--aisb-smart-dark-section-link, var(--wc-link, var(--aisb-color-primary, #6366f1)));
+    border-color: var(--aisb-smart-dark-section-link, var(--wc-link, var(--aisb-color-primary, #6366f1)));
 }
 
 .aisb-section--dark .woocommerce nav.woocommerce-pagination ul li a:hover,
