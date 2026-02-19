@@ -667,7 +667,9 @@
     font-family: inherit;
 }
 
-/* Remove Button */
+/* Remove Button - Uses feature icon styling pattern
+   Default: Subtle primary background + primary icon color
+   Hover: Slightly stronger primary background */
 .promptless-header__mini-cart .promptless-cart-item__remove {
     grid-area: remove;
     width: 24px;
@@ -675,7 +677,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--section-text-muted);
+    color: var(--aisb-smart-light-icon, var(--aisb-color-primary));
+    background-color: var(--aisb-smart-light-icon-bg, var(--aisb-color-primary-bg));
     font-size: 18px;
     text-decoration: none;
     border-radius: 4px;
@@ -683,8 +686,18 @@
 }
 
 .promptless-header__mini-cart .promptless-cart-item__remove:hover {
-    color: #ef4444;
-    background-color: rgba(239, 68, 68, 0.1);
+    color: var(--aisb-smart-light-icon, var(--aisb-color-primary));
+    background-color: var(--aisb-color-primary-bg-hover, rgba(99, 102, 241, 0.2));
+}
+
+/* Dark theme remove button */
+.promptless-header.aisb-section--dark .promptless-cart-item__remove {
+    color: var(--aisb-smart-dark-icon, var(--aisb-color-primary));
+    background-color: var(--aisb-smart-dark-icon-bg, var(--aisb-color-primary-bg));
+}
+
+.promptless-header.aisb-section--dark .promptless-cart-item__remove:hover {
+    background-color: var(--aisb-color-primary-bg-hover, rgba(99, 102, 241, 0.2));
 }
 
 /* ==========================================================================
@@ -711,17 +724,27 @@
     text-decoration: none;
 }
 
-/* Remove button - base state */
-.promptless-header.aisb-section--light .promptless-cart-item__remove[href][href][href][href][href][href][href][href],
-.promptless-header.aisb-section--dark .promptless-cart-item__remove[href][href][href][href][href][href][href][href] {
-    color: var(--section-text-muted);
+/* Remove button - Light theme base state */
+.promptless-header.aisb-section--light .promptless-cart-item__remove[href][href][href][href][href][href][href][href] {
+    color: var(--aisb-smart-light-icon, var(--aisb-color-primary));
     text-decoration: none;
 }
 
-/* Remove button - hover */
-.promptless-header.aisb-section--light .promptless-cart-item__remove[href][href][href][href][href][href][href][href]:hover,
+/* Remove button - Light theme hover */
+.promptless-header.aisb-section--light .promptless-cart-item__remove[href][href][href][href][href][href][href][href]:hover {
+    color: var(--aisb-smart-light-icon, var(--aisb-color-primary));
+    text-decoration: none;
+}
+
+/* Remove button - Dark theme base state */
+.promptless-header.aisb-section--dark .promptless-cart-item__remove[href][href][href][href][href][href][href][href] {
+    color: var(--aisb-smart-dark-icon, var(--aisb-color-primary));
+    text-decoration: none;
+}
+
+/* Remove button - Dark theme hover */
 .promptless-header.aisb-section--dark .promptless-cart-item__remove[href][href][href][href][href][href][href][href]:hover {
-    color: #ef4444;
+    color: var(--aisb-smart-dark-icon, var(--aisb-color-primary));
     text-decoration: none;
 }
 
