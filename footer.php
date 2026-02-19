@@ -13,7 +13,7 @@
 <footer class="<?php echo esc_attr( promptless_get_footer_classes() ); ?>" role="contentinfo">
     <div class="promptless-container">
         <!-- Footer Main Content -->
-        <div class="promptless-footer__main">
+        <div class="promptless-footer__main <?php echo esc_attr( promptless_get_footer_grid_class() ); ?>">
             <!-- Footer Brand Column -->
             <div class="promptless-footer__brand">
                 <?php promptless_site_logo(); ?>

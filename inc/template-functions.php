@@ -719,6 +719,43 @@ function promptless_get_topbar_mobile_behavior() {
 }
 
 /**
+ * Get footer grid modifier class based on active nav menus and social widget
+ *
+ * Returns CSS modifier classes that control grid column distribution.
+ * The grid adapts dynamically based on which columns are actually present:
+ * - Brand column (always present)
+ * - 0-3 navigation columns
+ * - Optional social widget column
+ *
+ * @return string CSS class(es) for grid layout modifiers
+ */
+function promptless_get_footer_grid_class() {
+    $nav_count = 0;
+
+    if ( has_nav_menu( 'footer-col-1' ) ) {
+        $nav_count++;
+    }
+    if ( has_nav_menu( 'footer-col-2' ) ) {
+        $nav_count++;
+    }
+    if ( has_nav_menu( 'footer-col-3' ) ) {
+        $nav_count++;
+    }
+
+    $has_social = is_active_sidebar( 'footer-social' );
+
+    // Build modifier class based on nav count
+    $class = 'promptless-footer__main--nav-' . $nav_count;
+
+    // Add social modifier if social widget is active
+    if ( $has_social ) {
+        $class .= ' promptless-footer__main--has-social';
+    }
+
+    return $class;
+}
+
+/**
  * Output collapsed top bar section for mobile hamburger menu
  *
  * Only outputs when:
