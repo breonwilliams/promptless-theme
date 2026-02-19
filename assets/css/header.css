@@ -933,6 +933,7 @@
    ========================================================================== */
 
 .promptless-topbar {
+    /* --topbar-height is set dynamically by JavaScript for accurate positioning */
     position: relative;
     z-index: 101;
     background-color: var(--topbar-bg);
@@ -948,7 +949,7 @@
 
 /* Header offset when both top bar and header are sticky */
 .promptless-topbar--sticky + .promptless-header--sticky {
-    top: var(--topbar-height, 36px);
+    top: var(--topbar-height, 0);
 }
 
 /* ==========================================================================
@@ -1065,7 +1066,7 @@
 }
 
 .admin-bar .promptless-topbar--sticky + .promptless-header--sticky {
-    top: calc(32px + var(--topbar-height, 36px));
+    top: calc(32px + var(--topbar-height, 0));
 }
 
 @media (max-width: 782px) {
@@ -1074,7 +1075,7 @@
     }
 
     .admin-bar .promptless-topbar--sticky + .promptless-header--sticky {
-        top: calc(46px + var(--topbar-height, 36px));
+        top: calc(46px + var(--topbar-height, 0));
     }
 }
 

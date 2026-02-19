@@ -95,6 +95,9 @@
                 }
             }, 100);
         });
+
+        // Initialize sticky header height management
+        initStickyHeightManager();
     }
 
     /**
@@ -220,6 +223,50 @@
             cartToggle.setAttribute('aria-expanded', 'false');
             miniCart.setAttribute('aria-hidden', 'true');
         }
+    }
+
+    /**
+     * Initialize sticky header height management
+     *
+     * Dynamically measures topbar height and sets CSS variable for
+     * gap-free sticky header positioning. Uses ResizeObserver for
+     * responsive updates.
+     */
+    function initStickyHeightManager() {
+        const topbar = document.querySelector('.promptless-topbar');
+        const header = document.querySelector('.promptless-header--sticky');
+
+        // Exit if no sticky elements exist
+        if (!topbar && !header) {
+            return;
+        }
+
+        /**
+         * Measure actual topbar height and update CSS variable
+         */
+        function updateStickyOffsets() {
+            const topbarHeight = topbar ? topbar.offsetHeight : 0;
+
+            // Set CSS variable on document root for sticky positioning
+            document.documentElement.style.setProperty(
+                '--topbar-height',
+                topbarHeight + 'px'
+            );
+        }
+
+        // Initial measurement on DOM ready
+        updateStickyOffsets();
+
+        // Watch for topbar size changes using ResizeObserver
+        if (topbar && typeof ResizeObserver !== 'undefined') {
+            const resizeObserver = new ResizeObserver(function() {
+                updateStickyOffsets();
+            });
+            resizeObserver.observe(topbar);
+        }
+
+        // Update after fonts load (can affect height)
+        window.addEventListener('load', updateStickyOffsets);
     }
 
     // Initialize when DOM is ready
