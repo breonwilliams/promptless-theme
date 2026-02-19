@@ -64,7 +64,7 @@
 
 @media (min-width: 1024px) {
     .promptless-footer__main {
-        grid-template-columns: 2fr repeat(2, 1fr) 1fr;
+        grid-template-columns: 2fr repeat(3, 1fr) 1fr;
         gap: 3rem;
     }
 }
@@ -130,6 +130,60 @@
     color: var(--section-text-muted);
     margin: 0;
     line-height: 1.6;
+}
+
+/* ==========================================================================
+   Footer Brand Rich Text
+   Supports formatted text, links, and contact info below logo
+   ========================================================================== */
+
+.promptless-footer__brand-text {
+    font-size: 0.9375rem;
+    color: var(--section-text-muted);
+    line-height: 1.6;
+}
+
+.promptless-footer__brand-text p {
+    margin: 0 0 0.75rem 0;
+}
+
+.promptless-footer__brand-text p:last-child {
+    margin-bottom: 0;
+}
+
+.promptless-footer__brand-text a {
+    color: var(--section-text);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: color 0.2s ease;
+}
+
+.promptless-footer__brand-text a:hover,
+.promptless-footer__brand-text a:focus {
+    color: var(--section-primary);
+}
+
+/* High-specificity link overrides for smart colors */
+.promptless-footer.aisb-section--light .promptless-footer__brand-text a[href][href][href][href][href][href][href][href] {
+    color: var(--section-text);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.promptless-footer.aisb-section--light .promptless-footer__brand-text a[href][href][href][href][href][href][href][href]:hover,
+.promptless-footer.aisb-section--light .promptless-footer__brand-text a[href][href][href][href][href][href][href][href]:focus {
+    color: var(--aisb-smart-light-section-link, var(--section-primary));
+}
+
+.promptless-footer.aisb-section--dark .promptless-footer__brand-text a[href][href][href][href][href][href][href][href] {
+    color: var(--section-text);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.promptless-footer.aisb-section--dark .promptless-footer__brand-text a[href][href][href][href][href][href][href][href]:hover,
+.promptless-footer.aisb-section--dark .promptless-footer__brand-text a[href][href][href][href][href][href][href][href]:focus {
+    color: var(--aisb-smart-dark-section-link, var(--section-primary));
 }
 
 /* ==========================================================================

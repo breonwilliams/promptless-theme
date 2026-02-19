@@ -321,6 +321,28 @@ class Promptless_Customizer {
         );
 
         // =============================================
+        // Footer Brand Text (Rich Text Area)
+        // =============================================
+        $wp_customize->add_setting(
+            'promptless_footer_brand_text',
+            array(
+                'default'           => '',
+                'sanitize_callback' => 'wp_kses_post',
+                'transport'         => 'postMessage',
+            )
+        );
+
+        $wp_customize->add_control(
+            'promptless_footer_brand_text',
+            array(
+                'label'       => __( 'Footer Brand Description', 'promptless-theme' ),
+                'description' => __( 'Add text, contact info, or links below the logo. Supports basic HTML formatting (bold, italic, links). Leave empty to show site tagline.', 'promptless-theme' ),
+                'section'     => 'promptless_theme_settings',
+                'type'        => 'textarea',
+            )
+        );
+
+        // =============================================
         // WooCommerce Header Cart Settings
         // Only show if WooCommerce is active
         // =============================================

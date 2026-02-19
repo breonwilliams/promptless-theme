@@ -31,7 +31,7 @@
     <div class="promptless-container">
         <div class="promptless-header__inner">
             <!-- Logo / Site Title -->
-            <div class="promptless-header__brand">
+            <div class="promptless-header__brand" data-home-url="<?php echo esc_url( home_url( '/' ) ); ?>">
                 <?php promptless_site_logo(); ?>
             </div>
 

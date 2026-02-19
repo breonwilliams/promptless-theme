@@ -18,11 +18,20 @@
             <div class="promptless-footer__brand">
                 <?php promptless_site_logo(); ?>
                 <?php
-                $description = get_bloginfo( 'description', 'display' );
-                if ( $description ) :
+                // Get custom brand text (supports HTML) or fall back to tagline
+                $brand_text = get_theme_mod( 'promptless_footer_brand_text', '' );
+                if ( $brand_text ) :
                     ?>
-                    <p class="promptless-footer__tagline"><?php echo esc_html( $description ); ?></p>
-                <?php endif; ?>
+                    <div class="promptless-footer__brand-text">
+                        <?php echo wp_kses_post( $brand_text ); ?>
+                    </div>
+                <?php else :
+                    $description = get_bloginfo( 'description', 'display' );
+                    if ( $description ) :
+                        ?>
+                        <p class="promptless-footer__tagline"><?php echo esc_html( $description ); ?></p>
+                    <?php endif;
+                endif; ?>
             </div>
 
             <!-- Footer Navigation Columns -->
@@ -36,6 +45,12 @@
                 <?php if ( has_nav_menu( 'footer-col-2' ) ) : ?>
                     <div class="promptless-footer__nav-column">
                         <?php promptless_footer_nav( 'footer-col-2' ); ?>
+                    </div>
+                <?php endif; ?>
+
+                <?php if ( has_nav_menu( 'footer-col-3' ) ) : ?>
+                    <div class="promptless-footer__nav-column">
+                        <?php promptless_footer_nav( 'footer-col-3' ); ?>
                     </div>
                 <?php endif; ?>
             </div>
