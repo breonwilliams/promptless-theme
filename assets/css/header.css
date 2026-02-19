@@ -872,7 +872,7 @@
         right: 0;
         width: 100%;
         max-height: 60vh;
-        border-radius: var(--aisb-section-radius-card, 8px) var(--aisb-section-radius-card, 8px) 0 0;
+        border-radius: 0;
         transform: translateY(100%);
     }
 

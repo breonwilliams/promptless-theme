@@ -1230,6 +1230,7 @@ body.woocommerce-cart .aisb-section--dark a.remove:not(.promptless-cart-item__re
 .woocommerce-MyAccount-navigation ul li a {
     display: block;
     padding: var(--aisb-section-space-sm, 1rem) var(--aisb-section-space-md, 1.5rem);
+    background: var(--wc-surface);
     color: var(--wc-text);
     text-decoration: none;
     font-weight: 500;
@@ -1237,12 +1238,25 @@ body.woocommerce-cart .aisb-section--dark a.remove:not(.promptless-cart-item__re
 }
 
 .woocommerce-MyAccount-navigation ul li a:hover {
-    background: var(--wc-bg);
-    color: var(--wc-link);
+    background: var(--wc-primary);
+    color: var(--aisb-button-primary-text, #ffffff);
 }
 
 .woocommerce-MyAccount-navigation ul li.is-active a {
     background: var(--wc-primary);
+    color: var(--aisb-button-primary-text, #ffffff);
+}
+
+/* Light mode explicit rules for proper specificity cascade */
+body.woocommerce .aisb-section--light .woocommerce-MyAccount-navigation ul li a:hover,
+body.woocommerce-page .aisb-section--light .woocommerce-MyAccount-navigation ul li a:hover {
+    background-color: var(--wc-primary, var(--aisb-color-primary, #6366f1));
+    color: var(--aisb-button-primary-text, #ffffff);
+}
+
+body.woocommerce .aisb-section--light .woocommerce-MyAccount-navigation ul li.is-active a,
+body.woocommerce-page .aisb-section--light .woocommerce-MyAccount-navigation ul li.is-active a {
+    background-color: var(--wc-primary, var(--aisb-color-primary, #6366f1));
     color: var(--aisb-button-primary-text, #ffffff);
 }
 
@@ -2309,13 +2323,21 @@ body.woocommerce-page .aisb-section--dark .woocommerce-MyAccount-navigation ul l
 
 body.woocommerce .aisb-section--dark .woocommerce-MyAccount-navigation ul li a,
 body.woocommerce-page .aisb-section--dark .woocommerce-MyAccount-navigation ul li a {
+    background-color: var(--wc-surface, var(--aisb-color-dark-surface, #1f2937));
     color: var(--wc-text, var(--aisb-color-dark-text, #f9fafb));
 }
 
 body.woocommerce .aisb-section--dark .woocommerce-MyAccount-navigation ul li a:hover,
 body.woocommerce-page .aisb-section--dark .woocommerce-MyAccount-navigation ul li a:hover {
-    background-color: var(--wc-bg, var(--aisb-color-dark-background, #111827));
-    color: var(--wc-link, var(--aisb-color-primary, #6366f1));
+    background-color: var(--wc-primary, var(--aisb-color-primary, #6366f1));
+    color: var(--aisb-button-primary-text, #ffffff);
+}
+
+/* CRITICAL: Dark mode active state - must have same specificity as hover */
+body.woocommerce .aisb-section--dark .woocommerce-MyAccount-navigation ul li.is-active a,
+body.woocommerce-page .aisb-section--dark .woocommerce-MyAccount-navigation ul li.is-active a {
+    background-color: var(--wc-primary, var(--aisb-color-primary, #6366f1));
+    color: var(--aisb-button-primary-text, #ffffff);
 }
 
 body.woocommerce .aisb-section--dark .woocommerce-MyAccount-content,
