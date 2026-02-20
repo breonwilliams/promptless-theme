@@ -10,7 +10,7 @@
 
 <section class="promptless-no-results">
     <header class="promptless-no-results__header">
-        <h1 class="promptless-no-results__title"><?php esc_html_e( 'Nothing Found', 'promptless-theme' ); ?></h1>
+        <h1 class="promptless-no-results__title"><?php esc_html_e( 'Nothing Found', 'promptless' ); ?></h1>
     </header>
 
     <div class="promptless-no-results__content">
@@ -20,7 +20,7 @@
                 printf(
                     /* translators: %s: URL to create new post */
                     wp_kses(
-                        __( 'Ready to publish your first post? <a href="%s">Get started here</a>.', 'promptless-theme' ),
+                        __( 'Ready to publish your first post? <a href="%s">Get started here</a>.', 'promptless' ),
                         array(
                             'a' => array(
                                 'href' => array(),
@@ -32,10 +32,10 @@
                 ?>
             </p>
         <?php elseif ( is_search() ) : ?>
-            <p><?php esc_html_e( 'Sorry, but nothing matched your search terms. Please try again with some different keywords.', 'promptless-theme' ); ?></p>
+            <p><?php esc_html_e( 'Sorry, but nothing matched your search terms. Please try again with some different keywords.', 'promptless' ); ?></p>
             <?php get_search_form(); ?>
         <?php else : ?>
-            <p><?php esc_html_e( 'It seems we can\'t find what you\'re looking for. Perhaps searching can help.', 'promptless-theme' ); ?></p>
+            <p><?php esc_html_e( 'It seems we can\'t find what you\'re looking for. Perhaps searching can help.', 'promptless' ); ?></p>
             <?php get_search_form(); ?>
         <?php endif; ?>
     </div>

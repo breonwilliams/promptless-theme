@@ -44,7 +44,7 @@ get_header();
             <?php
             wp_link_pages(
                 array(
-                    'before' => '<div class="page-links">' . esc_html__( 'Pages:', 'promptless-theme' ),
+                    'before' => '<div class="page-links">' . esc_html__( 'Pages:', 'promptless' ),
                     'after'  => '</div>',
                 )
             );

@@ -38,7 +38,7 @@ class Promptless_Customizer {
         $wp_customize->add_section(
             'promptless_theme_settings',
             array(
-                'title'    => __( 'Theme Settings', 'promptless-theme' ),
+                'title'    => __( 'Theme Settings', 'promptless' ),
                 'priority' => 30,
             )
         );
@@ -58,13 +58,13 @@ class Promptless_Customizer {
         $wp_customize->add_control(
             'promptless_header_theme',
             array(
-                'label'       => __( 'Header Theme', 'promptless-theme' ),
-                'description' => __( 'Choose light or dark styling for the header. Colors are inherited from Promptless WP Global Settings.', 'promptless-theme' ),
+                'label'       => __( 'Header Theme', 'promptless' ),
+                'description' => __( 'Choose light or dark styling for the header. Colors are inherited from Promptless WP Global Settings.', 'promptless' ),
                 'section'     => 'promptless_theme_settings',
                 'type'        => 'select',
                 'choices'     => array(
-                    'light' => __( 'Light', 'promptless-theme' ),
-                    'dark'  => __( 'Dark', 'promptless-theme' ),
+                    'light' => __( 'Light', 'promptless' ),
+                    'dark'  => __( 'Dark', 'promptless' ),
                 ),
             )
         );
@@ -84,13 +84,13 @@ class Promptless_Customizer {
         $wp_customize->add_control(
             'promptless_footer_theme',
             array(
-                'label'       => __( 'Footer Theme', 'promptless-theme' ),
-                'description' => __( 'Choose light or dark styling for the footer. Colors are inherited from Promptless WP Global Settings.', 'promptless-theme' ),
+                'label'       => __( 'Footer Theme', 'promptless' ),
+                'description' => __( 'Choose light or dark styling for the footer. Colors are inherited from Promptless WP Global Settings.', 'promptless' ),
                 'section'     => 'promptless_theme_settings',
                 'type'        => 'select',
                 'choices'     => array(
-                    'light' => __( 'Light', 'promptless-theme' ),
-                    'dark'  => __( 'Dark', 'promptless-theme' ),
+                    'light' => __( 'Light', 'promptless' ),
+                    'dark'  => __( 'Dark', 'promptless' ),
                 ),
             )
         );
@@ -110,13 +110,13 @@ class Promptless_Customizer {
         $wp_customize->add_control(
             'promptless_content_theme',
             array(
-                'label'       => __( 'Content Theme', 'promptless-theme' ),
-                'description' => __( 'Choose light or dark styling for page content areas.', 'promptless-theme' ),
+                'label'       => __( 'Content Theme', 'promptless' ),
+                'description' => __( 'Choose light or dark styling for page content areas.', 'promptless' ),
                 'section'     => 'promptless_theme_settings',
                 'type'        => 'select',
                 'choices'     => array(
-                    'light' => __( 'Light', 'promptless-theme' ),
-                    'dark'  => __( 'Dark', 'promptless-theme' ),
+                    'light' => __( 'Light', 'promptless' ),
+                    'dark'  => __( 'Dark', 'promptless' ),
                 ),
             )
         );
@@ -136,8 +136,8 @@ class Promptless_Customizer {
         $wp_customize->add_control(
             'promptless_header_cta_text',
             array(
-                'label'       => __( 'Header CTA Text', 'promptless-theme' ),
-                'description' => __( 'Button text for the header call-to-action. Leave empty to hide.', 'promptless-theme' ),
+                'label'       => __( 'Header CTA Text', 'promptless' ),
+                'description' => __( 'Button text for the header call-to-action. Leave empty to hide.', 'promptless' ),
                 'section'     => 'promptless_theme_settings',
                 'type'        => 'text',
             )
@@ -155,8 +155,8 @@ class Promptless_Customizer {
         $wp_customize->add_control(
             'promptless_header_cta_url',
             array(
-                'label'       => __( 'Header CTA URL', 'promptless-theme' ),
-                'description' => __( 'Link URL for the header call-to-action button.', 'promptless-theme' ),
+                'label'       => __( 'Header CTA URL', 'promptless' ),
+                'description' => __( 'Link URL for the header call-to-action button.', 'promptless' ),
                 'section'     => 'promptless_theme_settings',
                 'type'        => 'url',
             )
@@ -177,14 +177,14 @@ class Promptless_Customizer {
         $wp_customize->add_control(
             'promptless_nav_position',
             array(
-                'label'       => __( 'Navigation Position', 'promptless-theme' ),
-                'description' => __( 'Align the primary navigation menu within the header.', 'promptless-theme' ),
+                'label'       => __( 'Navigation Position', 'promptless' ),
+                'description' => __( 'Align the primary navigation menu within the header.', 'promptless' ),
                 'section'     => 'promptless_theme_settings',
                 'type'        => 'select',
                 'choices'     => array(
-                    'left'   => __( 'Left', 'promptless-theme' ),
-                    'center' => __( 'Center', 'promptless-theme' ),
-                    'right'  => __( 'Right', 'promptless-theme' ),
+                    'left'   => __( 'Left', 'promptless' ),
+                    'center' => __( 'Center', 'promptless' ),
+                    'right'  => __( 'Right', 'promptless' ),
                 ),
             )
         );
@@ -204,8 +204,8 @@ class Promptless_Customizer {
         $wp_customize->add_control(
             'promptless_header_border',
             array(
-                'label'       => __( 'Show Header Border', 'promptless-theme' ),
-                'description' => __( 'Display a bottom border on the header.', 'promptless-theme' ),
+                'label'       => __( 'Show Header Border', 'promptless' ),
+                'description' => __( 'Display a bottom border on the header.', 'promptless' ),
                 'section'     => 'promptless_theme_settings',
                 'type'        => 'checkbox',
             )
@@ -226,8 +226,8 @@ class Promptless_Customizer {
         $wp_customize->add_control(
             'promptless_header_sticky',
             array(
-                'label'       => __( 'Sticky Header', 'promptless-theme' ),
-                'description' => __( 'Keep the header fixed at the top when scrolling.', 'promptless-theme' ),
+                'label'       => __( 'Sticky Header', 'promptless' ),
+                'description' => __( 'Keep the header fixed at the top when scrolling.', 'promptless' ),
                 'section'     => 'promptless_theme_settings',
                 'type'        => 'checkbox',
             )
@@ -248,8 +248,8 @@ class Promptless_Customizer {
         $wp_customize->add_control(
             'promptless_topbar_enabled',
             array(
-                'label'       => __( 'Enable Top Bar', 'promptless-theme' ),
-                'description' => __( 'Display a utility bar above the header with left/right menus.', 'promptless-theme' ),
+                'label'       => __( 'Enable Top Bar', 'promptless' ),
+                'description' => __( 'Display a utility bar above the header with left/right menus.', 'promptless' ),
                 'section'     => 'promptless_theme_settings',
                 'type'        => 'checkbox',
             )
@@ -267,13 +267,13 @@ class Promptless_Customizer {
         $wp_customize->add_control(
             'promptless_topbar_theme',
             array(
-                'label'       => __( 'Top Bar Theme', 'promptless-theme' ),
-                'description' => __( 'Choose light or dark styling for the top bar.', 'promptless-theme' ),
+                'label'       => __( 'Top Bar Theme', 'promptless' ),
+                'description' => __( 'Choose light or dark styling for the top bar.', 'promptless' ),
                 'section'     => 'promptless_theme_settings',
                 'type'        => 'select',
                 'choices'     => array(
-                    'light' => __( 'Light', 'promptless-theme' ),
-                    'dark'  => __( 'Dark', 'promptless-theme' ),
+                    'light' => __( 'Light', 'promptless' ),
+                    'dark'  => __( 'Dark', 'promptless' ),
                 ),
             )
         );
@@ -290,8 +290,8 @@ class Promptless_Customizer {
         $wp_customize->add_control(
             'promptless_topbar_sticky',
             array(
-                'label'       => __( 'Sticky Top Bar', 'promptless-theme' ),
-                'description' => __( 'Keep the top bar fixed when scrolling. Only works when header is also sticky.', 'promptless-theme' ),
+                'label'       => __( 'Sticky Top Bar', 'promptless' ),
+                'description' => __( 'Keep the top bar fixed when scrolling. Only works when header is also sticky.', 'promptless' ),
                 'section'     => 'promptless_theme_settings',
                 'type'        => 'checkbox',
             )
@@ -309,13 +309,13 @@ class Promptless_Customizer {
         $wp_customize->add_control(
             'promptless_topbar_mobile',
             array(
-                'label'       => __( 'Top Bar Mobile Behavior', 'promptless-theme' ),
-                'description' => __( 'Choose how the top bar behaves on mobile devices.', 'promptless-theme' ),
+                'label'       => __( 'Top Bar Mobile Behavior', 'promptless' ),
+                'description' => __( 'Choose how the top bar behaves on mobile devices.', 'promptless' ),
                 'section'     => 'promptless_theme_settings',
                 'type'        => 'select',
                 'choices'     => array(
-                    'hide'     => __( 'Hide on Mobile', 'promptless-theme' ),
-                    'collapse' => __( 'Collapse into Hamburger Menu', 'promptless-theme' ),
+                    'hide'     => __( 'Hide on Mobile', 'promptless' ),
+                    'collapse' => __( 'Collapse into Hamburger Menu', 'promptless' ),
                 ),
             )
         );
@@ -335,8 +335,8 @@ class Promptless_Customizer {
         $wp_customize->add_control(
             'promptless_footer_brand_text',
             array(
-                'label'       => __( 'Footer Brand Description', 'promptless-theme' ),
-                'description' => __( 'Add text, contact info, or links below the logo. Supports basic HTML formatting (bold, italic, links). Leave empty to show site tagline.', 'promptless-theme' ),
+                'label'       => __( 'Footer Brand Description', 'promptless' ),
+                'description' => __( 'Add text, contact info, or links below the logo. Supports basic HTML formatting (bold, italic, links). Leave empty to show site tagline.', 'promptless' ),
                 'section'     => 'promptless_theme_settings',
                 'type'        => 'textarea',
             )
@@ -360,8 +360,8 @@ class Promptless_Customizer {
             $wp_customize->add_control(
                 'promptless_header_cart_enabled',
                 array(
-                    'label'       => __( 'Show Cart Icon', 'promptless-theme' ),
-                    'description' => __( 'Display a shopping cart icon in the header.', 'promptless-theme' ),
+                    'label'       => __( 'Show Cart Icon', 'promptless' ),
+                    'description' => __( 'Display a shopping cart icon in the header.', 'promptless' ),
                     'section'     => 'promptless_theme_settings',
                     'type'        => 'checkbox',
                 )
@@ -380,13 +380,13 @@ class Promptless_Customizer {
             $wp_customize->add_control(
                 'promptless_header_cart_style',
                 array(
-                    'label'       => __( 'Cart Icon Behavior', 'promptless-theme' ),
-                    'description' => __( 'Choose whether the cart icon opens a mini-cart dropdown or links directly to the cart page.', 'promptless-theme' ),
+                    'label'       => __( 'Cart Icon Behavior', 'promptless' ),
+                    'description' => __( 'Choose whether the cart icon opens a mini-cart dropdown or links directly to the cart page.', 'promptless' ),
                     'section'     => 'promptless_theme_settings',
                     'type'        => 'select',
                     'choices'     => array(
-                        'dropdown' => __( 'Mini-Cart Dropdown', 'promptless-theme' ),
-                        'link'     => __( 'Link to Cart Page', 'promptless-theme' ),
+                        'dropdown' => __( 'Mini-Cart Dropdown', 'promptless' ),
+                        'link'     => __( 'Link to Cart Page', 'promptless' ),
                     ),
                 )
             );

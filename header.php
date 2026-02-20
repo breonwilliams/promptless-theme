@@ -22,7 +22,7 @@
 <?php wp_body_open(); ?>
 
 <a class="skip-link" href="#main-content">
-    <?php esc_html_e( 'Skip to content', 'promptless-theme' ); ?>
+    <?php esc_html_e( 'Skip to content', 'promptless' ); ?>
 </a>
 
 <?php promptless_topbar(); ?>

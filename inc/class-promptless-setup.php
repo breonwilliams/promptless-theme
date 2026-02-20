@@ -44,7 +44,7 @@ class Promptless_Setup {
      */
     public function setup() {
         // Make theme available for translation
-        load_theme_textdomain( 'promptless-theme', PROMPTLESS_THEME_DIR . '/languages' );
+        load_theme_textdomain( 'promptless', PROMPTLESS_THEME_DIR . '/languages' );
 
         // Add default posts and comments RSS feed links to head
         add_theme_support( 'automatic-feed-links' );
@@ -65,13 +65,13 @@ class Promptless_Setup {
         // Register navigation menus
         register_nav_menus(
             array(
-                'primary'      => esc_html__( 'Primary Menu', 'promptless-theme' ),
-                'footer'       => esc_html__( 'Footer Menu', 'promptless-theme' ),
-                'footer-col-1' => esc_html__( 'Footer Column 1', 'promptless-theme' ),
-                'footer-col-2' => esc_html__( 'Footer Column 2', 'promptless-theme' ),
-                'footer-col-3' => esc_html__( 'Footer Column 3', 'promptless-theme' ),
-                'topbar-left'  => esc_html__( 'Top Bar Left', 'promptless-theme' ),
-                'topbar-right' => esc_html__( 'Top Bar Right', 'promptless-theme' ),
+                'primary'      => esc_html__( 'Primary Menu', 'promptless' ),
+                'footer'       => esc_html__( 'Footer Menu', 'promptless' ),
+                'footer-col-1' => esc_html__( 'Footer Column 1', 'promptless' ),
+                'footer-col-2' => esc_html__( 'Footer Column 2', 'promptless' ),
+                'footer-col-3' => esc_html__( 'Footer Column 3', 'promptless' ),
+                'topbar-left'  => esc_html__( 'Top Bar Left', 'promptless' ),
+                'topbar-right' => esc_html__( 'Top Bar Right', 'promptless' ),
             )
         );
 
@@ -112,6 +112,7 @@ class Promptless_Setup {
 
         // Add support for editor styles
         add_theme_support( 'editor-styles' );
+        add_editor_style( 'assets/css/editor-style.css' );
 
         // Declare support for Promptless WP plugin native integration
         add_theme_support( 'aisb-native-theme' );
@@ -150,9 +151,9 @@ class Promptless_Setup {
         // Footer widget area
         register_sidebar(
             array(
-                'name'          => esc_html__( 'Footer Widgets', 'promptless-theme' ),
+                'name'          => esc_html__( 'Footer Widgets', 'promptless' ),
                 'id'            => 'footer-widgets',
-                'description'   => esc_html__( 'Add widgets here to appear in your footer.', 'promptless-theme' ),
+                'description'   => esc_html__( 'Add widgets here to appear in your footer.', 'promptless' ),
                 'before_widget' => '<div id="%1$s" class="promptless-footer__widget %2$s">',
                 'after_widget'  => '</div>',
                 'before_title'  => '<h4 class="promptless-footer__widget-title">',
@@ -164,9 +165,9 @@ class Promptless_Setup {
         if ( class_exists( 'WooCommerce' ) ) {
             register_sidebar(
                 array(
-                    'name'          => esc_html__( 'Shop Sidebar', 'promptless-theme' ),
+                    'name'          => esc_html__( 'Shop Sidebar', 'promptless' ),
                     'id'            => 'shop-sidebar',
-                    'description'   => esc_html__( 'Add widgets here to appear in the shop sidebar.', 'promptless-theme' ),
+                    'description'   => esc_html__( 'Add widgets here to appear in the shop sidebar.', 'promptless' ),
                     'before_widget' => '<div id="%1$s" class="promptless-widget %2$s">',
                     'after_widget'  => '</div>',
                     'before_title'  => '<h4 class="promptless-widget__title">',
@@ -178,9 +179,9 @@ class Promptless_Setup {
         // Social links widget area
         register_sidebar(
             array(
-                'name'          => esc_html__( 'Footer Social Links', 'promptless-theme' ),
+                'name'          => esc_html__( 'Footer Social Links', 'promptless' ),
                 'id'            => 'footer-social',
-                'description'   => esc_html__( 'Add social link widgets here.', 'promptless-theme' ),
+                'description'   => esc_html__( 'Add social link widgets here.', 'promptless' ),
                 'before_widget' => '<div id="%1$s" class="promptless-footer__social %2$s">',
                 'after_widget'  => '</div>',
                 'before_title'  => '<span class="screen-reader-text">',
@@ -224,7 +225,7 @@ class Promptless_Setup {
      * @return string Modified sale flash HTML.
      */
     public function custom_sale_flash( $html, $post, $product ) {
-        return '<span class="onsale">' . esc_html__( 'Sale', 'promptless-theme' ) . '</span>';
+        return '<span class="onsale">' . esc_html__( 'Sale', 'promptless' ) . '</span>';
     }
 
     /**

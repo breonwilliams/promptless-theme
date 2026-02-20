@@ -103,8 +103,8 @@ $sections = apply_filters( 'aisb_get_sections', $sections, $post_id );
             if ( current_user_can( 'edit_posts' ) ) {
                 ?>
                 <div style="padding: 60px 20px; text-align: center; background: var(--aisb-color-surface, #f5f5f5);">
-                    <h2><?php esc_html_e( 'Promptless WP - Full Width Mode', 'promptless-theme' ); ?></h2>
-                    <p><?php esc_html_e( 'No sections added yet. Use the editor to add sections to this page.', 'promptless-theme' ); ?></p>
+                    <h2><?php esc_html_e( 'Promptless WP - Full Width Mode', 'promptless' ); ?></h2>
+                    <p><?php esc_html_e( 'No sections added yet. Use the editor to add sections to this page.', 'promptless' ); ?></p>
                 </div>
                 <?php
             }

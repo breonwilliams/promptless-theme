@@ -84,7 +84,7 @@ function promptless_copyright() {
 
     printf(
         /* translators: 1: Current year, 2: Site name */
-        esc_html__( '&copy; %1$s %2$s. All rights reserved.', 'promptless-theme' ),
+        esc_html__( '&copy; %1$s %2$s. All rights reserved.', 'promptless' ),
         esc_html( $year ),
         esc_html( $site_name )
     );
@@ -219,11 +219,11 @@ function promptless_pagination() {
     $args = array(
         'prev_text' => sprintf(
             '<span class="screen-reader-text">%s</span><span aria-hidden="true">&larr;</span>',
-            esc_html__( 'Previous page', 'promptless-theme' )
+            esc_html__( 'Previous page', 'promptless' )
         ),
         'next_text' => sprintf(
             '<span class="screen-reader-text">%s</span><span aria-hidden="true">&rarr;</span>',
-            esc_html__( 'Next page', 'promptless-theme' )
+            esc_html__( 'Next page', 'promptless' )
         ),
     );
 
@@ -272,12 +272,12 @@ function promptless_mobile_menu_toggle() {
         class="promptless-header__menu-toggle"
         aria-controls="primary-navigation"
         aria-expanded="false"
-        aria-label="<?php esc_attr_e( 'Open menu', 'promptless-theme' ); ?>"
+        aria-label="<?php esc_attr_e( 'Open menu', 'promptless' ); ?>"
     >
         <span class="promptless-header__menu-toggle-bar"></span>
         <span class="promptless-header__menu-toggle-bar"></span>
         <span class="promptless-header__menu-toggle-bar"></span>
-        <span class="screen-reader-text"><?php esc_html_e( 'Menu', 'promptless-theme' ); ?></span>
+        <span class="screen-reader-text"><?php esc_html_e( 'Menu', 'promptless' ); ?></span>
     </button>
     <?php
 }
@@ -462,7 +462,7 @@ function promptless_header_cart() {
             'Shopping cart, %d item',
             'Shopping cart, %d items',
             $cart_count,
-            'promptless-theme'
+            'promptless'
         ),
         $cart_count
     );
@@ -531,7 +531,7 @@ function promptless_cart_count_badge( $count ) {
         <?php
         printf(
             /* translators: %d is the number of items */
-            esc_html( _n( '%d item in cart', '%d items in cart', $count, 'promptless-theme' ) ),
+            esc_html( _n( '%d item in cart', '%d items in cart', $count, 'promptless' ) ),
             (int) $count
         );
         ?>
@@ -571,14 +571,14 @@ add_filter( 'woocommerce_cart_hash', function( $hash ) {
  * Output mini-cart View Cart button with ghost styling
  */
 function promptless_mini_cart_view_cart_button() {
-	echo '<a href="' . esc_url( wc_get_cart_url() ) . '" class="aisb-btn aisb-btn--compact aisb-btn-ghost">' . esc_html__( 'View cart', 'woocommerce' ) . '</a>';
+	echo '<a href="' . esc_url( wc_get_cart_url() ) . '" class="aisb-btn aisb-btn--compact aisb-btn-ghost">' . esc_html__( 'View cart', 'promptless' ) . '</a>';
 }
 
 /**
  * Output mini-cart Checkout button with primary styling
  */
 function promptless_mini_cart_checkout_button() {
-	echo '<a href="' . esc_url( wc_get_checkout_url() ) . '" class="aisb-btn aisb-btn--compact aisb-btn-primary">' . esc_html__( 'Checkout', 'woocommerce' ) . '</a>';
+	echo '<a href="' . esc_url( wc_get_checkout_url() ) . '" class="aisb-btn aisb-btn--compact aisb-btn-primary">' . esc_html__( 'Checkout', 'promptless' ) . '</a>';
 }
 
 /**

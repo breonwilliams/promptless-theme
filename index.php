@@ -21,7 +21,7 @@ get_header();
                 <?php if ( is_home() && ! is_front_page() ) : ?>
                     <h1 class="promptless-archive__title"><?php single_post_title(); ?></h1>
                 <?php else : ?>
-                    <h1 class="promptless-archive__title"><?php esc_html_e( 'Latest Posts', 'promptless-theme' ); ?></h1>
+                    <h1 class="promptless-archive__title"><?php esc_html_e( 'Latest Posts', 'promptless' ); ?></h1>
                 <?php endif; ?>
             </header>
             <div class="promptless-archive__grid">

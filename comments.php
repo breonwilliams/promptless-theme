@@ -32,7 +32,7 @@ if ( post_password_required() ) {
             $promptless_comment_count = get_comments_number();
             printf(
                 /* translators: 1: Number of comments, 2: Post title */
-                esc_html( _n( '%1$s response to &ldquo;%2$s&rdquo;', '%1$s responses to &ldquo;%2$s&rdquo;', $promptless_comment_count, 'promptless-theme' ) ),
+                esc_html( _n( '%1$s response to &ldquo;%2$s&rdquo;', '%1$s responses to &ldquo;%2$s&rdquo;', $promptless_comment_count, 'promptless' ) ),
                 number_format_i18n( $promptless_comment_count ),
                 get_the_title()
             );
@@ -59,7 +59,7 @@ if ( post_password_required() ) {
         // If comments are closed and there are comments, let's leave a little note.
         if ( ! comments_open() ) :
             ?>
-            <p class="no-comments"><?php esc_html_e( 'Comments are closed.', 'promptless-theme' ); ?></p>
+            <p class="no-comments"><?php esc_html_e( 'Comments are closed.', 'promptless' ); ?></p>
             <?php
         endif;
 

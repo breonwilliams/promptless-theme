@@ -62,7 +62,7 @@ $sections = apply_filters( 'aisb_get_sections', $sections, $post_id );
     <?php wp_body_open(); ?>
 
     <a class="skip-link" href="#main-content">
-        <?php esc_html_e( 'Skip to content', 'promptless-theme' ); ?>
+        <?php esc_html_e( 'Skip to content', 'promptless' ); ?>
     </a>
 
     <main id="main-content" class="site-main promptless-canvas__content">
@@ -115,8 +115,8 @@ $sections = apply_filters( 'aisb_get_sections', $sections, $post_id );
                     ?>
                     <div style="padding: 60px 20px; text-align: center; background: var(--aisb-color-surface, #f5f5f5); min-height: 100vh; display: flex; align-items: center; justify-content: center;">
                         <div>
-                            <h2><?php esc_html_e( 'Promptless WP - Canvas Mode', 'promptless-theme' ); ?></h2>
-                            <p><?php esc_html_e( 'No sections added yet. Use the editor to add sections to this page.', 'promptless-theme' ); ?></p>
+                            <h2><?php esc_html_e( 'Promptless WP - Canvas Mode', 'promptless' ); ?></h2>
+                            <p><?php esc_html_e( 'No sections added yet. Use the editor to add sections to this page.', 'promptless' ); ?></p>
                         </div>
                     </div>
                     <?php

@@ -67,12 +67,12 @@ do_action( 'woocommerce_before_mini_cart' );
 							'<a role="button" href="%s" class="remove_from_cart_button promptless-cart-item__remove" aria-label="%s" data-product_id="%s" data-cart_item_key="%s" data-product_sku="%s" data-success_message="%s">&times;</a>',
 							esc_url( wc_get_cart_remove_url( $cart_item_key ) ),
 							/* translators: %s is the product name */
-							esc_attr( sprintf( __( 'Remove %s from cart', 'woocommerce' ), wp_strip_all_tags( $product_name ) ) ),
+							esc_attr( sprintf( __( 'Remove %s from cart', 'promptless' ), wp_strip_all_tags( $product_name ) ) ),
 							esc_attr( $product_id ),
 							esc_attr( $cart_item_key ),
 							esc_attr( $_product->get_sku() ),
 							/* translators: %s is the product name */
-							esc_attr( sprintf( __( '&ldquo;%s&rdquo; has been removed from your cart', 'woocommerce' ), wp_strip_all_tags( $product_name ) ) )
+							esc_attr( sprintf( __( '&ldquo;%s&rdquo; has been removed from your cart', 'promptless' ), wp_strip_all_tags( $product_name ) ) )
 						),
 						$cart_item_key
 					);
@@ -105,7 +105,7 @@ do_action( 'woocommerce_before_mini_cart' );
 
 <?php else : ?>
 
-	<p class="woocommerce-mini-cart__empty-message"><?php esc_html_e( 'No products in the cart.', 'woocommerce' ); ?></p>
+	<p class="woocommerce-mini-cart__empty-message"><?php esc_html_e( 'No products in the cart.', 'promptless' ); ?></p>
 
 <?php endif; ?>
 

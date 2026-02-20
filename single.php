@@ -29,7 +29,7 @@ get_header();
                                     <?php
                                     printf(
                                         /* translators: %s: Author name */
-                                        esc_html__( 'by %s', 'promptless-theme' ),
+                                        esc_html__( 'by %s', 'promptless' ),
                                         '<a href="' . esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ) . '">' . esc_html( get_the_author() ) . '</a>'
                                     );
                                     ?>
@@ -41,7 +41,7 @@ get_header();
                                     <?php
                                     printf(
                                         /* translators: %d: Number of minutes */
-                                        esc_html( _n( '%d min read', '%d min read', $reading_time, 'promptless-theme' ) ),
+                                        esc_html( _n( '%d min read', '%d min read', $reading_time, 'promptless' ) ),
                                         esc_html( $reading_time )
                                     );
                                     ?>
@@ -68,7 +68,7 @@ get_header();
             <?php
             wp_link_pages(
                 array(
-                    'before' => '<div class="page-links promptless-container">' . esc_html__( 'Pages:', 'promptless-theme' ),
+                    'before' => '<div class="page-links promptless-container">' . esc_html__( 'Pages:', 'promptless' ),
                     'after'  => '</div>',
                 )
             );
@@ -81,7 +81,7 @@ get_header();
                     if ( $tags ) :
                         ?>
                         <div class="promptless-single__tags">
-                            <span class="promptless-single__tags-label"><?php esc_html_e( 'Tags:', 'promptless-theme' ); ?></span>
+                            <span class="promptless-single__tags-label"><?php esc_html_e( 'Tags:', 'promptless' ); ?></span>
                             <?php
                             foreach ( $tags as $tag ) :
                                 printf(
@@ -95,7 +95,7 @@ get_header();
                     <?php endif; ?>
 
                     <!-- Post Navigation -->
-                    <nav class="promptless-single__nav" aria-label="<?php esc_attr_e( 'Post navigation', 'promptless-theme' ); ?>">
+                    <nav class="promptless-single__nav" aria-label="<?php esc_attr_e( 'Post navigation', 'promptless' ); ?>">
                         <?php
                         $prev_post = get_previous_post();
                         $next_post = get_next_post();
@@ -103,14 +103,14 @@ get_header();
                         if ( $prev_post ) :
                             ?>
                             <a href="<?php echo esc_url( get_permalink( $prev_post ) ); ?>" class="promptless-single__nav-link promptless-single__nav-link--prev">
-                                <span class="promptless-single__nav-label"><?php esc_html_e( 'Previous', 'promptless-theme' ); ?></span>
+                                <span class="promptless-single__nav-label"><?php esc_html_e( 'Previous', 'promptless' ); ?></span>
                                 <span class="promptless-single__nav-title"><?php echo esc_html( get_the_title( $prev_post ) ); ?></span>
                             </a>
                         <?php endif; ?>
 
                         <?php if ( $next_post ) : ?>
                             <a href="<?php echo esc_url( get_permalink( $next_post ) ); ?>" class="promptless-single__nav-link promptless-single__nav-link--next">
-                                <span class="promptless-single__nav-label"><?php esc_html_e( 'Next', 'promptless-theme' ); ?></span>
+                                <span class="promptless-single__nav-label"><?php esc_html_e( 'Next', 'promptless' ); ?></span>
                                 <span class="promptless-single__nav-title"><?php echo esc_html( get_the_title( $next_post ) ); ?></span>
                             </a>
                         <?php endif; ?>

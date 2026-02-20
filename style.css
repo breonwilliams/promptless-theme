@@ -4,18 +4,23 @@ Theme URI: https://promptlesswp.com/theme
 Author: Promptless WP
 Author URI: https://promptlesswp.com
 Description: A minimal WordPress theme designed to work seamlessly with the Promptless WP plugin. Inherits colors, typography, and styling from the plugin's Global Settings for a unified brand experience.
-Version: 1.0.0
+Version: 1.0.1
 Requires at least: 6.0
 Tested up to: 6.7
 Requires PHP: 7.4
 License: GNU General Public License v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
-Text Domain: promptless-theme
+Text Domain: promptless
 Tags: one-column, custom-logo, custom-menu, featured-images, full-width-template, block-styles, wide-blocks, accessibility-ready, blog, portfolio
 
 Promptless Theme is designed as a companion to the Promptless WP page builder plugin.
 It inherits all styling from the plugin's Global Settings, creating a cohesive website
 where header, footer, and archive pages match the sections built with the plugin.
+*/
+
+/*
+Promptless WordPress Theme, Copyright 2025 Promptless WP
+Promptless is distributed under the terms of the GNU GPL v2 or later.
 */
 
 /* ==========================================================================
@@ -260,4 +265,52 @@ button {
 
 .entry-content.alignfull {
   max-width: none;
+}
+
+/* ==========================================================================
+   WordPress Required Classes
+   ========================================================================== */
+
+.wp-caption {
+  max-width: 100%;
+  margin-bottom: 1rem;
+}
+
+.wp-caption-text {
+  font-size: 0.875rem;
+  color: var(--aisb-color-text-muted, #6b7280);
+  text-align: center;
+  padding: 0.5rem 0;
+}
+
+.sticky {
+  /* Sticky post styling - inherits standard post styles */
+}
+
+.gallery-caption {
+  font-size: 0.875rem;
+  color: var(--aisb-color-text-muted, #6b7280);
+}
+
+.bypostauthor {
+  /* Comment author highlighting - inherits standard comment styles */
+}
+
+.alignright {
+  float: right;
+  margin-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.alignleft {
+  float: left;
+  margin-right: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.aligncenter {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 1rem;
 }

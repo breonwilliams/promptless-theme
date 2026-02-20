@@ -32,7 +32,7 @@
         </div>
 
         <a href="<?php the_permalink(); ?>" class="aisb-features__item-link">
-            <?php esc_html_e( 'Read more', 'promptless-theme' ); ?>
+            <?php esc_html_e( 'Read more', 'promptless' ); ?>
         </a>
     </div>
 </article>

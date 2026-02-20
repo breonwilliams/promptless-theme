@@ -16,7 +16,7 @@ get_header();
                 <?php
                 printf(
                     /* translators: %s: Search query */
-                    esc_html__( 'Search results for: %s', 'promptless-theme' ),
+                    esc_html__( 'Search results for: %s', 'promptless' ),
                     '<span>' . esc_html( get_search_query() ) . '</span>'
                 );
                 ?>
@@ -39,7 +39,7 @@ get_header();
         <?php else : ?>
 
             <div class="promptless-search__no-results">
-                <p><?php esc_html_e( 'Sorry, no results were found for your search. Please try again with different keywords.', 'promptless-theme' ); ?></p>
+                <p><?php esc_html_e( 'Sorry, no results were found for your search. Please try again with different keywords.', 'promptless' ); ?></p>
                 <?php get_search_form(); ?>
             </div>
 
