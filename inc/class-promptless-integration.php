@@ -54,7 +54,7 @@ class Promptless_Integration {
      * @return bool
      */
     public function is_plugin_active() {
-        return class_exists( 'AISB_Plugin' ) || defined( 'AISB_PLUGIN_VERSION' );
+        return class_exists( 'AISB_Plugin' ) || defined( 'AISB_MODERN_VERSION' );
     }
 
     /**
@@ -158,8 +158,8 @@ class Promptless_Integration {
                 --aisb-color-dark-text-muted: <?php echo esc_attr( $settings['dark_muted_text'] ); ?>;
 
                 /* Typography - System fonts as fallback */
-                --aisb-section-font-heading: <?php echo esc_attr( $settings['heading_font'] ); ?>;
-                --aisb-section-font-body: <?php echo esc_attr( $settings['body_font'] ); ?>;
+                --aisb-section-font-heading: <?php echo $settings['heading_font']; ?>;
+                --aisb-section-font-body: <?php echo $settings['body_font']; ?>;
 
                 /* Border radius */
                 --aisb-section-radius-button: <?php echo esc_attr( $settings['button_radius'] ); ?>;
