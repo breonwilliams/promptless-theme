@@ -1083,6 +1083,70 @@ body.aisb-neo-brutalist-cards #reviews .comment-text {
 }
 
 /* ==========================================================================
+   SHOP ORDERING SELECT
+   Default sorting dropdown on shop/archive pages
+   ========================================================================== */
+
+/* Light mode shop ordering select */
+body.woocommerce .aisb-section--light .woocommerce-ordering select,
+body.woocommerce-page .aisb-section--light .woocommerce-ordering select,
+body.post-type-archive-product .aisb-section--light .woocommerce-ordering select {
+    padding: var(--aisb-section-space-sm, 0.75rem);
+    font-family: var(--aisb-section-font-body, inherit);
+    font-size: var(--aisb-section-text-base, 1rem);
+    color: var(--wc-text, var(--aisb-color-text, #1f2937));
+    background-color: var(--wc-surface, var(--aisb-color-surface, #f9fafb));
+    border: 1px solid var(--wc-border, var(--aisb-color-border, #e5e7eb));
+    border-radius: var(--aisb-section-radius-sm, 6px);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Light mode shop ordering focus state */
+body.woocommerce .aisb-section--light .woocommerce-ordering select:focus,
+body.woocommerce-page .aisb-section--light .woocommerce-ordering select:focus,
+body.post-type-archive-product .aisb-section--light .woocommerce-ordering select:focus {
+    outline: none;
+    border-color: var(--wc-primary, var(--aisb-color-primary, #6366f1));
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+/* ==========================================================================
+   PRODUCT VARIATIONS SELECT
+   Attribute dropdowns on variable product pages (e.g., Size, Color)
+   ========================================================================== */
+
+/* Base variations select styling */
+.woocommerce div.product form.cart .variations select,
+.woocommerce .variations_form .variations select {
+    width: 100%;
+    padding: var(--aisb-section-space-sm, 0.75rem);
+    font-family: var(--aisb-section-font-body, inherit);
+    font-size: var(--aisb-section-text-base, 1rem);
+    border-radius: var(--aisb-section-radius-sm, 6px);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+/* Light mode variations */
+body.woocommerce .aisb-section--light div.product form.cart .variations select,
+body.woocommerce-page .aisb-section--light div.product form.cart .variations select,
+body.single-product .aisb-section--light .variations_form .variations select {
+    color: var(--wc-text, var(--aisb-color-text, #1f2937));
+    background-color: var(--wc-surface, var(--aisb-color-surface, #f9fafb));
+    border: 1px solid var(--wc-border, var(--aisb-color-border, #e5e7eb));
+}
+
+/* Light mode variations focus */
+body.woocommerce .aisb-section--light div.product form.cart .variations select:focus,
+body.woocommerce-page .aisb-section--light div.product form.cart .variations select:focus,
+body.single-product .aisb-section--light .variations_form .variations select:focus {
+    outline: none;
+    border-color: var(--wc-primary, var(--aisb-color-primary, #6366f1));
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+/* ==========================================================================
    Notices & Messages
    ========================================================================== */
 
@@ -2278,6 +2342,24 @@ body.woocommerce-page .aisb-section--dark .select2-container--default .select2-s
     background-color: transparent;
 }
 
+/* Dark mode variations */
+body.woocommerce .aisb-section--dark div.product form.cart .variations select,
+body.woocommerce-page .aisb-section--dark div.product form.cart .variations select,
+body.single-product .aisb-section--dark .variations_form .variations select {
+    color: var(--wc-text, var(--aisb-color-dark-text, #f9fafb));
+    background-color: var(--wc-surface, var(--aisb-color-dark-surface, #1f2937));
+    border: 1px solid var(--wc-border, var(--aisb-color-dark-border, #374151));
+}
+
+/* Dark mode variations focus */
+body.woocommerce .aisb-section--dark div.product form.cart .variations select:focus,
+body.woocommerce-page .aisb-section--dark div.product form.cart .variations select:focus,
+body.single-product .aisb-section--dark .variations_form .variations select:focus {
+    outline: none;
+    border-color: var(--wc-primary, var(--aisb-color-primary, #6366f1));
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
 /* ==========================================================================
    Tables - Dark Mode (Cart, Checkout, Order)
    ========================================================================== */
@@ -2470,6 +2552,15 @@ body.woocommerce-page .aisb-section--dark .woocommerce-ordering select {
     color: var(--wc-text, var(--aisb-color-dark-text, #f9fafb));
     background-color: var(--wc-surface, var(--aisb-color-dark-surface, #1f2937));
     border-color: var(--wc-border, var(--aisb-color-dark-border, #374151));
+}
+
+/* Dark mode shop ordering focus state */
+body.woocommerce .aisb-section--dark .woocommerce-ordering select:focus,
+body.woocommerce-page .aisb-section--dark .woocommerce-ordering select:focus,
+body.post-type-archive-product .aisb-section--dark .woocommerce-ordering select:focus {
+    outline: none;
+    border-color: var(--wc-primary, var(--aisb-color-primary, #6366f1));
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
 }
 
 /* Price styling in dark mode */
