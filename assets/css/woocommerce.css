@@ -500,6 +500,166 @@ body.woocommerce-page.aisb-section--dark ul.products li.product a.added_to_cart 
     text-decoration: none;
 }
 
+/* ============================================
+   GLOBAL BUTTON HOVER EFFECTS
+   Syncs with AI Section Builder global settings
+
+   SELECTOR PATTERN: Uses compound selectors (no space)
+   because .woocommerce is on the body tag itself.
+   Must include both .woocommerce AND .woocommerce-page
+   ============================================ */
+
+/* Lift Effect - Primary buttons */
+body.aisb-hover-lift.woocommerce button.button:hover,
+body.aisb-hover-lift.woocommerce button.button.alt:hover,
+body.aisb-hover-lift.woocommerce a.button:hover,
+body.aisb-hover-lift.woocommerce a.button.alt:hover,
+body.aisb-hover-lift.woocommerce input.button:hover,
+body.aisb-hover-lift.woocommerce input.button.alt:hover,
+body.aisb-hover-lift.woocommerce #respond input#submit:hover,
+body.aisb-hover-lift.woocommerce .checkout-button:hover,
+body.aisb-hover-lift.woocommerce #place_order:hover,
+body.aisb-hover-lift.woocommerce .woocommerce-Button:hover,
+body.aisb-hover-lift.woocommerce .single_add_to_cart_button:hover,
+body.aisb-hover-lift.woocommerce ul.products li.product .button:hover,
+body.aisb-hover-lift.woocommerce ul.products li.product .add_to_cart_button:hover,
+body.aisb-hover-lift.woocommerce-page button.button:hover,
+body.aisb-hover-lift.woocommerce-page a.button:hover,
+body.aisb-hover-lift.woocommerce-page input.button:hover,
+body.aisb-hover-lift.woocommerce-page #place_order:hover,
+body.aisb-hover-lift.woocommerce-page .checkout-button:hover {
+    filter: none;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Scale Effect - Primary buttons */
+body.aisb-hover-scale.woocommerce button.button:hover,
+body.aisb-hover-scale.woocommerce button.button.alt:hover,
+body.aisb-hover-scale.woocommerce a.button:hover,
+body.aisb-hover-scale.woocommerce a.button.alt:hover,
+body.aisb-hover-scale.woocommerce input.button:hover,
+body.aisb-hover-scale.woocommerce input.button.alt:hover,
+body.aisb-hover-scale.woocommerce #respond input#submit:hover,
+body.aisb-hover-scale.woocommerce .checkout-button:hover,
+body.aisb-hover-scale.woocommerce #place_order:hover,
+body.aisb-hover-scale.woocommerce .woocommerce-Button:hover,
+body.aisb-hover-scale.woocommerce .single_add_to_cart_button:hover,
+body.aisb-hover-scale.woocommerce ul.products li.product .button:hover,
+body.aisb-hover-scale.woocommerce ul.products li.product .add_to_cart_button:hover,
+body.aisb-hover-scale.woocommerce-page button.button:hover,
+body.aisb-hover-scale.woocommerce-page a.button:hover,
+body.aisb-hover-scale.woocommerce-page input.button:hover,
+body.aisb-hover-scale.woocommerce-page #place_order:hover,
+body.aisb-hover-scale.woocommerce-page .checkout-button:hover {
+    filter: none;
+    transform: scale(1.03);
+}
+
+/* Glow Effect - Primary buttons */
+body.aisb-hover-glow.woocommerce button.button:hover,
+body.aisb-hover-glow.woocommerce button.button.alt:hover,
+body.aisb-hover-glow.woocommerce a.button:hover,
+body.aisb-hover-glow.woocommerce a.button.alt:hover,
+body.aisb-hover-glow.woocommerce input.button:hover,
+body.aisb-hover-glow.woocommerce input.button.alt:hover,
+body.aisb-hover-glow.woocommerce #respond input#submit:hover,
+body.aisb-hover-glow.woocommerce .checkout-button:hover,
+body.aisb-hover-glow.woocommerce #place_order:hover,
+body.aisb-hover-glow.woocommerce .woocommerce-Button:hover,
+body.aisb-hover-glow.woocommerce .single_add_to_cart_button:hover,
+body.aisb-hover-glow.woocommerce ul.products li.product .button:hover,
+body.aisb-hover-glow.woocommerce ul.products li.product .add_to_cart_button:hover,
+body.aisb-hover-glow.woocommerce-page button.button:hover,
+body.aisb-hover-glow.woocommerce-page a.button:hover,
+body.aisb-hover-glow.woocommerce-page input.button:hover,
+body.aisb-hover-glow.woocommerce-page #place_order:hover,
+body.aisb-hover-glow.woocommerce-page .checkout-button:hover {
+    filter: none;
+    box-shadow: 0 0 20px var(--aisb-button-glow-color, rgba(99, 102, 241, 0.4));
+}
+
+/* None Effect - Primary buttons */
+body.aisb-hover-none.woocommerce button.button:hover,
+body.aisb-hover-none.woocommerce button.button.alt:hover,
+body.aisb-hover-none.woocommerce a.button:hover,
+body.aisb-hover-none.woocommerce a.button.alt:hover,
+body.aisb-hover-none.woocommerce input.button:hover,
+body.aisb-hover-none.woocommerce input.button.alt:hover,
+body.aisb-hover-none.woocommerce #respond input#submit:hover,
+body.aisb-hover-none.woocommerce .checkout-button:hover,
+body.aisb-hover-none.woocommerce #place_order:hover,
+body.aisb-hover-none.woocommerce .woocommerce-Button:hover,
+body.aisb-hover-none.woocommerce .single_add_to_cart_button:hover,
+body.aisb-hover-none.woocommerce ul.products li.product .button:hover,
+body.aisb-hover-none.woocommerce ul.products li.product .add_to_cart_button:hover,
+body.aisb-hover-none.woocommerce-page button.button:hover,
+body.aisb-hover-none.woocommerce-page a.button:hover,
+body.aisb-hover-none.woocommerce-page input.button:hover,
+body.aisb-hover-none.woocommerce-page #place_order:hover,
+body.aisb-hover-none.woocommerce-page .checkout-button:hover {
+    filter: none;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Lift Effect - Ghost/Secondary buttons */
+body.aisb-hover-lift.woocommerce .woocommerce-mini-cart__buttons .button:not(.checkout):hover,
+body.aisb-hover-lift.woocommerce a.added_to_cart:hover,
+body.aisb-hover-lift.woocommerce ul.products li.product a.added_to_cart:hover {
+    filter: none;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Scale Effect - Ghost/Secondary buttons */
+body.aisb-hover-scale.woocommerce .woocommerce-mini-cart__buttons .button:not(.checkout):hover,
+body.aisb-hover-scale.woocommerce a.added_to_cart:hover,
+body.aisb-hover-scale.woocommerce ul.products li.product a.added_to_cart:hover {
+    filter: none;
+    transform: scale(1.03);
+}
+
+/* Glow Effect - Ghost/Secondary buttons */
+body.aisb-hover-glow.woocommerce .woocommerce-mini-cart__buttons .button:not(.checkout):hover,
+body.aisb-hover-glow.woocommerce a.added_to_cart:hover,
+body.aisb-hover-glow.woocommerce ul.products li.product a.added_to_cart:hover {
+    filter: none;
+    box-shadow: 0 0 20px var(--aisb-secondary-glow-color, rgba(129, 140, 248, 0.4));
+}
+
+/* None Effect - Ghost/Secondary buttons (keeps ghost fill behavior) */
+body.aisb-hover-none.woocommerce .woocommerce-mini-cart__buttons .button:not(.checkout):hover,
+body.aisb-hover-none.woocommerce a.added_to_cart:hover,
+body.aisb-hover-none.woocommerce ul.products li.product a.added_to_cart:hover {
+    filter: none;
+    transform: none;
+    box-shadow: none;
+    /* Keep ghost fill behavior unless explicitly disabled */
+    background: var(--aisb-color-primary, #6366f1);
+    color: var(--aisb-button-primary-text, #ffffff);
+}
+
+/* Accessibility: Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    body.aisb-hover-lift.woocommerce button.button:hover,
+    body.aisb-hover-lift.woocommerce a.button:hover,
+    body.aisb-hover-lift.woocommerce input.button:hover,
+    body.aisb-hover-lift.woocommerce .woocommerce-mini-cart__buttons .button:not(.checkout):hover,
+    body.aisb-hover-lift.woocommerce a.added_to_cart:hover,
+    body.aisb-hover-lift.woocommerce-page button.button:hover,
+    body.aisb-hover-lift.woocommerce-page a.button:hover,
+    body.aisb-hover-scale.woocommerce button.button:hover,
+    body.aisb-hover-scale.woocommerce a.button:hover,
+    body.aisb-hover-scale.woocommerce input.button:hover,
+    body.aisb-hover-scale.woocommerce .woocommerce-mini-cart__buttons .button:not(.checkout):hover,
+    body.aisb-hover-scale.woocommerce a.added_to_cart:hover,
+    body.aisb-hover-scale.woocommerce-page button.button:hover,
+    body.aisb-hover-scale.woocommerce-page a.button:hover {
+        transform: none;
+    }
+}
+
 /* Neo-Brutalist button support
  * SELECTOR FIX: .woocommerce is on body, so use compound selector (body.class1.class2)
  * not descendant selector (body.class1 .class2)
