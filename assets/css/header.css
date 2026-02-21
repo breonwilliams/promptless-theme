@@ -812,7 +812,9 @@
 
 .promptless-header__mini-cart .promptless-cart-item__remove:hover {
     color: var(--aisb-smart-light-icon, var(--aisb-color-primary));
-    background-color: var(--aisb-color-primary-bg-hover, rgba(99, 102, 241, 0.2));
+    background-color: var(--aisb-smart-light-icon-bg, var(--aisb-color-primary-bg));
+    filter: brightness(0.92);
+    text-decoration: none;
 }
 
 /* Dark theme remove button */
@@ -822,7 +824,10 @@
 }
 
 .promptless-header.aisb-section--dark .promptless-cart-item__remove:hover {
-    background-color: var(--aisb-color-primary-bg-hover, rgba(99, 102, 241, 0.2));
+    color: var(--aisb-smart-dark-icon, var(--aisb-color-primary));
+    background-color: var(--aisb-smart-dark-icon-bg, var(--aisb-color-primary-bg));
+    filter: brightness(1.15);
+    text-decoration: none;
 }
 
 /* ==========================================================================
@@ -849,27 +854,40 @@
     text-decoration: none;
 }
 
-/* Remove button - Light theme base state */
-.promptless-header.aisb-section--light .promptless-cart-item__remove[href][href][href][href][href][href][href][href] {
+/* Remove button - Light theme base state
+   Uses 9x [href] selectors (0,12,1) to beat plugin link rules (0,11,1) */
+.promptless-header.aisb-section--light .promptless-cart-item__remove[href][href][href][href][href][href][href][href][href] {
     color: var(--aisb-smart-light-icon, var(--aisb-color-primary));
     text-decoration: none;
 }
 
 /* Remove button - Light theme hover */
-.promptless-header.aisb-section--light .promptless-cart-item__remove[href][href][href][href][href][href][href][href]:hover {
+.promptless-header.aisb-section--light .promptless-cart-item__remove[href][href][href][href][href][href][href][href][href]:hover {
     color: var(--aisb-smart-light-icon, var(--aisb-color-primary));
+    background-color: var(--aisb-smart-light-icon-bg, var(--aisb-color-primary-bg));
+    filter: brightness(0.92);
     text-decoration: none;
 }
 
 /* Remove button - Dark theme base state */
-.promptless-header.aisb-section--dark .promptless-cart-item__remove[href][href][href][href][href][href][href][href] {
+.promptless-header.aisb-section--dark .promptless-cart-item__remove[href][href][href][href][href][href][href][href][href] {
     color: var(--aisb-smart-dark-icon, var(--aisb-color-primary));
     text-decoration: none;
 }
 
 /* Remove button - Dark theme hover */
-.promptless-header.aisb-section--dark .promptless-cart-item__remove[href][href][href][href][href][href][href][href]:hover {
+.promptless-header.aisb-section--dark .promptless-cart-item__remove[href][href][href][href][href][href][href][href][href]:hover {
     color: var(--aisb-smart-dark-icon, var(--aisb-color-primary));
+    background-color: var(--aisb-smart-dark-icon-bg, var(--aisb-color-primary-bg));
+    filter: brightness(1.15);
+    text-decoration: none;
+}
+
+/* WooCommerce page override - prevent link underlines on remove button */
+body.woocommerce .promptless-header__mini-cart .promptless-cart-item__remove:hover,
+body.woocommerce-page .promptless-header__mini-cart .promptless-cart-item__remove:hover,
+body.woocommerce-cart .promptless-header__mini-cart .promptless-cart-item__remove:hover,
+body.woocommerce-checkout .promptless-header__mini-cart .promptless-cart-item__remove:hover {
     text-decoration: none;
 }
 
