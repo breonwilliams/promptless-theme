@@ -111,6 +111,30 @@ body.woocommerce-page .aisb-section--light .woocommerce {
     --wc-surface-link: var(--aisb-smart-light-surface-link, var(--aisb-color-primary, #6366f1));
 }
 
+/* ==========================================================================
+   Light Mode - Checkout Form Inputs (High Specificity)
+   These rules override WooCommerce core's .woocommerce form .form-row .input-text
+   selector which uses --wc-form-border-color (defaults to dark color).
+   Specificity: (0,6,1) to match dark mode and beat WooCommerce's (0,4,0)
+   ========================================================================== */
+body.woocommerce .aisb-section--light .woocommerce form .form-row input.input-text,
+body.woocommerce .aisb-section--light .woocommerce form .form-row textarea,
+body.woocommerce .aisb-section--light .woocommerce form .form-row select,
+body.woocommerce-page .aisb-section--light .woocommerce form .form-row input.input-text,
+body.woocommerce-page .aisb-section--light .woocommerce form .form-row textarea,
+body.woocommerce-page .aisb-section--light .woocommerce form .form-row select {
+    background-color: var(--wc-surface, var(--aisb-color-surface, #f9fafb));
+    color: var(--wc-text, var(--aisb-color-text, #1f2937));
+    border-color: var(--wc-border, var(--aisb-color-border, #e5e7eb));
+}
+
+body.woocommerce .aisb-section--light .woocommerce form .form-row input::placeholder,
+body.woocommerce .aisb-section--light .woocommerce form .form-row textarea::placeholder,
+body.woocommerce-page .aisb-section--light .woocommerce form .form-row input::placeholder,
+body.woocommerce-page .aisb-section--light .woocommerce form .form-row textarea::placeholder {
+    color: var(--wc-text-muted, var(--aisb-color-text-muted, #6b7280));
+}
+
 /* Dark mode - compound selectors (when dark class is on same element as woocommerce) */
 .woocommerce.aisb-section--dark,
 .woocommerce-page.aisb-section--dark,
@@ -1465,6 +1489,7 @@ body.woocommerce .aisb-section--light .woocommerce-MyAccount-navigation ul li a:
 body.woocommerce-page .aisb-section--light .woocommerce-MyAccount-navigation ul li a:hover {
     background-color: var(--wc-primary, var(--aisb-color-primary, #6366f1));
     color: var(--aisb-button-primary-text, #ffffff);
+    text-decoration: none;
 }
 
 body.woocommerce .aisb-section--light .woocommerce-MyAccount-navigation ul li.is-active a,
@@ -2544,6 +2569,7 @@ body.woocommerce .aisb-section--dark .woocommerce-MyAccount-navigation ul li a:h
 body.woocommerce-page .aisb-section--dark .woocommerce-MyAccount-navigation ul li a:hover {
     background-color: var(--wc-primary, var(--aisb-color-primary, #6366f1));
     color: var(--aisb-button-primary-text, #ffffff);
+    text-decoration: none;
 }
 
 /* CRITICAL: Dark mode active state - must have same specificity as hover */
