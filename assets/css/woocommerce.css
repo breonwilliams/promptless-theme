@@ -2115,14 +2115,20 @@ body.woocommerce-page .aisb-section--dark .widget_shopping_cart .cart_list li:no
     grid-template-columns: repeat(6, 1fr);
 }
 
-/* Reset product li margins since grid handles spacing */
-.woocommerce ul.products li.product {
+/* Reset product li margins and widths for CSS Grid compatibility
+ * IMPORTANT: Must use column-specific selectors to override WooCommerce's
+ * woocommerce-layout.css which sets percentage widths for float-based layouts.
+ * Example: .woocommerce ul.products.columns-2 li.product { width: 48%; }
+ * Our selectors must match this specificity to ensure width: 100% is applied.
+ */
+.woocommerce ul.products li.product,
+.woocommerce ul.products.columns-2 li.product,
+.woocommerce ul.products.columns-3 li.product,
+.woocommerce ul.products.columns-4 li.product,
+.woocommerce ul.products.columns-5 li.product,
+.woocommerce ul.products.columns-6 li.product {
     margin-bottom: 0;
     width: 100%;
-}
-
-/* Reset WooCommerce default float-based layout for grid compatibility */
-.woocommerce ul.products li.product {
     float: none;
     clear: none;
 }
