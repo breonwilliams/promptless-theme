@@ -343,6 +343,66 @@ class Promptless_Customizer {
         );
 
         // =============================================
+        // Footer Column Headings
+        // =============================================
+        $wp_customize->add_setting(
+            'promptless_footer_col_1_heading',
+            array(
+                'default'           => '',
+                'sanitize_callback' => 'sanitize_text_field',
+                'transport'         => 'refresh',
+            )
+        );
+
+        $wp_customize->add_control(
+            'promptless_footer_col_1_heading',
+            array(
+                'label'       => __( 'Footer Column 1 Heading', 'promptless' ),
+                'description' => __( 'Optional heading above Footer Column 1 menu. Leave empty to hide.', 'promptless' ),
+                'section'     => 'promptless_theme_settings',
+                'type'        => 'text',
+            )
+        );
+
+        $wp_customize->add_setting(
+            'promptless_footer_col_2_heading',
+            array(
+                'default'           => '',
+                'sanitize_callback' => 'sanitize_text_field',
+                'transport'         => 'refresh',
+            )
+        );
+
+        $wp_customize->add_control(
+            'promptless_footer_col_2_heading',
+            array(
+                'label'       => __( 'Footer Column 2 Heading', 'promptless' ),
+                'description' => __( 'Optional heading above Footer Column 2 menu. Leave empty to hide.', 'promptless' ),
+                'section'     => 'promptless_theme_settings',
+                'type'        => 'text',
+            )
+        );
+
+        $wp_customize->add_setting(
+            'promptless_footer_col_3_heading',
+            array(
+                'default'           => '',
+                'sanitize_callback' => 'sanitize_text_field',
+                'transport'         => 'refresh',
+            )
+        );
+
+        $wp_customize->add_control(
+            'promptless_footer_col_3_heading',
+            array(
+                'label'       => __( 'Footer Column 3 Heading', 'promptless' ),
+                'description' => __( 'Optional heading above Footer Column 3 menu. Leave empty to hide.', 'promptless' ),
+                'section'     => 'promptless_theme_settings',
+                'type'        => 'text',
+            )
+        );
+
+        // =============================================
         // WooCommerce Header Cart Settings
         // Only show if WooCommerce is active
         // =============================================

@@ -76,6 +76,42 @@ function promptless_footer_nav( $location = 'footer' ) {
 }
 
 /**
+ * Add aria-labelledby to footer navigation containers
+ *
+ * Uses accessible ARIA labeling instead of heading elements
+ * to avoid heading hierarchy issues.
+ *
+ * @param string $nav_menu The HTML content for the navigation menu.
+ * @param object $args     An object of wp_nav_menu() arguments.
+ * @return string Modified navigation HTML.
+ */
+function promptless_footer_nav_aria_label( $nav_menu, $args ) {
+    // Only apply to footer column menus
+    $footer_locations = array( 'footer-col-1', 'footer-col-2', 'footer-col-3' );
+
+    if ( ! in_array( $args->theme_location, $footer_locations, true ) ) {
+        return $nav_menu;
+    }
+
+    // Get heading for this location
+    $location_num = str_replace( 'footer-col-', '', $args->theme_location );
+    $heading      = get_theme_mod( 'promptless_footer_col_' . $location_num . '_heading', '' );
+
+    // If heading exists, add aria-labelledby to the nav container
+    if ( $heading ) {
+        $heading_id = 'footer-nav-col-' . $location_num . '-heading';
+        $nav_menu   = str_replace(
+            'class="promptless-footer__nav"',
+            'class="promptless-footer__nav" aria-labelledby="' . esc_attr( $heading_id ) . '"',
+            $nav_menu
+        );
+    }
+
+    return $nav_menu;
+}
+add_filter( 'wp_nav_menu', 'promptless_footer_nav_aria_label', 10, 2 );
+
+/**
  * Output the copyright text
  */
 function promptless_copyright() {

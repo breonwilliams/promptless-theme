@@ -249,6 +249,23 @@
     min-width: 0;
 }
 
+/* ==========================================================================
+   Footer Navigation Column Headings
+   Uses <p> instead of heading elements for accessibility (avoids hierarchy issues)
+   Styled to match widget titles for visual consistency.
+
+   Uses heading font tokens for design consistency with sections.
+   Tokens update automatically when Global Settings → Heading Font changes.
+   ========================================================================== */
+
+.promptless-footer__nav-heading {
+    font-family: var(--aisb-section-font-heading);
+    font-size: var(--aisb-section-text-lg);
+    font-weight: var(--aisb-section-font-heading-weight);
+    color: var(--section-text);
+    margin: 0 0 1rem 0;
+}
+
 .promptless-footer__nav {
     display: block;
 }
@@ -366,12 +383,10 @@
 }
 
 .promptless-footer__widget-title {
-    font-family: var(--aisb-section-font-heading, inherit);
-    font-size: 0.875rem;
-    font-weight: 600;
+    font-family: var(--aisb-section-font-heading);
+    font-size: var(--aisb-section-text-lg);
+    font-weight: var(--aisb-section-font-heading-weight);
     color: var(--section-text);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
     margin-bottom: 1rem;
 }
 

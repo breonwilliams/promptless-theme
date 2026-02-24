@@ -38,18 +38,39 @@
             <div class="promptless-footer__nav-columns">
                 <?php if ( has_nav_menu( 'footer-col-1' ) ) : ?>
                     <div class="promptless-footer__nav-column">
+                        <?php
+                        $col_1_heading = get_theme_mod( 'promptless_footer_col_1_heading', '' );
+                        if ( $col_1_heading ) :
+                            $heading_id_1 = 'footer-nav-col-1-heading';
+                        ?>
+                            <p id="<?php echo esc_attr( $heading_id_1 ); ?>" class="promptless-footer__nav-heading"><?php echo esc_html( $col_1_heading ); ?></p>
+                        <?php endif; ?>
                         <?php promptless_footer_nav( 'footer-col-1' ); ?>
                     </div>
                 <?php endif; ?>
 
                 <?php if ( has_nav_menu( 'footer-col-2' ) ) : ?>
                     <div class="promptless-footer__nav-column">
+                        <?php
+                        $col_2_heading = get_theme_mod( 'promptless_footer_col_2_heading', '' );
+                        if ( $col_2_heading ) :
+                            $heading_id_2 = 'footer-nav-col-2-heading';
+                        ?>
+                            <p id="<?php echo esc_attr( $heading_id_2 ); ?>" class="promptless-footer__nav-heading"><?php echo esc_html( $col_2_heading ); ?></p>
+                        <?php endif; ?>
                         <?php promptless_footer_nav( 'footer-col-2' ); ?>
                     </div>
                 <?php endif; ?>
 
                 <?php if ( has_nav_menu( 'footer-col-3' ) ) : ?>
                     <div class="promptless-footer__nav-column">
+                        <?php
+                        $col_3_heading = get_theme_mod( 'promptless_footer_col_3_heading', '' );
+                        if ( $col_3_heading ) :
+                            $heading_id_3 = 'footer-nav-col-3-heading';
+                        ?>
+                            <p id="<?php echo esc_attr( $heading_id_3 ); ?>" class="promptless-footer__nav-heading"><?php echo esc_html( $col_3_heading ); ?></p>
+                        <?php endif; ?>
                         <?php promptless_footer_nav( 'footer-col-3' ); ?>
                     </div>
                 <?php endif; ?>
