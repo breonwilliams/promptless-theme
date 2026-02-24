@@ -191,7 +191,7 @@
 }
 
 .promptless-header__nav-list a:hover,
-.promptless-header__nav-list a:focus {
+.promptless-header__nav-list a:focus-visible {
     color: var(--aisb-smart-light-section-link, var(--section-primary));
     background-color: transparent;
     text-decoration: none;
@@ -215,9 +215,9 @@
     text-decoration: none;
 }
 
-/* Light mode navigation - hover/focus */
+/* Light mode navigation - hover/focus-visible */
 .promptless-header.aisb-section--light .promptless-header__nav-list a[href][href][href][href][href][href][href][href]:hover,
-.promptless-header.aisb-section--light .promptless-header__nav-list a[href][href][href][href][href][href][href][href]:focus {
+.promptless-header.aisb-section--light .promptless-header__nav-list a[href][href][href][href][href][href][href][href]:focus-visible {
     color: var(--aisb-smart-light-section-link, var(--section-primary));
     text-decoration: none;
 }
@@ -234,9 +234,9 @@
     text-decoration: none;
 }
 
-/* Dark mode navigation - hover/focus */
+/* Dark mode navigation - hover/focus-visible */
 .promptless-header.aisb-section--dark .promptless-header__nav-list a[href][href][href][href][href][href][href][href]:hover,
-.promptless-header.aisb-section--dark .promptless-header__nav-list a[href][href][href][href][href][href][href][href]:focus {
+.promptless-header.aisb-section--dark .promptless-header__nav-list a[href][href][href][href][href][href][href][href]:focus-visible {
     color: var(--aisb-smart-dark-section-link, var(--section-primary));
     text-decoration: none;
 }
@@ -1129,7 +1129,7 @@ body.woocommerce-checkout .promptless-header__mini-cart .promptless-cart-item__r
 }
 
 .promptless-topbar__nav-list a:hover,
-.promptless-topbar__nav-list a:focus {
+.promptless-topbar__nav-list a:focus-visible {
     color: var(--topbar-text);
     text-decoration: none;
 }
@@ -1146,9 +1146,9 @@ body.woocommerce-checkout .promptless-header__mini-cart .promptless-cart-item__r
     text-decoration: none;
 }
 
-/* LIGHT MODE - Hover/Focus - Uses smart accessible link color */
+/* LIGHT MODE - Hover/Focus-visible - Uses smart accessible link color */
 .promptless-topbar.aisb-section--light .promptless-topbar__nav-list a[href][href][href][href][href][href][href][href]:hover,
-.promptless-topbar.aisb-section--light .promptless-topbar__nav-list a[href][href][href][href][href][href][href][href]:focus {
+.promptless-topbar.aisb-section--light .promptless-topbar__nav-list a[href][href][href][href][href][href][href][href]:focus-visible {
     color: var(--aisb-smart-light-section-link, var(--topbar-primary));
     text-decoration: none;
 }
@@ -1165,9 +1165,9 @@ body.woocommerce-checkout .promptless-header__mini-cart .promptless-cart-item__r
     text-decoration: none;
 }
 
-/* DARK MODE - Hover/Focus - Uses smart accessible link color */
+/* DARK MODE - Hover/Focus-visible - Uses smart accessible link color */
 .promptless-topbar.aisb-section--dark .promptless-topbar__nav-list a[href][href][href][href][href][href][href][href]:hover,
-.promptless-topbar.aisb-section--dark .promptless-topbar__nav-list a[href][href][href][href][href][href][href][href]:focus {
+.promptless-topbar.aisb-section--dark .promptless-topbar__nav-list a[href][href][href][href][href][href][href][href]:focus-visible {
     color: var(--aisb-smart-dark-section-link, var(--topbar-primary));
     text-decoration: none;
 }
@@ -1251,7 +1251,7 @@ body.woocommerce-checkout .promptless-header__mini-cart .promptless-cart-item__r
     }
 
     .promptless-mobile-topbar__list a:hover,
-    .promptless-mobile-topbar__list a:focus {
+    .promptless-mobile-topbar__list a:focus-visible {
         color: var(--section-text);
         text-decoration: none;
     }
@@ -1262,7 +1262,7 @@ body.woocommerce-checkout .promptless-header__mini-cart .promptless-cart-item__r
     }
 
     .promptless-header.aisb-section--light .promptless-mobile-topbar__list a[href][href][href][href][href][href][href][href]:hover,
-    .promptless-header.aisb-section--light .promptless-mobile-topbar__list a[href][href][href][href][href][href][href][href]:focus {
+    .promptless-header.aisb-section--light .promptless-mobile-topbar__list a[href][href][href][href][href][href][href][href]:focus-visible {
         color: var(--aisb-smart-light-section-link, var(--section-primary));
     }
 
@@ -1271,7 +1271,7 @@ body.woocommerce-checkout .promptless-header__mini-cart .promptless-cart-item__r
     }
 
     .promptless-header.aisb-section--dark .promptless-mobile-topbar__list a[href][href][href][href][href][href][href][href]:hover,
-    .promptless-header.aisb-section--dark .promptless-mobile-topbar__list a[href][href][href][href][href][href][href][href]:focus {
+    .promptless-header.aisb-section--dark .promptless-mobile-topbar__list a[href][href][href][href][href][href][href][href]:focus-visible {
         color: var(--aisb-smart-dark-section-link, var(--section-primary));
     }
 

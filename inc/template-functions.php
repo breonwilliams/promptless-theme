@@ -801,3 +801,54 @@ function promptless_mobile_topbar_section() {
     </div>
     <?php
 }
+
+/**
+ * Fix incorrect current-menu-item class on home link
+ *
+ * WordPress incorrectly adds 'current-menu-item' to custom links pointing to
+ * the home URL on ALL pages because '/' is a substring of every URL.
+ * This filter removes those classes when not actually on the front page.
+ *
+ * This is the WordPress-standard approach used by major themes (Astra,
+ * GeneratePress, OceanWP) to handle this known WordPress core behavior.
+ *
+ * @since 1.0.3
+ * @param array    $classes Current menu item classes.
+ * @param WP_Post  $item    Menu item object.
+ * @param stdClass $args    Menu arguments.
+ * @return array   Modified classes.
+ */
+function promptless_fix_home_menu_item_classes( $classes, $item, $args ) {
+    // Only process custom links (type 'custom')
+    if ( 'custom' !== $item->type ) {
+        return $classes;
+    }
+
+    // Get the home URL for comparison
+    $home_url = trailingslashit( home_url() );
+    $item_url = trailingslashit( $item->url );
+
+    // Check if this custom link points to the home URL
+    $is_home_link = (
+        $item_url === $home_url ||
+        $item_url === '/' ||
+        $item_url === trailingslashit( '/' )
+    );
+
+    if ( ! $is_home_link ) {
+        return $classes;
+    }
+
+    // If we're not on the front page, remove the incorrect current classes
+    if ( ! is_front_page() ) {
+        $classes = array_diff( $classes, array(
+            'current-menu-item',
+            'current_page_item',
+            'current-menu-ancestor',
+            'current-page-ancestor',
+        ) );
+    }
+
+    return $classes;
+}
+add_filter( 'nav_menu_css_class', 'promptless_fix_home_menu_item_classes', 10, 3 );
