@@ -92,6 +92,8 @@ body.woocommerce-page .aisb-section--light {
     --wc-surface-link: var(--aisb-smart-light-surface-link, var(--aisb-color-primary, #6366f1));
     /* Notice accent uses smart surface icon color for WCAG 3:1 contrast on light surfaces */
     --wc-notice-accent: var(--aisb-smart-light-surface-icon, var(--aisb-color-primary, #6366f1));
+    /* Select arrow - dark chevron for light backgrounds */
+    --wc-select-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%236b7280'%3E%3Cpath fill-rule='evenodd' d='M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z' clip-rule='evenodd'/%3E%3C/svg%3E");
 }
 
 /* Light mode for div.woocommerce inside light sections
@@ -113,6 +115,8 @@ body.woocommerce-page .aisb-section--light .woocommerce {
     --wc-surface-link: var(--aisb-smart-light-surface-link, var(--aisb-color-primary, #6366f1));
     /* Notice accent uses smart surface icon color for WCAG 3:1 contrast on light surfaces */
     --wc-notice-accent: var(--aisb-smart-light-surface-icon, var(--aisb-color-primary, #6366f1));
+    /* Select arrow - dark chevron for light backgrounds */
+    --wc-select-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%236b7280'%3E%3Cpath fill-rule='evenodd' d='M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z' clip-rule='evenodd'/%3E%3C/svg%3E");
 }
 
 /* ==========================================================================
@@ -157,6 +161,8 @@ body.woocommerce-page .aisb-section--dark {
     --wc-surface-link: var(--aisb-smart-dark-surface-link, var(--aisb-color-primary, #6366f1));
     /* Notice accent uses smart surface icon color for WCAG 3:1 contrast on dark surfaces */
     --wc-notice-accent: var(--aisb-smart-dark-surface-icon, var(--aisb-color-primary, #6366f1));
+    /* Select arrow - light chevron for dark backgrounds */
+    --wc-select-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%239ca3af'%3E%3Cpath fill-rule='evenodd' d='M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z' clip-rule='evenodd'/%3E%3C/svg%3E");
 }
 
 /* Dark mode for div.woocommerce inside dark sections
@@ -178,6 +184,8 @@ body.woocommerce-page .aisb-section--dark .woocommerce {
     --wc-surface-link: var(--aisb-smart-dark-surface-link, var(--aisb-color-primary, #6366f1));
     /* Notice accent uses smart surface icon color for WCAG 3:1 contrast on dark surfaces */
     --wc-notice-accent: var(--aisb-smart-dark-surface-icon, var(--aisb-color-primary, #6366f1));
+    /* Select arrow - light chevron for dark backgrounds */
+    --wc-select-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%239ca3af'%3E%3Cpath fill-rule='evenodd' d='M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z' clip-rule='evenodd'/%3E%3C/svg%3E");
 }
 
 /* Default fallback for non-themed contexts */
@@ -193,6 +201,8 @@ body.woocommerce-page .aisb-section--dark .woocommerce {
     --wc-surface-link: var(--aisb-color-primary, #6366f1);
     /* Notice accent uses smart surface icon color for WCAG 3:1 contrast - defaults to light mode */
     --wc-notice-accent: var(--aisb-smart-light-surface-icon, var(--aisb-color-primary, #6366f1));
+    /* Select arrow - dark chevron for light backgrounds (default fallback) */
+    --wc-select-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%236b7280'%3E%3Cpath fill-rule='evenodd' d='M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z' clip-rule='evenodd'/%3E%3C/svg%3E");
 }
 
 /* ==========================================================================
@@ -1048,6 +1058,24 @@ body.aisb-neo-brutalist-cards #reviews .comment-text {
     box-sizing: border-box;
 }
 
+/* ==========================================================================
+   Custom Select Arrow Styling
+   Replaces browser default arrow with theme-aware SVG chevron.
+   Uses --wc-select-arrow variable which adapts to light/dark mode.
+   ========================================================================== */
+.woocommerce form .form-row select,
+.woocommerce div.product form.cart .variations select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    padding-right: 2.5rem;
+    background-image: var(--wc-select-arrow);
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1rem;
+    cursor: pointer;
+}
+
 .woocommerce form .form-row input.input-text:focus,
 .woocommerce form .form-row textarea:focus,
 .woocommerce form .form-row select:focus,
@@ -1093,31 +1121,44 @@ body.aisb-neo-brutalist-cards #reviews .comment-text {
 }
 
 /* ==========================================================================
-   SHOP ORDERING SELECT
+   SHOP ORDERING SELECT - Base Styles
    Default sorting dropdown on shop/archive pages
+   Base styles apply to all themes, then theme-specific rules override colors
    ========================================================================== */
+.woocommerce-ordering select {
+    padding: var(--aisb-section-space-sm, 0.75rem);
+    padding-right: 2.5rem; /* Extra space for custom arrow */
+    font-family: var(--aisb-section-font-body, inherit);
+    font-size: var(--aisb-section-text-base, 1rem);
+    color: var(--wc-text);
+    background-color: var(--wc-surface);
+    border: 1px solid var(--wc-border);
+    border-radius: var(--aisb-section-radius-sm, 6px);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    /* Arrow styling */
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: var(--wc-select-arrow);
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1rem;
+    cursor: pointer;
+}
 
-/* Light mode shop ordering select */
+.woocommerce-ordering select:focus {
+    outline: none;
+    border-color: var(--wc-primary);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+/* Light mode shop ordering select - color overrides only */
 body.woocommerce .aisb-section--light .woocommerce-ordering select,
 body.woocommerce-page .aisb-section--light .woocommerce-ordering select,
 body.post-type-archive-product .aisb-section--light .woocommerce-ordering select {
-    padding: var(--aisb-section-space-sm, 0.75rem);
-    font-family: var(--aisb-section-font-body, inherit);
-    font-size: var(--aisb-section-text-base, 1rem);
     color: var(--wc-text, var(--aisb-color-text, #1f2937));
     background-color: var(--wc-surface, var(--aisb-color-surface, #f9fafb));
-    border: 1px solid var(--wc-border, var(--aisb-color-border, #e5e7eb));
-    border-radius: var(--aisb-section-radius-sm, 6px);
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-/* Light mode shop ordering focus state */
-body.woocommerce .aisb-section--light .woocommerce-ordering select:focus,
-body.woocommerce-page .aisb-section--light .woocommerce-ordering select:focus,
-body.post-type-archive-product .aisb-section--light .woocommerce-ordering select:focus {
-    outline: none;
-    border-color: var(--wc-primary, var(--aisb-color-primary, #6366f1));
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    border-color: var(--wc-border, var(--aisb-color-border, #e5e7eb));
 }
 
 /* ==========================================================================
@@ -2566,20 +2607,12 @@ body.woocommerce-page .aisb-section--dark .woocommerce-result-count {
     color: var(--wc-text-muted, var(--aisb-color-dark-text-muted, #9ca3af));
 }
 
+/* Dark mode shop ordering select - color overrides only */
 body.woocommerce .aisb-section--dark .woocommerce-ordering select,
 body.woocommerce-page .aisb-section--dark .woocommerce-ordering select {
     color: var(--wc-text, var(--aisb-color-dark-text, #f9fafb));
     background-color: var(--wc-surface, var(--aisb-color-dark-surface, #1f2937));
     border-color: var(--wc-border, var(--aisb-color-dark-border, #374151));
-}
-
-/* Dark mode shop ordering focus state */
-body.woocommerce .aisb-section--dark .woocommerce-ordering select:focus,
-body.woocommerce-page .aisb-section--dark .woocommerce-ordering select:focus,
-body.post-type-archive-product .aisb-section--dark .woocommerce-ordering select:focus {
-    outline: none;
-    border-color: var(--wc-primary, var(--aisb-color-primary, #6366f1));
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
 }
 
 /* Price styling in dark mode */
