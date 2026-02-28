@@ -90,6 +90,8 @@ body.woocommerce-page .aisb-section--light {
     --wc-primary: var(--aisb-color-primary, #6366f1);
     --wc-link: var(--aisb-smart-light-section-link, var(--aisb-color-primary, #6366f1));
     --wc-surface-link: var(--aisb-smart-light-surface-link, var(--aisb-color-primary, #6366f1));
+    /* Notice accent uses smart surface icon color for WCAG 3:1 contrast on light surfaces */
+    --wc-notice-accent: var(--aisb-smart-light-surface-icon, var(--aisb-color-primary, #6366f1));
 }
 
 /* Light mode for div.woocommerce inside light sections
@@ -109,6 +111,8 @@ body.woocommerce-page .aisb-section--light .woocommerce {
     --wc-primary: var(--aisb-color-primary, #6366f1);
     --wc-link: var(--aisb-smart-light-section-link, var(--aisb-color-primary, #6366f1));
     --wc-surface-link: var(--aisb-smart-light-surface-link, var(--aisb-color-primary, #6366f1));
+    /* Notice accent uses smart surface icon color for WCAG 3:1 contrast on light surfaces */
+    --wc-notice-accent: var(--aisb-smart-light-surface-icon, var(--aisb-color-primary, #6366f1));
 }
 
 /* ==========================================================================
@@ -151,6 +155,8 @@ body.woocommerce-page .aisb-section--dark {
     --wc-primary: var(--aisb-color-primary, #6366f1);
     --wc-link: var(--aisb-smart-dark-section-link, var(--aisb-color-primary, #6366f1));
     --wc-surface-link: var(--aisb-smart-dark-surface-link, var(--aisb-color-primary, #6366f1));
+    /* Notice accent uses smart surface icon color for WCAG 3:1 contrast on dark surfaces */
+    --wc-notice-accent: var(--aisb-smart-dark-surface-icon, var(--aisb-color-primary, #6366f1));
 }
 
 /* Dark mode for div.woocommerce inside dark sections
@@ -170,6 +176,8 @@ body.woocommerce-page .aisb-section--dark .woocommerce {
     --wc-primary: var(--aisb-color-primary, #6366f1);
     --wc-link: var(--aisb-smart-dark-section-link, var(--aisb-color-primary, #6366f1));
     --wc-surface-link: var(--aisb-smart-dark-surface-link, var(--aisb-color-primary, #6366f1));
+    /* Notice accent uses smart surface icon color for WCAG 3:1 contrast on dark surfaces */
+    --wc-notice-accent: var(--aisb-smart-dark-surface-icon, var(--aisb-color-primary, #6366f1));
 }
 
 /* Default fallback for non-themed contexts */
@@ -183,6 +191,8 @@ body.woocommerce-page .aisb-section--dark .woocommerce {
     --wc-primary: var(--aisb-color-primary, #6366f1);
     --wc-link: var(--aisb-color-primary, #6366f1);
     --wc-surface-link: var(--aisb-color-primary, #6366f1);
+    /* Notice accent uses smart surface icon color for WCAG 3:1 contrast - defaults to light mode */
+    --wc-notice-accent: var(--aisb-smart-light-surface-icon, var(--aisb-color-primary, #6366f1));
 }
 
 /* ==========================================================================
@@ -1153,16 +1163,19 @@ body.single-product .aisb-section--light .variations_form .variations select:foc
 
 .woocommerce-message::before,
 .woocommerce-info::before {
-    color: var(--wc-primary);
+    /* Use notice-accent for WCAG 3:1 contrast - automatically adjusted for accessibility */
+    color: var(--wc-notice-accent, var(--wc-primary));
 }
 
 /* Notice base styles - message, info, notice
- * Mirrors .woocommerce-error structure but uses primary color accent */
+ * Mirrors .woocommerce-error structure but uses notice-accent for WCAG accessibility.
+ * The --wc-notice-accent variable uses smart surface icon colors that automatically
+ * adjust for 3:1 contrast ratio against surface backgrounds (e.g., yellow → darker shade). */
 .woocommerce-message,
 .woocommerce-info,
 .woocommerce-notice {
     background: var(--wc-surface);
-    border: 1px solid var(--wc-primary, var(--aisb-color-primary, #6366f1));
+    border: 1px solid var(--wc-notice-accent, var(--wc-primary, #6366f1));
     border-left-width: 4px;
     color: var(--wc-text);
     font-family: var(--aisb-section-font-body, inherit);
