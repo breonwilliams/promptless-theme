@@ -1,17 +1,16 @@
 /*
 Theme Name: Promptless
-Theme URI: https://promptlesswp.com/theme
 Author: Promptless WP
 Author URI: https://promptlesswp.com
 Description: A minimal WordPress theme designed to work seamlessly with the Promptless WP plugin. Inherits colors, typography, and styling from the plugin's Global Settings for a unified brand experience.
-Version: 1.0.4
+Version: 1.0.3
 Requires at least: 6.0
-Tested up to: 6.7
+Tested up to: 6.9
 Requires PHP: 7.4
 License: GNU General Public License v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: promptless
-Tags: one-column, custom-logo, custom-menu, featured-images, full-width-template, block-styles, wide-blocks, accessibility-ready, blog, portfolio
+Tags: one-column, custom-logo, custom-menu, featured-images, full-width-template, block-styles, wide-blocks, blog, portfolio
 
 Promptless Theme is designed as a companion to the Promptless WP page builder plugin.
 It inherits all styling from the plugin's Global Settings, creating a cohesive website
@@ -62,6 +61,8 @@ h1, h2, h3, h4, h5, h6 {
   margin-top: 0;
   margin-bottom: 0.5em;
   color: var(--aisb-color-text, #1f2937);
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 h1 { font-size: 2.5rem; }

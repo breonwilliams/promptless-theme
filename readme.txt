@@ -1,10 +1,10 @@
 === Promptless ===
 Contributors: promptlesswp
-Tags: one-column, custom-logo, custom-menu, featured-images, full-width-template, block-styles, wide-blocks, accessibility-ready, blog, portfolio
+Tags: one-column, custom-logo, custom-menu, featured-images, full-width-template, block-styles, wide-blocks, blog, portfolio
 Requires at least: 6.0
-Tested up to: 6.7
+Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.0.4
+Stable tag: 1.0.3
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -89,14 +89,15 @@ Use the Promptless WP plugin's Canvas display mode, which provides a full-screen
 
 == Changelog ==
 
-= 1.0.4 =
-* Fixed: Mobile menu first item showing focus highlight when menu opens
-* Changed: Navigation links now use :focus-visible instead of :focus for better UX
-* Improved: Programmatic focus no longer triggers color highlight on touch devices
-
 = 1.0.3 =
+* Fixed: Long titles now wrap properly with overflow-wrap and word-break properties
+* Fixed: Dynamic CSS now uses wp_add_inline_style() per WordPress.org guidelines
+* Fixed: Mobile menu first item showing focus highlight when menu opens
 * Fixed: Home menu item incorrectly highlighted on all pages when using custom link
-* Added: nav_menu_css_class filter to fix WordPress core behavior with home URL matching
+* Changed: Navigation links now use :focus-visible instead of :focus for better UX
+* Changed: Updated Tested up to WordPress 6.9
+* Removed: Theme URI from style.css header
+* Removed: accessibility-ready tag (requires full audit)
 
 = 1.0.2 =
 * Synchronized version numbers across all theme files

@@ -325,6 +325,8 @@
     color: var(--section-text);
     margin: 0;
     line-height: var(--aisb-section-leading-tight, 1.2);
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
 
 .promptless-archive__description {
@@ -825,6 +827,8 @@
     max-width: 800px;
     margin: 0;
     line-height: var(--aisb-section-leading-tight, 1.2);
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
 
 .promptless-single__meta {
@@ -1071,6 +1075,8 @@
     color: var(--section-text);
     margin: 0;
     line-height: var(--aisb-section-leading-tight, 1.2);
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
 
 /* ==========================================================================

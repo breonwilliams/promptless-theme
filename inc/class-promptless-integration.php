@@ -32,8 +32,8 @@ class Promptless_Integration {
         // This tells the plugin to output CSS variables on ALL pages (not just section pages)
         add_action( 'after_setup_theme', array( $this, 'register_theme_support' ) );
 
-        // Output CSS variables only as fallback when plugin is NOT active
-        add_action( 'wp_head', array( $this, 'output_css_variables' ), 5 );
+        // Add inline CSS variables only as fallback when plugin is NOT active
+        add_action( 'wp_enqueue_scripts', array( $this, 'add_inline_css_variables' ), 20 );
 
         add_filter( 'body_class', array( $this, 'add_body_classes' ) );
     }
@@ -114,7 +114,7 @@ class Promptless_Integration {
     }
 
     /**
-     * Output CSS variables for theme elements
+     * Add inline CSS variables for theme elements
      *
      * This is a FALLBACK ONLY - it runs when the plugin is NOT active.
      *
@@ -127,8 +127,9 @@ class Promptless_Integration {
      * - Google Font loading
      *
      * This fallback ensures graceful degradation when plugin is deactivated.
+     * Uses wp_add_inline_style() per WordPress.org theme requirements.
      */
-    public function output_css_variables() {
+    public function add_inline_css_variables() {
         // If plugin is active, it handles ALL CSS variables site-wide for native themes
         // The plugin's enqueue_global_css_variables() runs on priority 5
         if ( $this->is_plugin_active() ) {
@@ -138,46 +139,44 @@ class Promptless_Integration {
         // Plugin is NOT active - output minimal fallback CSS variables
         $settings = $this->get_default_settings();
 
-        ?>
-        <style id="promptless-theme-css-variables-fallback">
-            :root {
-                /* Colors - Basic fallback when plugin is deactivated */
-                --aisb-color-primary: <?php echo esc_attr( $settings['primary_color'] ); ?>;
-                --aisb-color-secondary: <?php echo esc_attr( $settings['secondary_color'] ); ?>;
-                --aisb-color-text: <?php echo esc_attr( $settings['text_color'] ); ?>;
-                --aisb-color-background: <?php echo esc_attr( $settings['background_color'] ); ?>;
-                --aisb-color-surface: <?php echo esc_attr( $settings['surface_color'] ); ?>;
-                --aisb-color-border: <?php echo esc_attr( $settings['border_color'] ); ?>;
-                --aisb-color-text-muted: <?php echo esc_attr( $settings['muted_text_color'] ); ?>;
+        $css = ':root {
+            /* Colors - Basic fallback when plugin is deactivated */
+            --aisb-color-primary: ' . esc_attr( $settings['primary_color'] ) . ';
+            --aisb-color-secondary: ' . esc_attr( $settings['secondary_color'] ) . ';
+            --aisb-color-text: ' . esc_attr( $settings['text_color'] ) . ';
+            --aisb-color-background: ' . esc_attr( $settings['background_color'] ) . ';
+            --aisb-color-surface: ' . esc_attr( $settings['surface_color'] ) . ';
+            --aisb-color-border: ' . esc_attr( $settings['border_color'] ) . ';
+            --aisb-color-text-muted: ' . esc_attr( $settings['muted_text_color'] ) . ';
 
-                /* Dark mode colors */
-                --aisb-color-dark-background: <?php echo esc_attr( $settings['dark_background'] ); ?>;
-                --aisb-color-dark-text: <?php echo esc_attr( $settings['dark_text'] ); ?>;
-                --aisb-color-dark-surface: <?php echo esc_attr( $settings['dark_surface'] ); ?>;
-                --aisb-color-dark-border: <?php echo esc_attr( $settings['dark_border'] ); ?>;
-                --aisb-color-dark-text-muted: <?php echo esc_attr( $settings['dark_muted_text'] ); ?>;
+            /* Dark mode colors */
+            --aisb-color-dark-background: ' . esc_attr( $settings['dark_background'] ) . ';
+            --aisb-color-dark-text: ' . esc_attr( $settings['dark_text'] ) . ';
+            --aisb-color-dark-surface: ' . esc_attr( $settings['dark_surface'] ) . ';
+            --aisb-color-dark-border: ' . esc_attr( $settings['dark_border'] ) . ';
+            --aisb-color-dark-text-muted: ' . esc_attr( $settings['dark_muted_text'] ) . ';
 
-                /* Typography - System fonts as fallback */
-                --aisb-section-font-heading: <?php echo $settings['heading_font']; ?>;
-                --aisb-section-font-body: <?php echo $settings['body_font']; ?>;
+            /* Typography - System fonts as fallback */
+            --aisb-section-font-heading: ' . $settings['heading_font'] . ';
+            --aisb-section-font-body: ' . $settings['body_font'] . ';
 
-                /* Border radius */
-                --aisb-section-radius-button: <?php echo esc_attr( $settings['button_radius'] ); ?>;
-                --aisb-section-radius-card: <?php echo esc_attr( $settings['card_radius'] ); ?>;
-                --aisb-section-radius-image: <?php echo esc_attr( $settings['image_radius'] ); ?>;
+            /* Border radius */
+            --aisb-section-radius-button: ' . esc_attr( $settings['button_radius'] ) . ';
+            --aisb-section-radius-card: ' . esc_attr( $settings['card_radius'] ) . ';
+            --aisb-section-radius-image: ' . esc_attr( $settings['image_radius'] ) . ';
 
-                /* Container */
-                --aisb-section-max-width: <?php echo esc_attr( $settings['max_width'] ); ?>;
+            /* Container */
+            --aisb-section-max-width: ' . esc_attr( $settings['max_width'] ) . ';
 
-                /* Basic fallbacks for calculated colors (plugin calculates WCAG-compliant versions) */
-                --aisb-button-primary-text: #ffffff;
-                --aisb-button-primary-bg: <?php echo esc_attr( $settings['primary_color'] ); ?>;
-                --aisb-ghost-button-color: <?php echo esc_attr( $settings['primary_color'] ); ?>;
-                --aisb-link-color: <?php echo esc_attr( $settings['primary_color'] ); ?>;
-                --aisb-color-text-inverse: #ffffff;
-            }
-        </style>
-        <?php
+            /* Basic fallbacks for calculated colors (plugin calculates WCAG-compliant versions) */
+            --aisb-button-primary-text: #ffffff;
+            --aisb-button-primary-bg: ' . esc_attr( $settings['primary_color'] ) . ';
+            --aisb-ghost-button-color: ' . esc_attr( $settings['primary_color'] ) . ';
+            --aisb-link-color: ' . esc_attr( $settings['primary_color'] ) . ';
+            --aisb-color-text-inverse: #ffffff;
+        }';
+
+        wp_add_inline_style( 'promptless-theme-style', $css );
     }
 
     /**
