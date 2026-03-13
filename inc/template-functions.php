@@ -48,7 +48,7 @@ function promptless_primary_nav() {
                 'container'       => 'nav',
                 'container_class' => 'promptless-header__nav',
                 'container_id'    => 'primary-navigation',
-                'depth'           => 2,
+                'depth'           => 3,
                 'fallback_cb'     => false,
             )
         );

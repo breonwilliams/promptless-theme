@@ -101,40 +101,74 @@
     }
 
     /**
-     * Initialize submenu accessibility
+     * Initialize submenu accessibility with split button pattern for mobile
+     *
+     * On mobile: Injects a separate toggle button so parent links remain accessible
+     * On desktop: Toggle button hidden via CSS, hover behavior works as expected
+     *
+     * Supports nested submenus up to 3 levels
      */
     function initSubmenuAccessibility() {
-        const menuItems = document.querySelectorAll('.promptless-header__nav-list > li');
+        // Select ALL items with children, not just top-level
+        const menuItemsWithChildren = document.querySelectorAll('.promptless-header__nav-list .menu-item-has-children');
 
-        menuItems.forEach(function(item) {
-            const link = item.querySelector('a');
-            const submenu = item.querySelector('.sub-menu');
+        menuItemsWithChildren.forEach(function(item) {
+            const link = item.querySelector(':scope > a');  // Direct child link only
+            const submenu = item.querySelector(':scope > .sub-menu');  // Direct child submenu only
 
-            if (!submenu) {
+            if (!submenu || !link) {
                 return;
             }
 
-            // Add aria attributes
+            // Add aria-haspopup to link for screen readers
             link.setAttribute('aria-haspopup', 'true');
-            link.setAttribute('aria-expanded', 'false');
 
-            // Toggle submenu on click (for touch devices)
-            link.addEventListener('click', function(event) {
-                // Only prevent default and toggle on mobile
-                if (window.innerWidth < 768) {
-                    event.preventDefault();
-                    const isExpanded = this.getAttribute('aria-expanded') === 'true';
-                    this.setAttribute('aria-expanded', !isExpanded);
-                    submenu.style.display = isExpanded ? 'none' : 'block';
-                }
+            // Create toggle button for mobile (injected after the link)
+            const toggleBtn = document.createElement('button');
+            toggleBtn.className = 'submenu-toggle';
+            toggleBtn.setAttribute('type', 'button');
+            toggleBtn.setAttribute('aria-expanded', 'false');
+            toggleBtn.setAttribute('aria-label', 'Toggle ' + link.textContent.trim() + ' submenu');
+            toggleBtn.innerHTML = '<span class="submenu-toggle__icon" aria-hidden="true"></span>';
+
+            // Insert button after link, before submenu
+            link.parentNode.insertBefore(toggleBtn, submenu);
+
+            // Toggle button click handler (works on mobile, hidden on desktop via CSS)
+            toggleBtn.addEventListener('click', function(event) {
+                event.preventDefault();
+                event.stopPropagation();
+
+                const isExpanded = this.getAttribute('aria-expanded') === 'true';
+
+                // Close sibling submenus at same level
+                const siblings = item.parentElement.querySelectorAll(':scope > .menu-item-has-children');
+                siblings.forEach(function(sibling) {
+                    if (sibling !== item) {
+                        const siblingToggle = sibling.querySelector(':scope > .submenu-toggle');
+                        const siblingSubmenu = sibling.querySelector(':scope > .sub-menu');
+                        if (siblingToggle && siblingSubmenu) {
+                            siblingToggle.setAttribute('aria-expanded', 'false');
+                            siblingSubmenu.style.display = '';
+                            sibling.classList.remove('is-expanded');
+                        }
+                    }
+                });
+
+                // Toggle current submenu
+                this.setAttribute('aria-expanded', !isExpanded);
+                submenu.style.display = isExpanded ? '' : 'block';
+                item.classList.toggle('is-expanded', !isExpanded);
             });
 
-            // Handle keyboard navigation
-            link.addEventListener('keydown', function(event) {
+            // Handle keyboard navigation on toggle button
+            toggleBtn.addEventListener('keydown', function(event) {
                 if (event.key === 'Enter' || event.key === ' ') {
                     event.preventDefault();
                     const isExpanded = this.getAttribute('aria-expanded') === 'true';
                     this.setAttribute('aria-expanded', !isExpanded);
+                    item.classList.toggle('is-expanded', !isExpanded);
+                    submenu.style.display = isExpanded ? '' : 'block';
 
                     if (!isExpanded) {
                         const firstSubmenuLink = submenu.querySelector('a');
@@ -145,18 +179,81 @@
                 }
             });
 
-            // Update aria-expanded on hover (desktop)
+            // Desktop: Update aria-expanded on hover (toggle button hidden via CSS)
             item.addEventListener('mouseenter', function() {
                 if (window.innerWidth >= 768) {
-                    link.setAttribute('aria-expanded', 'true');
+                    toggleBtn.setAttribute('aria-expanded', 'true');
                 }
             });
 
             item.addEventListener('mouseleave', function() {
                 if (window.innerWidth >= 768) {
-                    link.setAttribute('aria-expanded', 'false');
+                    toggleBtn.setAttribute('aria-expanded', 'false');
                 }
             });
+        });
+
+        // Initialize nested keyboard navigation
+        initNestedKeyboardNav();
+    }
+
+    /**
+     * Handle keyboard navigation for nested submenus
+     */
+    function initNestedKeyboardNav() {
+        const navList = document.querySelector('.promptless-header__nav-list');
+        if (!navList) return;
+
+        navList.addEventListener('keydown', function(event) {
+            const target = event.target;
+            const parentItem = target.closest('.menu-item-has-children');
+
+            if (!parentItem) return;
+
+            const submenu = parentItem.querySelector(':scope > .sub-menu');
+            const link = parentItem.querySelector(':scope > a');
+
+            // ArrowRight: Open submenu and focus first item (desktop only)
+            if (event.key === 'ArrowRight' && submenu && window.innerWidth >= 768) {
+                event.preventDefault();
+                link.setAttribute('aria-expanded', 'true');
+                const firstSubLink = submenu.querySelector('a');
+                if (firstSubLink) {
+                    firstSubLink.focus();
+                }
+            }
+
+            // ArrowLeft: Close submenu and focus parent (desktop only)
+            if (event.key === 'ArrowLeft' && window.innerWidth >= 768) {
+                const parentSubmenu = target.closest('.sub-menu');
+                if (parentSubmenu) {
+                    event.preventDefault();
+                    const parentMenuItem = parentSubmenu.closest('.menu-item-has-children');
+                    if (parentMenuItem) {
+                        const parentLink = parentMenuItem.querySelector(':scope > a');
+                        if (parentLink) {
+                            parentLink.setAttribute('aria-expanded', 'false');
+                            parentLink.focus();
+                        }
+                    }
+                }
+            }
+
+            // Escape: Close current submenu level
+            if (event.key === 'Escape') {
+                const currentSubmenu = target.closest('.sub-menu');
+                if (currentSubmenu) {
+                    const parentMenuItem = currentSubmenu.closest('.menu-item-has-children');
+                    if (parentMenuItem) {
+                        const parentLink = parentMenuItem.querySelector(':scope > a');
+                        if (parentLink) {
+                            parentLink.setAttribute('aria-expanded', 'false');
+                            parentMenuItem.classList.remove('is-expanded');
+                            parentLink.focus();
+                        }
+                    }
+                }
+            }
         });
     }
 
