@@ -4,7 +4,7 @@ Tags: one-column, custom-logo, custom-menu, featured-images, full-width-template
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.0.3
+Stable tag: 1.0.4
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -88,6 +88,12 @@ This theme is optimized for the Promptless WP page builder. It may work with oth
 Use the Promptless WP plugin's Canvas display mode, which provides a full-screen layout without the header and footer.
 
 == Changelog ==
+
+= 1.0.4 =
+* Fixed: Comments section now properly aligns with page content width
+* Fixed: Post titles in archives are now clickable
+* Fixed: Featured images in archives are now clickable and keyboard accessible
+* Improved: Better accessibility for archive card links
 
 = 1.0.3 =
 * Fixed: Long titles now wrap properly with overflow-wrap and word-break properties

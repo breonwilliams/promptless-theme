@@ -72,14 +72,19 @@ get_header();
                     'after'  => '</div>',
                 )
             );
-            ?>
 
+            // Check for footer content existence.
+            $tags      = get_the_tags();
+            $prev_post = get_previous_post();
+            $next_post = get_next_post();
+            $has_footer_content = $tags || $prev_post || $next_post;
+
+            // Only render footer if there's content to show.
+            if ( $has_footer_content ) :
+            ?>
             <footer class="promptless-single__footer">
                 <div class="promptless-container">
-                    <?php
-                    $tags = get_the_tags();
-                    if ( $tags ) :
-                        ?>
+                    <?php if ( $tags ) : ?>
                         <div class="promptless-single__tags">
                             <span class="promptless-single__tags-label"><?php esc_html_e( 'Tags:', 'promptless' ); ?></span>
                             <?php
@@ -94,14 +99,10 @@ get_header();
                         </div>
                     <?php endif; ?>
 
+                    <?php if ( $prev_post || $next_post ) : ?>
                     <!-- Post Navigation -->
                     <nav class="promptless-single__nav" aria-label="<?php esc_attr_e( 'Post navigation', 'promptless' ); ?>">
-                        <?php
-                        $prev_post = get_previous_post();
-                        $next_post = get_next_post();
-
-                        if ( $prev_post ) :
-                            ?>
+                        <?php if ( $prev_post ) : ?>
                             <a href="<?php echo esc_url( get_permalink( $prev_post ) ); ?>" class="promptless-single__nav-link promptless-single__nav-link--prev">
                                 <span class="promptless-single__nav-label"><?php esc_html_e( 'Previous', 'promptless' ); ?></span>
                                 <span class="promptless-single__nav-title"><?php echo esc_html( get_the_title( $prev_post ) ); ?></span>
@@ -115,8 +116,10 @@ get_header();
                             </a>
                         <?php endif; ?>
                     </nav>
+                    <?php endif; ?>
                 </div>
             </footer>
+            <?php endif; ?>
         </article>
         <?php
 
