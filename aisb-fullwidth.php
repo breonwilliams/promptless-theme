@@ -36,12 +36,10 @@ if ( empty( $sections_raw ) ) {
 
     // Check for JSON decode errors
     if ( json_last_error() !== JSON_ERROR_NONE ) {
-        error_log( 'AISB: JSON decode error for post ' . $post_id . ': ' . json_last_error_msg() );
         $sections = array();
     }
 } else {
-    // Unknown format - log and use empty array
-    error_log( 'AISB: Unexpected sections data type for post ' . $post_id . ': ' . gettype( $sections_raw ) );
+    // Unknown format - use empty array
     $sections = array();
 }
 
@@ -66,7 +64,6 @@ $sections = apply_filters( 'aisb_get_sections', $sections, $post_id );
                 foreach ( $sections as $section_index => $section ) {
                     // Skip invalid section entries
                     if ( ! is_array( $section ) ) {
-                        error_log( 'AISB: Invalid section at index ' . $section_index . ' for post ' . $post_id );
                         continue;
                     }
                     $sections_html .= $renderer->render_section( $section, $section_index, $post_id );
@@ -88,13 +85,10 @@ $sections = apply_filters( 'aisb_get_sections', $sections, $post_id );
                 // Clear collected CSS for next render
                 $renderer->clear_collected_css();
             } catch ( Exception $e ) {
-                // Log the error but don't break the page
-                error_log( 'AISB: Section rendering error for post ' . $post_id . ': ' . $e->getMessage() );
-
                 // Show error message only to admins
                 if ( current_user_can( 'edit_posts' ) ) {
                     echo '<div style="padding: 20px; background: #fff3cd; border: 1px solid #ffc107; margin: 20px; border-radius: 4px;">';
-                    echo '<strong>Promptless WP Error:</strong> Unable to render sections. Please check the error logs.';
+                    echo '<strong>' . esc_html__( 'Promptless WP Error:', 'promptless' ) . '</strong> ' . esc_html__( 'Unable to render sections. Please check the error logs.', 'promptless' );
                     echo '</div>';
                 }
             }

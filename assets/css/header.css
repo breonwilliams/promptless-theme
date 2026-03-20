@@ -618,15 +618,17 @@
         transition: background-color 0.2s ease;
     }
 
-    .promptless-header__nav-list .submenu-toggle:hover,
-    .promptless-header__nav-list .submenu-toggle:focus {
+    .promptless-header__nav-list .submenu-toggle:hover {
         background-color: var(--section-surface);
-        outline: none;
     }
 
-    .promptless-header__nav-list .submenu-toggle:focus-visible {
-        outline: 2px solid var(--section-primary);
-        outline-offset: -2px;
+    .promptless-header__nav-list .submenu-toggle:focus {
+        background-color: var(--section-surface);
+        box-shadow: inset 0 0 0 2px var(--section-primary);
+    }
+
+    .promptless-header__nav-list .submenu-toggle:focus:not(:focus-visible) {
+        box-shadow: none;
     }
 
     /* Chevron icon using mask technique */
@@ -718,22 +720,36 @@
    ========================================================================== */
 
 .skip-link {
-    position: absolute;
-    top: -40px;
-    left: 0;
-    background: var(--section-primary);
+    position: fixed;
+    top: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--section-primary, var(--aisb-color-primary, #6366f1));
     color: #ffffff;
     padding: 8px 16px;
-    z-index: 100000;
+    z-index: 999999;
     text-decoration: none;
     font-weight: 500;
-    border-radius: 0 0 var(--aisb-section-radius-button, 6px) 0;
+    border-radius: var(--aisb-section-radius-button, 6px);
+    white-space: nowrap;
+    transition: top 0.2s ease;
 }
 
 .skip-link:focus {
-    top: 0;
-    outline: 2px solid var(--section-primary);
+    top: 10px;
+    outline: 2px solid var(--section-primary, var(--aisb-color-primary, #6366f1));
     outline-offset: 2px;
+}
+
+/* Admin bar offset for skip link */
+.admin-bar .skip-link:focus {
+    top: 42px;
+}
+
+@media (max-width: 782px) {
+    .admin-bar .skip-link:focus {
+        top: 56px;
+    }
 }
 
 /* ==========================================================================

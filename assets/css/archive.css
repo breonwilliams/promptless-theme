@@ -425,6 +425,37 @@
     overflow: hidden;
 }
 
+/* Featured image focus indicator for keyboard navigation
+   Uses ::after pseudo-element because:
+   1. Parent has overflow:hidden which clips outline
+   2. Image covers 100% of anchor, hiding inset box-shadow
+   Pseudo-element sits ON TOP of image to show focus indicator */
+.promptless-archive__grid .aisb-features__item-image-wrapper a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.promptless-archive__grid .aisb-features__item-image-wrapper a:focus,
+.promptless-archive__grid .aisb-features__item-image-wrapper a:focus-visible {
+    outline: none;
+}
+
+.promptless-archive__grid .aisb-features__item-image-wrapper a:focus::after,
+.promptless-archive__grid .aisb-features__item-image-wrapper a:focus-visible::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    box-shadow: inset 0 0 0 3px var(--section-primary, var(--aisb-color-primary, #6366f1));
+    pointer-events: none;
+    border-radius: inherit;
+}
+
+.promptless-archive__grid .aisb-features__item-image-wrapper a:focus:not(:focus-visible)::after {
+    box-shadow: none;
+}
+
 .promptless-archive__grid .aisb-features__item-image {
     width: 100%;
     height: 100%;
@@ -777,8 +808,12 @@
 }
 
 .search-form .search-field:focus {
-    outline: none;
     border-color: var(--section-primary);
+    box-shadow: 0 0 0 2px var(--section-primary);
+}
+
+.search-form .search-field:focus:not(:focus-visible) {
+    box-shadow: none;
 }
 
 .search-form .search-submit {
@@ -1440,8 +1475,14 @@
 .comment-form input[type="email"]:focus,
 .comment-form input[type="url"]:focus,
 .comment-form textarea:focus {
-    outline: none;
     border-color: var(--section-primary);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+}
+
+.comment-form input[type="text"]:focus:not(:focus-visible),
+.comment-form input[type="email"]:focus:not(:focus-visible),
+.comment-form input[type="url"]:focus:not(:focus-visible),
+.comment-form textarea:focus:not(:focus-visible) {
     box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
 }
 

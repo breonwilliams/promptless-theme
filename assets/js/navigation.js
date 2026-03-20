@@ -61,6 +61,11 @@
                 // Close mini-cart if open
                 closeMiniCart();
             }
+
+            // Focus trap for mobile menu
+            if (event.key === 'Tab' && navWrapper.classList.contains('is-open')) {
+                trapFocusInMobileMenu(event, navWrapper, menuToggle);
+            }
         });
 
         // Close menu when clicking outside
@@ -364,6 +369,50 @@
 
         // Update after fonts load (can affect height)
         window.addEventListener('load', updateStickyOffsets);
+    }
+
+    /**
+     * Get all focusable elements within a container
+     *
+     * @param {Element} container - The container element to search within
+     * @return {NodeList} List of focusable elements
+     */
+    function getFocusableElements(container) {
+        return container.querySelectorAll(
+            'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        );
+    }
+
+    /**
+     * Trap focus within mobile menu when open
+     *
+     * @param {KeyboardEvent} event - The keydown event
+     * @param {Element} navWrapper - The navigation wrapper element
+     * @param {Element} menuToggle - The menu toggle button
+     */
+    function trapFocusInMobileMenu(event, navWrapper, menuToggle) {
+        var focusableElements = getFocusableElements(navWrapper);
+
+        if (focusableElements.length === 0) {
+            return;
+        }
+
+        var firstFocusable = focusableElements[0];
+        var lastFocusable = focusableElements[focusableElements.length - 1];
+
+        if (event.shiftKey) {
+            // Shift + Tab: if on first element or menu toggle, wrap to last element
+            if (document.activeElement === firstFocusable || document.activeElement === menuToggle) {
+                event.preventDefault();
+                lastFocusable.focus();
+            }
+        } else {
+            // Tab: if on last element, wrap to menu toggle
+            if (document.activeElement === lastFocusable) {
+                event.preventDefault();
+                menuToggle.focus();
+            }
+        }
     }
 
     // Initialize when DOM is ready

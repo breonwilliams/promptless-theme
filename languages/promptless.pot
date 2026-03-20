@@ -2,7 +2,7 @@
 # This file is distributed under the GNU General Public License v2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Promptless 1.0.0\n"
+"Project-Id-Version: Promptless 1.0.6\n"
 "Report-Msgid-Bugs-To: https://promptlesswp.com/support\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
