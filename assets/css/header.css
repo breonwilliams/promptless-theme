@@ -1175,8 +1175,9 @@ body.woocommerce-checkout .promptless-header__mini-cart .promptless-cart-item__r
 }
 
 .promptless-header__mini-cart .button.checkout.wc-forward:hover {
-    filter: brightness(0.9);
-    color: var(--aisb-button-primary-text, #ffffff);
+    background: var(--aisb-button-primary-hover-bg, var(--aisb-button-primary-bg, var(--aisb-color-primary)));
+    border-color: var(--aisb-button-primary-hover-bg, var(--aisb-button-primary-bg, var(--aisb-color-primary)));
+    color: var(--aisb-button-primary-hover-text, var(--aisb-button-primary-text, #ffffff));
     text-decoration: none;
 }
 
