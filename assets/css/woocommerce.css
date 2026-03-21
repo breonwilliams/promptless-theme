@@ -1611,6 +1611,7 @@ body.woocommerce-page .aisb-section--light .woocommerce-MyAccount-navigation ul 
     background-color: var(--wc-primary, var(--aisb-color-primary, #6366f1));
     color: var(--aisb-button-primary-text, #ffffff);
     text-decoration: none;
+    filter: none; /* Prevent wildcard brightness filter */
 }
 
 body.woocommerce .aisb-section--light .woocommerce-MyAccount-navigation ul li.is-active a,
@@ -2717,6 +2718,7 @@ body.woocommerce-page .aisb-section--dark .woocommerce-MyAccount-navigation ul l
     background-color: var(--wc-primary, var(--aisb-color-primary, #6366f1));
     color: var(--aisb-button-primary-text, #ffffff);
     text-decoration: none;
+    filter: none; /* Prevent wildcard brightness filter */
 }
 
 /* CRITICAL: Dark mode active state - must have same specificity as hover */
