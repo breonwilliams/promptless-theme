@@ -536,9 +536,13 @@
         max-height: 0;
         overflow: hidden;
         overflow-x: hidden; /* Prevent horizontal scroll from long menu items */
-        transition: max-height 0.3s ease;
+        transition: max-height 0.3s ease, visibility 0.3s ease;
         /* Override desktop flexbox centering for full-width mobile menu */
         display: block;
+        /* WCAG 2.1 SC 2.4.3: Remove hidden menu from tab order
+           visibility: hidden removes elements from keyboard navigation
+           while overflow: hidden only hides them visually */
+        visibility: hidden;
     }
 
     /* Reset navigation position classes on mobile - menu is always full-width */
@@ -552,6 +556,8 @@
         max-height: 70vh;
         overflow-y: auto;
         overflow-x: hidden; /* Ensure no horizontal scroll when menu is open */
+        /* WCAG 2.1 SC 2.4.3: Make menu focusable when open */
+        visibility: visible;
     }
 
     .promptless-header__nav {

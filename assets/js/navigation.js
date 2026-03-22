@@ -38,8 +38,9 @@
             closeMiniCart();
 
             // Focus first menu item when opening
-            if (!isExpanded && primaryNav) {
-                const firstLink = primaryNav.querySelector('a');
+            // Use navWrapper to include topbar links (which appear before primary nav)
+            if (!isExpanded && navWrapper) {
+                const firstLink = navWrapper.querySelector('a');
                 if (firstLink) {
                     setTimeout(function() {
                         firstLink.focus();
@@ -386,31 +387,67 @@
     /**
      * Trap focus within mobile menu when open
      *
+     * WCAG 2.1 SC 2.1.2 (No Keyboard Trap): Focus cycles within the modal
+     * WAI-ARIA Authoring Practices: Modal dialog focus management
+     *
+     * Focus order: menuToggle → nav items → back to menuToggle
+     * This keeps focus trapped within the mobile menu modal.
+     *
      * @param {KeyboardEvent} event - The keydown event
      * @param {Element} navWrapper - The navigation wrapper element
      * @param {Element} menuToggle - The menu toggle button
      */
     function trapFocusInMobileMenu(event, navWrapper, menuToggle) {
-        var focusableElements = getFocusableElements(navWrapper);
+        var navFocusable = getFocusableElements(navWrapper);
 
-        if (focusableElements.length === 0) {
+        // Build complete focus cycle: menuToggle + all nav items
+        // menuToggle is part of the modal UI even though it's outside navWrapper
+        var allFocusable = [menuToggle].concat(Array.prototype.slice.call(navFocusable));
+
+        if (allFocusable.length <= 1) {
+            // Only menuToggle exists, prevent tabbing away
+            event.preventDefault();
             return;
         }
 
-        var firstFocusable = focusableElements[0];
-        var lastFocusable = focusableElements[focusableElements.length - 1];
+        var firstFocusable = allFocusable[0]; // menuToggle
+        var lastFocusable = allFocusable[allFocusable.length - 1];
+
+        // Check if current focus is within the menu area
+        var isInMenu = navWrapper.contains(document.activeElement) ||
+                       menuToggle === document.activeElement;
+
+        // If focus escaped the menu somehow, bring it back
+        if (!isInMenu) {
+            event.preventDefault();
+            menuToggle.focus();
+            return;
+        }
+
+        // Second focusable is the first nav item (after menuToggle)
+        var secondFocusable = allFocusable.length > 1 ? allFocusable[1] : null;
 
         if (event.shiftKey) {
-            // Shift + Tab: if on first element or menu toggle, wrap to last element
-            if (document.activeElement === firstFocusable || document.activeElement === menuToggle) {
+            // Shift + Tab: going backward
+            if (document.activeElement === firstFocusable) {
+                // From menuToggle, wrap to last nav item
                 event.preventDefault();
                 lastFocusable.focus();
-            }
-        } else {
-            // Tab: if on last element, wrap to menu toggle
-            if (document.activeElement === lastFocusable) {
+            } else if (secondFocusable && document.activeElement === secondFocusable) {
+                // From first nav item, go to menuToggle
                 event.preventDefault();
                 menuToggle.focus();
+            }
+        } else {
+            // Tab: going forward
+            if (document.activeElement === lastFocusable) {
+                // From last nav item, wrap to menuToggle
+                event.preventDefault();
+                firstFocusable.focus();
+            } else if (secondFocusable && document.activeElement === firstFocusable) {
+                // From menuToggle, go to first nav item (topbar or primary nav)
+                event.preventDefault();
+                secondFocusable.focus();
             }
         }
     }
