@@ -870,6 +870,12 @@
     margin-bottom: var(--aisb-section-space-2xl, 3rem);
 }
 
+.promptless-404__search {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .promptless-404__search p {
     color: var(--section-text-muted);
     margin-bottom: var(--aisb-section-space-md, 1rem);
