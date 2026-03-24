@@ -774,11 +774,15 @@ body.aisb-neo-brutalist-buttons.woocommerce #respond input#submit,
 body.aisb-neo-brutalist-buttons.woocommerce .checkout-button,
 body.aisb-neo-brutalist-buttons.woocommerce #place_order,
 body.aisb-neo-brutalist-buttons.woocommerce .woocommerce-Button,
+body.aisb-neo-brutalist-buttons.woocommerce ul.products li.product .button,
+body.aisb-neo-brutalist-buttons.woocommerce ul.products li.product .add_to_cart_button,
 body.aisb-neo-brutalist-buttons.woocommerce-page button.button,
 body.aisb-neo-brutalist-buttons.woocommerce-page a.button,
 body.aisb-neo-brutalist-buttons.woocommerce-page input.button,
 body.aisb-neo-brutalist-buttons.woocommerce-page #place_order,
-body.aisb-neo-brutalist-buttons.woocommerce-page .checkout-button {
+body.aisb-neo-brutalist-buttons.woocommerce-page .checkout-button,
+body.aisb-neo-brutalist-buttons.woocommerce-page ul.products li.product .button,
+body.aisb-neo-brutalist-buttons.woocommerce-page ul.products li.product .add_to_cart_button {
     border: var(--aisb-neo-border-width-button, 3px) solid var(--aisb-neo-brutalist-primary-border, #000);
     box-shadow: var(--aisb-neo-shadow-offset-button, 4px) var(--aisb-neo-shadow-offset-button, 4px) 0 var(--aisb-neo-brutalist-primary-border, #000);
 }
@@ -794,15 +798,19 @@ body.aisb-neo-brutalist-buttons.woocommerce #respond input#submit:hover,
 body.aisb-neo-brutalist-buttons.woocommerce .checkout-button:hover,
 body.aisb-neo-brutalist-buttons.woocommerce #place_order:hover,
 body.aisb-neo-brutalist-buttons.woocommerce .woocommerce-Button:hover,
+body.aisb-neo-brutalist-buttons.woocommerce ul.products li.product .button:hover,
+body.aisb-neo-brutalist-buttons.woocommerce ul.products li.product .add_to_cart_button:hover,
 body.aisb-neo-brutalist-buttons.woocommerce-page button.button:hover,
 body.aisb-neo-brutalist-buttons.woocommerce-page a.button:hover,
 body.aisb-neo-brutalist-buttons.woocommerce-page input.button:hover,
 body.aisb-neo-brutalist-buttons.woocommerce-page #place_order:hover,
-body.aisb-neo-brutalist-buttons.woocommerce-page .checkout-button:hover {
+body.aisb-neo-brutalist-buttons.woocommerce-page .checkout-button:hover,
+body.aisb-neo-brutalist-buttons.woocommerce-page ul.products li.product .button:hover,
+body.aisb-neo-brutalist-buttons.woocommerce-page ul.products li.product .add_to_cart_button:hover {
     transform: translate(1px, 1px);
     box-shadow: var(--aisb-neo-shadow-offset-button-hover, 3px) var(--aisb-neo-shadow-offset-button-hover, 3px) 0 var(--aisb-neo-brutalist-primary-border, #000);
     background: var(--aisb-button-primary-hover-bg, var(--aisb-button-primary-bg, var(--aisb-color-primary)));
-    border-color: var(--aisb-button-primary-hover-bg, var(--aisb-button-primary-bg, var(--aisb-color-primary)));
+    /* NOTE: border-color intentionally NOT changed on hover to preserve black neo-brutalist border */
 }
 
 /* Neo-Brutalist mini-cart buttons (excludes ghost/View Cart button) */
@@ -814,6 +822,62 @@ body.aisb-neo-brutalist-buttons.woocommerce .woocommerce-mini-cart__buttons .but
 body.aisb-neo-brutalist-buttons.woocommerce .woocommerce-mini-cart__buttons .button:not(.checkout):hover {
     transform: translate(1px, 1px);
     box-shadow: var(--aisb-neo-shadow-offset-button-hover, 3px) var(--aisb-neo-shadow-offset-button-hover, 3px) 0 var(--aisb-neo-brutalist-primary-border, #000);
+}
+
+/* Dark mode Neo-Brutalist buttons
+ * .aisb-section--dark may be on body (compound) or on descendant (main element)
+ */
+body.aisb-neo-brutalist-buttons.aisb-section--dark.woocommerce button.button,
+body.aisb-neo-brutalist-buttons.aisb-section--dark.woocommerce button.button.alt,
+body.aisb-neo-brutalist-buttons.aisb-section--dark.woocommerce a.button,
+body.aisb-neo-brutalist-buttons.aisb-section--dark.woocommerce a.button.alt,
+body.aisb-neo-brutalist-buttons.aisb-section--dark.woocommerce input.button,
+body.aisb-neo-brutalist-buttons.aisb-section--dark.woocommerce .single_add_to_cart_button,
+body.aisb-neo-brutalist-buttons.aisb-section--dark.woocommerce ul.products li.product .button,
+body.aisb-neo-brutalist-buttons.aisb-section--dark.woocommerce ul.products li.product .add_to_cart_button,
+body.aisb-neo-brutalist-buttons.woocommerce .aisb-section--dark button.button,
+body.aisb-neo-brutalist-buttons.woocommerce .aisb-section--dark a.button,
+body.aisb-neo-brutalist-buttons.woocommerce .aisb-section--dark ul.products li.product .button,
+body.aisb-neo-brutalist-buttons.woocommerce .aisb-section--dark ul.products li.product .add_to_cart_button {
+    border-color: var(--aisb-neo-brutalist-primary-border-dark, #000);
+    box-shadow: var(--aisb-neo-shadow-offset-button, 4px) var(--aisb-neo-shadow-offset-button, 4px) 0 var(--aisb-neo-brutalist-primary-border-dark, #000);
+}
+
+/* Dark mode Neo-Brutalist button hover */
+body.aisb-neo-brutalist-buttons.aisb-section--dark.woocommerce button.button:hover,
+body.aisb-neo-brutalist-buttons.aisb-section--dark.woocommerce button.button.alt:hover,
+body.aisb-neo-brutalist-buttons.aisb-section--dark.woocommerce a.button:hover,
+body.aisb-neo-brutalist-buttons.aisb-section--dark.woocommerce a.button.alt:hover,
+body.aisb-neo-brutalist-buttons.aisb-section--dark.woocommerce input.button:hover,
+body.aisb-neo-brutalist-buttons.aisb-section--dark.woocommerce .single_add_to_cart_button:hover,
+body.aisb-neo-brutalist-buttons.aisb-section--dark.woocommerce ul.products li.product .button:hover,
+body.aisb-neo-brutalist-buttons.aisb-section--dark.woocommerce ul.products li.product .add_to_cart_button:hover,
+body.aisb-neo-brutalist-buttons.woocommerce .aisb-section--dark button.button:hover,
+body.aisb-neo-brutalist-buttons.woocommerce .aisb-section--dark a.button:hover,
+body.aisb-neo-brutalist-buttons.woocommerce .aisb-section--dark ul.products li.product .button:hover,
+body.aisb-neo-brutalist-buttons.woocommerce .aisb-section--dark ul.products li.product .add_to_cart_button:hover {
+    transform: translate(1px, 1px);
+    box-shadow: var(--aisb-neo-shadow-offset-button-hover, 3px) var(--aisb-neo-shadow-offset-button-hover, 3px) 0 var(--aisb-neo-brutalist-primary-border-dark, #000);
+    background: var(--aisb-button-primary-hover-bg, var(--aisb-button-primary-bg, var(--aisb-color-primary)));
+}
+
+/* Neo-Brutalist ghost/secondary buttons (View Cart, etc.)
+ * Ghost buttons get the same 3D treatment but with secondary border color
+ */
+body.aisb-neo-brutalist-buttons.woocommerce a.added_to_cart,
+body.aisb-neo-brutalist-buttons.woocommerce ul.products li.product a.added_to_cart,
+body.aisb-neo-brutalist-buttons.woocommerce-page a.added_to_cart,
+body.aisb-neo-brutalist-buttons.woocommerce-page ul.products li.product a.added_to_cart {
+    border: var(--aisb-neo-border-width-button, 3px) solid var(--aisb-neo-brutalist-secondary-border, #000);
+    box-shadow: var(--aisb-neo-shadow-offset-button, 4px) var(--aisb-neo-shadow-offset-button, 4px) 0 var(--aisb-neo-brutalist-secondary-border, #000);
+}
+
+body.aisb-neo-brutalist-buttons.woocommerce a.added_to_cart:hover,
+body.aisb-neo-brutalist-buttons.woocommerce ul.products li.product a.added_to_cart:hover,
+body.aisb-neo-brutalist-buttons.woocommerce-page a.added_to_cart:hover,
+body.aisb-neo-brutalist-buttons.woocommerce-page ul.products li.product a.added_to_cart:hover {
+    transform: translate(1px, 1px);
+    box-shadow: var(--aisb-neo-shadow-offset-button-hover, 3px) var(--aisb-neo-shadow-offset-button-hover, 3px) 0 var(--aisb-neo-brutalist-secondary-border, #000);
 }
 
 /* ==========================================================================
