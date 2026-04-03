@@ -1376,6 +1376,63 @@ body.single-product .aisb-section--light .variations_form .variations select:foc
     border-bottom: none;
 }
 
+/* ==========================================================================
+   Product Attributes Table (Additional Information Tab)
+   The shop_attributes class is different from shop_table, so needs explicit styling
+   to match cart/checkout tables for visual consistency.
+   ========================================================================== */
+
+.woocommerce table.shop_attributes {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 0;
+}
+
+.woocommerce table.shop_attributes th {
+    font-family: var(--aisb-section-font-heading, inherit);
+    font-weight: var(--aisb-section-font-heading-weight, 700);
+    font-size: var(--aisb-section-text-sm, 0.875rem);
+    color: var(--wc-text);
+    background: var(--wc-surface);
+    padding: var(--aisb-section-space-md, 1rem);
+    border-bottom: 1px solid var(--wc-border);
+    text-align: left;
+    width: 30%;
+}
+
+.woocommerce table.shop_attributes td {
+    font-family: var(--aisb-section-font-body, inherit);
+    color: var(--wc-text);
+    padding: var(--aisb-section-space-md, 1rem);
+    border-bottom: 1px solid var(--wc-border);
+    vertical-align: middle;
+}
+
+.woocommerce table.shop_attributes tbody tr:last-child th,
+.woocommerce table.shop_attributes tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Product attributes table links */
+.woocommerce table.shop_attributes td a {
+    color: var(--wc-link);
+    text-decoration: none;
+}
+
+/* Light mode - darken on hover */
+body.woocommerce .aisb-section--light table.shop_attributes td a:hover,
+body.woocommerce-page .aisb-section--light table.shop_attributes td a:hover {
+    text-decoration: underline;
+    filter: brightness(0.85);
+}
+
+/* Dark mode - brighten on hover */
+body.woocommerce .aisb-section--dark table.shop_attributes td a:hover,
+body.woocommerce-page .aisb-section--dark table.shop_attributes td a:hover {
+    text-decoration: underline;
+    filter: brightness(1.15);
+}
+
 /* Product name in cart */
 .woocommerce-cart table.cart td.product-name a {
     color: var(--wc-text);
