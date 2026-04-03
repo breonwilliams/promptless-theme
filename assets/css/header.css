@@ -89,36 +89,39 @@
     font-weight: 700;
     color: var(--section-text);
     text-decoration: none;
-    transition: color 0.2s ease;
+    transition: none;  /* Override base anchor transition - site title remains static */
 }
 
 .promptless-header__site-title:hover,
 .promptless-header__site-title:focus {
-    color: var(--section-primary);
+    color: var(--section-text);  /* Static - no color change on hover */
     text-decoration: none;
 }
 
 /* Site title link - high specificity overrides for plugin link colors
-   Uses 8x [href] attribute selectors to beat plugin specificity 0,10,1 */
-.promptless-header.aisb-section--light .promptless-header__site-title[href][href][href][href][href][href][href][href] {
+   Uses 9x [href] attribute selectors (0,12,0) to beat plugin specificity (0,11,1)
+   Plugin selector: .aisb-section--dark a:not(.aisb-btn):not(.button)... has 10 :not() + 'a' element */
+.promptless-header.aisb-section--light .promptless-header__site-title[href][href][href][href][href][href][href][href][href] {
     color: var(--section-text);
     text-decoration: none;
+    transition: none;
 }
 
-.promptless-header.aisb-section--light .promptless-header__site-title[href][href][href][href][href][href][href][href]:hover,
-.promptless-header.aisb-section--light .promptless-header__site-title[href][href][href][href][href][href][href][href]:focus {
-    color: var(--aisb-smart-light-section-link, var(--section-primary));
+.promptless-header.aisb-section--light .promptless-header__site-title[href][href][href][href][href][href][href][href][href]:hover,
+.promptless-header.aisb-section--light .promptless-header__site-title[href][href][href][href][href][href][href][href][href]:focus {
+    color: var(--section-text);  /* Static - no color change on hover */
     text-decoration: none;
 }
 
-.promptless-header.aisb-section--dark .promptless-header__site-title[href][href][href][href][href][href][href][href] {
+.promptless-header.aisb-section--dark .promptless-header__site-title[href][href][href][href][href][href][href][href][href] {
     color: var(--section-text);
     text-decoration: none;
+    transition: none;
 }
 
-.promptless-header.aisb-section--dark .promptless-header__site-title[href][href][href][href][href][href][href][href]:hover,
-.promptless-header.aisb-section--dark .promptless-header__site-title[href][href][href][href][href][href][href][href]:focus {
-    color: var(--aisb-smart-dark-section-link, var(--section-primary));
+.promptless-header.aisb-section--dark .promptless-header__site-title[href][href][href][href][href][href][href][href][href]:hover,
+.promptless-header.aisb-section--dark .promptless-header__site-title[href][href][href][href][href][href][href][href][href]:focus {
+    color: var(--section-text);  /* Static - no color change on hover */
     text-decoration: none;
 }
 
