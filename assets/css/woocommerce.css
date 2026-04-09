@@ -881,6 +881,119 @@ body.aisb-neo-brutalist-buttons.woocommerce-page ul.products li.product a.added_
 }
 
 /* ==========================================================================
+   Neo-Brutalist OUTLINE Variant - WooCommerce Buttons
+   Thick borders without the 3D shadow effect
+   Applied via .aisb-neo-brutalist-buttons-outline body class
+   ========================================================================== */
+
+/* Primary Buttons - Outline variant (borders only, no shadow) */
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce button.button,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce button.button.alt,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce a.button,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce a.button.alt,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce input.button,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce input.button.alt,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce .single_add_to_cart_button,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce #respond input#submit,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce .checkout-button,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce #place_order,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce .woocommerce-Button,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce ul.products li.product .button,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce ul.products li.product .add_to_cart_button,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce-page button.button,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce-page a.button,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce-page input.button,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce-page #place_order,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce-page .checkout-button,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce-page ul.products li.product .button,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce-page ul.products li.product .add_to_cart_button {
+    box-shadow: none;
+}
+
+/* Primary Buttons Hover - Outline variant (no animation) */
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce button.button:hover,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce button.button.alt:hover,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce a.button:hover,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce a.button.alt:hover,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce input.button:hover,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce input.button.alt:hover,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce .single_add_to_cart_button:hover,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce #respond input#submit:hover,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce .checkout-button:hover,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce #place_order:hover,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce .woocommerce-Button:hover,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce ul.products li.product .button:hover,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce ul.products li.product .add_to_cart_button:hover,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce-page button.button:hover,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce-page a.button:hover,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce-page input.button:hover,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce-page #place_order:hover,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce-page .checkout-button:hover,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce-page ul.products li.product .button:hover,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce-page ul.products li.product .add_to_cart_button:hover {
+    box-shadow: none;
+    transform: none;
+}
+
+/* Ghost/Secondary Buttons - Outline variant */
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce a.added_to_cart,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce ul.products li.product a.added_to_cart,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce-page a.added_to_cart,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce-page ul.products li.product a.added_to_cart {
+    box-shadow: none;
+}
+
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce a.added_to_cart:hover,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce ul.products li.product a.added_to_cart:hover,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce-page a.added_to_cart:hover,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce-page ul.products li.product a.added_to_cart:hover {
+    box-shadow: none;
+    transform: none;
+}
+
+/* Mini-cart Buttons - Outline variant */
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce .woocommerce-mini-cart__buttons .button:not(.checkout) {
+    box-shadow: none;
+}
+
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce .woocommerce-mini-cart__buttons .button:not(.checkout):hover {
+    box-shadow: none;
+    transform: none;
+}
+
+/* Dark Mode - Outline variant */
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.aisb-section--dark.woocommerce button.button,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.aisb-section--dark.woocommerce button.button.alt,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.aisb-section--dark.woocommerce a.button,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.aisb-section--dark.woocommerce a.button.alt,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.aisb-section--dark.woocommerce input.button,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.aisb-section--dark.woocommerce .single_add_to_cart_button,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.aisb-section--dark.woocommerce ul.products li.product .button,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.aisb-section--dark.woocommerce ul.products li.product .add_to_cart_button,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce .aisb-section--dark button.button,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce .aisb-section--dark a.button,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce .aisb-section--dark ul.products li.product .button,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce .aisb-section--dark ul.products li.product .add_to_cart_button {
+    box-shadow: none;
+}
+
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.aisb-section--dark.woocommerce button.button:hover,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.aisb-section--dark.woocommerce button.button.alt:hover,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.aisb-section--dark.woocommerce a.button:hover,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.aisb-section--dark.woocommerce a.button.alt:hover,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.aisb-section--dark.woocommerce input.button:hover,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.aisb-section--dark.woocommerce .single_add_to_cart_button:hover,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.aisb-section--dark.woocommerce ul.products li.product .button:hover,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.aisb-section--dark.woocommerce ul.products li.product .add_to_cart_button:hover,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce .aisb-section--dark button.button:hover,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce .aisb-section--dark a.button:hover,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce .aisb-section--dark ul.products li.product .button:hover,
+body.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline.woocommerce .aisb-section--dark ul.products li.product .add_to_cart_button:hover {
+    box-shadow: none;
+    transform: none;
+}
+
+/* ==========================================================================
    Product Cards - Archive/Shop Grid
    Uses plugin's card system for consistent product displays
    ========================================================================== */
@@ -1016,6 +1129,47 @@ body.aisb-neo-brutalist-cards .woocommerce-MyAccount-navigation ul,
 body.aisb-neo-brutalist-cards #reviews .comment-text {
     border: var(--aisb-neo-border-width, 4px) solid var(--wc-border, var(--aisb-color-border, #e5e7eb));
     box-shadow: var(--aisb-neo-shadow-offset, 8px) var(--aisb-neo-shadow-offset, 8px) 0 var(--wc-border, var(--aisb-color-border, #e5e7eb));
+}
+
+/* ==========================================================================
+   Neo-Brutalist OUTLINE Variant - WooCommerce Cards
+   Thick borders without the 3D shadow effect
+   Applied via .aisb-neo-brutalist-cards-outline body class
+   ========================================================================== */
+
+/* Product Cards - Outline variant (borders only, no shadow) */
+body.aisb-neo-brutalist-cards.aisb-neo-brutalist-cards-outline.woocommerce ul.products li.product,
+body.aisb-neo-brutalist-cards.aisb-neo-brutalist-cards-outline.woocommerce-page ul.products li.product {
+    box-shadow: none;
+}
+
+body.aisb-neo-brutalist-cards.aisb-neo-brutalist-cards-outline.woocommerce ul.products li.product:hover,
+body.aisb-neo-brutalist-cards.aisb-neo-brutalist-cards-outline.woocommerce-page ul.products li.product:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+/* Dark Mode Product Cards - Outline variant */
+body.aisb-neo-brutalist-cards.aisb-neo-brutalist-cards-outline.aisb-section--dark.woocommerce ul.products li.product,
+body.aisb-neo-brutalist-cards.aisb-neo-brutalist-cards-outline.aisb-section--dark.woocommerce-page ul.products li.product,
+body.aisb-neo-brutalist-cards.aisb-neo-brutalist-cards-outline.woocommerce .aisb-section--dark ul.products li.product,
+body.aisb-neo-brutalist-cards.aisb-neo-brutalist-cards-outline.woocommerce-page .aisb-section--dark ul.products li.product {
+    box-shadow: none;
+}
+
+body.aisb-neo-brutalist-cards.aisb-neo-brutalist-cards-outline.aisb-section--dark.woocommerce ul.products li.product:hover,
+body.aisb-neo-brutalist-cards.aisb-neo-brutalist-cards-outline.aisb-section--dark.woocommerce-page ul.products li.product:hover,
+body.aisb-neo-brutalist-cards.aisb-neo-brutalist-cards-outline.woocommerce .aisb-section--dark ul.products li.product:hover,
+body.aisb-neo-brutalist-cards.aisb-neo-brutalist-cards-outline.woocommerce-page .aisb-section--dark ul.products li.product:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+/* Other Cards (payment, account nav, reviews) - Outline variant */
+body.aisb-neo-brutalist-cards.aisb-neo-brutalist-cards-outline #payment,
+body.aisb-neo-brutalist-cards.aisb-neo-brutalist-cards-outline .woocommerce-MyAccount-navigation ul,
+body.aisb-neo-brutalist-cards.aisb-neo-brutalist-cards-outline #reviews .comment-text {
+    box-shadow: none;
 }
 
 /* ==========================================================================

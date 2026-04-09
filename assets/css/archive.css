@@ -417,6 +417,17 @@
     box-shadow: var(--aisb-neo-shadow-offset, 8px) var(--aisb-neo-shadow-offset, 8px) 0 var(--aisb-color-dark-border);
 }
 
+/* Neo-Brutalist OUTLINE Variant - Archive Cards
+ * Thick borders without the 3D shadow effect
+ */
+.aisb-neo-brutalist-cards.aisb-neo-brutalist-cards-outline .promptless-archive__grid .aisb-features__item {
+    box-shadow: none;
+}
+
+.aisb-neo-brutalist-cards.aisb-neo-brutalist-cards-outline .promptless-content.aisb-section--dark .promptless-archive__grid .aisb-features__item {
+    box-shadow: none;
+}
+
 .promptless-archive__grid .aisb-features__item-image-wrapper {
     position: relative;
     width: 100%;
@@ -1650,4 +1661,36 @@
 .promptless-content.aisb-section--dark.aisb-neo-brutalist-buttons .comment-form input[type="submit"]:hover {
     transform: translate(1px, 1px);
     box-shadow: var(--aisb-neo-shadow-offset-button-hover, 3px) var(--aisb-neo-shadow-offset-button-hover, 3px) 0 var(--aisb-neo-brutalist-primary-border-dark, #000);
+}
+
+/* ==========================================================================
+   Neo-Brutalist OUTLINE Variant - Comment Form Buttons
+   Thick borders without the 3D shadow effect
+   Applied via .aisb-neo-brutalist-buttons-outline body class
+   ========================================================================== */
+
+/* Comment Submit Button - Outline variant (borders only, no shadow) */
+.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline .comment-form .submit,
+.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline .comment-form input[type="submit"] {
+    box-shadow: none;
+}
+
+/* Comment Submit Button Hover - Outline variant (no animation) */
+.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline .comment-form .submit:hover,
+.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline .comment-form input[type="submit"]:hover {
+    box-shadow: none;
+    transform: none;
+    /* Keep the filter hover effect for visual feedback */
+}
+
+/* Dark Mode - Comment Form Outline variant */
+.promptless-content.aisb-section--dark.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline .comment-form .submit,
+.promptless-content.aisb-section--dark.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline .comment-form input[type="submit"] {
+    box-shadow: none;
+}
+
+.promptless-content.aisb-section--dark.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline .comment-form .submit:hover,
+.promptless-content.aisb-section--dark.aisb-neo-brutalist-buttons.aisb-neo-brutalist-buttons-outline .comment-form input[type="submit"]:hover {
+    box-shadow: none;
+    transform: none;
 }
