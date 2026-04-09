@@ -358,7 +358,7 @@ body.woocommerce-page .aisb-section--dark div.product .product-short-description
     cursor: pointer;
     text-decoration: none;
     transition: all 0.2s ease;
-    line-height: 1.5;
+    line-height: normal; /* Match plugin button height - prevents extra vertical spacing */
 }
 
 /* Product card Add to Cart buttons - Compact size to match Product Grid section */
