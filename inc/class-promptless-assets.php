@@ -55,13 +55,16 @@ class Promptless_Assets {
             PROMPTLESS_THEME_VERSION
         );
 
-        // Archive and content styles (for blog, category, tag, search, single, pages)
-        wp_enqueue_style(
-            'promptless-theme-archive',
-            PROMPTLESS_THEME_URI . '/assets/css/archive.css',
-            array( 'promptless-theme-style' ),
-            PROMPTLESS_THEME_VERSION
-        );
+        // Archive and content styles - only load on pages that need them
+        // This saves ~12KB on non-archive pages (conditional loading for PageSpeed optimization)
+        if ( is_archive() || is_search() || is_singular( 'post' ) || is_home() ) {
+            wp_enqueue_style(
+                'promptless-theme-archive',
+                PROMPTLESS_THEME_URI . '/assets/css/archive.css',
+                array( 'promptless-theme-style' ),
+                PROMPTLESS_THEME_VERSION
+            );
+        }
 
         // WooCommerce styles - only load when WooCommerce is active
         // Follows official WooCommerce theme integration pattern
