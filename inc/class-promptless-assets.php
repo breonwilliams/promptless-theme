@@ -56,8 +56,8 @@ class Promptless_Assets {
         );
 
         // Archive and content styles - only load on pages that need them
-        // This saves ~12KB on non-archive pages (conditional loading for PageSpeed optimization)
-        if ( is_archive() || is_search() || is_singular( 'post' ) || is_home() ) {
+        // This saves ~12KB on the front page (conditional loading for PageSpeed optimization)
+        if ( is_archive() || is_search() || is_singular( 'post' ) || is_home() || is_page() ) {
             wp_enqueue_style(
                 'promptless-theme-archive',
                 PROMPTLESS_THEME_URI . '/assets/css/archive.css',
