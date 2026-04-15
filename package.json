@@ -1,0 +1,17 @@
+{
+  "name": "promptless-theme",
+  "version": "1.0.0",
+  "description": "Promptless WordPress Theme - Build scripts for asset optimization",
+  "private": true,
+  "scripts": {
+    "build:css": "node scripts/build-css.js",
+    "build:js": "node scripts/build-js.js",
+    "build": "npm run build:css && npm run build:js",
+    "watch": "npm run build -- --watch"
+  },
+  "devDependencies": {
+    "cssnano": "^7.0.0",
+    "postcss": "^8.4.35",
+    "terser": "^5.27.0"
+  }
+}

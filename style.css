@@ -3,7 +3,7 @@ Theme Name: Promptless
 Author: Promptless WP
 Author URI: https://promptlesswp.com
 Description: A minimal WordPress theme designed to work seamlessly with the Promptless WP plugin. Inherits colors, typography, and styling from the plugin's Global Settings for a unified brand experience.
-Version: 1.0.9
+Version: 1.1.0
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
@@ -317,4 +317,36 @@ button {
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 1rem;
+}
+
+/* ==========================================================================
+   Page Header Spacing
+   Critical styles that must load on ALL pages (moved from archive.css)
+   Ensures Cart, Checkout, and other standard pages have proper heading spacing
+   ========================================================================== */
+
+.promptless-page__header {
+  padding: var(--aisb-section-space-2xl, 3rem) 0 var(--aisb-section-space-xl, 2rem);
+}
+
+.promptless-page__title {
+  font-family: var(--aisb-section-font-heading, inherit);
+  font-size: var(--aisb-section-text-4xl, 2.5rem);
+  font-weight: var(--aisb-section-font-heading-weight, 700);
+  color: var(--section-text, var(--aisb-color-text, #1f2937));
+  margin: 0;
+  line-height: var(--aisb-section-leading-tight, 1.2);
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+/* Mobile responsive */
+@media (max-width: 640px) {
+  .promptless-page__header {
+    padding: var(--aisb-section-space-xl, 2rem) 0 var(--aisb-section-space-lg, 1.5rem);
+  }
+
+  .promptless-page__title {
+    font-size: var(--aisb-section-text-2xl, 1.75rem);
+  }
 }

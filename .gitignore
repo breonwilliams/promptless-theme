@@ -1,0 +1,20 @@
+# Dependencies
+node_modules/
+
+# Build output
+release/
+
+# System files
+.DS_Store
+Thumbs.db
+*.log
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.AppleDouble
+.LSOverride

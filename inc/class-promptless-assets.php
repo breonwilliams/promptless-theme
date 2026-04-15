@@ -39,39 +39,40 @@ class Promptless_Assets {
             PROMPTLESS_THEME_VERSION
         );
 
-        // Header styles
+        // Header styles (minified for PageSpeed optimization)
         wp_enqueue_style(
             'promptless-theme-header',
-            PROMPTLESS_THEME_URI . '/assets/css/header.css',
+            PROMPTLESS_THEME_URI . '/assets/css/header.min.css',
             array( 'promptless-theme-style' ),
             PROMPTLESS_THEME_VERSION
         );
 
-        // Footer styles
+        // Footer styles (minified for PageSpeed optimization)
         wp_enqueue_style(
             'promptless-theme-footer',
-            PROMPTLESS_THEME_URI . '/assets/css/footer.css',
+            PROMPTLESS_THEME_URI . '/assets/css/footer.min.css',
             array( 'promptless-theme-style' ),
             PROMPTLESS_THEME_VERSION
         );
 
-        // Archive and content styles - only load on pages that need them
-        // This saves ~12KB on the front page (conditional loading for PageSpeed optimization)
-        if ( is_archive() || is_search() || is_singular( 'post' ) || is_home() || is_page() ) {
+        // Archive and content styles - only load on blog/archive pages
+        // EXCLUDED is_page(): Pages using the plugin don't need archive.css (saves ~14KB)
+        // PageSpeed optimization: Reduces unused CSS on landing pages
+        if ( is_archive() || is_search() || is_singular( 'post' ) || is_home() ) {
             wp_enqueue_style(
                 'promptless-theme-archive',
-                PROMPTLESS_THEME_URI . '/assets/css/archive.css',
+                PROMPTLESS_THEME_URI . '/assets/css/archive.min.css',
                 array( 'promptless-theme-style' ),
                 PROMPTLESS_THEME_VERSION
             );
         }
 
         // WooCommerce styles - only load when WooCommerce is active
-        // Follows official WooCommerce theme integration pattern
+        // Follows official WooCommerce theme integration pattern (minified for PageSpeed)
         if ( class_exists( 'WooCommerce' ) ) {
             wp_enqueue_style(
                 'promptless-theme-woocommerce',
-                PROMPTLESS_THEME_URI . '/assets/css/woocommerce.css',
+                PROMPTLESS_THEME_URI . '/assets/css/woocommerce.min.css',
                 array( 'promptless-theme-style', 'woocommerce-general' ),
                 PROMPTLESS_THEME_VERSION
             );
@@ -82,10 +83,10 @@ class Promptless_Assets {
      * Enqueue scripts
      */
     public function enqueue_scripts() {
-        // Navigation script (mobile menu toggle, mini-cart)
+        // Navigation script (mobile menu toggle, mini-cart) - minified for PageSpeed
         wp_enqueue_script(
             'promptless-theme-navigation',
-            PROMPTLESS_THEME_URI . '/assets/js/navigation.js',
+            PROMPTLESS_THEME_URI . '/assets/js/navigation.min.js',
             array(),
             PROMPTLESS_THEME_VERSION,
             true
