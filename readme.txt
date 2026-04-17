@@ -4,7 +4,7 @@ Tags: one-column, custom-logo, custom-menu, featured-images, full-width-template
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -88,6 +88,12 @@ This theme is optimized for the Promptless WP page builder. It may work with oth
 Use the Promptless WP plugin's Canvas display mode, which provides a full-screen layout without the header and footer.
 
 == Changelog ==
+
+= 1.1.1 =
+* Performance: WooCommerce assets now conditionally loaded only on shop pages
+* Performance: Theme WooCommerce CSS only loads when needed (saves ~116KB on non-shop pages)
+* Performance: WooCommerce core scripts/styles dequeued on non-shop pages (saves ~150KB+)
+* Added: New `promptless_needs_woocommerce_assets()` helper function for smart asset detection
 
 = 1.1.0 =
 * Performance: Conditional CSS loading - archive.css only loads on blog/archive pages

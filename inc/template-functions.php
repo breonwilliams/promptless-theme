@@ -888,3 +888,51 @@ function promptless_fix_home_menu_item_classes( $classes, $item, $args ) {
     return $classes;
 }
 add_filter( 'nav_menu_css_class', 'promptless_fix_home_menu_item_classes', 10, 3 );
+
+/**
+ * Check if current page needs WooCommerce assets
+ *
+ * Returns true if:
+ * - Is a WooCommerce page (shop, product, cart, checkout, account)
+ * - Mini-cart is enabled in header
+ * - Page has a productgrid section from Promptless WP
+ *
+ * @since 1.2.0
+ * @return bool
+ */
+function promptless_needs_woocommerce_assets() {
+    // WooCommerce must be active
+    if ( ! class_exists( 'WooCommerce' ) ) {
+        return false;
+    }
+
+    // Always load on WooCommerce pages
+    if ( is_woocommerce() || is_cart() || is_checkout() || is_account_page() ) {
+        return true;
+    }
+
+    // Load if mini-cart is enabled (needs AJAX updates)
+    if ( function_exists( 'promptless_has_header_cart' ) && promptless_has_header_cart() ) {
+        return true;
+    }
+
+    // Check if page has productgrid section
+    global $post;
+    if ( $post ) {
+        $sections = get_post_meta( $post->ID, '_aisb_sections', true );
+
+        if ( is_string( $sections ) ) {
+            $sections = json_decode( $sections, true );
+        }
+
+        if ( is_array( $sections ) ) {
+            foreach ( $sections as $section ) {
+                if ( isset( $section['type'] ) && $section['type'] === 'productgrid' ) {
+                    return true;
+                }
+            }
+        }
+    }
+
+    return false;
+}
