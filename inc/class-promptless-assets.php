@@ -59,7 +59,7 @@ class Promptless_Assets {
         // Archive and content styles - only load on blog/archive pages
         // EXCLUDED is_page(): Pages using the plugin don't need archive.css (saves ~14KB)
         // PageSpeed optimization: Reduces unused CSS on landing pages
-        if ( is_archive() || is_search() || is_singular( 'post' ) || is_home() ) {
+        if ( is_archive() || is_search() || is_singular( 'post' ) || is_home() || is_404() ) {
             wp_enqueue_style(
                 'promptless-theme-archive',
                 PROMPTLESS_THEME_URI . '/assets/css/archive.min.css',
