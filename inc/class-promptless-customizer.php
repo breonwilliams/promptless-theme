@@ -33,13 +33,108 @@ class Promptless_Customizer {
     public function register_customizer_settings( $wp_customize ) {
 
         // =============================================
-        // Theme Settings Section
+        // Panels
         // =============================================
-        $wp_customize->add_section(
-            'promptless_theme_settings',
+
+        // Header Panel
+        $wp_customize->add_panel(
+            'promptless_header_panel',
             array(
-                'title'    => __( 'Theme Settings', 'promptless' ),
+                'title'    => __( 'Header', 'promptless-theme' ),
                 'priority' => 30,
+            )
+        );
+
+        // Top Bar Panel
+        $wp_customize->add_panel(
+            'promptless_topbar_panel',
+            array(
+                'title'    => __( 'Top Bar', 'promptless-theme' ),
+                'priority' => 31,
+            )
+        );
+
+        // Footer Panel
+        $wp_customize->add_panel(
+            'promptless_footer_panel',
+            array(
+                'title'    => __( 'Footer', 'promptless-theme' ),
+                'priority' => 33,
+            )
+        );
+
+        // =============================================
+        // Sections
+        // =============================================
+
+        // Header Appearance Section
+        $wp_customize->add_section(
+            'promptless_header_appearance',
+            array(
+                'title'    => __( 'Header Appearance', 'promptless-theme' ),
+                'panel'    => 'promptless_header_panel',
+                'priority' => 10,
+            )
+        );
+
+        // Navigation Section
+        $wp_customize->add_section(
+            'promptless_header_nav',
+            array(
+                'title'    => __( 'Navigation', 'promptless-theme' ),
+                'panel'    => 'promptless_header_panel',
+                'priority' => 20,
+            )
+        );
+
+        // Header CTA Section
+        $wp_customize->add_section(
+            'promptless_header_cta',
+            array(
+                'title'    => __( 'Header CTA', 'promptless-theme' ),
+                'panel'    => 'promptless_header_panel',
+                'priority' => 30,
+            )
+        );
+
+        // Cart Section (WooCommerce only - added conditionally below)
+
+        // Top Bar Settings Section
+        $wp_customize->add_section(
+            'promptless_topbar_settings',
+            array(
+                'title'    => __( 'Top Bar Settings', 'promptless-theme' ),
+                'panel'    => 'promptless_topbar_panel',
+                'priority' => 10,
+            )
+        );
+
+        // Content Section (standalone, no panel)
+        $wp_customize->add_section(
+            'promptless_content_section',
+            array(
+                'title'    => __( 'Content', 'promptless-theme' ),
+                'priority' => 32,
+            )
+        );
+
+        // Footer Appearance Section
+        $wp_customize->add_section(
+            'promptless_footer_appearance',
+            array(
+                'title'    => __( 'Footer Appearance', 'promptless-theme' ),
+                'panel'    => 'promptless_footer_panel',
+                'priority' => 10,
+            )
+        );
+
+        // Footer Columns Section
+        $wp_customize->add_section(
+            'promptless_footer_columns',
+            array(
+                'title'    => __( 'Footer Columns', 'promptless-theme' ),
+                'panel'    => 'promptless_footer_panel',
+                'priority' => 20,
             )
         );
 
@@ -58,13 +153,13 @@ class Promptless_Customizer {
         $wp_customize->add_control(
             'promptless_header_theme',
             array(
-                'label'       => __( 'Header Theme', 'promptless' ),
-                'description' => __( 'Choose light or dark styling for the header. Colors are inherited from Promptless WP Global Settings.', 'promptless' ),
-                'section'     => 'promptless_theme_settings',
+                'label'       => __( 'Header Theme', 'promptless-theme' ),
+                'description' => __( 'Choose light or dark styling for the header. Colors are inherited from Promptless WP Global Settings.', 'promptless-theme' ),
+                'section'     => 'promptless_header_appearance',
                 'type'        => 'select',
                 'choices'     => array(
-                    'light' => __( 'Light', 'promptless' ),
-                    'dark'  => __( 'Dark', 'promptless' ),
+                    'light' => __( 'Light', 'promptless-theme' ),
+                    'dark'  => __( 'Dark', 'promptless-theme' ),
                 ),
             )
         );
@@ -84,13 +179,13 @@ class Promptless_Customizer {
         $wp_customize->add_control(
             'promptless_footer_theme',
             array(
-                'label'       => __( 'Footer Theme', 'promptless' ),
-                'description' => __( 'Choose light or dark styling for the footer. Colors are inherited from Promptless WP Global Settings.', 'promptless' ),
-                'section'     => 'promptless_theme_settings',
+                'label'       => __( 'Footer Theme', 'promptless-theme' ),
+                'description' => __( 'Choose light or dark styling for the footer. Colors are inherited from Promptless WP Global Settings.', 'promptless-theme' ),
+                'section'     => 'promptless_footer_appearance',
                 'type'        => 'select',
                 'choices'     => array(
-                    'light' => __( 'Light', 'promptless' ),
-                    'dark'  => __( 'Dark', 'promptless' ),
+                    'light' => __( 'Light', 'promptless-theme' ),
+                    'dark'  => __( 'Dark', 'promptless-theme' ),
                 ),
             )
         );
@@ -110,13 +205,13 @@ class Promptless_Customizer {
         $wp_customize->add_control(
             'promptless_content_theme',
             array(
-                'label'       => __( 'Content Theme', 'promptless' ),
-                'description' => __( 'Choose light or dark styling for page content areas.', 'promptless' ),
-                'section'     => 'promptless_theme_settings',
+                'label'       => __( 'Content Theme', 'promptless-theme' ),
+                'description' => __( 'Choose light or dark styling for page content areas.', 'promptless-theme' ),
+                'section'     => 'promptless_content_section',
                 'type'        => 'select',
                 'choices'     => array(
-                    'light' => __( 'Light', 'promptless' ),
-                    'dark'  => __( 'Dark', 'promptless' ),
+                    'light' => __( 'Light', 'promptless-theme' ),
+                    'dark'  => __( 'Dark', 'promptless-theme' ),
                 ),
             )
         );
@@ -136,9 +231,9 @@ class Promptless_Customizer {
         $wp_customize->add_control(
             'promptless_header_cta_text',
             array(
-                'label'       => __( 'Header CTA Text', 'promptless' ),
-                'description' => __( 'Button text for the header call-to-action. Leave empty to hide.', 'promptless' ),
-                'section'     => 'promptless_theme_settings',
+                'label'       => __( 'Header CTA Text', 'promptless-theme' ),
+                'description' => __( 'Button text for the header call-to-action. Leave empty to hide.', 'promptless-theme' ),
+                'section'     => 'promptless_header_cta',
                 'type'        => 'text',
             )
         );
@@ -155,9 +250,9 @@ class Promptless_Customizer {
         $wp_customize->add_control(
             'promptless_header_cta_url',
             array(
-                'label'       => __( 'Header CTA URL', 'promptless' ),
-                'description' => __( 'Link URL for the header call-to-action button.', 'promptless' ),
-                'section'     => 'promptless_theme_settings',
+                'label'       => __( 'Header CTA URL', 'promptless-theme' ),
+                'description' => __( 'Link URL for the header call-to-action button.', 'promptless-theme' ),
+                'section'     => 'promptless_header_cta',
                 'type'        => 'url',
             )
         );
@@ -177,14 +272,14 @@ class Promptless_Customizer {
         $wp_customize->add_control(
             'promptless_nav_position',
             array(
-                'label'       => __( 'Navigation Position', 'promptless' ),
-                'description' => __( 'Align the primary navigation menu within the header.', 'promptless' ),
-                'section'     => 'promptless_theme_settings',
+                'label'       => __( 'Navigation Position', 'promptless-theme' ),
+                'description' => __( 'Align the primary navigation menu within the header.', 'promptless-theme' ),
+                'section'     => 'promptless_header_nav',
                 'type'        => 'select',
                 'choices'     => array(
-                    'left'   => __( 'Left', 'promptless' ),
-                    'center' => __( 'Center', 'promptless' ),
-                    'right'  => __( 'Right', 'promptless' ),
+                    'left'   => __( 'Left', 'promptless-theme' ),
+                    'center' => __( 'Center', 'promptless-theme' ),
+                    'right'  => __( 'Right', 'promptless-theme' ),
                 ),
             )
         );
@@ -204,9 +299,9 @@ class Promptless_Customizer {
         $wp_customize->add_control(
             'promptless_header_border',
             array(
-                'label'       => __( 'Show Header Border', 'promptless' ),
-                'description' => __( 'Display a bottom border on the header.', 'promptless' ),
-                'section'     => 'promptless_theme_settings',
+                'label'       => __( 'Show Header Border', 'promptless-theme' ),
+                'description' => __( 'Display a bottom border on the header.', 'promptless-theme' ),
+                'section'     => 'promptless_header_appearance',
                 'type'        => 'checkbox',
             )
         );
@@ -226,9 +321,9 @@ class Promptless_Customizer {
         $wp_customize->add_control(
             'promptless_header_sticky',
             array(
-                'label'       => __( 'Sticky Header', 'promptless' ),
-                'description' => __( 'Keep the header fixed at the top when scrolling.', 'promptless' ),
-                'section'     => 'promptless_theme_settings',
+                'label'       => __( 'Sticky Header', 'promptless-theme' ),
+                'description' => __( 'Keep the header fixed at the top when scrolling.', 'promptless-theme' ),
+                'section'     => 'promptless_header_appearance',
                 'type'        => 'checkbox',
             )
         );
@@ -248,9 +343,9 @@ class Promptless_Customizer {
         $wp_customize->add_control(
             'promptless_topbar_enabled',
             array(
-                'label'       => __( 'Enable Top Bar', 'promptless' ),
-                'description' => __( 'Display a utility bar above the header with left/right menus.', 'promptless' ),
-                'section'     => 'promptless_theme_settings',
+                'label'       => __( 'Enable Top Bar', 'promptless-theme' ),
+                'description' => __( 'Display a utility bar above the header with left/right menus.', 'promptless-theme' ),
+                'section'     => 'promptless_topbar_settings',
                 'type'        => 'checkbox',
             )
         );
@@ -267,13 +362,13 @@ class Promptless_Customizer {
         $wp_customize->add_control(
             'promptless_topbar_theme',
             array(
-                'label'       => __( 'Top Bar Theme', 'promptless' ),
-                'description' => __( 'Choose light or dark styling for the top bar.', 'promptless' ),
-                'section'     => 'promptless_theme_settings',
+                'label'       => __( 'Top Bar Theme', 'promptless-theme' ),
+                'description' => __( 'Choose light or dark styling for the top bar.', 'promptless-theme' ),
+                'section'     => 'promptless_topbar_settings',
                 'type'        => 'select',
                 'choices'     => array(
-                    'light' => __( 'Light', 'promptless' ),
-                    'dark'  => __( 'Dark', 'promptless' ),
+                    'light' => __( 'Light', 'promptless-theme' ),
+                    'dark'  => __( 'Dark', 'promptless-theme' ),
                 ),
             )
         );
@@ -290,9 +385,9 @@ class Promptless_Customizer {
         $wp_customize->add_control(
             'promptless_topbar_sticky',
             array(
-                'label'       => __( 'Sticky Top Bar', 'promptless' ),
-                'description' => __( 'Keep the top bar fixed when scrolling. Only works when header is also sticky.', 'promptless' ),
-                'section'     => 'promptless_theme_settings',
+                'label'       => __( 'Sticky Top Bar', 'promptless-theme' ),
+                'description' => __( 'Keep the top bar fixed when scrolling. Only works when header is also sticky.', 'promptless-theme' ),
+                'section'     => 'promptless_topbar_settings',
                 'type'        => 'checkbox',
             )
         );
@@ -309,13 +404,13 @@ class Promptless_Customizer {
         $wp_customize->add_control(
             'promptless_topbar_mobile',
             array(
-                'label'       => __( 'Top Bar Mobile Behavior', 'promptless' ),
-                'description' => __( 'Choose how the top bar behaves on mobile devices.', 'promptless' ),
-                'section'     => 'promptless_theme_settings',
+                'label'       => __( 'Top Bar Mobile Behavior', 'promptless-theme' ),
+                'description' => __( 'Choose how the top bar behaves on mobile devices.', 'promptless-theme' ),
+                'section'     => 'promptless_topbar_settings',
                 'type'        => 'select',
                 'choices'     => array(
-                    'hide'     => __( 'Hide on Mobile', 'promptless' ),
-                    'collapse' => __( 'Collapse into Hamburger Menu', 'promptless' ),
+                    'hide'     => __( 'Hide on Mobile', 'promptless-theme' ),
+                    'collapse' => __( 'Collapse into Hamburger Menu', 'promptless-theme' ),
                 ),
             )
         );
@@ -335,9 +430,9 @@ class Promptless_Customizer {
         $wp_customize->add_control(
             'promptless_footer_brand_text',
             array(
-                'label'       => __( 'Footer Brand Description', 'promptless' ),
-                'description' => __( 'Add text, contact info, or links below the logo. Supports basic HTML formatting (bold, italic, links). Leave empty to show site tagline.', 'promptless' ),
-                'section'     => 'promptless_theme_settings',
+                'label'       => __( 'Footer Brand Description', 'promptless-theme' ),
+                'description' => __( 'Add text, contact info, or links below the logo. Supports basic HTML formatting (bold, italic, links). Leave empty to show site tagline.', 'promptless-theme' ),
+                'section'     => 'promptless_footer_appearance',
                 'type'        => 'textarea',
             )
         );
@@ -357,9 +452,9 @@ class Promptless_Customizer {
         $wp_customize->add_control(
             'promptless_footer_col_1_heading',
             array(
-                'label'       => __( 'Footer Column 1 Heading', 'promptless' ),
-                'description' => __( 'Optional heading above Footer Column 1 menu. Leave empty to hide.', 'promptless' ),
-                'section'     => 'promptless_theme_settings',
+                'label'       => __( 'Footer Column 1 Heading', 'promptless-theme' ),
+                'description' => __( 'Optional heading above Footer Column 1 menu. Leave empty to hide.', 'promptless-theme' ),
+                'section'     => 'promptless_footer_columns',
                 'type'        => 'text',
             )
         );
@@ -376,9 +471,9 @@ class Promptless_Customizer {
         $wp_customize->add_control(
             'promptless_footer_col_2_heading',
             array(
-                'label'       => __( 'Footer Column 2 Heading', 'promptless' ),
-                'description' => __( 'Optional heading above Footer Column 2 menu. Leave empty to hide.', 'promptless' ),
-                'section'     => 'promptless_theme_settings',
+                'label'       => __( 'Footer Column 2 Heading', 'promptless-theme' ),
+                'description' => __( 'Optional heading above Footer Column 2 menu. Leave empty to hide.', 'promptless-theme' ),
+                'section'     => 'promptless_footer_columns',
                 'type'        => 'text',
             )
         );
@@ -395,9 +490,9 @@ class Promptless_Customizer {
         $wp_customize->add_control(
             'promptless_footer_col_3_heading',
             array(
-                'label'       => __( 'Footer Column 3 Heading', 'promptless' ),
-                'description' => __( 'Optional heading above Footer Column 3 menu. Leave empty to hide.', 'promptless' ),
-                'section'     => 'promptless_theme_settings',
+                'label'       => __( 'Footer Column 3 Heading', 'promptless-theme' ),
+                'description' => __( 'Optional heading above Footer Column 3 menu. Leave empty to hide.', 'promptless-theme' ),
+                'section'     => 'promptless_footer_columns',
                 'type'        => 'text',
             )
         );
@@ -407,6 +502,16 @@ class Promptless_Customizer {
         // Only show if WooCommerce is active
         // =============================================
         if ( class_exists( 'WooCommerce' ) ) {
+            // Cart Section (WooCommerce only)
+            $wp_customize->add_section(
+                'promptless_header_cart',
+                array(
+                    'title'    => __( 'Cart', 'promptless-theme' ),
+                    'panel'    => 'promptless_header_panel',
+                    'priority' => 40,
+                )
+            );
+
             // Enable cart icon toggle
             $wp_customize->add_setting(
                 'promptless_header_cart_enabled',
@@ -420,9 +525,9 @@ class Promptless_Customizer {
             $wp_customize->add_control(
                 'promptless_header_cart_enabled',
                 array(
-                    'label'       => __( 'Show Cart Icon', 'promptless' ),
-                    'description' => __( 'Display a shopping cart icon in the header.', 'promptless' ),
-                    'section'     => 'promptless_theme_settings',
+                    'label'       => __( 'Show Cart Icon', 'promptless-theme' ),
+                    'description' => __( 'Display a shopping cart icon in the header.', 'promptless-theme' ),
+                    'section'     => 'promptless_header_cart',
                     'type'        => 'checkbox',
                 )
             );
@@ -440,13 +545,13 @@ class Promptless_Customizer {
             $wp_customize->add_control(
                 'promptless_header_cart_style',
                 array(
-                    'label'       => __( 'Cart Icon Behavior', 'promptless' ),
-                    'description' => __( 'Choose whether the cart icon opens a mini-cart dropdown or links directly to the cart page.', 'promptless' ),
-                    'section'     => 'promptless_theme_settings',
+                    'label'       => __( 'Cart Icon Behavior', 'promptless-theme' ),
+                    'description' => __( 'Choose whether the cart icon opens a mini-cart dropdown or links directly to the cart page.', 'promptless-theme' ),
+                    'section'     => 'promptless_header_cart',
                     'type'        => 'select',
                     'choices'     => array(
-                        'dropdown' => __( 'Mini-Cart Dropdown', 'promptless' ),
-                        'link'     => __( 'Link to Cart Page', 'promptless' ),
+                        'dropdown' => __( 'Mini-Cart Dropdown', 'promptless-theme' ),
+                        'link'     => __( 'Link to Cart Page', 'promptless-theme' ),
                     ),
                 )
             );
