@@ -1219,6 +1219,8 @@
 
 /* ==========================================================================
    Page Content
+   Note: Critical bottom padding is now in style.css to load on ALL pages
+   (including standard WordPress pages that don't load archive.css)
    ========================================================================== */
 
 .promptless-page__content {

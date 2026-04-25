@@ -350,3 +350,19 @@ button {
     font-size: var(--aisb-section-text-2xl, 1.75rem);
   }
 }
+
+/* ==========================================================================
+   Page Content Spacing
+   Critical styles that must load on ALL pages (moved from archive.css)
+   Ensures proper spacing between content and footer on all pages
+   ========================================================================== */
+
+.promptless-page__content {
+  padding-bottom: var(--aisb-section-space-2xl, 3rem);
+}
+
+@media (max-width: 640px) {
+  .promptless-page__content {
+    padding-bottom: var(--aisb-section-space-xl, 2rem);
+  }
+}
