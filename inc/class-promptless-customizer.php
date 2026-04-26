@@ -67,6 +67,16 @@ class Promptless_Customizer {
         // Sections
         // =============================================
 
+        // Header Layout Section (first in Header panel)
+        $wp_customize->add_section(
+            'promptless_header_layout_section',
+            array(
+                'title'    => __( 'Header Layout', 'promptless-theme' ),
+                'panel'    => 'promptless_header_panel',
+                'priority' => 5,
+            )
+        );
+
         // Header Appearance Section
         $wp_customize->add_section(
             'promptless_header_appearance',
@@ -135,6 +145,32 @@ class Promptless_Customizer {
                 'title'    => __( 'Footer Columns', 'promptless-theme' ),
                 'panel'    => 'promptless_footer_panel',
                 'priority' => 20,
+            )
+        );
+
+        // =============================================
+        // Header Layout Setting
+        // =============================================
+        $wp_customize->add_setting(
+            'promptless_header_layout',
+            array(
+                'default'           => 'default',
+                'sanitize_callback' => array( $this, 'sanitize_header_layout' ),
+                'transport'         => 'refresh',
+            )
+        );
+
+        $wp_customize->add_control(
+            'promptless_header_layout',
+            array(
+                'label'       => __( 'Header Layout', 'promptless-theme' ),
+                'description' => __( 'Choose the header layout style.', 'promptless-theme' ),
+                'section'     => 'promptless_header_layout_section',
+                'type'        => 'select',
+                'choices'     => array(
+                    'default' => __( 'Default (Single Row)', 'promptless-theme' ),
+                    'stacked' => __( 'Stacked (Two Rows)', 'promptless-theme' ),
+                ),
             )
         );
 
@@ -630,5 +666,21 @@ class Promptless_Customizer {
         }
 
         return 'hide';
+    }
+
+    /**
+     * Sanitize header layout setting
+     *
+     * @param string $value Setting value.
+     * @return string Sanitized value.
+     */
+    public function sanitize_header_layout( $value ) {
+        $valid = array( 'default', 'stacked' );
+
+        if ( in_array( $value, $valid, true ) ) {
+            return $value;
+        }
+
+        return 'default';
     }
 }

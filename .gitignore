@@ -5,6 +5,9 @@ node_modules/
 release/
 create-release.sh
 
+# Testing
+tests/
+
 # System files
 .DS_Store
 Thumbs.db

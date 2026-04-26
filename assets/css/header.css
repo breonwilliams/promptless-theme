@@ -1500,3 +1500,281 @@ body.woocommerce-checkout .promptless-header__mini-cart .promptless-cart-item__r
         color: var(--aisb-smart-dark-section-link, var(--section-primary));
     }
 }
+
+/* ==========================================================================
+   LAYOUT VARIANT: Stacked
+   Row 1 in header: Logo + Actions
+   Row 2 as separate <nav>: Centered Navigation (see SEPARATED NAV BAR below)
+
+   Desktop: Header shows logo/actions, nav bar below is separate element
+   Mobile: Nav bar hidden, navigation moves to hamburger drawer
+   ========================================================================== */
+
+.promptless-header--layout-stacked .promptless-header__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.promptless-header--layout-stacked .promptless-header__row--primary {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+}
+
+/* ==========================================================================
+   STACKED LAYOUT: Mobile-Only Nav Wrapper
+
+   For stacked layouts, we need a nav wrapper INSIDE the header for the
+   mobile hamburger menu. This wrapper is:
+   - Hidden on desktop (separate nav bar shows instead)
+   - Visible on mobile (becomes the hamburger menu drawer)
+   ========================================================================== */
+
+/* Desktop: Hide the internal mobile-only nav wrapper */
+@media (min-width: 768px) {
+    .promptless-header--layout-stacked .promptless-header__nav-wrapper--mobile-only {
+        display: none;
+    }
+}
+
+/* Mobile: Inherits existing .promptless-header__nav-wrapper styles
+   No additional rules needed - automatic dropdown positioning */
+
+/* ==========================================================================
+   STACKED LAYOUT: SEPARATED NAV BAR
+
+   For stacked layouts, the nav bar is a separate <nav> element outside the
+   header. This enables proper sticky positioning when sticky is enabled,
+   because CSS position:sticky only works relative to the viewport when the
+   element is not constrained by its parent's bounds.
+
+   Structure:
+   <header class="promptless-header promptless-header--layout-stacked">
+     <div class="promptless-container">
+       <div class="row--primary">Logo + Actions</div>
+     </div>
+   </header>
+   <nav class="promptless-header-nav">              ← Always outside header
+     <div class="promptless-container">
+       Navigation content
+     </div>
+   </nav>
+
+   Benefits:
+   - Reduces sticky header real estate (~40px saved)
+   - Common professional pattern (used by major sites)
+   - More viewport space for content
+   - Proper sticky behavior that actually works
+
+   Behavior:
+   - Desktop: Header scrolls away, nav sticks (when sticky enabled)
+   - Mobile: Nav bar hidden, content moves to hamburger drawer
+   ========================================================================== */
+
+/* Base nav bar styles */
+.promptless-header-nav {
+    position: relative;
+    z-index: 99;  /* Below header (100) so cart dropdown (200) appears above */
+    background-color: var(--section-bg);
+    /* No border-top - header already has border-bottom to avoid double border */
+    border-bottom: 1px solid var(--section-border);
+}
+
+/* No border variant (controlled by header border setting) */
+.promptless-header-nav--no-border {
+    border-bottom: none;
+}
+
+/* Theme variants - Light */
+.promptless-header-nav.aisb-section--light {
+    --section-bg: var(--aisb-color-background, #ffffff);
+    --section-surface: var(--aisb-color-surface, #f9fafb);
+    --section-text: var(--aisb-color-text, #1f2937);
+    --section-text-muted: var(--aisb-color-text-muted, #6b7280);
+    --section-border: var(--aisb-color-border, #e5e7eb);
+    --section-primary: var(--aisb-color-primary, #6366f1);
+}
+
+/* Theme variants - Dark */
+.promptless-header-nav.aisb-section--dark {
+    --section-bg: var(--aisb-color-dark-background, #111827);
+    --section-surface: var(--aisb-color-dark-surface, #1f2937);
+    --section-text: var(--aisb-color-dark-text, #f9fafb);
+    --section-text-muted: var(--aisb-color-dark-text-muted, #9ca3af);
+    --section-border: var(--aisb-color-dark-border, #374151);
+    --section-primary: var(--aisb-color-primary, #6366f1);
+}
+
+/* Nav wrapper layout */
+.promptless-header-nav .promptless-header__nav-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 0.5rem 0;
+}
+
+/* Nav position variants */
+.promptless-header-nav--left .promptless-header__nav-wrapper {
+    justify-content: flex-start;
+}
+
+.promptless-header-nav--center .promptless-header__nav-wrapper {
+    justify-content: center;
+}
+
+.promptless-header-nav--right .promptless-header__nav-wrapper {
+    justify-content: flex-end;
+}
+
+/* Desktop: Show navigation */
+@media (min-width: 768px) {
+    .promptless-header-nav .promptless-header__nav {
+        display: block;
+    }
+}
+
+/* Sticky behavior (when header sticky is enabled) */
+.promptless-header-nav--sticky {
+    position: sticky;
+    top: 0;
+    z-index: 99;  /* Below header (100) so cart dropdown (200) appears above */
+}
+
+/* Account for sticky top bar */
+.promptless-topbar--sticky ~ .promptless-header-nav--sticky {
+    top: var(--topbar-height, 0);
+}
+
+/* Admin bar offsets */
+.admin-bar .promptless-header-nav--sticky {
+    top: 32px;
+}
+
+.admin-bar .promptless-topbar--sticky ~ .promptless-header-nav--sticky {
+    top: calc(32px + var(--topbar-height, 0));
+}
+
+@media (max-width: 782px) {
+    .admin-bar .promptless-header-nav--sticky {
+        top: 46px;
+    }
+
+    .admin-bar .promptless-topbar--sticky ~ .promptless-header-nav--sticky {
+        top: calc(46px + var(--topbar-height, 0));
+    }
+}
+
+/* Mobile: Hide nav bar (navigation moves to hamburger drawer) */
+@media (max-width: 767px) {
+    .promptless-header-nav {
+        display: none;
+    }
+}
+
+/* ==========================================================================
+   STACKED NAV BAR: HIGH-SPECIFICITY LINK OVERRIDES
+   Same pattern as header navigation - override plugin link colors
+   ========================================================================== */
+
+/* Light mode navigation - base state */
+.promptless-header-nav.aisb-section--light .promptless-header__nav-list a[href][href][href][href][href][href][href][href] {
+    color: var(--section-text);
+    text-decoration: none;
+}
+
+/* Light mode navigation - hover/focus-visible */
+.promptless-header-nav.aisb-section--light .promptless-header__nav-list a[href][href][href][href][href][href][href][href]:hover,
+.promptless-header-nav.aisb-section--light .promptless-header__nav-list a[href][href][href][href][href][href][href][href]:focus-visible {
+    color: var(--aisb-smart-light-section-link, var(--section-primary));
+    text-decoration: none;
+}
+
+/* Light mode navigation - current item */
+.promptless-header-nav.aisb-section--light .promptless-header__nav-list .current-menu-item > a[href][href][href][href][href][href][href][href],
+.promptless-header-nav.aisb-section--light .promptless-header__nav-list .current_page_item > a[href][href][href][href][href][href][href][href] {
+    color: var(--aisb-smart-light-section-link, var(--section-primary));
+}
+
+/* Dark mode navigation - base state */
+.promptless-header-nav.aisb-section--dark .promptless-header__nav-list a[href][href][href][href][href][href][href][href] {
+    color: var(--section-text);
+    text-decoration: none;
+}
+
+/* Dark mode navigation - hover/focus-visible */
+.promptless-header-nav.aisb-section--dark .promptless-header__nav-list a[href][href][href][href][href][href][href][href]:hover,
+.promptless-header-nav.aisb-section--dark .promptless-header__nav-list a[href][href][href][href][href][href][href][href]:focus-visible {
+    color: var(--aisb-smart-dark-section-link, var(--section-primary));
+    text-decoration: none;
+}
+
+/* Dark mode navigation - current item */
+.promptless-header-nav.aisb-section--dark .promptless-header__nav-list .current-menu-item > a[href][href][href][href][href][href][href][href],
+.promptless-header-nav.aisb-section--dark .promptless-header__nav-list .current_page_item > a[href][href][href][href][href][href][href][href] {
+    color: var(--aisb-smart-dark-section-link, var(--section-primary));
+}
+
+/* ==========================================================================
+   STACKED NAV BAR: DROPDOWN CHEVRONS
+   Copy of header chevron styles for the separated nav bar
+   ========================================================================== */
+
+@media (min-width: 768px) {
+    /* Parent link layout for chevron alignment */
+    .promptless-header-nav .promptless-header__nav-list > .menu-item-has-children > a {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+
+    /* Chevron indicator using mask-image technique */
+    .promptless-header-nav .promptless-header__nav-list > .menu-item-has-children > a::after {
+        content: '';
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        background-color: var(--section-text);
+        -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none'%3E%3Cpath d='M3 4.5L6 7.5L9 4.5' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+        -webkit-mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none'%3E%3Cpath d='M3 4.5L6 7.5L9 4.5' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+        mask-size: contain;
+        mask-repeat: no-repeat;
+        mask-position: center;
+        opacity: 0.5;
+        transition: transform 0.2s ease, opacity 0.2s ease, background-color 0.2s ease;
+        flex-shrink: 0;
+    }
+
+    /* Hover/focus state */
+    .promptless-header-nav .promptless-header__nav-list > .menu-item-has-children > a:hover::after,
+    .promptless-header-nav .promptless-header__nav-list > .menu-item-has-children > a:focus::after {
+        opacity: 0.7;
+    }
+
+    /* Rotate chevron when submenu is open */
+    .promptless-header-nav .promptless-header__nav-list > .menu-item-has-children:hover > a::after,
+    .promptless-header-nav .promptless-header__nav-list > .menu-item-has-children:focus-within > a::after {
+        transform: rotate(180deg);
+        opacity: 0.7;
+    }
+}
+
+/* Chevron theme variant overrides */
+.promptless-header-nav.aisb-section--light .promptless-header__nav-list > .menu-item-has-children > a::after {
+    background-color: var(--section-text);
+}
+
+.promptless-header-nav.aisb-section--light .promptless-header__nav-list > .menu-item-has-children > a:hover::after,
+.promptless-header-nav.aisb-section--light .promptless-header__nav-list > .menu-item-has-children > a:focus::after {
+    background-color: var(--aisb-smart-light-section-link, var(--section-primary));
+}
+
+.promptless-header-nav.aisb-section--dark .promptless-header__nav-list > .menu-item-has-children > a::after {
+    background-color: var(--section-text);
+}
+
+.promptless-header-nav.aisb-section--dark .promptless-header__nav-list > .menu-item-has-children > a:hover::after,
+.promptless-header-nav.aisb-section--dark .promptless-header__nav-list > .menu-item-has-children > a:focus::after {
+    background-color: var(--aisb-smart-dark-section-link, var(--section-primary));
+}

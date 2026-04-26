@@ -365,6 +365,15 @@ function promptless_get_nav_position() {
 }
 
 /**
+ * Get the header layout setting
+ *
+ * @return string 'default' or 'stacked'
+ */
+function promptless_get_header_layout() {
+    return get_theme_mod( 'promptless_header_layout', 'default' );
+}
+
+/**
  * Check if header border should be displayed
  *
  * @return bool True if header border is enabled.
@@ -390,11 +399,15 @@ function promptless_is_header_sticky() {
 function promptless_get_header_classes() {
     $classes = array( 'promptless-header' );
     $theme   = promptless_get_header_theme();
+    $layout  = promptless_get_header_layout();
 
     // Add theme variant class (same pattern as plugin sections)
     $classes[] = 'aisb-section--' . esc_attr( $theme );
 
-    // Add navigation position class
+    // Add layout class
+    $classes[] = 'promptless-header--layout-' . esc_attr( $layout );
+
+    // Navigation position applies to both layouts
     $nav_position = promptless_get_nav_position();
     $classes[]    = 'promptless-header--nav-' . esc_attr( $nav_position );
 
@@ -404,8 +417,41 @@ function promptless_get_header_classes() {
     }
 
     // Sticky (sticky class when enabled)
-    if ( promptless_is_header_sticky() ) {
+    // For stacked layouts, sticky applies to the separate nav element, not the header
+    if ( promptless_is_header_sticky() && 'stacked' !== $layout ) {
         $classes[] = 'promptless-header--sticky';
+    }
+
+    return implode( ' ', $classes );
+}
+
+/**
+ * Get header nav CSS classes for stacked layout
+ *
+ * Used for the separate nav element that appears outside the header
+ * when using the stacked layout variant.
+ *
+ * @return string CSS classes for header nav element
+ */
+function promptless_get_header_nav_classes() {
+    $classes = array();
+
+    // Theme variant (same as header)
+    $theme     = promptless_get_header_theme();
+    $classes[] = 'aisb-section--' . esc_attr( $theme );
+
+    // Nav position
+    $nav_position = promptless_get_nav_position();
+    $classes[]    = 'promptless-header-nav--' . esc_attr( $nav_position );
+
+    // Sticky (when header sticky is enabled, nav bar becomes sticky)
+    if ( promptless_is_header_sticky() ) {
+        $classes[] = 'promptless-header-nav--sticky';
+    }
+
+    // Border (match header border setting)
+    if ( ! promptless_has_header_border() ) {
+        $classes[] = 'promptless-header-nav--no-border';
     }
 
     return implode( ' ', $classes );
