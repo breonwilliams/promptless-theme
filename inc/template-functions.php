@@ -418,8 +418,14 @@ function promptless_get_header_classes() {
 
     // Sticky (sticky class when enabled)
     // For stacked layouts, sticky applies to the separate nav element, not the header
-    if ( promptless_is_header_sticky() && 'stacked' !== $layout ) {
-        $classes[] = 'promptless-header--sticky';
+    // But we still add a modifier class so CSS can make header sticky on mobile
+    if ( promptless_is_header_sticky() ) {
+        if ( 'stacked' !== $layout ) {
+            $classes[] = 'promptless-header--sticky';
+        } else {
+            // Stacked layout: add modifier for mobile sticky (CSS handles breakpoint)
+            $classes[] = 'promptless-header--sticky-mobile';
+        }
     }
 
     return implode( ' ', $classes );

@@ -1668,6 +1668,18 @@ body.woocommerce-checkout .promptless-header__mini-cart .promptless-cart-item__r
     .promptless-header-nav {
         display: none;
     }
+
+    /* Stacked layout: Make header sticky on mobile when nav bar is hidden */
+    .promptless-header--sticky-mobile {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
+
+    /* Admin bar offset for mobile sticky header (stacked layout) */
+    .admin-bar .promptless-header--sticky-mobile {
+        top: 46px;
+    }
 }
 
 /* ==========================================================================
