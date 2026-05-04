@@ -4,7 +4,7 @@ Tags: one-column, custom-logo, custom-menu, featured-images, full-width-template
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.1.3
+Stable tag: 1.1.4
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -88,6 +88,10 @@ This theme is optimized for the Promptless WP page builder. It may work with oth
 Use the Promptless WP plugin's Canvas display mode, which provides a full-screen layout without the header and footer.
 
 == Changelog ==
+
+= 1.1.4 =
+* Added: Color mode options for stacked header variant
+* Fixed: Sticky menu for stacked header
 
 = 1.1.3 =
 * Added: New stacked header variant layout option
