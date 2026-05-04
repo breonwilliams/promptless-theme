@@ -347,6 +347,24 @@ function promptless_get_header_theme() {
 }
 
 /**
+ * Get the navigation bar theme variant setting
+ *
+ * For stacked layouts only. Falls back to header theme if not set.
+ *
+ * @return string 'light' or 'dark'
+ */
+function promptless_get_header_nav_theme() {
+    $nav_theme = get_theme_mod( 'promptless_header_nav_theme', '' );
+
+    // If empty (inherit) or not stacked layout, use header theme
+    if ( empty( $nav_theme ) || 'stacked' !== promptless_get_header_layout() ) {
+        return promptless_get_header_theme();
+    }
+
+    return $nav_theme;
+}
+
+/**
  * Get the footer theme variant setting
  *
  * @return string 'light' or 'dark'
@@ -442,8 +460,8 @@ function promptless_get_header_classes() {
 function promptless_get_header_nav_classes() {
     $classes = array();
 
-    // Theme variant (same as header)
-    $theme     = promptless_get_header_theme();
+    // Theme variant (may differ from header in stacked layout)
+    $theme     = promptless_get_header_nav_theme();
     $classes[] = 'aisb-section--' . esc_attr( $theme );
 
     // Nav position

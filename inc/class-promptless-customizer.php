@@ -201,6 +201,34 @@ class Promptless_Customizer {
         );
 
         // =============================================
+        // Navigation Bar Theme (Stacked Layout Only)
+        // =============================================
+        $wp_customize->add_setting(
+            'promptless_header_nav_theme',
+            array(
+                'default'           => '',
+                'sanitize_callback' => array( $this, 'sanitize_nav_theme_variant' ),
+                'transport'         => 'refresh',
+            )
+        );
+
+        $wp_customize->add_control(
+            'promptless_header_nav_theme',
+            array(
+                'label'           => __( 'Navigation Bar Theme', 'promptless-theme' ),
+                'description'     => __( 'Choose light or dark styling for the navigation bar. Only applies to stacked layout.', 'promptless-theme' ),
+                'section'         => 'promptless_header_appearance',
+                'type'            => 'select',
+                'choices'         => array(
+                    ''      => __( 'Same as Header', 'promptless-theme' ),
+                    'light' => __( 'Light', 'promptless-theme' ),
+                    'dark'  => __( 'Dark', 'promptless-theme' ),
+                ),
+                'active_callback' => array( $this, 'is_stacked_layout' ),
+            )
+        );
+
+        // =============================================
         // Footer Theme Variant
         // =============================================
         $wp_customize->add_setting(
@@ -682,5 +710,31 @@ class Promptless_Customizer {
         }
 
         return 'default';
+    }
+
+    /**
+     * Check if stacked header layout is selected
+     *
+     * @param WP_Customize_Control $control Current control.
+     * @return bool True if stacked layout is selected.
+     */
+    public function is_stacked_layout( $control ) {
+        return 'stacked' === $control->manager->get_setting( 'promptless_header_layout' )->value();
+    }
+
+    /**
+     * Sanitize navigation theme variant setting
+     *
+     * @param string $value Setting value.
+     * @return string Sanitized value.
+     */
+    public function sanitize_nav_theme_variant( $value ) {
+        $valid = array( '', 'light', 'dark' );
+
+        if ( in_array( $value, $valid, true ) ) {
+            return $value;
+        }
+
+        return '';
     }
 }
