@@ -26,6 +26,14 @@ class Promptless_Assets {
         add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
         add_action( 'wp_enqueue_scripts', array( $this, 'maybe_dequeue_woocommerce_assets' ), 99 );
         add_action( 'customize_preview_init', array( $this, 'enqueue_customizer_preview_scripts' ) );
+
+        // Inject the user's plugin global-setting colors as CSS variables
+        // into the block editor iframe, so editor-style.css's `var()` calls
+        // resolve to the same values the front end is using. Without this
+        // the editor preview falls back to the hardcoded defaults baked
+        // into editor-style.css and stops reflecting Global Settings
+        // changes the moment they're saved.
+        add_filter( 'block_editor_settings_all', array( $this, 'inject_editor_iframe_tokens' ), 10, 1 );
     }
 
     /**
@@ -159,5 +167,107 @@ class Promptless_Assets {
         wp_dequeue_script( 'jquery-blockui' );
         wp_dequeue_script( 'wc-order-attribution' );
         wp_dequeue_script( 'sourcebuster-js' );
+    }
+
+    /**
+     * Inject the user's plugin global-setting colors as CSS variables
+     * into the block editor iframe.
+     *
+     * The block editor renders blocks inside an iframe. CSS variables
+     * declared at `:root` in the parent document don't cascade through
+     * iframe boundaries, so the editor preview otherwise can't see the
+     * user's custom palette — `editor-style.css` would always fall back
+     * to its hardcoded defaults.
+     *
+     * The `block_editor_settings_all` filter is the WordPress 6.0+
+     * supported way to push CSS into the editor iframe. Each entry in
+     * `$settings['styles']` becomes a `<style>` tag inside the iframe.
+     *
+     * Reads global settings via `Promptless_Integration::get_global_settings()`,
+     * which already handles the plugin-not-active case (returns the
+     * theme's local defaults). So this works whether the plugin is
+     * active or not — the editor preview is consistent with whatever
+     * the front-end would render.
+     *
+     * Scoped to `.editor-styles-wrapper` (the iframe's body class) rather
+     * than `:root` so the variables apply specifically to the editor
+     * content area without leaking to the editor chrome (toolbars,
+     * sidebars, etc.) which uses its own --aisb-editor-* token system.
+     *
+     * @param array $settings Block editor settings array.
+     * @return array Modified settings with our CSS injected.
+     * @since 1.1.5
+     */
+    public function inject_editor_iframe_tokens( $settings ) {
+        // Defensive: integration class may not be loaded in edge cases
+        // (e.g. very early hook fires). Bail silently — editor will use
+        // editor-style.css fallbacks.
+        if ( ! class_exists( 'Promptless_Integration' ) ) {
+            return $settings;
+        }
+
+        $integration = new Promptless_Integration();
+        $settings_data = $integration->get_global_settings();
+
+        // The 8 tokens editor-style.css consumes via var(). Keep this
+        // list narrow — every key here is a user-visible editor preview
+        // surface, and every key NOT here just uses the hardcoded
+        // fallback in editor-style.css. Adding a new key requires
+        // updating both this list AND the corresponding var() call site.
+        $css_var_map = array(
+            '--aisb-color-primary'           => 'primary_color',
+            '--aisb-color-text'              => 'text_color',
+            '--aisb-color-text-muted'        => 'muted_text_color',
+            '--aisb-color-background'        => 'background_color',
+            '--aisb-color-surface'           => 'surface_color',
+            '--aisb-color-border'            => 'border_color',
+            '--aisb-section-font-heading'    => 'heading_font',
+            '--aisb-section-font-body'       => 'body_font',
+        );
+
+        $declarations = array();
+        foreach ( $css_var_map as $css_var => $settings_key ) {
+            if ( isset( $settings_data[ $settings_key ] ) && '' !== $settings_data[ $settings_key ] ) {
+                // Hex color values come from a controlled list (plugin or
+                // theme defaults) but are still user-influenceable, so
+                // sanitize per type. Font family values may include
+                // commas and quotes legitimately.
+                $value = $settings_data[ $settings_key ];
+                if ( false !== strpos( $css_var, 'color' ) ) {
+                    $value = sanitize_hex_color( $value );
+                    if ( ! $value ) {
+                        continue; // skip invalid hex
+                    }
+                }
+                $declarations[] = sprintf(
+                    '    %s: %s;',
+                    esc_attr( $css_var ),
+                    // Font values: escape any closing-brace / angle-bracket characters
+                    // that could break out of the <style> tag. Hex colors above are
+                    // already validated by sanitize_hex_color so this is belt-and-suspenders.
+                    esc_attr( $value )
+                );
+            }
+        }
+
+        // Bail if we have nothing to inject (e.g. plugin inactive AND
+        // theme integration class returned nothing valid). The editor
+        // will use editor-style.css fallbacks.
+        if ( empty( $declarations ) ) {
+            return $settings;
+        }
+
+        $css = ".editor-styles-wrapper {\n" . implode( "\n", $declarations ) . "\n}\n";
+
+        // The `styles` array is the documented place for editor-iframe
+        // CSS injection in WP 6.0+. Each entry creates a <style> inside
+        // the iframe — not a separate stylesheet request, so no extra
+        // HTTP roundtrip and no caching considerations.
+        if ( ! isset( $settings['styles'] ) || ! is_array( $settings['styles'] ) ) {
+            $settings['styles'] = array();
+        }
+        $settings['styles'][] = array( 'css' => $css );
+
+        return $settings;
     }
 }

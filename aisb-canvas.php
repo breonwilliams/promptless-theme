@@ -1,13 +1,20 @@
 <?php
 /**
- * Promptless WP - Canvas Template
+ * Promptless WP — Canvas Template
  *
- * This template provides a completely blank canvas for sections.
- * No theme header, footer, or any theme markup - just the sections.
- * Perfect for landing pages, coming soon pages, etc.
+ * Provides a completely blank canvas for plugin sections. No theme header
+ * or footer — sections render in a viewport-filling main element. Ideal
+ * for landing pages, coming-soon pages, and anywhere chrome would
+ * compete with the section design.
  *
- * Note: When this theme template exists, the plugin will use it
- * instead of its own template (via locate_template()).
+ * Note: when this theme template exists, the plugin uses it instead of
+ * its own template (via `locate_template()`).
+ *
+ * The PLUGIN INTEGRATION boundary (sections fetch + SectionRenderer
+ * lifecycle + admin error handling + version compat checking) lives in
+ * `Promptless_Plugin_Bridge`. This template just wires page chrome around
+ * one bridge call so future plugin API changes touch one file, not every
+ * template that renders sections.
  *
  * @package Promptless_Theme
  * @since 1.0.0
@@ -17,37 +24,6 @@
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
-
-// Get sections data
-$post_id      = get_the_ID();
-$sections_raw = get_post_meta( $post_id, '_aisb_sections', true );
-
-// Validate and decode sections with error handling
-if ( empty( $sections_raw ) ) {
-    $sections = array();
-} elseif ( is_array( $sections_raw ) ) {
-    // Already an array (from filter or direct storage)
-    $sections = $sections_raw;
-} elseif ( is_string( $sections_raw ) ) {
-    // Decode JSON string with error handling
-    $sections = json_decode( $sections_raw, true );
-
-    // Check for JSON decode errors
-    if ( json_last_error() !== JSON_ERROR_NONE ) {
-        $sections = array();
-    }
-} else {
-    // Unknown format - use empty array
-    $sections = array();
-}
-
-// Ensure sections is an array after all processing
-if ( ! is_array( $sections ) ) {
-    $sections = array();
-}
-
-// Apply filter to allow preview mode to override sections
-$sections = apply_filters( 'aisb_get_sections', $sections, $post_id );
 ?>
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>
@@ -65,58 +41,7 @@ $sections = apply_filters( 'aisb_get_sections', $sections, $post_id );
 
     <main id="main-content" class="site-main promptless-canvas__content">
         <div id="aisb-canvas-wrapper" class="aisb-canvas-wrapper">
-            <?php
-            if ( ! empty( $sections ) && is_array( $sections ) ) {
-                try {
-                    $renderer = new \AISB\Modern\Core\SectionRenderer();
-
-                    // Render all sections (CSS will be collected internally)
-                    $sections_html = '';
-                    foreach ( $sections as $section_index => $section ) {
-                        // Skip invalid section entries
-                        if ( ! is_array( $section ) ) {
-                            continue;
-                        }
-                        $sections_html .= $renderer->render_section( $section, $section_index, $post_id );
-                    }
-
-                    // Get collected CSS from all sections
-                    $collected_css = $renderer->get_collected_css();
-
-                    // Output consolidated CSS if any was collected
-                    if ( ! empty( $collected_css ) ) {
-                        echo '<style id="aisb-custom-css-' . esc_attr( $post_id ) . '">';
-                        echo $collected_css;
-                        echo '</style>';
-                    }
-
-                    // Output the rendered sections
-                    echo $sections_html;
-
-                    // Clear collected CSS for next render
-                    $renderer->clear_collected_css();
-                } catch ( Exception $e ) {
-                    // Show error message only to admins
-                    if ( current_user_can( 'edit_posts' ) ) {
-                        echo '<div style="padding: 20px; background: #fff3cd; border: 1px solid #ffc107; margin: 20px; border-radius: 4px;">';
-                        echo '<strong>' . esc_html__( 'Promptless WP Error:', 'promptless' ) . '</strong> ' . esc_html__( 'Unable to render sections. Please check the error logs.', 'promptless' );
-                        echo '</div>';
-                    }
-                }
-            } else {
-                // Show placeholder in admin preview
-                if ( current_user_can( 'edit_posts' ) ) {
-                    ?>
-                    <div style="padding: 60px 20px; text-align: center; background: var(--aisb-color-surface, #f5f5f5); min-height: 100vh; display: flex; align-items: center; justify-content: center;">
-                        <div>
-                            <h2><?php esc_html_e( 'Promptless WP - Canvas Mode', 'promptless' ); ?></h2>
-                            <p><?php esc_html_e( 'No sections added yet. Use the editor to add sections to this page.', 'promptless' ); ?></p>
-                        </div>
-                    </div>
-                    <?php
-                }
-            }
-            ?>
+            <?php Promptless_Plugin_Bridge::render_sections( get_the_ID(), __( 'Canvas Mode', 'promptless' ) ); ?>
         </div>
     </main>
 

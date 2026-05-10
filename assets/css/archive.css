@@ -10,34 +10,10 @@
 
 /* ==========================================================================
    Theme Variant Scoped Variables
+   The .promptless-content variant declarations + base bg rule MOVED to
+   style.css so they apply on every template (not just archive/blog/single
+   where this stylesheet loads). See style.css "Page Content Wrapper" block.
    ========================================================================== */
-
-.promptless-content.aisb-section--light {
-    --section-bg: var(--aisb-color-background, #ffffff);
-    --section-surface: var(--aisb-color-surface, #f9fafb);
-    --section-text: var(--aisb-color-text, #1f2937);
-    --section-text-muted: var(--aisb-color-text-muted, #6b7280);
-    --section-border: var(--aisb-color-border, #e5e7eb);
-    --section-primary: var(--aisb-color-primary, #6366f1);
-    --section-link: var(--aisb-smart-light-section-link, var(--aisb-color-primary, #6366f1));
-    --section-surface-link: var(--aisb-smart-light-surface-link, var(--aisb-color-primary, #6366f1));
-}
-
-.promptless-content.aisb-section--dark {
-    --section-bg: var(--aisb-color-dark-background, #111827);
-    --section-surface: var(--aisb-color-dark-surface, #1f2937);
-    --section-text: var(--aisb-color-dark-text, #f9fafb);
-    --section-text-muted: var(--aisb-color-dark-text-muted, #9ca3af);
-    --section-border: var(--aisb-color-dark-border, #374151);
-    --section-primary: var(--aisb-color-primary, #6366f1);
-    --section-link: var(--aisb-smart-dark-section-link, var(--aisb-color-primary, #6366f1));
-    --section-surface-link: var(--aisb-smart-dark-surface-link, var(--aisb-color-primary, #6366f1));
-}
-
-.promptless-content {
-    background-color: var(--section-bg);
-    transition: background-color 0.2s ease;
-}
 
 /* ==========================================================================
    Entry Content Typography - Dark/Light Mode Support
@@ -499,37 +475,41 @@
 
 .promptless-archive__grid .aisb-features__item-title a:hover {
     color: var(--section-surface-link, var(--aisb-color-primary, #6366f1));
+    text-decoration: none;
 }
 
 .promptless-archive__grid .aisb-features__item-title a:focus-visible {
     outline: 2px solid var(--section-primary, var(--aisb-color-primary, #6366f1));
     outline-offset: 2px;
+    text-decoration: none;
 }
 
 /* ==========================================================================
-   HIGH-SPECIFICITY TITLE LINK OVERRIDES
-   Plugin core-components.css link rules have specificity 0,10,1 due to 9 :not() clauses.
-   We use 8x [href] attribute selectors to achieve 0,11,1 and override.
+   Title Link Overrides
+   The plugin's catch-all link-paint rule (core-components.css, the 10x
+   :not() chain) is wrapped in @layer aisb-defaults — so these normal-
+   specificity theme rules win the cascade without specificity hacks.
+   See THEME_AUDIT_WAVE2_PLAN.md.
    ========================================================================== */
 
 /* Light mode title links - no underline */
-.promptless-content.aisb-section--light .promptless-archive__grid .aisb-features__item-title a[href][href][href][href][href][href][href][href] {
+.promptless-content.aisb-section--light .promptless-archive__grid .aisb-features__item-title a[href] {
     color: inherit;
     text-decoration: none;
 }
 
-.promptless-content.aisb-section--light .promptless-archive__grid .aisb-features__item-title a[href][href][href][href][href][href][href][href]:hover {
+.promptless-content.aisb-section--light .promptless-archive__grid .aisb-features__item-title a[href]:hover {
     color: var(--section-surface-link, var(--aisb-color-primary, #6366f1));
     text-decoration: none;
 }
 
 /* Dark mode title links - no underline */
-.promptless-content.aisb-section--dark .promptless-archive__grid .aisb-features__item-title a[href][href][href][href][href][href][href][href] {
+.promptless-content.aisb-section--dark .promptless-archive__grid .aisb-features__item-title a[href] {
     color: inherit;
     text-decoration: none;
 }
 
-.promptless-content.aisb-section--dark .promptless-archive__grid .aisb-features__item-title a[href][href][href][href][href][href][href][href]:hover {
+.promptless-content.aisb-section--dark .promptless-archive__grid .aisb-features__item-title a[href]:hover {
     color: var(--section-surface-link, var(--aisb-color-primary, #6366f1));
     text-decoration: none;
 }
@@ -585,10 +565,10 @@
 }
 
 /* High-specificity override for read more links to prevent plugin underline */
-.promptless-content.aisb-section--light .promptless-archive__grid .aisb-features__item-link[href][href][href][href][href][href][href][href],
-.promptless-content.aisb-section--light .promptless-archive__grid .aisb-features__item-link[href][href][href][href][href][href][href][href]:hover,
-.promptless-content.aisb-section--dark .promptless-archive__grid .aisb-features__item-link[href][href][href][href][href][href][href][href],
-.promptless-content.aisb-section--dark .promptless-archive__grid .aisb-features__item-link[href][href][href][href][href][href][href][href]:hover {
+.promptless-content.aisb-section--light .promptless-archive__grid .aisb-features__item-link[href],
+.promptless-content.aisb-section--light .promptless-archive__grid .aisb-features__item-link[href]:hover,
+.promptless-content.aisb-section--dark .promptless-archive__grid .aisb-features__item-link[href],
+.promptless-content.aisb-section--dark .promptless-archive__grid .aisb-features__item-link[href]:hover {
     text-decoration: none;
 }
 
@@ -698,22 +678,23 @@
 }
 
 /* ==========================================================================
-   HIGH-SPECIFICITY PAGINATION LINK OVERRIDES
-   Plugin core-components.css link rules have specificity 0,10,1 due to 9 :not() clauses.
-   We use 8x [href] attribute selectors to achieve 0,11,1 and override.
-   Uses smart colors for accessibility - auto-adjusts problematic colors.
+   Pagination Link Overrides
+   The plugin's catch-all link-paint rule (core-components.css, the 10x
+   :not() chain) is wrapped in @layer aisb-defaults — so these normal-
+   specificity theme rules win the cascade without specificity hacks.
+   See THEME_AUDIT_WAVE2_PLAN.md.
    ========================================================================== */
 
 /* Light mode pagination - base state with smart colors */
-.promptless-content.aisb-section--light a.page-numbers[href][href][href][href][href][href][href][href] {
+.promptless-content.aisb-section--light a.page-numbers[href] {
     color: var(--aisb-smart-light-section-link, var(--aisb-color-primary, #6366f1));
     border-color: var(--aisb-smart-light-section-link, var(--aisb-color-primary, #6366f1));
     text-decoration: none;
 }
 
 /* Light mode pagination - hover/focus */
-.promptless-content.aisb-section--light a.page-numbers[href][href][href][href][href][href][href][href]:hover,
-.promptless-content.aisb-section--light a.page-numbers[href][href][href][href][href][href][href][href]:focus {
+.promptless-content.aisb-section--light a.page-numbers[href]:hover,
+.promptless-content.aisb-section--light a.page-numbers[href]:focus {
     background-color: var(--aisb-color-primary, #6366f1);
     border-color: var(--aisb-color-primary, #6366f1);
     color: var(--aisb-button-primary-text, #ffffff);
@@ -728,15 +709,15 @@
 }
 
 /* Dark mode pagination - base state with smart colors */
-.promptless-content.aisb-section--dark a.page-numbers[href][href][href][href][href][href][href][href] {
+.promptless-content.aisb-section--dark a.page-numbers[href] {
     color: var(--aisb-smart-dark-section-link, var(--aisb-color-primary, #6366f1));
     border-color: var(--aisb-smart-dark-section-link, var(--aisb-color-primary, #6366f1));
     text-decoration: none;
 }
 
 /* Dark mode pagination - hover/focus */
-.promptless-content.aisb-section--dark a.page-numbers[href][href][href][href][href][href][href][href]:hover,
-.promptless-content.aisb-section--dark a.page-numbers[href][href][href][href][href][href][href][href]:focus {
+.promptless-content.aisb-section--dark a.page-numbers[href]:hover,
+.promptless-content.aisb-section--dark a.page-numbers[href]:focus {
     background-color: var(--aisb-color-primary, #6366f1);
     border-color: var(--aisb-color-primary, #6366f1);
     color: var(--aisb-button-primary-text, #ffffff);
@@ -946,6 +927,7 @@
 
 .promptless-single__meta a:hover {
     color: var(--section-link);
+    text-decoration: none;
 }
 
 /* ==========================================================================
@@ -1033,33 +1015,35 @@
 }
 
 /* ==========================================================================
-   HIGH-SPECIFICITY TAG LINK OVERRIDES
-   Plugin core-components.css link rules have specificity 0,10,1 due to 9 :not() clauses.
-   We use 8x [href] attribute selectors to achieve 0,11,1 and override.
+   Tag Link Overrides
+   The plugin's catch-all link-paint rule (core-components.css, the 10x
+   :not() chain) is wrapped in @layer aisb-defaults — so these normal-
+   specificity theme rules win the cascade without specificity hacks.
+   See THEME_AUDIT_WAVE2_PLAN.md.
    ========================================================================== */
 
 /* Light mode tag links - base state */
-.promptless-content.aisb-section--light a.promptless-single__tag[href][href][href][href][href][href][href][href] {
+.promptless-content.aisb-section--light a.promptless-single__tag[href] {
     color: var(--section-text-muted);
     text-decoration: none;
 }
 
 /* Light mode tag links - hover/focus */
-.promptless-content.aisb-section--light a.promptless-single__tag[href][href][href][href][href][href][href][href]:hover,
-.promptless-content.aisb-section--light a.promptless-single__tag[href][href][href][href][href][href][href][href]:focus {
+.promptless-content.aisb-section--light a.promptless-single__tag[href]:hover,
+.promptless-content.aisb-section--light a.promptless-single__tag[href]:focus {
     color: var(--section-link);
     text-decoration: none;
 }
 
 /* Dark mode tag links - base state */
-.promptless-content.aisb-section--dark a.promptless-single__tag[href][href][href][href][href][href][href][href] {
+.promptless-content.aisb-section--dark a.promptless-single__tag[href] {
     color: var(--section-text-muted);
     text-decoration: none;
 }
 
 /* Dark mode tag links - hover/focus */
-.promptless-content.aisb-section--dark a.promptless-single__tag[href][href][href][href][href][href][href][href]:hover,
-.promptless-content.aisb-section--dark a.promptless-single__tag[href][href][href][href][href][href][href][href]:focus {
+.promptless-content.aisb-section--dark a.promptless-single__tag[href]:hover,
+.promptless-content.aisb-section--dark a.promptless-single__tag[href]:focus {
     color: var(--section-link);
     text-decoration: none;
 }
@@ -1119,30 +1103,32 @@
 }
 
 /* ==========================================================================
-   HIGH-SPECIFICITY POST NAVIGATION LINK OVERRIDES
-   Plugin core-components.css link rules have specificity 0,10,1 due to 9 :not() clauses.
-   We use 8x [href] attribute selectors to achieve 0,11,1 and override.
+   Post Navigation Link Overrides
+   The plugin's catch-all link-paint rule (core-components.css, the 10x
+   :not() chain) is wrapped in @layer aisb-defaults — so these normal-
+   specificity theme rules win the cascade without specificity hacks.
+   See THEME_AUDIT_WAVE2_PLAN.md.
    ========================================================================== */
 
 /* Light mode post navigation - base state */
-.promptless-content.aisb-section--light a.promptless-single__nav-link[href][href][href][href][href][href][href][href] {
+.promptless-content.aisb-section--light a.promptless-single__nav-link[href] {
     text-decoration: none;
 }
 
 /* Light mode post navigation - hover/focus */
-.promptless-content.aisb-section--light a.promptless-single__nav-link[href][href][href][href][href][href][href][href]:hover,
-.promptless-content.aisb-section--light a.promptless-single__nav-link[href][href][href][href][href][href][href][href]:focus {
+.promptless-content.aisb-section--light a.promptless-single__nav-link[href]:hover,
+.promptless-content.aisb-section--light a.promptless-single__nav-link[href]:focus {
     text-decoration: none;
 }
 
 /* Dark mode post navigation - base state */
-.promptless-content.aisb-section--dark a.promptless-single__nav-link[href][href][href][href][href][href][href][href] {
+.promptless-content.aisb-section--dark a.promptless-single__nav-link[href] {
     text-decoration: none;
 }
 
 /* Dark mode post navigation - hover/focus */
-.promptless-content.aisb-section--dark a.promptless-single__nav-link[href][href][href][href][href][href][href][href]:hover,
-.promptless-content.aisb-section--dark a.promptless-single__nav-link[href][href][href][href][href][href][href][href]:focus {
+.promptless-content.aisb-section--dark a.promptless-single__nav-link[href]:hover,
+.promptless-content.aisb-section--dark a.promptless-single__nav-link[href]:focus {
     text-decoration: none;
 }
 
@@ -1385,6 +1371,7 @@
 /* Use smart colors for hover states */
 .comment-metadata a:hover {
     color: var(--section-link);
+    text-decoration: none;
 }
 
 /* Comment content */

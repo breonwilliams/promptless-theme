@@ -32,6 +32,7 @@ define( 'PROMPTLESS_THEME_URI', get_template_directory_uri() );
 require_once PROMPTLESS_THEME_DIR . '/inc/class-promptless-setup.php';
 require_once PROMPTLESS_THEME_DIR . '/inc/class-promptless-assets.php';
 require_once PROMPTLESS_THEME_DIR . '/inc/class-promptless-integration.php';
+require_once PROMPTLESS_THEME_DIR . '/inc/class-promptless-plugin-bridge.php';
 require_once PROMPTLESS_THEME_DIR . '/inc/class-promptless-customizer.php';
 require_once PROMPTLESS_THEME_DIR . '/inc/template-functions.php';
 
@@ -55,15 +56,28 @@ function promptless_content_width() {
 add_action( 'after_setup_theme', 'promptless_content_width', 0 );
 
 /**
- * Add body class to disable WooCommerce default button styles
+ * Add body class to disable WooCommerce default button styles.
  *
- * This tells WooCommerce that the theme handles its own button styling,
- * which disables WooCommerce's :where() selector default button CSS.
- * Without this, WooCommerce applies gray text color to buttons.
+ * Tells WooCommerce that the theme handles its own button styling, which
+ * disables WooCommerce's `:where()` selector default button CSS. Without
+ * this, WooCommerce applies gray text color to buttons.
+ *
+ * Why this is a NAMED function instead of an anonymous closure: child
+ * themes and site-owner code need a recoverable handle to call
+ * `remove_filter('body_class', 'promptless_woocommerce_body_class')` if
+ * they want to opt out (e.g. when their own integration manages the
+ * WooCommerce button-styles signal). Closures give callers no such
+ * handle — once registered they can only be removed via reflection on
+ * the WP filter registry, which is not a contract we should require.
+ *
+ * @param array $classes Existing body classes from WordPress core.
+ * @return array Possibly-augmented body classes.
+ * @since 1.1.5
  */
-add_filter( 'body_class', function( $classes ) {
+function promptless_woocommerce_body_class( $classes ) {
     if ( class_exists( 'WooCommerce' ) ) {
         $classes[] = 'woocommerce-block-theme-has-button-styles';
     }
     return $classes;
-} );
+}
+add_filter( 'body_class', 'promptless_woocommerce_body_class' );

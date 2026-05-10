@@ -1,7 +1,7 @@
 === Promptless ===
 Contributors: promptlesswp
 Tags: one-column, custom-logo, custom-menu, featured-images, full-width-template, block-styles, wide-blocks, blog, portfolio
-Requires at least: 6.0
+Requires at least: 6.6
 Tested up to: 6.9
 Requires PHP: 7.4
 Stable tag: 1.1.4

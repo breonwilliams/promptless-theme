@@ -4,7 +4,7 @@ Author: Promptless WP
 Author URI: https://promptlesswp.com
 Description: A minimal WordPress theme designed to work seamlessly with the Promptless WP plugin. Inherits colors, typography, and styling from the plugin's Global Settings for a unified brand experience.
 Version: 1.1.4
-Requires at least: 6.0
+Requires at least: 6.6
 Tested up to: 6.9
 Requires PHP: 7.4
 License: GNU General Public License v2 or later
@@ -48,6 +48,64 @@ body {
   background-color: var(--aisb-color-background, #ffffff);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* ==========================================================================
+   Page Content Wrapper — Theme Variant Scoped Variables
+   These rules live here (always-loaded style.css) rather than archive.css
+   because .promptless-content is the page-content wrapper on EVERY template,
+   not just archives. Without these, WC/checkout/cart/shop and other non-
+   archive templates inherit no --section-bg/--section-text tokens and the
+   page-content wrapper has no background-color, leaving page text invisible
+   in dark mode (light-on-light) and missing variant theming everywhere.
+   ========================================================================== */
+
+.promptless-content.aisb-section--light {
+    --section-bg: var(--aisb-color-background, #ffffff);
+    --section-surface: var(--aisb-color-surface, #f9fafb);
+    --section-text: var(--aisb-color-text, #1f2937);
+    --section-text-muted: var(--aisb-color-text-muted, #6b7280);
+    --section-border: var(--aisb-color-border, #e5e7eb);
+    --section-primary: var(--aisb-color-primary, #6366f1);
+    --section-link: var(--aisb-smart-light-section-link, var(--aisb-color-primary, #6366f1));
+    --section-surface-link: var(--aisb-smart-light-surface-link, var(--aisb-color-primary, #6366f1));
+}
+
+.promptless-content.aisb-section--dark {
+    --section-bg: var(--aisb-color-dark-background, #111827);
+    --section-surface: var(--aisb-color-dark-surface, #1f2937);
+    --section-text: var(--aisb-color-dark-text, #f9fafb);
+    --section-text-muted: var(--aisb-color-dark-text-muted, #9ca3af);
+    --section-border: var(--aisb-color-dark-border, #374151);
+    --section-primary: var(--aisb-color-primary, #6366f1);
+    --section-link: var(--aisb-smart-dark-section-link, var(--aisb-color-primary, #6366f1));
+    --section-surface-link: var(--aisb-smart-dark-surface-link, var(--aisb-color-primary, #6366f1));
+}
+
+.promptless-content {
+    background-color: var(--section-bg);
+    color: var(--section-text);
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Headings inside the page-content wrapper inherit the variant text color
+ * (they otherwise read --aisb-color-text from style.css's :root rule which
+ * is the LIGHT mode color, breaking dark-mode contrast). */
+.promptless-content h1,
+.promptless-content h2,
+.promptless-content h3,
+.promptless-content h4,
+.promptless-content h5,
+.promptless-content h6 {
+    color: var(--section-text);
+}
+
+/* Form labels inside page content — both WP standard forms and WooCommerce.
+ * Without this, labels use the global text color and become invisible against
+ * a dark page background. */
+.promptless-content label,
+.promptless-content legend {
+    color: var(--section-text);
 }
 
 /* ==========================================================================

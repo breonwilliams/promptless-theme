@@ -120,9 +120,12 @@ body.woocommerce-page .aisb-section--light .woocommerce {
 }
 
 /* ==========================================================================
-   Light Mode - Checkout Form Inputs (High Specificity)
-   These rules override WooCommerce core's .woocommerce form .form-row .input-text
-   selector which uses --wc-form-border-color (defaults to dark color).
+   Light Mode - Form Inputs (High Specificity)
+   These rules override WooCommerce core's form selectors which use
+   --wc-form-border-color (defaults to dark color).
+   Selectors cover ALL the input contexts the base rule at line ~1267 styles:
+   checkout form inputs (.form-row), cart quantity inputs (.qty), coupon
+   code input (#coupon_code), shop sort dropdown (select.orderby).
    Specificity: (0,6,1) to match dark mode and beat WooCommerce's (0,4,0)
    ========================================================================== */
 body.woocommerce .aisb-section--light .woocommerce form .form-row input.input-text,
@@ -130,10 +133,28 @@ body.woocommerce .aisb-section--light .woocommerce form .form-row textarea,
 body.woocommerce .aisb-section--light .woocommerce form .form-row select,
 body.woocommerce-page .aisb-section--light .woocommerce form .form-row input.input-text,
 body.woocommerce-page .aisb-section--light .woocommerce form .form-row textarea,
-body.woocommerce-page .aisb-section--light .woocommerce form .form-row select {
+body.woocommerce-page .aisb-section--light .woocommerce form .form-row select,
+/* Cart quantity inputs (e.g. .woocommerce .quantity .qty on cart page) */
+body.woocommerce .aisb-section--light .woocommerce .quantity .qty,
+body.woocommerce-page .aisb-section--light .woocommerce .quantity .qty,
+/* Coupon code inputs (cart page #coupon_code, checkout coupon toggle) */
+body.woocommerce .aisb-section--light .woocommerce #coupon_code,
+body.woocommerce-page .aisb-section--light .woocommerce #coupon_code,
+body.woocommerce .aisb-section--light .woocommerce-cart table.cart td.actions .coupon input.input-text,
+body.woocommerce-page .aisb-section--light .woocommerce-cart table.cart td.actions .coupon input.input-text,
+/* Shop sort dropdown (.woocommerce-ordering .orderby) */
+body.woocommerce .aisb-section--light .woocommerce-ordering .orderby,
+body.woocommerce-page .aisb-section--light .woocommerce-ordering .orderby {
     background-color: var(--wc-surface, var(--aisb-color-surface, #f9fafb));
     color: var(--wc-text, var(--aisb-color-text, #1f2937));
-    border-color: var(--wc-border, var(--aisb-color-border, #e5e7eb));
+    /* Prefer the plugin's smart-surface-border token when available — it's
+     * pre-calculated to have WCAG 2.1 SC 1.4.11-compliant 3:1 contrast
+     * against the surface color the input sits on. Falls back through the
+     * raw border tokens for browsers/setups where smart-color isn't active.
+     * Without this preference, palettes where --aisb-color-border resolves
+     * close to --aisb-color-surface (e.g. teal-derived palettes) produce
+     * near-invisible form borders. */
+    border-color: var(--aisb-smart-light-surface-border, var(--wc-border, var(--aisb-color-border, #e5e7eb)));
 }
 
 body.woocommerce .aisb-section--light .woocommerce form .form-row input::placeholder,
@@ -455,6 +476,7 @@ body.woocommerce-page.aisb-section--light ul.products li.product a.added_to_cart
     border-color: var(--aisb-color-primary, #6366f1);
     outline: 2px solid var(--aisb-smart-light-section-link, var(--aisb-color-primary, #6366f1));
     outline-offset: 2px;
+    text-decoration: none;
 }
 
 .aisb-section--dark .woocommerce ul.products li.product a.added_to_cart:hover:focus,
@@ -470,6 +492,7 @@ body.woocommerce-page.aisb-section--dark ul.products li.product a.added_to_cart:
     border-color: var(--aisb-color-primary, #6366f1);
     outline: 2px solid var(--aisb-smart-dark-section-link, var(--aisb-color-primary, #6366f1));
     outline-offset: 2px;
+    text-decoration: none;
 }
 
 /* Disabled state */
@@ -724,6 +747,7 @@ body.aisb-hover-glow.woocommerce a.added_to_cart:hover,
 body.aisb-hover-glow.woocommerce ul.products li.product a.added_to_cart:hover {
     filter: none;
     box-shadow: 0 0 20px var(--aisb-secondary-glow-color, rgba(129, 140, 248, 0.4));
+    text-decoration: none;
 }
 
 /* None Effect - Ghost/Secondary buttons (keeps ghost fill behavior) */
@@ -736,6 +760,7 @@ body.aisb-hover-none.woocommerce ul.products li.product a.added_to_cart:hover {
     /* Keep ghost fill behavior unless explicitly disabled */
     background: var(--aisb-color-primary, #6366f1);
     color: var(--aisb-button-primary-text, #ffffff);
+    text-decoration: none;
 }
 
 /* Accessibility: Reduced motion support */
@@ -1272,6 +1297,11 @@ body.aisb-neo-brutalist-cards.aisb-neo-brutalist-cards-outline #reviews .comment
     font-size: var(--aisb-section-text-base, 1rem);
     color: var(--wc-text);
     background: var(--wc-surface);
+    /* Border width + style. The COLOR is overridden by the variant-scoped
+     * rules above (light/dark) which prefer the WCAG-adjusted
+     * --aisb-smart-{theme}-surface-border token. This bare fallback applies
+     * only when neither variant rule matches (rare — usually means the form
+     * isn't inside any .aisb-section--* wrapper). */
     border: 1px solid var(--wc-border);
     border-radius: var(--aisb-section-radius-sm, 6px); /* Uses small radius token */
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -1671,6 +1701,31 @@ body.woocommerce-page .aisb-section--dark table.shop_attributes td a:hover {
     text-decoration: none;
 }
 
+/* Override WooCommerce core's --wc-red token per theme variant.
+ *
+ * WC core ships `.woocommerce a.remove { color: var(--wc-red) !important; }`.
+ * We can't beat that with normal CSS (the !important wins regardless of
+ * specificity) AND we don't want to add our own !important war on top.
+ * Solution: override the value of --wc-red itself per variant. The
+ * !important rule still fires — but resolves through to a contrast-safe
+ * red instead of WC's #a00 default (which is invisible on dark bgs and
+ * marginal on light).
+ *
+ * Light: vivid red-500, comfortable contrast on light bg (~5:1)
+ * Dark:  brighter red-400, readable on dark bg (~5:1)
+ * The destructive-action red signaling is preserved in both modes. */
+body.woocommerce .aisb-section--light,
+body.woocommerce-page .aisb-section--light,
+body.woocommerce-cart .aisb-section--light {
+    --wc-red: var(--aisb-color-error, #ef4444);
+}
+
+body.woocommerce .aisb-section--dark,
+body.woocommerce-page .aisb-section--dark,
+body.woocommerce-cart .aisb-section--dark {
+    --wc-red: #f87171;
+}
+
 /* Remove button hover - base styling */
 .woocommerce a.remove:not(.promptless-cart-item__remove):hover {
     background: var(--aisb-color-error, #dc2626);
@@ -1873,6 +1928,7 @@ body.woocommerce-cart .aisb-section--dark a.remove:not(.promptless-cart-item__re
 .woocommerce-MyAccount-navigation ul li a:hover {
     background: var(--wc-primary);
     color: var(--aisb-button-primary-text, #ffffff);
+    text-decoration: none;
 }
 
 .woocommerce-MyAccount-navigation ul li.is-active a {
@@ -2060,6 +2116,7 @@ body.woocommerce-page .aisb-section--dark div.product .product_meta a:hover {
 
 .woocommerce div.product .woocommerce-tabs ul.tabs li a:hover {
     color: var(--wc-text);
+    text-decoration: none;
 }
 
 /* Light mode tab links - darken on hover */
@@ -2067,6 +2124,7 @@ body.woocommerce .aisb-section--light div.product .woocommerce-tabs ul.tabs li a
 body.woocommerce-page .aisb-section--light div.product .woocommerce-tabs ul.tabs li a:hover {
     color: var(--wc-text);
     filter: brightness(0.85);
+    text-decoration: none;
 }
 
 /* Dark mode tab links - brighten on hover */
@@ -2074,6 +2132,7 @@ body.woocommerce .aisb-section--dark div.product .woocommerce-tabs ul.tabs li a:
 body.woocommerce-page .aisb-section--dark div.product .woocommerce-tabs ul.tabs li a:hover {
     color: var(--wc-text, var(--aisb-color-dark-text, #f9fafb));
     filter: brightness(1.15);
+    text-decoration: none;
 }
 
 .woocommerce div.product .woocommerce-tabs ul.tabs li.active a {
@@ -2198,6 +2257,7 @@ body.woocommerce .aisb-section--light .woocommerce-breadcrumb a:hover,
 body.woocommerce-page .aisb-section--light .woocommerce-breadcrumb a:hover {
     color: var(--wc-link);
     filter: brightness(0.85);
+    text-decoration: none;
 }
 
 /* Dark mode breadcrumb links - brighten on hover */
@@ -2206,6 +2266,7 @@ body.woocommerce .aisb-section--dark .woocommerce-breadcrumb a:hover,
 body.woocommerce-page .aisb-section--dark .woocommerce-breadcrumb a:hover {
     color: var(--wc-link);
     filter: brightness(1.15);
+    text-decoration: none;
 }
 
 /* ==========================================================================
@@ -2285,6 +2346,7 @@ body.woocommerce-page nav.woocommerce-pagination ul.page-numbers:hover {
     background-color: var(--wc-link, var(--aisb-color-primary, #6366f1));
     border-color: var(--wc-link, var(--aisb-color-primary, #6366f1));
     color: var(--aisb-button-primary-text, #ffffff);
+    text-decoration: none;
 }
 
 .woocommerce nav.woocommerce-pagination ul li span.current {
@@ -2309,6 +2371,7 @@ body.aisb-section--dark .woocommerce nav.woocommerce-pagination ul li a:focus {
     background-color: var(--wc-link, var(--aisb-color-primary, #6366f1));
     border-color: var(--wc-link, var(--aisb-color-primary, #6366f1));
     color: var(--aisb-button-primary-text, #ffffff);
+    text-decoration: none;
 }
 
 .aisb-section--dark .woocommerce nav.woocommerce-pagination ul li span.current,
@@ -2368,6 +2431,7 @@ body.woocommerce .aisb-section--light .widget ul.product_list_widget li:not(.pro
 body.woocommerce-page .aisb-section--light .widget ul.product_list_widget li:not(.promptless-cart-item) a:hover {
     color: var(--wc-link);
     filter: brightness(0.85);
+    text-decoration: none;
 }
 
 /* Dark mode widget links - brighten on hover */
@@ -2376,6 +2440,7 @@ body.woocommerce .aisb-section--dark .widget ul.product_list_widget li:not(.prom
 body.woocommerce-page .aisb-section--dark .widget ul.product_list_widget li:not(.promptless-cart-item) a:hover {
     color: var(--wc-link);
     filter: brightness(1.15);
+    text-decoration: none;
 }
 
 /* Mini cart widget links - base hover */
@@ -2632,7 +2697,8 @@ body.woocommerce-page .aisb-section--dark textarea,
 body.woocommerce-page .aisb-section--dark select {
     background-color: var(--wc-surface, var(--aisb-color-dark-surface, #1f2937));
     color: var(--wc-text, var(--aisb-color-dark-text, #f9fafb));
-    border-color: var(--wc-border, var(--aisb-color-dark-border, #374151));
+    /* See light-mode rule above for the smart-surface-border rationale. */
+    border-color: var(--aisb-smart-dark-surface-border, var(--wc-border, var(--aisb-color-dark-border, #374151)));
 }
 
 body.woocommerce .aisb-section--dark input::placeholder,
@@ -2651,10 +2717,20 @@ body.woocommerce .aisb-section--dark .woocommerce form .form-row textarea,
 body.woocommerce .aisb-section--dark .woocommerce form .form-row select,
 body.woocommerce-page .aisb-section--dark .woocommerce form .form-row input.input-text,
 body.woocommerce-page .aisb-section--dark .woocommerce form .form-row textarea,
-body.woocommerce-page .aisb-section--dark .woocommerce form .form-row select {
+body.woocommerce-page .aisb-section--dark .woocommerce form .form-row select,
+/* Cart / coupon / sort dropdown — mirrors the light-mode block above. */
+body.woocommerce .aisb-section--dark .woocommerce .quantity .qty,
+body.woocommerce-page .aisb-section--dark .woocommerce .quantity .qty,
+body.woocommerce .aisb-section--dark .woocommerce #coupon_code,
+body.woocommerce-page .aisb-section--dark .woocommerce #coupon_code,
+body.woocommerce .aisb-section--dark .woocommerce-cart table.cart td.actions .coupon input.input-text,
+body.woocommerce-page .aisb-section--dark .woocommerce-cart table.cart td.actions .coupon input.input-text,
+body.woocommerce .aisb-section--dark .woocommerce-ordering .orderby,
+body.woocommerce-page .aisb-section--dark .woocommerce-ordering .orderby {
     background-color: var(--wc-surface, var(--aisb-color-dark-surface, #1f2937));
     color: var(--wc-text, var(--aisb-color-dark-text, #f9fafb));
-    border-color: var(--wc-border, var(--aisb-color-dark-border, #374151));
+    /* See light-mode rule (~line 128) for the smart-surface-border rationale. */
+    border-color: var(--aisb-smart-dark-surface-border, var(--wc-border, var(--aisb-color-dark-border, #374151)));
 }
 
 body.woocommerce .aisb-section--dark .woocommerce form .form-row input::placeholder,
@@ -2782,6 +2858,31 @@ body.woocommerce-page .aisb-section--dark .woocommerce-notice {
     background-color: var(--wc-surface, var(--aisb-color-dark-surface, #1f2937));
     color: var(--wc-text, var(--aisb-color-dark-text, #f9fafb));
     border-color: var(--wc-border, var(--aisb-color-dark-border, #374151));
+}
+
+/* Light mode link styles for WooCommerce notices (info, message, error, notice).
+ * These mirror the dark-mode block below. Without explicit light-mode rules,
+ * WooCommerce core's default styling wins on light pages and uses the raw
+ * brand primary color, which fails WCAG 1.4.3 contrast on light palettes
+ * where primary is itself a light color (notice background is --wc-surface,
+ * which can be a near-equal-luminance tint).
+ *
+ * --wc-link resolves to --aisb-smart-light-section-link when smart-color is
+ * active (WCAG-adjusted for 4.5:1 against the background), falling back
+ * through the raw tokens when not. This is the same token used by other
+ * unstyled section links via the plugin's @layer aisb-defaults catch-all. */
+body.woocommerce .aisb-section--light .woocommerce-message a:not(.button),
+body.woocommerce .aisb-section--light .woocommerce-info a:not(.button),
+body.woocommerce-page .aisb-section--light .woocommerce-message a:not(.button),
+body.woocommerce-page .aisb-section--light .woocommerce-info a:not(.button) {
+    color: var(--wc-link, var(--aisb-color-primary, #6366f1));
+}
+
+body.woocommerce .aisb-section--light .woocommerce-error a:not(.button),
+body.woocommerce .aisb-section--light .woocommerce-notice a:not(.button),
+body.woocommerce-page .aisb-section--light .woocommerce-error a:not(.button),
+body.woocommerce-page .aisb-section--light .woocommerce-notice a:not(.button) {
+    color: var(--wc-link, var(--aisb-color-primary, #6366f1));
 }
 
 body.woocommerce .aisb-section--dark .woocommerce-message a:not(.button),
@@ -2919,6 +3020,7 @@ body.woocommerce-page .aisb-section--dark .cart_item .product-name a:hover,
 body.woocommerce-page .aisb-section--dark table.shop_table .product-name a:hover {
     color: var(--wc-link, var(--aisb-color-primary, #6366f1));
     filter: brightness(1.15);
+    text-decoration: none;
 }
 
 /* Muted text dark mode */
@@ -3038,6 +3140,7 @@ body.woocommerce-page .aisb-section--dark div.product .woocommerce-tabs ul.tabs 
 body.woocommerce .aisb-section--dark div.product .woocommerce-tabs ul.tabs li a:hover,
 body.woocommerce-page .aisb-section--dark div.product .woocommerce-tabs ul.tabs li a:hover {
     color: var(--wc-text, var(--aisb-color-dark-text, #f9fafb));
+    text-decoration: none;
 }
 
 body.woocommerce .aisb-section--dark div.product .woocommerce-tabs ul.tabs li.active a,
@@ -3093,6 +3196,7 @@ body.woocommerce .aisb-section--dark .woocommerce-breadcrumb a:hover,
 body.woocommerce-page .aisb-section--dark .woocommerce-breadcrumb a:hover {
     color: var(--wc-link, var(--aisb-color-primary, #6366f1));
     filter: brightness(1.15);
+    text-decoration: none;
 }
 
 /* ==========================================================================
@@ -3114,6 +3218,7 @@ body.woocommerce .aisb-section--dark .widget ul.product_list_widget li:not(.prom
 body.woocommerce-page .aisb-section--dark .widget ul.product_list_widget li:not(.promptless-cart-item) a:hover {
     color: var(--wc-link, var(--aisb-color-primary, #6366f1));
     filter: brightness(1.15);
+    text-decoration: none;
 }
 
 body.woocommerce .aisb-section--dark .widget ul.product_list_widget li:not(.promptless-cart-item) .amount,
@@ -3155,11 +3260,11 @@ body.woocommerce-page .aisb-section--dark .widget_shopping_cart .total {
 }
 
 /* ==========================================================================
-   HIGH-SPECIFICITY UI/NAVIGATION LINK OVERRIDES
-   Plugin core-components.css link rules have specificity 0,10,1 due to 9 :not() clauses.
-   We use 8x [href] attribute selectors to achieve 0,11,1 and override.
-   This ensures breadcrumbs, widget links, and other UI elements use correct colors
-   and do NOT get underline on hover (which is meant for content links only).
+   Ui/Navigation Link Overrides
+   The plugin's catch-all link-paint rule (core-components.css, the 10x
+   :not() chain) is wrapped in @layer aisb-defaults — so these normal-
+   specificity theme rules win the cascade without specificity hacks.
+   See THEME_AUDIT_WAVE2_PLAN.md.
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
@@ -3167,25 +3272,25 @@ body.woocommerce-page .aisb-section--dark .widget_shopping_cart .total {
    -------------------------------------------------------------------------- */
 
 /* Light mode breadcrumbs */
-.aisb-section--light .woocommerce-breadcrumb a[href][href][href][href][href][href][href][href] {
+.aisb-section--light .woocommerce-breadcrumb a[href] {
     color: var(--wc-text-muted, var(--aisb-color-text-muted, #6b7280));
     text-decoration: none;
 }
 
-.aisb-section--light .woocommerce-breadcrumb a[href][href][href][href][href][href][href][href]:hover,
-.aisb-section--light .woocommerce-breadcrumb a[href][href][href][href][href][href][href][href]:focus {
+.aisb-section--light .woocommerce-breadcrumb a[href]:hover,
+.aisb-section--light .woocommerce-breadcrumb a[href]:focus {
     color: var(--wc-link, var(--aisb-color-primary, #6366f1));
     text-decoration: none;
 }
 
 /* Dark mode breadcrumbs */
-.aisb-section--dark .woocommerce-breadcrumb a[href][href][href][href][href][href][href][href] {
+.aisb-section--dark .woocommerce-breadcrumb a[href] {
     color: var(--wc-text-muted, var(--aisb-color-dark-text-muted, #9ca3af));
     text-decoration: none;
 }
 
-.aisb-section--dark .woocommerce-breadcrumb a[href][href][href][href][href][href][href][href]:hover,
-.aisb-section--dark .woocommerce-breadcrumb a[href][href][href][href][href][href][href][href]:focus {
+.aisb-section--dark .woocommerce-breadcrumb a[href]:hover,
+.aisb-section--dark .woocommerce-breadcrumb a[href]:focus {
     color: var(--wc-link, var(--aisb-color-primary, #6366f1));
     text-decoration: none;
 }
@@ -3196,25 +3301,25 @@ body.woocommerce-page .aisb-section--dark .widget_shopping_cart .total {
    -------------------------------------------------------------------------- */
 
 /* Light mode product widget links */
-.aisb-section--light .widget ul.product_list_widget li:not(.promptless-cart-item) a[href][href][href][href][href][href][href][href] {
+.aisb-section--light .widget ul.product_list_widget li:not(.promptless-cart-item) a[href] {
     color: var(--wc-text, var(--aisb-color-text, #1f2937));
     text-decoration: none;
 }
 
-.aisb-section--light .widget ul.product_list_widget li:not(.promptless-cart-item) a[href][href][href][href][href][href][href][href]:hover,
-.aisb-section--light .widget ul.product_list_widget li:not(.promptless-cart-item) a[href][href][href][href][href][href][href][href]:focus {
+.aisb-section--light .widget ul.product_list_widget li:not(.promptless-cart-item) a[href]:hover,
+.aisb-section--light .widget ul.product_list_widget li:not(.promptless-cart-item) a[href]:focus {
     color: var(--wc-link, var(--aisb-color-primary, #6366f1));
     text-decoration: none;
 }
 
 /* Dark mode product widget links */
-.aisb-section--dark .widget ul.product_list_widget li:not(.promptless-cart-item) a[href][href][href][href][href][href][href][href] {
+.aisb-section--dark .widget ul.product_list_widget li:not(.promptless-cart-item) a[href] {
     color: var(--wc-text, var(--aisb-color-dark-text, #f9fafb));
     text-decoration: none;
 }
 
-.aisb-section--dark .widget ul.product_list_widget li:not(.promptless-cart-item) a[href][href][href][href][href][href][href][href]:hover,
-.aisb-section--dark .widget ul.product_list_widget li:not(.promptless-cart-item) a[href][href][href][href][href][href][href][href]:focus {
+.aisb-section--dark .widget ul.product_list_widget li:not(.promptless-cart-item) a[href]:hover,
+.aisb-section--dark .widget ul.product_list_widget li:not(.promptless-cart-item) a[href]:focus {
     color: var(--wc-link, var(--aisb-color-primary, #6366f1));
     text-decoration: none;
 }
@@ -3225,25 +3330,25 @@ body.woocommerce-page .aisb-section--dark .widget_shopping_cart .total {
    -------------------------------------------------------------------------- */
 
 /* Light mode mini cart links */
-.aisb-section--light .widget_shopping_cart .cart_list li:not(.promptless-cart-item) a[href][href][href][href][href][href][href][href] {
+.aisb-section--light .widget_shopping_cart .cart_list li:not(.promptless-cart-item) a[href] {
     color: var(--wc-text, var(--aisb-color-text, #1f2937));
     text-decoration: none;
 }
 
-.aisb-section--light .widget_shopping_cart .cart_list li:not(.promptless-cart-item) a[href][href][href][href][href][href][href][href]:hover,
-.aisb-section--light .widget_shopping_cart .cart_list li:not(.promptless-cart-item) a[href][href][href][href][href][href][href][href]:focus {
+.aisb-section--light .widget_shopping_cart .cart_list li:not(.promptless-cart-item) a[href]:hover,
+.aisb-section--light .widget_shopping_cart .cart_list li:not(.promptless-cart-item) a[href]:focus {
     color: var(--wc-link, var(--aisb-color-primary, #6366f1));
     text-decoration: none;
 }
 
 /* Dark mode mini cart links */
-.aisb-section--dark .widget_shopping_cart .cart_list li:not(.promptless-cart-item) a[href][href][href][href][href][href][href][href] {
+.aisb-section--dark .widget_shopping_cart .cart_list li:not(.promptless-cart-item) a[href] {
     color: var(--wc-text, var(--aisb-color-dark-text, #f9fafb));
     text-decoration: none;
 }
 
-.aisb-section--dark .widget_shopping_cart .cart_list li:not(.promptless-cart-item) a[href][href][href][href][href][href][href][href]:hover,
-.aisb-section--dark .widget_shopping_cart .cart_list li:not(.promptless-cart-item) a[href][href][href][href][href][href][href][href]:focus {
+.aisb-section--dark .widget_shopping_cart .cart_list li:not(.promptless-cart-item) a[href]:hover,
+.aisb-section--dark .widget_shopping_cart .cart_list li:not(.promptless-cart-item) a[href]:focus {
     color: var(--wc-link, var(--aisb-color-primary, #6366f1));
     text-decoration: none;
 }
@@ -3253,24 +3358,24 @@ body.woocommerce-page .aisb-section--dark .widget_shopping_cart .total {
    -------------------------------------------------------------------------- */
 
 /* Light mode pagination */
-.aisb-section--light .woocommerce-pagination a.page-numbers[href][href][href][href][href][href][href][href] {
+.aisb-section--light .woocommerce-pagination a.page-numbers[href] {
     color: var(--wc-link, var(--aisb-color-primary, #6366f1));
     text-decoration: none;
 }
 
-.aisb-section--light .woocommerce-pagination a.page-numbers[href][href][href][href][href][href][href][href]:hover,
-.aisb-section--light .woocommerce-pagination a.page-numbers[href][href][href][href][href][href][href][href]:focus {
+.aisb-section--light .woocommerce-pagination a.page-numbers[href]:hover,
+.aisb-section--light .woocommerce-pagination a.page-numbers[href]:focus {
     text-decoration: none;
 }
 
 /* Dark mode pagination */
-.aisb-section--dark .woocommerce-pagination a.page-numbers[href][href][href][href][href][href][href][href] {
+.aisb-section--dark .woocommerce-pagination a.page-numbers[href] {
     color: var(--wc-link, var(--aisb-color-primary, #6366f1));
     text-decoration: none;
 }
 
-.aisb-section--dark .woocommerce-pagination a.page-numbers[href][href][href][href][href][href][href][href]:hover,
-.aisb-section--dark .woocommerce-pagination a.page-numbers[href][href][href][href][href][href][href][href]:focus {
+.aisb-section--dark .woocommerce-pagination a.page-numbers[href]:hover,
+.aisb-section--dark .woocommerce-pagination a.page-numbers[href]:focus {
     text-decoration: none;
 }
 
@@ -3280,36 +3385,36 @@ body.woocommerce-page .aisb-section--dark .widget_shopping_cart .total {
    -------------------------------------------------------------------------- */
 
 /* Light mode product titles */
-.aisb-section--light ul.products li.product a[href][href][href][href][href][href][href][href] .woocommerce-loop-product__title,
-.aisb-section--light ul.products li.product a[href][href][href][href][href][href][href][href] h2,
-.aisb-section--light ul.products li.product a[href][href][href][href][href][href][href][href] h3 {
+.aisb-section--light ul.products li.product a[href] .woocommerce-loop-product__title,
+.aisb-section--light ul.products li.product a[href] h2,
+.aisb-section--light ul.products li.product a[href] h3 {
     color: var(--wc-text, var(--aisb-color-text, #1f2937));
 }
 
 /* Product card link wrapper - no underline */
-.aisb-section--light ul.products li.product > a[href][href][href][href][href][href][href][href] {
+.aisb-section--light ul.products li.product > a[href] {
     text-decoration: none;
 }
 
-.aisb-section--light ul.products li.product > a[href][href][href][href][href][href][href][href]:hover,
-.aisb-section--light ul.products li.product > a[href][href][href][href][href][href][href][href]:focus {
+.aisb-section--light ul.products li.product > a[href]:hover,
+.aisb-section--light ul.products li.product > a[href]:focus {
     text-decoration: none;
 }
 
 /* Dark mode product titles */
-.aisb-section--dark ul.products li.product a[href][href][href][href][href][href][href][href] .woocommerce-loop-product__title,
-.aisb-section--dark ul.products li.product a[href][href][href][href][href][href][href][href] h2,
-.aisb-section--dark ul.products li.product a[href][href][href][href][href][href][href][href] h3 {
+.aisb-section--dark ul.products li.product a[href] .woocommerce-loop-product__title,
+.aisb-section--dark ul.products li.product a[href] h2,
+.aisb-section--dark ul.products li.product a[href] h3 {
     color: var(--wc-text, var(--aisb-color-dark-text, #f9fafb));
 }
 
 /* Product card link wrapper - no underline */
-.aisb-section--dark ul.products li.product > a[href][href][href][href][href][href][href][href] {
+.aisb-section--dark ul.products li.product > a[href] {
     text-decoration: none;
 }
 
-.aisb-section--dark ul.products li.product > a[href][href][href][href][href][href][href][href]:hover,
-.aisb-section--dark ul.products li.product > a[href][href][href][href][href][href][href][href]:focus {
+.aisb-section--dark ul.products li.product > a[href]:hover,
+.aisb-section--dark ul.products li.product > a[href]:focus {
     text-decoration: none;
 }
 
@@ -3318,32 +3423,32 @@ body.woocommerce-page .aisb-section--dark .widget_shopping_cart .total {
    -------------------------------------------------------------------------- */
 
 /* Light mode cart links - excludes .button to prevent overriding button text colors */
-.aisb-section--light .cart_totals a[href][href][href][href][href][href][href][href]:not(.button),
-.aisb-section--light .shipping-calculator-button[href][href][href][href][href][href][href][href] {
+.aisb-section--light .cart_totals a[href]:not(.button),
+.aisb-section--light .shipping-calculator-button[href] {
     color: var(--wc-link, var(--aisb-color-primary, #6366f1));
     text-decoration: none;
 }
 
-.aisb-section--light .cart_totals a[href][href][href][href][href][href][href][href]:not(.button):hover,
-.aisb-section--light .cart_totals a[href][href][href][href][href][href][href][href]:not(.button):focus,
-.aisb-section--light .shipping-calculator-button[href][href][href][href][href][href][href][href]:hover,
-.aisb-section--light .shipping-calculator-button[href][href][href][href][href][href][href][href]:focus {
+.aisb-section--light .cart_totals a[href]:not(.button):hover,
+.aisb-section--light .cart_totals a[href]:not(.button):focus,
+.aisb-section--light .shipping-calculator-button[href]:hover,
+.aisb-section--light .shipping-calculator-button[href]:focus {
     color: var(--wc-link, var(--aisb-color-primary, #6366f1));
     text-decoration: none;
     filter: brightness(0.85);
 }
 
 /* Dark mode cart links - excludes .button to prevent overriding button text colors */
-.aisb-section--dark .cart_totals a[href][href][href][href][href][href][href][href]:not(.button),
-.aisb-section--dark .shipping-calculator-button[href][href][href][href][href][href][href][href] {
+.aisb-section--dark .cart_totals a[href]:not(.button),
+.aisb-section--dark .shipping-calculator-button[href] {
     color: var(--wc-link, var(--aisb-color-primary, #6366f1));
     text-decoration: none;
 }
 
-.aisb-section--dark .cart_totals a[href][href][href][href][href][href][href][href]:not(.button):hover,
-.aisb-section--dark .cart_totals a[href][href][href][href][href][href][href][href]:not(.button):focus,
-.aisb-section--dark .shipping-calculator-button[href][href][href][href][href][href][href][href]:hover,
-.aisb-section--dark .shipping-calculator-button[href][href][href][href][href][href][href][href]:focus {
+.aisb-section--dark .cart_totals a[href]:not(.button):hover,
+.aisb-section--dark .cart_totals a[href]:not(.button):focus,
+.aisb-section--dark .shipping-calculator-button[href]:hover,
+.aisb-section--dark .shipping-calculator-button[href]:focus {
     color: var(--wc-link, var(--aisb-color-primary, #6366f1));
     text-decoration: none;
     filter: brightness(1.15);
@@ -3354,44 +3459,44 @@ body.woocommerce-page .aisb-section--dark .widget_shopping_cart .total {
    -------------------------------------------------------------------------- */
 
 /* Light mode checkout links - excludes .button to prevent overriding button text colors */
-.aisb-section--light .woocommerce-privacy-policy-link[href][href][href][href][href][href][href][href],
-.aisb-section--light .woocommerce-terms-and-conditions-link[href][href][href][href][href][href][href][href],
-.aisb-section--light .woocommerce-LostPassword a[href][href][href][href][href][href][href][href]:not(.button),
-.aisb-section--light .lost_password a[href][href][href][href][href][href][href][href]:not(.button) {
+.aisb-section--light .woocommerce-privacy-policy-link[href],
+.aisb-section--light .woocommerce-terms-and-conditions-link[href],
+.aisb-section--light .woocommerce-LostPassword a[href]:not(.button),
+.aisb-section--light .lost_password a[href]:not(.button) {
     color: var(--wc-link, var(--aisb-color-primary, #6366f1));
     text-decoration: none;
 }
 
-.aisb-section--light .woocommerce-privacy-policy-link[href][href][href][href][href][href][href][href]:hover,
-.aisb-section--light .woocommerce-privacy-policy-link[href][href][href][href][href][href][href][href]:focus,
-.aisb-section--light .woocommerce-terms-and-conditions-link[href][href][href][href][href][href][href][href]:hover,
-.aisb-section--light .woocommerce-terms-and-conditions-link[href][href][href][href][href][href][href][href]:focus,
-.aisb-section--light .woocommerce-LostPassword a[href][href][href][href][href][href][href][href]:not(.button):hover,
-.aisb-section--light .woocommerce-LostPassword a[href][href][href][href][href][href][href][href]:not(.button):focus,
-.aisb-section--light .lost_password a[href][href][href][href][href][href][href][href]:not(.button):hover,
-.aisb-section--light .lost_password a[href][href][href][href][href][href][href][href]:not(.button):focus {
+.aisb-section--light .woocommerce-privacy-policy-link[href]:hover,
+.aisb-section--light .woocommerce-privacy-policy-link[href]:focus,
+.aisb-section--light .woocommerce-terms-and-conditions-link[href]:hover,
+.aisb-section--light .woocommerce-terms-and-conditions-link[href]:focus,
+.aisb-section--light .woocommerce-LostPassword a[href]:not(.button):hover,
+.aisb-section--light .woocommerce-LostPassword a[href]:not(.button):focus,
+.aisb-section--light .lost_password a[href]:not(.button):hover,
+.aisb-section--light .lost_password a[href]:not(.button):focus {
     color: var(--wc-link, var(--aisb-color-primary, #6366f1));
     text-decoration: underline;
     filter: brightness(0.85);
 }
 
 /* Dark mode checkout links - excludes .button to prevent overriding button text colors */
-.aisb-section--dark .woocommerce-privacy-policy-link[href][href][href][href][href][href][href][href],
-.aisb-section--dark .woocommerce-terms-and-conditions-link[href][href][href][href][href][href][href][href],
-.aisb-section--dark .woocommerce-LostPassword a[href][href][href][href][href][href][href][href]:not(.button),
-.aisb-section--dark .lost_password a[href][href][href][href][href][href][href][href]:not(.button) {
+.aisb-section--dark .woocommerce-privacy-policy-link[href],
+.aisb-section--dark .woocommerce-terms-and-conditions-link[href],
+.aisb-section--dark .woocommerce-LostPassword a[href]:not(.button),
+.aisb-section--dark .lost_password a[href]:not(.button) {
     color: var(--wc-link, var(--aisb-color-primary, #6366f1));
     text-decoration: none;
 }
 
-.aisb-section--dark .woocommerce-privacy-policy-link[href][href][href][href][href][href][href][href]:hover,
-.aisb-section--dark .woocommerce-privacy-policy-link[href][href][href][href][href][href][href][href]:focus,
-.aisb-section--dark .woocommerce-terms-and-conditions-link[href][href][href][href][href][href][href][href]:hover,
-.aisb-section--dark .woocommerce-terms-and-conditions-link[href][href][href][href][href][href][href][href]:focus,
-.aisb-section--dark .woocommerce-LostPassword a[href][href][href][href][href][href][href][href]:not(.button):hover,
-.aisb-section--dark .woocommerce-LostPassword a[href][href][href][href][href][href][href][href]:not(.button):focus,
-.aisb-section--dark .lost_password a[href][href][href][href][href][href][href][href]:not(.button):hover,
-.aisb-section--dark .lost_password a[href][href][href][href][href][href][href][href]:not(.button):focus {
+.aisb-section--dark .woocommerce-privacy-policy-link[href]:hover,
+.aisb-section--dark .woocommerce-privacy-policy-link[href]:focus,
+.aisb-section--dark .woocommerce-terms-and-conditions-link[href]:hover,
+.aisb-section--dark .woocommerce-terms-and-conditions-link[href]:focus,
+.aisb-section--dark .woocommerce-LostPassword a[href]:not(.button):hover,
+.aisb-section--dark .woocommerce-LostPassword a[href]:not(.button):focus,
+.aisb-section--dark .lost_password a[href]:not(.button):hover,
+.aisb-section--dark .lost_password a[href]:not(.button):focus {
     color: var(--wc-link, var(--aisb-color-primary, #6366f1));
     text-decoration: underline;
     filter: brightness(1.15);
@@ -3402,70 +3507,70 @@ body.woocommerce-page .aisb-section--dark .widget_shopping_cart .total {
    -------------------------------------------------------------------------- */
 
 /* Light mode My Account content links - excludes .button to prevent overriding button text colors */
-.aisb-section--light .woocommerce-MyAccount-content a[href][href][href][href][href][href][href][href]:not(.button) {
+.aisb-section--light .woocommerce-MyAccount-content a[href]:not(.button) {
     color: var(--wc-link, var(--aisb-color-primary, #6366f1));
     text-decoration: none;
 }
 
-.aisb-section--light .woocommerce-MyAccount-content a[href][href][href][href][href][href][href][href]:not(.button):hover,
-.aisb-section--light .woocommerce-MyAccount-content a[href][href][href][href][href][href][href][href]:not(.button):focus {
+.aisb-section--light .woocommerce-MyAccount-content a[href]:not(.button):hover,
+.aisb-section--light .woocommerce-MyAccount-content a[href]:not(.button):focus {
     color: var(--wc-link, var(--aisb-color-primary, #6366f1));
     text-decoration: underline;
     filter: brightness(0.85);
 }
 
 /* Light mode specific My Account elements - excludes .button to prevent overriding button text colors */
-.aisb-section--light .woocommerce-orders-table a[href][href][href][href][href][href][href][href]:not(.button),
-.aisb-section--light .woocommerce-order-details a[href][href][href][href][href][href][href][href]:not(.button),
-.aisb-section--light .woocommerce-customer-details a[href][href][href][href][href][href][href][href]:not(.button),
-.aisb-section--light .woocommerce-Address a.edit[href][href][href][href][href][href][href][href] {
+.aisb-section--light .woocommerce-orders-table a[href]:not(.button),
+.aisb-section--light .woocommerce-order-details a[href]:not(.button),
+.aisb-section--light .woocommerce-customer-details a[href]:not(.button),
+.aisb-section--light .woocommerce-Address a.edit[href] {
     color: var(--wc-link, var(--aisb-color-primary, #6366f1));
     text-decoration: none;
 }
 
-.aisb-section--light .woocommerce-orders-table a[href][href][href][href][href][href][href][href]:not(.button):hover,
-.aisb-section--light .woocommerce-orders-table a[href][href][href][href][href][href][href][href]:not(.button):focus,
-.aisb-section--light .woocommerce-order-details a[href][href][href][href][href][href][href][href]:not(.button):hover,
-.aisb-section--light .woocommerce-order-details a[href][href][href][href][href][href][href][href]:not(.button):focus,
-.aisb-section--light .woocommerce-customer-details a[href][href][href][href][href][href][href][href]:not(.button):hover,
-.aisb-section--light .woocommerce-customer-details a[href][href][href][href][href][href][href][href]:not(.button):focus,
-.aisb-section--light .woocommerce-Address a.edit[href][href][href][href][href][href][href][href]:hover,
-.aisb-section--light .woocommerce-Address a.edit[href][href][href][href][href][href][href][href]:focus {
+.aisb-section--light .woocommerce-orders-table a[href]:not(.button):hover,
+.aisb-section--light .woocommerce-orders-table a[href]:not(.button):focus,
+.aisb-section--light .woocommerce-order-details a[href]:not(.button):hover,
+.aisb-section--light .woocommerce-order-details a[href]:not(.button):focus,
+.aisb-section--light .woocommerce-customer-details a[href]:not(.button):hover,
+.aisb-section--light .woocommerce-customer-details a[href]:not(.button):focus,
+.aisb-section--light .woocommerce-Address a.edit[href]:hover,
+.aisb-section--light .woocommerce-Address a.edit[href]:focus {
     color: var(--wc-link, var(--aisb-color-primary, #6366f1));
     text-decoration: underline;
     filter: brightness(0.85);
 }
 
 /* Dark mode My Account content links - excludes .button to prevent overriding button text colors */
-.aisb-section--dark .woocommerce-MyAccount-content a[href][href][href][href][href][href][href][href]:not(.button) {
+.aisb-section--dark .woocommerce-MyAccount-content a[href]:not(.button) {
     color: var(--wc-link, var(--aisb-color-primary, #6366f1));
     text-decoration: none;
 }
 
-.aisb-section--dark .woocommerce-MyAccount-content a[href][href][href][href][href][href][href][href]:not(.button):hover,
-.aisb-section--dark .woocommerce-MyAccount-content a[href][href][href][href][href][href][href][href]:not(.button):focus {
+.aisb-section--dark .woocommerce-MyAccount-content a[href]:not(.button):hover,
+.aisb-section--dark .woocommerce-MyAccount-content a[href]:not(.button):focus {
     color: var(--wc-link, var(--aisb-color-primary, #6366f1));
     text-decoration: underline;
     filter: brightness(1.15);
 }
 
 /* Dark mode specific My Account elements - excludes .button to prevent overriding button text colors */
-.aisb-section--dark .woocommerce-orders-table a[href][href][href][href][href][href][href][href]:not(.button),
-.aisb-section--dark .woocommerce-order-details a[href][href][href][href][href][href][href][href]:not(.button),
-.aisb-section--dark .woocommerce-customer-details a[href][href][href][href][href][href][href][href]:not(.button),
-.aisb-section--dark .woocommerce-Address a.edit[href][href][href][href][href][href][href][href] {
+.aisb-section--dark .woocommerce-orders-table a[href]:not(.button),
+.aisb-section--dark .woocommerce-order-details a[href]:not(.button),
+.aisb-section--dark .woocommerce-customer-details a[href]:not(.button),
+.aisb-section--dark .woocommerce-Address a.edit[href] {
     color: var(--wc-link, var(--aisb-color-primary, #6366f1));
     text-decoration: none;
 }
 
-.aisb-section--dark .woocommerce-orders-table a[href][href][href][href][href][href][href][href]:not(.button):hover,
-.aisb-section--dark .woocommerce-orders-table a[href][href][href][href][href][href][href][href]:not(.button):focus,
-.aisb-section--dark .woocommerce-order-details a[href][href][href][href][href][href][href][href]:not(.button):hover,
-.aisb-section--dark .woocommerce-order-details a[href][href][href][href][href][href][href][href]:not(.button):focus,
-.aisb-section--dark .woocommerce-customer-details a[href][href][href][href][href][href][href][href]:not(.button):hover,
-.aisb-section--dark .woocommerce-customer-details a[href][href][href][href][href][href][href][href]:not(.button):focus,
-.aisb-section--dark .woocommerce-Address a.edit[href][href][href][href][href][href][href][href]:hover,
-.aisb-section--dark .woocommerce-Address a.edit[href][href][href][href][href][href][href][href]:focus {
+.aisb-section--dark .woocommerce-orders-table a[href]:not(.button):hover,
+.aisb-section--dark .woocommerce-orders-table a[href]:not(.button):focus,
+.aisb-section--dark .woocommerce-order-details a[href]:not(.button):hover,
+.aisb-section--dark .woocommerce-order-details a[href]:not(.button):focus,
+.aisb-section--dark .woocommerce-customer-details a[href]:not(.button):hover,
+.aisb-section--dark .woocommerce-customer-details a[href]:not(.button):focus,
+.aisb-section--dark .woocommerce-Address a.edit[href]:hover,
+.aisb-section--dark .woocommerce-Address a.edit[href]:focus {
     color: var(--wc-link, var(--aisb-color-primary, #6366f1));
     text-decoration: underline;
     filter: brightness(1.15);

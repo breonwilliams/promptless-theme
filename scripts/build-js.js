@@ -61,13 +61,27 @@ async function minifyJS(inputPath) {
 async function build() {
     console.log('Building minified JavaScript files...\n');
 
-    for (const file of jsFiles) {
-        const fullPath = path.join(themeRoot, file);
-        if (fs.existsSync(fullPath)) {
-            await minifyJS(file);
-        } else {
-            console.log(`⚠ Skipping ${file} (not found)`);
+    // Pass 1: assert every listed source file exists. Previously we logged
+    // "⚠ Skipping…" and continued, which silently masked typos in jsFiles
+    // (or accidentally-deleted source files) and shipped stale .min.js.
+    // Failing here is a CI-friendly hard stop: the build is wrong, fix the
+    // file list or restore the missing source.
+    const missing = jsFiles.filter(
+        (file) => !fs.existsSync(path.join(themeRoot, file))
+    );
+    if (missing.length > 0) {
+        console.error('✗ JavaScript build aborted — listed source files do not exist:');
+        for (const file of missing) {
+            console.error(`    ${file}`);
         }
+        console.error('\nFix scripts/build-js.js jsFiles[] or restore the missing source.');
+        process.exit(1);
+    }
+
+    // Pass 2: minify every file. Each file's own try/catch in minifyJS
+    // already exits with code 1 on a per-file error.
+    for (const file of jsFiles) {
+        await minifyJS(file);
     }
 
     console.log('\n✓ JavaScript build complete!');

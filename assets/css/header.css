@@ -98,36 +98,37 @@
     text-decoration: none;
 }
 
-/* Site title link - high specificity overrides for plugin link colors
-   Uses 9x [href] attribute selectors (0,12,0) to beat plugin specificity (0,11,1)
-   Plugin selector: .aisb-section--dark a:not(.aisb-btn):not(.button)... has 10 :not() + 'a' element */
-.promptless-header.aisb-section--light .promptless-header__site-title[href][href][href][href][href][href][href][href][href] {
+/* Site title link styling.
+   The site title is intentionally static — no hover color shift, since
+   it's identity, not a CTA. Plugin catch-all link rule is layered
+   (@layer aisb-defaults) so these normal-specificity rules win. */
+.promptless-header.aisb-section--light .promptless-header__site-title[href] {
     color: var(--section-text);
     text-decoration: none;
     transition: none;
 }
 
-.promptless-header.aisb-section--light .promptless-header__site-title[href][href][href][href][href][href][href][href][href]:hover,
-.promptless-header.aisb-section--light .promptless-header__site-title[href][href][href][href][href][href][href][href][href]:focus {
+.promptless-header.aisb-section--light .promptless-header__site-title[href]:hover,
+.promptless-header.aisb-section--light .promptless-header__site-title[href]:focus {
     color: var(--section-text);  /* Static - no color change on hover */
     text-decoration: none;
 }
 
-.promptless-header.aisb-section--dark .promptless-header__site-title[href][href][href][href][href][href][href][href][href] {
+.promptless-header.aisb-section--dark .promptless-header__site-title[href] {
     color: var(--section-text);
     text-decoration: none;
     transition: none;
 }
 
-.promptless-header.aisb-section--dark .promptless-header__site-title[href][href][href][href][href][href][href][href][href]:hover,
-.promptless-header.aisb-section--dark .promptless-header__site-title[href][href][href][href][href][href][href][href][href]:focus {
+.promptless-header.aisb-section--dark .promptless-header__site-title[href]:hover,
+.promptless-header.aisb-section--dark .promptless-header__site-title[href]:focus {
     color: var(--section-text);  /* Static - no color change on hover */
     text-decoration: none;
 }
 
-/* Brand link wrapper - high specificity override */
-.promptless-header.aisb-section--light .promptless-header__brand a[href][href][href][href][href][href][href][href],
-.promptless-header.aisb-section--dark .promptless-header__brand a[href][href][href][href][href][href][href][href] {
+/* Brand link wrapper. */
+.promptless-header.aisb-section--light .promptless-header__brand a[href],
+.promptless-header.aisb-section--dark .promptless-header__brand a[href] {
     text-decoration: none;
 }
 
@@ -206,47 +207,48 @@
 }
 
 /* ==========================================================================
-   HIGH-SPECIFICITY NAVIGATION LINK OVERRIDES
-   Plugin core-components.css link rules have specificity 0,10,1 due to 9 :not() clauses.
-   We use 8x [href] attribute selectors to achieve 0,11,1 and override.
-   See docs/standards/WOOCOMMERCE_DESIGN_ALIGNMENT.md Part 8.3
+   Navigation Link Overrides
+   The plugin's catch-all link-paint rule (core-components.css, the 10x
+   :not() chain) is wrapped in @layer aisb-defaults — so these normal-
+   specificity theme rules win the cascade without specificity hacks.
+   See THEME_AUDIT_WAVE2_PLAN.md.
    ========================================================================== */
 
 /* Light mode navigation - base state */
-.promptless-header.aisb-section--light .promptless-header__nav-list a[href][href][href][href][href][href][href][href] {
+.promptless-header.aisb-section--light .promptless-header__nav-list a[href] {
     color: var(--section-text);
     text-decoration: none;
 }
 
 /* Light mode navigation - hover/focus-visible */
-.promptless-header.aisb-section--light .promptless-header__nav-list a[href][href][href][href][href][href][href][href]:hover,
-.promptless-header.aisb-section--light .promptless-header__nav-list a[href][href][href][href][href][href][href][href]:focus-visible {
+.promptless-header.aisb-section--light .promptless-header__nav-list a[href]:hover,
+.promptless-header.aisb-section--light .promptless-header__nav-list a[href]:focus-visible {
     color: var(--aisb-smart-light-section-link, var(--section-primary));
     text-decoration: none;
 }
 
 /* Light mode navigation - current item */
-.promptless-header.aisb-section--light .promptless-header__nav-list .current-menu-item > a[href][href][href][href][href][href][href][href],
-.promptless-header.aisb-section--light .promptless-header__nav-list .current_page_item > a[href][href][href][href][href][href][href][href] {
+.promptless-header.aisb-section--light .promptless-header__nav-list .current-menu-item > a[href],
+.promptless-header.aisb-section--light .promptless-header__nav-list .current_page_item > a[href] {
     color: var(--aisb-smart-light-section-link, var(--section-primary));
 }
 
 /* Dark mode navigation - base state */
-.promptless-header.aisb-section--dark .promptless-header__nav-list a[href][href][href][href][href][href][href][href] {
+.promptless-header.aisb-section--dark .promptless-header__nav-list a[href] {
     color: var(--section-text);
     text-decoration: none;
 }
 
 /* Dark mode navigation - hover/focus-visible */
-.promptless-header.aisb-section--dark .promptless-header__nav-list a[href][href][href][href][href][href][href][href]:hover,
-.promptless-header.aisb-section--dark .promptless-header__nav-list a[href][href][href][href][href][href][href][href]:focus-visible {
+.promptless-header.aisb-section--dark .promptless-header__nav-list a[href]:hover,
+.promptless-header.aisb-section--dark .promptless-header__nav-list a[href]:focus-visible {
     color: var(--aisb-smart-dark-section-link, var(--section-primary));
     text-decoration: none;
 }
 
 /* Dark mode navigation - current item */
-.promptless-header.aisb-section--dark .promptless-header__nav-list .current-menu-item > a[href][href][href][href][href][href][href][href],
-.promptless-header.aisb-section--dark .promptless-header__nav-list .current_page_item > a[href][href][href][href][href][href][href][href] {
+.promptless-header.aisb-section--dark .promptless-header__nav-list .current-menu-item > a[href],
+.promptless-header.aisb-section--dark .promptless-header__nav-list .current_page_item > a[href] {
     color: var(--aisb-smart-dark-section-link, var(--section-primary));
 }
 
@@ -317,6 +319,7 @@
 .promptless-header.aisb-section--light .promptless-header__nav-list > .menu-item-has-children > a:hover::after,
 .promptless-header.aisb-section--light .promptless-header__nav-list > .menu-item-has-children > a:focus::after {
     background-color: var(--aisb-smart-light-section-link, var(--section-primary));
+    text-decoration: none;
 }
 
 /* Dark mode - chevron base state */
@@ -328,6 +331,7 @@
 .promptless-header.aisb-section--dark .promptless-header__nav-list > .menu-item-has-children > a:hover::after,
 .promptless-header.aisb-section--dark .promptless-header__nav-list > .menu-item-has-children > a:focus::after {
     background-color: var(--aisb-smart-dark-section-link, var(--section-primary));
+    text-decoration: none;
 }
 
 /* ==========================================================================
@@ -442,6 +446,7 @@
 .promptless-header.aisb-section--light .promptless-header__nav-list .sub-menu .menu-item-has-children > a:hover::after,
 .promptless-header.aisb-section--light .promptless-header__nav-list .sub-menu .menu-item-has-children > a:focus::after {
     background-color: var(--aisb-smart-light-section-link, var(--section-primary));
+    text-decoration: none;
 }
 
 .promptless-header.aisb-section--dark .promptless-header__nav-list .sub-menu .menu-item-has-children > a::after {
@@ -451,6 +456,7 @@
 .promptless-header.aisb-section--dark .promptless-header__nav-list .sub-menu .menu-item-has-children > a:hover::after,
 .promptless-header.aisb-section--dark .promptless-header__nav-list .sub-menu .menu-item-has-children > a:focus::after {
     background-color: var(--aisb-smart-dark-section-link, var(--section-primary));
+    text-decoration: none;
 }
 
 /* ==========================================================================
@@ -734,7 +740,13 @@
     left: 50%;
     transform: translateX(-50%);
     background: var(--section-primary, var(--aisb-color-primary, #6366f1));
-    color: #ffffff;
+    /* Was hardcoded #ffffff, which failed WCAG 1.4.3 contrast on palettes
+     * with a LIGHT primary color (e.g. light teal: white-on-light = ~1.6:1
+     * vs the 4.5:1 minimum). --aisb-button-primary-text is the plugin's
+     * smart-calculated text color for the brand background — auto-selects
+     * white for dark primaries and dark text for light primaries.
+     * Hardcoded fallbacks preserve sane defaults if the plugin is inactive. */
+    color: var(--aisb-button-primary-text, #ffffff);
     padding: 8px 16px;
     z-index: 999999;
     text-decoration: none;
@@ -823,20 +835,20 @@
 }
 
 /* High-specificity override to prevent plugin link color interference */
-.promptless-header.aisb-section--light .promptless-header__cart-link[href][href][href][href][href][href][href][href],
-.promptless-header.aisb-section--dark .promptless-header__cart-link[href][href][href][href][href][href][href][href] {
+.promptless-header.aisb-section--light .promptless-header__cart-link[href],
+.promptless-header.aisb-section--dark .promptless-header__cart-link[href] {
     color: var(--section-text);
     text-decoration: none;
 }
 
-.promptless-header.aisb-section--light .promptless-header__cart-link[href][href][href][href][href][href][href][href]:hover,
-.promptless-header.aisb-section--light .promptless-header__cart-link[href][href][href][href][href][href][href][href]:focus {
+.promptless-header.aisb-section--light .promptless-header__cart-link[href]:hover,
+.promptless-header.aisb-section--light .promptless-header__cart-link[href]:focus {
     color: var(--aisb-smart-light-section-link, var(--section-primary));
     text-decoration: none;
 }
 
-.promptless-header.aisb-section--dark .promptless-header__cart-link[href][href][href][href][href][href][href][href]:hover,
-.promptless-header.aisb-section--dark .promptless-header__cart-link[href][href][href][href][href][href][href][href]:focus {
+.promptless-header.aisb-section--dark .promptless-header__cart-link[href]:hover,
+.promptless-header.aisb-section--dark .promptless-header__cart-link[href]:focus {
     color: var(--aisb-smart-dark-section-link, var(--section-primary));
     text-decoration: none;
 }
@@ -1049,33 +1061,32 @@
    ========================================================================== */
 
 /* Product name link - base state */
-.promptless-header.aisb-section--light .promptless-cart-item__name[href][href][href][href][href][href][href][href],
-.promptless-header.aisb-section--dark .promptless-cart-item__name[href][href][href][href][href][href][href][href] {
+.promptless-header.aisb-section--light .promptless-cart-item__name[href],
+.promptless-header.aisb-section--dark .promptless-cart-item__name[href] {
     color: var(--section-text);
     text-decoration: none;
 }
 
 /* Product name link - hover */
-.promptless-header.aisb-section--light .promptless-cart-item__name[href][href][href][href][href][href][href][href]:hover,
-.promptless-header.aisb-section--dark .promptless-cart-item__name[href][href][href][href][href][href][href][href]:hover {
+.promptless-header.aisb-section--light .promptless-cart-item__name[href]:hover,
+.promptless-header.aisb-section--dark .promptless-cart-item__name[href]:hover {
     text-decoration: underline;
 }
 
 /* Image link - no text decoration */
-.promptless-header.aisb-section--light .promptless-cart-item__image[href][href][href][href][href][href][href][href],
-.promptless-header.aisb-section--dark .promptless-cart-item__image[href][href][href][href][href][href][href][href] {
+.promptless-header.aisb-section--light .promptless-cart-item__image[href],
+.promptless-header.aisb-section--dark .promptless-cart-item__image[href] {
     text-decoration: none;
 }
 
-/* Remove button - Light theme base state
-   Uses 9x [href] selectors (0,12,1) to beat plugin link rules (0,11,1) */
-.promptless-header.aisb-section--light .promptless-cart-item__remove[href][href][href][href][href][href][href][href][href] {
+/* Remove button - Light theme base state */
+.promptless-header.aisb-section--light .promptless-cart-item__remove[href] {
     color: var(--aisb-smart-light-icon, var(--aisb-color-primary));
     text-decoration: none;
 }
 
 /* Remove button - Light theme hover */
-.promptless-header.aisb-section--light .promptless-cart-item__remove[href][href][href][href][href][href][href][href][href]:hover {
+.promptless-header.aisb-section--light .promptless-cart-item__remove[href]:hover {
     color: var(--aisb-smart-light-icon, var(--aisb-color-primary));
     background-color: var(--aisb-smart-light-icon-bg, var(--aisb-color-primary-bg));
     filter: brightness(0.92);
@@ -1083,13 +1094,13 @@
 }
 
 /* Remove button - Dark theme base state */
-.promptless-header.aisb-section--dark .promptless-cart-item__remove[href][href][href][href][href][href][href][href][href] {
+.promptless-header.aisb-section--dark .promptless-cart-item__remove[href] {
     color: var(--aisb-smart-dark-icon, var(--aisb-color-primary));
     text-decoration: none;
 }
 
 /* Remove button - Dark theme hover */
-.promptless-header.aisb-section--dark .promptless-cart-item__remove[href][href][href][href][href][href][href][href][href]:hover {
+.promptless-header.aisb-section--dark .promptless-cart-item__remove[href]:hover {
     color: var(--aisb-smart-dark-icon, var(--aisb-color-primary));
     background-color: var(--aisb-smart-dark-icon-bg, var(--aisb-color-primary-bg));
     filter: brightness(1.15);
@@ -1349,46 +1360,48 @@ body.woocommerce-checkout .promptless-header__mini-cart .promptless-cart-item__r
 }
 
 /* ==========================================================================
-   SMART COLOR CONTRAST SYSTEM - High-Specificity Link Overrides
-   Uses 8x [href] attribute selectors (specificity 0,11,1) to override
-   plugin core-components.css link rules (specificity 0,10,1)
+   Smart Color Contrast System — Link Styling
+   Plugin catch-all is layered (@layer aisb-defaults), so these normal-
+   specificity theme rules win the cascade. Color values still read from
+   --aisb-smart-* tokens for WCAG-compliant contrast on user palettes.
+   See THEME_AUDIT_WAVE2_PLAN.md.
    ========================================================================== */
 
 /* LIGHT MODE - Base state */
-.promptless-topbar.aisb-section--light .promptless-topbar__nav-list a[href][href][href][href][href][href][href][href] {
+.promptless-topbar.aisb-section--light .promptless-topbar__nav-list a[href] {
     color: var(--topbar-text-muted);
     text-decoration: none;
 }
 
 /* LIGHT MODE - Hover/Focus-visible - Uses smart accessible link color */
-.promptless-topbar.aisb-section--light .promptless-topbar__nav-list a[href][href][href][href][href][href][href][href]:hover,
-.promptless-topbar.aisb-section--light .promptless-topbar__nav-list a[href][href][href][href][href][href][href][href]:focus-visible {
+.promptless-topbar.aisb-section--light .promptless-topbar__nav-list a[href]:hover,
+.promptless-topbar.aisb-section--light .promptless-topbar__nav-list a[href]:focus-visible {
     color: var(--aisb-smart-light-section-link, var(--topbar-primary));
     text-decoration: none;
 }
 
 /* LIGHT MODE - Current menu item */
-.promptless-topbar.aisb-section--light .promptless-topbar__nav-list .current-menu-item > a[href][href][href][href][href][href][href][href],
-.promptless-topbar.aisb-section--light .promptless-topbar__nav-list .current_page_item > a[href][href][href][href][href][href][href][href] {
+.promptless-topbar.aisb-section--light .promptless-topbar__nav-list .current-menu-item > a[href],
+.promptless-topbar.aisb-section--light .promptless-topbar__nav-list .current_page_item > a[href] {
     color: var(--aisb-smart-light-section-link, var(--topbar-primary));
 }
 
 /* DARK MODE - Base state */
-.promptless-topbar.aisb-section--dark .promptless-topbar__nav-list a[href][href][href][href][href][href][href][href] {
+.promptless-topbar.aisb-section--dark .promptless-topbar__nav-list a[href] {
     color: var(--topbar-text-muted);
     text-decoration: none;
 }
 
 /* DARK MODE - Hover/Focus-visible - Uses smart accessible link color */
-.promptless-topbar.aisb-section--dark .promptless-topbar__nav-list a[href][href][href][href][href][href][href][href]:hover,
-.promptless-topbar.aisb-section--dark .promptless-topbar__nav-list a[href][href][href][href][href][href][href][href]:focus-visible {
+.promptless-topbar.aisb-section--dark .promptless-topbar__nav-list a[href]:hover,
+.promptless-topbar.aisb-section--dark .promptless-topbar__nav-list a[href]:focus-visible {
     color: var(--aisb-smart-dark-section-link, var(--topbar-primary));
     text-decoration: none;
 }
 
 /* DARK MODE - Current menu item */
-.promptless-topbar.aisb-section--dark .promptless-topbar__nav-list .current-menu-item > a[href][href][href][href][href][href][href][href],
-.promptless-topbar.aisb-section--dark .promptless-topbar__nav-list .current_page_item > a[href][href][href][href][href][href][href][href] {
+.promptless-topbar.aisb-section--dark .promptless-topbar__nav-list .current-menu-item > a[href],
+.promptless-topbar.aisb-section--dark .promptless-topbar__nav-list .current_page_item > a[href] {
     color: var(--aisb-smart-dark-section-link, var(--topbar-primary));
 }
 
@@ -1471,32 +1484,34 @@ body.woocommerce-checkout .promptless-header__mini-cart .promptless-cart-item__r
     }
 
     /* High-specificity overrides for plugin link colors */
-    .promptless-header.aisb-section--light .promptless-mobile-topbar__list a[href][href][href][href][href][href][href][href] {
+    .promptless-header.aisb-section--light .promptless-mobile-topbar__list a[href] {
         color: var(--section-text-muted);
     }
 
-    .promptless-header.aisb-section--light .promptless-mobile-topbar__list a[href][href][href][href][href][href][href][href]:hover,
-    .promptless-header.aisb-section--light .promptless-mobile-topbar__list a[href][href][href][href][href][href][href][href]:focus-visible {
+    .promptless-header.aisb-section--light .promptless-mobile-topbar__list a[href]:hover,
+    .promptless-header.aisb-section--light .promptless-mobile-topbar__list a[href]:focus-visible {
         color: var(--aisb-smart-light-section-link, var(--section-primary));
+        text-decoration: none;
     }
 
-    .promptless-header.aisb-section--dark .promptless-mobile-topbar__list a[href][href][href][href][href][href][href][href] {
+    .promptless-header.aisb-section--dark .promptless-mobile-topbar__list a[href] {
         color: var(--section-text-muted);
     }
 
-    .promptless-header.aisb-section--dark .promptless-mobile-topbar__list a[href][href][href][href][href][href][href][href]:hover,
-    .promptless-header.aisb-section--dark .promptless-mobile-topbar__list a[href][href][href][href][href][href][href][href]:focus-visible {
+    .promptless-header.aisb-section--dark .promptless-mobile-topbar__list a[href]:hover,
+    .promptless-header.aisb-section--dark .promptless-mobile-topbar__list a[href]:focus-visible {
         color: var(--aisb-smart-dark-section-link, var(--section-primary));
+        text-decoration: none;
     }
 
     /* Current menu item highlighting */
-    .promptless-header.aisb-section--light .promptless-mobile-topbar__list .current-menu-item > a[href][href][href][href][href][href][href][href],
-    .promptless-header.aisb-section--light .promptless-mobile-topbar__list .current_page_item > a[href][href][href][href][href][href][href][href] {
+    .promptless-header.aisb-section--light .promptless-mobile-topbar__list .current-menu-item > a[href],
+    .promptless-header.aisb-section--light .promptless-mobile-topbar__list .current_page_item > a[href] {
         color: var(--aisb-smart-light-section-link, var(--section-primary));
     }
 
-    .promptless-header.aisb-section--dark .promptless-mobile-topbar__list .current-menu-item > a[href][href][href][href][href][href][href][href],
-    .promptless-header.aisb-section--dark .promptless-mobile-topbar__list .current_page_item > a[href][href][href][href][href][href][href][href] {
+    .promptless-header.aisb-section--dark .promptless-mobile-topbar__list .current-menu-item > a[href],
+    .promptless-header.aisb-section--dark .promptless-mobile-topbar__list .current_page_item > a[href] {
         color: var(--aisb-smart-dark-section-link, var(--section-primary));
     }
 }
@@ -1683,45 +1698,46 @@ body.woocommerce-checkout .promptless-header__mini-cart .promptless-cart-item__r
 }
 
 /* ==========================================================================
-   STACKED NAV BAR: HIGH-SPECIFICITY LINK OVERRIDES
-   Same pattern as header navigation - override plugin link colors
+   Stacked Nav Bar — Link Styling
+   Plugin catch-all is layered (@layer aisb-defaults), so these normal-
+   specificity theme rules win the cascade. See THEME_AUDIT_WAVE2_PLAN.md.
    ========================================================================== */
 
 /* Light mode navigation - base state */
-.promptless-header-nav.aisb-section--light .promptless-header__nav-list a[href][href][href][href][href][href][href][href] {
+.promptless-header-nav.aisb-section--light .promptless-header__nav-list a[href] {
     color: var(--section-text);
     text-decoration: none;
 }
 
 /* Light mode navigation - hover/focus-visible */
-.promptless-header-nav.aisb-section--light .promptless-header__nav-list a[href][href][href][href][href][href][href][href]:hover,
-.promptless-header-nav.aisb-section--light .promptless-header__nav-list a[href][href][href][href][href][href][href][href]:focus-visible {
+.promptless-header-nav.aisb-section--light .promptless-header__nav-list a[href]:hover,
+.promptless-header-nav.aisb-section--light .promptless-header__nav-list a[href]:focus-visible {
     color: var(--aisb-smart-light-section-link, var(--section-primary));
     text-decoration: none;
 }
 
 /* Light mode navigation - current item */
-.promptless-header-nav.aisb-section--light .promptless-header__nav-list .current-menu-item > a[href][href][href][href][href][href][href][href],
-.promptless-header-nav.aisb-section--light .promptless-header__nav-list .current_page_item > a[href][href][href][href][href][href][href][href] {
+.promptless-header-nav.aisb-section--light .promptless-header__nav-list .current-menu-item > a[href],
+.promptless-header-nav.aisb-section--light .promptless-header__nav-list .current_page_item > a[href] {
     color: var(--aisb-smart-light-section-link, var(--section-primary));
 }
 
 /* Dark mode navigation - base state */
-.promptless-header-nav.aisb-section--dark .promptless-header__nav-list a[href][href][href][href][href][href][href][href] {
+.promptless-header-nav.aisb-section--dark .promptless-header__nav-list a[href] {
     color: var(--section-text);
     text-decoration: none;
 }
 
 /* Dark mode navigation - hover/focus-visible */
-.promptless-header-nav.aisb-section--dark .promptless-header__nav-list a[href][href][href][href][href][href][href][href]:hover,
-.promptless-header-nav.aisb-section--dark .promptless-header__nav-list a[href][href][href][href][href][href][href][href]:focus-visible {
+.promptless-header-nav.aisb-section--dark .promptless-header__nav-list a[href]:hover,
+.promptless-header-nav.aisb-section--dark .promptless-header__nav-list a[href]:focus-visible {
     color: var(--aisb-smart-dark-section-link, var(--section-primary));
     text-decoration: none;
 }
 
 /* Dark mode navigation - current item */
-.promptless-header-nav.aisb-section--dark .promptless-header__nav-list .current-menu-item > a[href][href][href][href][href][href][href][href],
-.promptless-header-nav.aisb-section--dark .promptless-header__nav-list .current_page_item > a[href][href][href][href][href][href][href][href] {
+.promptless-header-nav.aisb-section--dark .promptless-header__nav-list .current-menu-item > a[href],
+.promptless-header-nav.aisb-section--dark .promptless-header__nav-list .current_page_item > a[href] {
     color: var(--aisb-smart-dark-section-link, var(--section-primary));
 }
 
@@ -1780,6 +1796,7 @@ body.woocommerce-checkout .promptless-header__mini-cart .promptless-cart-item__r
 .promptless-header-nav.aisb-section--light .promptless-header__nav-list > .menu-item-has-children > a:hover::after,
 .promptless-header-nav.aisb-section--light .promptless-header__nav-list > .menu-item-has-children > a:focus::after {
     background-color: var(--aisb-smart-light-section-link, var(--section-primary));
+    text-decoration: none;
 }
 
 .promptless-header-nav.aisb-section--dark .promptless-header__nav-list > .menu-item-has-children > a::after {
@@ -1789,4 +1806,5 @@ body.woocommerce-checkout .promptless-header__mini-cart .promptless-cart-item__r
 .promptless-header-nav.aisb-section--dark .promptless-header__nav-list > .menu-item-has-children > a:hover::after,
 .promptless-header-nav.aisb-section--dark .promptless-header__nav-list > .menu-item-has-children > a:focus::after {
     background-color: var(--aisb-smart-dark-section-link, var(--section-primary));
+    text-decoration: none;
 }

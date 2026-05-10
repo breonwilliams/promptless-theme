@@ -967,27 +967,52 @@ add_filter( 'nav_menu_css_class', 'promptless_fix_home_menu_item_classes', 10, 3
  * - Mini-cart is enabled in header
  * - Page has a productgrid section from Promptless WP
  *
+ * Per-request memoized: the answer for a given post ID can't change
+ * mid-request (WC conditional tags, header-customizer state, and post
+ * meta are all stable within one PHP process), and the function is hit
+ * multiple times per page load by the asset-enqueue layer. Without
+ * caching, each call re-reads `_aisb_sections` post meta and JSON-decodes
+ * it just to scan for a `productgrid` section type.
+ *
+ * Cache key: the global `$post->ID` (or `__no_post__` when absent).
+ * Object cache is request-scoped via the function's static array, which
+ * is the right scope here — we don't want to persist across requests
+ * because the WC conditional tags depend on the current request URL.
+ *
  * @since 1.2.0
  * @return bool
  */
 function promptless_needs_woocommerce_assets() {
+    static $cache = array();
+
+    // Cache key: per-post when available, '__no_post__' otherwise. The
+    // global $post is the right scope because the only branch that varies
+    // by content is the productgrid scan; the WC/mini-cart branches are
+    // request-global and would produce the same answer for any post in
+    // the same request anyway.
+    global $post;
+    $cache_key = ( $post && isset( $post->ID ) ) ? (int) $post->ID : '__no_post__';
+
+    if ( array_key_exists( $cache_key, $cache ) ) {
+        return $cache[ $cache_key ];
+    }
+
     // WooCommerce must be active
     if ( ! class_exists( 'WooCommerce' ) ) {
-        return false;
+        return $cache[ $cache_key ] = false;
     }
 
     // Always load on WooCommerce pages
     if ( is_woocommerce() || is_cart() || is_checkout() || is_account_page() ) {
-        return true;
+        return $cache[ $cache_key ] = true;
     }
 
     // Load if mini-cart is enabled (needs AJAX updates)
     if ( function_exists( 'promptless_has_header_cart' ) && promptless_has_header_cart() ) {
-        return true;
+        return $cache[ $cache_key ] = true;
     }
 
     // Check if page has productgrid section
-    global $post;
     if ( $post ) {
         $sections = get_post_meta( $post->ID, '_aisb_sections', true );
 
@@ -998,11 +1023,11 @@ function promptless_needs_woocommerce_assets() {
         if ( is_array( $sections ) ) {
             foreach ( $sections as $section ) {
                 if ( isset( $section['type'] ) && $section['type'] === 'productgrid' ) {
-                    return true;
+                    return $cache[ $cache_key ] = true;
                 }
             }
         }
     }
 
-    return false;
+    return $cache[ $cache_key ] = false;
 }

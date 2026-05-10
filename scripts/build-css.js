@@ -64,13 +64,27 @@ async function minifyCSS(inputPath) {
 async function build() {
     console.log('Building minified CSS files...\n');
 
-    for (const file of cssFiles) {
-        const fullPath = path.join(themeRoot, file);
-        if (fs.existsSync(fullPath)) {
-            await minifyCSS(file);
-        } else {
-            console.log(`⚠ Skipping ${file} (not found)`);
+    // Pass 1: assert every listed source file exists. Previously we logged
+    // "⚠ Skipping…" and continued, which silently masked typos in cssFiles
+    // (or accidentally-deleted source files) and shipped stale .min.css.
+    // Failing here is a CI-friendly hard stop: the build is wrong, fix the
+    // file list or restore the missing source.
+    const missing = cssFiles.filter(
+        (file) => !fs.existsSync(path.join(themeRoot, file))
+    );
+    if (missing.length > 0) {
+        console.error('✗ CSS build aborted — listed source files do not exist:');
+        for (const file of missing) {
+            console.error(`    ${file}`);
         }
+        console.error('\nFix scripts/build-css.js cssFiles[] or restore the missing source.');
+        process.exit(1);
+    }
+
+    // Pass 2: minify every file. Each file's own try/catch in minifyCSS
+    // already exits with code 1 on a per-file error.
+    for (const file of cssFiles) {
+        await minifyCSS(file);
     }
 
     console.log('\n✓ CSS build complete!');
