@@ -574,11 +574,32 @@
         padding: 0.5rem 0;
     }
 
-    /* When collapsed topbar exists above, add top border to primary nav for visual separation */
+    /* When the collapsed topbar exists above, the primary nav gets a
+       top border for visual separation, and ALL of its native vertical
+       padding/margin is removed so the link padding alone defines the
+       drawer's vertical rhythm.
+
+       Why: the base .promptless-header__nav rule above sets `padding: 0.5rem 0`
+       to give the menu breathing room from the header chrome in inline
+       mode (where this nav is the first thing in the drawer). In collapse
+       mode that breathing room isn't needed — the topbar above already
+       provides spacing — and the extra 12px nav padding-top + 4px margin
+       was making the gap between the last topbar item and the FIRST nav
+       item visibly larger than the gap between any pair of primary-nav
+       items (which is just link-pb + 1px border + link-pt = 25px).
+
+       Zeroing margin/padding on this adjacent selector means:
+         • Gap above Home = topbar last link pb (13) + border (1) + Home link pt (12) = 26px
+         • Gap between Home/Shop = link pb (12) + border (1) + link pt (12) = 25px
+       Difference: 1px (imperceptible). Pixel-perfect rhythm.
+
+       The selector is scoped to `.promptless-mobile-topbar + .nav` so
+       inline mode (no topbar above) keeps its original 8px padding for
+       header-chrome separation. */
     .promptless-mobile-topbar + .promptless-header__nav {
         border-top: 1px solid var(--section-border);
-        margin-top: 0.25rem;
-        padding-top: 0.75rem;
+        margin-top: 0;
+        padding: 0;
     }
 
     .promptless-header__nav-list {
@@ -589,6 +610,25 @@
 
     .promptless-header__nav-list li {
         width: 100%;
+    }
+
+    /* Subtle separator between TOP-LEVEL menu items. The `> li + li`
+       adjacent-sibling selector targets every direct-child <li> EXCEPT
+       the first, so there's no top-border doubling against the mobile
+       topbar's bottom-border (.promptless-mobile-topbar +
+       .promptless-header__nav has its own border-top at line ~579).
+
+       Submenu items (.sub-menu > li) are explicitly NOT direct children
+       of .promptless-header__nav-list, so they're excluded from this
+       selector — a parent's expanded submenu reads as one visual group
+       with its parent rather than a separate list of items, which is
+       the correct grouping for "which chevron toggles which item."
+
+       Uses the same --section-border token as the existing chevron
+       divider so it adapts to the theme variant (.aisb-section--light
+       vs .aisb-section--dark) automatically. */
+    .promptless-header__nav-list > li + li {
+        border-top: 1px solid var(--section-border);
     }
 
     /* ==========================================================================
@@ -619,7 +659,14 @@
         overflow-wrap: break-word; /* Long text protection - modern property */
     }
 
-    /* Toggle button - right side */
+    /* Toggle button - right side.
+       The previous design used border-left to separate the toggle from
+       its sibling link, but that vertical line read as "the chevron
+       belongs to a column" rather than "the chevron belongs to its row."
+       With horizontal separators now between menu items (see
+       .promptless-header__nav-list > li + li above), each parent item
+       + its chevron read as one unit, and the chevron's affordance
+       comes from its size + hover/focus state, not from a hard border. */
     .promptless-header__nav-list .submenu-toggle {
         display: flex;
         align-items: center;
@@ -628,7 +675,6 @@
         padding: 0;
         background: transparent;
         border: none;
-        border-left: 1px solid var(--section-border);
         cursor: pointer;
         transition: background-color 0.2s ease;
     }
@@ -646,26 +692,33 @@
         box-shadow: none;
     }
 
-    /* Chevron icon using mask technique */
+    /* Chevron icon using mask technique.
+       Sized at 18×18 (was 12×12) so the affordance is clearly visible
+       without relying on the removed vertical divider. SVG uses
+       stroke-width:2.5 and rounded line caps/joins for a confident
+       modern chevron silhouette — same direction as the rest of the
+       theme's icon weight. Opacity stays subtle in the base state
+       (0.7) so the icon doesn't fight with the menu label, then ramps
+       to full opacity when expanded to telegraph the active state. */
     .promptless-header__nav-list .submenu-toggle__icon {
         display: block;
-        width: 12px;
-        height: 12px;
+        width: 18px;
+        height: 18px;
         background-color: var(--section-text);
-        -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-        mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+        -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+        mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
         -webkit-mask-size: contain;
         mask-size: contain;
         -webkit-mask-repeat: no-repeat;
         mask-repeat: no-repeat;
-        opacity: 0.6;
+        opacity: 0.7;
         transition: transform 0.2s ease, opacity 0.2s ease;
     }
 
     /* Rotate chevron when expanded */
     .promptless-header__nav-list .submenu-toggle[aria-expanded="true"] .submenu-toggle__icon {
         transform: rotate(180deg);
-        opacity: 0.8;
+        opacity: 1;
     }
 
     /* Submenu takes full width (below the link + toggle row) */
@@ -1428,18 +1481,212 @@ body.woocommerce-checkout .promptless-header__mini-cart .promptless-cart-item__r
 }
 
 /* ==========================================================================
-   Top Bar Responsive - Hide on Mobile
+   Top Bar Responsive — Mobile Hide / Inline Toggle
+   ----------------------------------------------------------------------------
+   Default behaviour on mobile is HIDDEN: the top bar's utility links are
+   routed into the hamburger drawer via .promptless-mobile-topbar instead
+   (see promptless_mobile_topbar_section() in template-functions.php).
+
+   The .promptless-topbar--mobile-inline modifier (added by
+   promptless_get_topbar_classes() when the Customizer setting is 'inline')
+   opts the bar OUT of the hide rule so it stays visible at the top of
+   the page on mobile, mirroring the desktop layout.
    ========================================================================== */
 
 @media (max-width: 767px) {
-    .promptless-topbar {
+    .promptless-topbar:not(.promptless-topbar--mobile-inline) {
         display: none;
     }
 }
 
 /* ==========================================================================
+   Inline Mode on Mobile — Single Compact Scrollable Row
+   ----------------------------------------------------------------------------
+   When the user selects "Always Show at Top" in the Customizer, the top
+   bar stays visible on mobile and STAYS SINGLE-ROW. This is the modern
+   2026 pattern for mobile utility bars on service-led sites (Apple,
+   Shopify storefronts, Linear, modern news mobile): one compact row that
+   scrolls horizontally if items overflow, never stacking to a second row.
+
+   Design rationale:
+     • Sticky-friendly height (~36–40px). The whole point of "Always Show"
+       on mobile is that key CTAs ("Call today", "Email") remain one tap
+       away as the user scrolls — but only if the bar doesn't dominate
+       the viewport. Stacked rows undo that win.
+     • Merged single row, not two separated left/right groups. The
+       <nav> and <ul> wrappers become layout-transparent via
+       display:contents, so all <li>s become direct flex children of
+       .promptless-topbar__inner and flow as ONE continuous row. The
+       semantic role of <nav> is preserved by modern browsers — see
+       the display:contents note below.
+     • Horizontal scroll on overflow. If a site has many utility items,
+       the row scrolls instead of growing tall. The CSS-only mask-image
+       fade at the row edges signals scrollability (becomes obvious when
+       content actually overflows; barely visible when it fits, so short
+       menus still read as a clean centered row).
+     • Scrollbars hidden. Standard mobile pattern; the mask fade is the
+       visual affordance.
+     • no-wrap on links. Prevents mid-label wrapping like "My / account"
+       on narrow widths — the row scrolls as a whole instead.
+
+   On display:contents and accessibility:
+     display:contents on <nav> and <ul> is well-supported as of 2022+
+     (Chrome 89, Firefox 67, Safari 16). Modern browsers preserve the
+     element's role in the accessibility tree even when its box is
+     omitted from layout — the <nav> region is still announced, the <ul>
+     is still announced as a list. This was a real bug in older
+     versions and is the reason the pattern was avoided historically;
+     by 2026 it's safe.
+
+   Reuse: this row composes correctly with the Sticky Top Bar setting.
+   The sticky behaviour is shared with the desktop bar (same
+   .promptless-topbar--sticky selector), so a user who enables both
+   "Always Show at Top" + "Sticky Top Bar" gets a persistent,
+   sticky-thin utility row on mobile — the exact pattern service
+   businesses want for always-on contact CTAs.
+   ========================================================================== */
+
+@media (max-width: 767px) {
+    .promptless-topbar--mobile-inline .promptless-topbar__inner {
+        flex-direction: row;
+        flex-wrap: nowrap;
+        /* `safe center` is the modern CSS-Box-Alignment safety keyword
+           (Chrome 93+, Firefox 63+, Safari 16+) that says: "center the
+           content when it fits, but fall back to flex-start when
+           centering would cause overflow." Without `safe`, plain
+           `center` would push items toward the middle on overflow,
+           leaving the leading items inaccessible at scrollLeft=0 —
+           the user can scroll right but never reach item #1 on the
+           left. That's the exact bug the user reported as "first
+           top bar menu item is getting cut off."
+
+           Behaviour matrix:
+             • content narrower than container → items centered (nice)
+             • content wider than container    → items align to start,
+                                                 first item is flush
+                                                 with the left edge at
+                                                 scrollLeft=0 (correct)
+           Combined with the scroll-aware mask below, this means:
+             • at-rest with no overflow         → centered, no fade
+             • at-rest with overflow            → first item flush left,
+                                                  right edge fades
+             • mid-scroll                       → both edges fade
+             • scrolled to end                  → last item flush right,
+                                                  left edge fades */
+        justify-content: safe center;
+        align-items: center;
+        gap: 0.75rem; /* 12px between merged items */
+        overflow-x: auto;
+        overflow-y: hidden;
+        scrollbar-width: none; /* Firefox */
+        padding-top: 0.375rem;
+        padding-bottom: 0.375rem;
+        /* Scroll-aware edge fade.
+           ---------------------------------------------------------------
+           Two CSS custom properties drive the mask widths:
+             --topbar-fade-left  : 16px when scrolled-from-start, else 0
+             --topbar-fade-right : 16px when has-overflow-right,   else 0
+           Default is 0/0 — equivalent to "no mask" — so the first item
+           sits flush against the left edge of the row when the user
+           hasn't scrolled yet. When the JS scroll handler in
+           assets/js/navigation.js (initTopbarScrollGradient) detects
+           that there's scrollable content beyond a given edge, it adds
+           the matching state class on .promptless-topbar__inner and
+           the mask kicks in for that edge only.
+           ---------------------------------------------------------------
+           Why a custom-property-driven mask instead of pseudo-elements:
+           the inner element is already a flex container with the menu
+           items as direct children (via display:contents on the
+           nav/ul wrappers above). Adding ::before/::after pseudos would
+           inject extra flex items into that row and break the spacing
+           model. Custom properties on the mask itself sidestep that. */
+        --topbar-fade-left: 0px;
+        --topbar-fade-right: 0px;
+        -webkit-mask-image: linear-gradient(
+            to right,
+            transparent 0,
+            #000 var(--topbar-fade-left),
+            #000 calc(100% - var(--topbar-fade-right)),
+            transparent 100%
+        );
+        mask-image: linear-gradient(
+            to right,
+            transparent 0,
+            #000 var(--topbar-fade-left),
+            #000 calc(100% - var(--topbar-fade-right)),
+            transparent 100%
+        );
+    }
+
+    /* Scroll-state hooks toggled by initTopbarScrollGradient() in
+       assets/js/navigation.js. The .is-* class convention matches the
+       existing .is-open used by the mobile menu toggle. */
+    .promptless-topbar--mobile-inline .promptless-topbar__inner.is-scrolled-from-start {
+        --topbar-fade-left: 16px;
+    }
+
+    .promptless-topbar--mobile-inline .promptless-topbar__inner.has-overflow-right {
+        --topbar-fade-right: 16px;
+    }
+
+    /* Hide the WebKit scrollbar (Chrome/Safari/Edge). Firefox is
+       handled by scrollbar-width:none on the parent. */
+    .promptless-topbar--mobile-inline .promptless-topbar__inner::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Flatten the nav and ul wrappers so all <li> items become direct
+       flex children of .promptless-topbar__inner. See the section
+       comment above for accessibility notes. */
+    .promptless-topbar--mobile-inline .promptless-topbar__nav,
+    .promptless-topbar--mobile-inline .promptless-topbar__nav--left,
+    .promptless-topbar--mobile-inline .promptless-topbar__nav--right {
+        display: contents;
+    }
+
+    .promptless-topbar--mobile-inline .promptless-topbar__nav-list {
+        display: contents;
+    }
+
+    .promptless-topbar--mobile-inline .promptless-topbar__nav-list li {
+        flex: 0 0 auto;
+    }
+
+    .promptless-topbar--mobile-inline .promptless-topbar__nav-list a {
+        display: flex;
+        align-items: center;
+        min-height: 36px;
+        padding: 0.375rem 0.5rem; /* compact tap target */
+        white-space: nowrap; /* don't wrap mid-label; row scrolls instead */
+    }
+}
+
+/* ==========================================================================
    Mobile Collapsed Top Bar (inside hamburger menu)
-   Only visible on mobile when topbar_mobile setting is 'collapse'
+   ----------------------------------------------------------------------------
+   Rendered when topbar_mobile is set to 'collapse'. Lives inside the
+   hamburger drawer ABOVE the primary navigation, where the adjacent
+   primary nav already adds a 1px top border for visual separation (see
+   `.promptless-mobile-topbar + .promptless-header__nav` ~line 578).
+
+   Design rationale (modern mobile utility-menu pattern — Stripe, Vercel,
+   Linear, Apple all converge here):
+     • Vertical stack, not horizontal flex-wrap. Wrapping horizontal lists
+       cram tappable items together and look accidental when they break
+       to a second line. A vertical column reads as intentional and gives
+       each link its own row with a comfortable tap target.
+     • Tap targets ≥44px (Apple HIG), achieved via min-height on links.
+     • Rhythm uses a 8/13/21px scale (golden-ratio-aligned: 8 × φ ≈ 13,
+       13 × φ ≈ 21). Drawer padding sits at 21px horizontal × 13px vertical;
+       link rows are 44px tall with 13px×21px inner padding so the touch
+       area extends edge-to-edge of the drawer.
+     • Two-menu separation: when both topbar-left and topbar-right exist
+       (two <ul>s side-by-side inside .promptless-mobile-topbar), they're
+       visually grouped via a 13px gap on the container — separation
+       without a hard divider line (minimalist 2026 convention).
+     • Hover/active feedback uses a subtle background tint, not just
+       color change. Better mobile affordance, and parity with how
+       primary nav items light up on tap.
    ========================================================================== */
 
 .promptless-mobile-topbar {
@@ -1448,15 +1695,29 @@ body.woocommerce-checkout .promptless-header__mini-cart .promptless-cart-item__r
 
 @media (max-width: 767px) {
     .promptless-mobile-topbar {
-        display: block;
-        padding: 0.75rem 1.5rem 0.5rem; /* Reduced bottom padding */
-        /* REMOVED: border-bottom - primary nav provides visual separation via border-top below */
+        display: flex;
+        flex-direction: column;
+        gap: 0.8125rem; /* 13px — golden-ratio-aligned group separation */
+        /* padding-bottom: 0 (was 13px → 7px → 0).
+           The last topbar link already provides its own 13px padding-
+           bottom from .promptless-mobile-topbar__list a. Adding more
+           container padding here was the original source of the
+           asymmetry: it pushed the divider line further from the last
+           topbar item than the divider lines between primary-nav items
+           are from their adjacent items.
+
+           With this set to 0, the divider sits 13px below the last
+           topbar text (matching the 12px gap between primary-nav items),
+           and the WHOLE drawer reads as one continuous rhythmic list
+           rather than two visually disconnected blocks. */
+        padding: 1.3125rem 1.3125rem 0; /* 21/21/0 */
+        /* No border — primary nav supplies the separator via border-top below */
     }
 
     .promptless-mobile-topbar__list {
         display: flex;
-        flex-wrap: wrap;
-        gap: 0.625rem 1.25rem; /* Better visual balance when items wrap */
+        flex-direction: column;
+        gap: 0;
         margin: 0;
         padding: 0;
         list-style: none;
@@ -1467,20 +1728,28 @@ body.woocommerce-checkout .promptless-header__mini-cart .promptless-cart-item__r
     }
 
     .promptless-mobile-topbar__list a {
-        display: block;
-        font-size: 0.8125rem; /* 13px - smaller than main nav */
+        display: flex;
+        align-items: center;
+        min-height: 44px; /* Apple HIG tap target */
+        padding: 0.8125rem 1.3125rem; /* 13px × 21px */
+        margin: 0 -1.3125rem; /* Bleed into drawer padding for full-row tap */
+        font-size: 0.875rem; /* 14px — slightly larger than desktop topbar for tappability */
         font-weight: 500;
+        line-height: 1.3;
         color: var(--section-text-muted);
         text-decoration: none;
-        transition: color 0.2s ease;
-        word-wrap: break-word; /* Long text protection */
-        overflow-wrap: break-word; /* Long text protection - modern property */
+        transition: color 0.15s ease, background-color 0.15s ease;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
     }
 
     .promptless-mobile-topbar__list a:hover,
     .promptless-mobile-topbar__list a:focus-visible {
         color: var(--section-text);
         text-decoration: none;
+        /* Subtle tint via currentColor → low alpha. Works across light/dark
+           themes without needing per-theme overrides. */
+        background-color: color-mix(in srgb, currentColor 6%, transparent);
     }
 
     /* High-specificity overrides for plugin link colors */
@@ -1694,6 +1963,36 @@ body.woocommerce-checkout .promptless-header__mini-cart .promptless-cart-item__r
     /* Admin bar offset for mobile sticky header (stacked layout) */
     .admin-bar .promptless-header--sticky-mobile {
         top: 46px;
+    }
+
+    /* ------------------------------------------------------------------
+       Sticky stacking fix: when the top bar is sticky AND the header is
+       sticky-on-mobile, the header has to sit BELOW the top bar instead
+       of underneath it. Without this, both elements stick to top:0 and
+       the topbar's higher z-index (101 vs 100) makes it visually cover
+       the header.
+
+       The non-mobile equivalent rules (.promptless-topbar--sticky +
+       .promptless-header--sticky, ~line 1297) already handle the case
+       where the header uses the always-sticky --sticky modifier. The
+       rules below are the mobile-only parallel for --sticky-mobile,
+       which is a separate modifier that only takes effect at
+       max-width: 767px (see the .promptless-header--sticky-mobile rule
+       directly above).
+
+       --topbar-height is the runtime-measured topbar height set by
+       assets/js/navigation.js. It defaults to 0 when JS hasn't run,
+       which keeps the page renderable pre-JS but produces a brief
+       overlap until measurement runs — acceptable trade-off vs.
+       hardcoding a height that wouldn't match the mobile single-row
+       layout (~49px) any better than 0 would.
+       ------------------------------------------------------------------ */
+    .promptless-topbar--sticky + .promptless-header--sticky-mobile {
+        top: var(--topbar-height, 0);
+    }
+
+    .admin-bar .promptless-topbar--sticky + .promptless-header--sticky-mobile {
+        top: calc(46px + var(--topbar-height, 0));
     }
 }
 

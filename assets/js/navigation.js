@@ -23,7 +23,7 @@
         }
 
         // Mobile menu toggle
-        menuToggle.addEventListener('click', function() {
+        menuToggle.addEventListener('click', function(event) {
             const isExpanded = this.getAttribute('aria-expanded') === 'true';
 
             this.setAttribute('aria-expanded', !isExpanded);
@@ -37,13 +37,37 @@
             // Close mini-cart if open
             closeMiniCart();
 
-            // Focus first menu item when opening
-            // Use navWrapper to include topbar links (which appear before primary nav)
-            if (!isExpanded && navWrapper) {
+            // Focus first menu item when opening — KEYBOARD ACTIVATION ONLY.
+            //
+            // WCAG SC 2.4.3 (Focus Order) is well-served by moving focus
+            // into the menu when a keyboard user opens it: their next Tab
+            // should land inside the menu, not jump past it. But for
+            // MOUSE / TOUCH activations, programmatic focus is unwanted:
+            //
+            //   • Modern :focus-visible suppresses the visible focus
+            //     ring on mouse-initiated programmatic focus, so it
+            //     usually isn't visible — but browsers don't always
+            //     guess right, especially after a setTimeout breaks the
+            //     direct click → focus chain.
+            //   • Screen readers announce the focus shift unexpectedly.
+            //   • Voice control and "next Tab" mental models break: the
+            //     user's tap was on the toggle, but focus quietly moved
+            //     to a link they didn't ask for.
+            //
+            // event.detail is the standard way to distinguish activation
+            // source on a click event:
+            //   • 0  → keyboard (Enter / Space on the <button>)
+            //   • ≥1 → mouse / touch (count of consecutive clicks)
+            //
+            // Use { preventScroll: true } so the focus shift never
+            // scrolls the page — the menu is already in view; we don't
+            // want to bump the viewport.
+            const wasKeyboardActivation = event.detail === 0;
+            if (!isExpanded && navWrapper && wasKeyboardActivation) {
                 const firstLink = navWrapper.querySelector('a');
                 if (firstLink) {
                     setTimeout(function() {
-                        firstLink.focus();
+                        firstLink.focus({ preventScroll: true });
                     }, 100);
                 }
             }
@@ -104,6 +128,9 @@
 
         // Initialize sticky header height management
         initStickyHeightManager();
+
+        // Initialize scroll-aware gradient for the mobile inline top bar
+        initTopbarScrollGradient();
     }
 
     /**
@@ -370,6 +397,102 @@
 
         // Update after fonts load (can affect height)
         window.addEventListener('load', updateStickyOffsets);
+    }
+
+    /**
+     * Initialize scroll-aware gradient for the mobile inline top bar
+     *
+     * When the user picks "Always Show at Top" in the Customizer, the
+     * top bar renders as a single horizontal row on mobile (see
+     * .promptless-topbar--mobile-inline rules in assets/css/header.css).
+     * If utility items overflow the viewport width, the row becomes
+     * horizontally scrollable.
+     *
+     * The CSS provides a mask-image fade at each edge of the row, but
+     * the fade widths are driven by CSS custom properties that default
+     * to 0px (no fade). This function toggles two state classes based
+     * on actual scroll position so the fade only appears for edges
+     * with scrollable content beyond them:
+     *
+     *   - .is-scrolled-from-start  → scrollLeft > 0  (left fade kicks in)
+     *   - .has-overflow-right      → more content scrolled-off-right
+     *                                (right fade kicks in)
+     *
+     * Without this, the always-on mask would fade the very first item
+     * even at scrollLeft=0, making it look cut off on initial load.
+     *
+     * The function exits cleanly when:
+     *   - The Customizer setting is 'collapse' (no .--mobile-inline class)
+     *   - The user is on desktop (the CSS mask is inside @media <=767px,
+     *     so even if we toggle classes here, no fade appears on desktop)
+     *   - The scroll container has no overflow (both checks fail, no
+     *     classes get added, no fade appears)
+     *
+     * Pattern mirrors the plugin's FAQ tabs scroll-gradient handler
+     * (src/frontend.js) so the two implementations stay conceptually
+     * aligned even though the plugin and theme can't share JS directly.
+     */
+    function initTopbarScrollGradient() {
+        const scrollContainer = document.querySelector(
+            '.promptless-topbar--mobile-inline .promptless-topbar__inner'
+        );
+
+        if (!scrollContainer) {
+            return;
+        }
+
+        // Subpixel scroll values can sit at e.g. 0.4 even when "at start"
+        // on some platforms. A 2px threshold avoids flickering between
+        // states near the boundaries.
+        const threshold = 2;
+        let ticking = false;
+
+        function updateScrollState() {
+            const scrollLeft = scrollContainer.scrollLeft;
+            const scrollWidth = scrollContainer.scrollWidth;
+            const clientWidth = scrollContainer.clientWidth;
+
+            scrollContainer.classList.toggle(
+                'is-scrolled-from-start',
+                scrollLeft > threshold
+            );
+
+            scrollContainer.classList.toggle(
+                'has-overflow-right',
+                scrollWidth - clientWidth - scrollLeft > threshold
+            );
+
+            ticking = false;
+        }
+
+        function onScroll() {
+            if (!ticking) {
+                requestAnimationFrame(updateScrollState);
+                ticking = true;
+            }
+        }
+
+        // Initial state — sets has-overflow-right on load if items
+        // overflow the viewport. Left fade stays off (scrollLeft is 0).
+        updateScrollState();
+
+        // Listen for horizontal scroll. Passive listener is correct
+        // here — we never preventDefault on scroll.
+        scrollContainer.addEventListener('scroll', onScroll, { passive: true });
+
+        // Layout changes (orientation change, font load, item add/remove)
+        // can change whether there's overflow. ResizeObserver handles
+        // the container itself; the window resize handles viewport
+        // changes that affect the parent's computed width.
+        if (typeof ResizeObserver !== 'undefined') {
+            const resizeObserver = new ResizeObserver(onScroll);
+            resizeObserver.observe(scrollContainer);
+        }
+        window.addEventListener('resize', onScroll, { passive: true });
+
+        // Late re-measurement after fonts load — font swaps can change
+        // item widths and therefore overflow state.
+        window.addEventListener('load', updateScrollState);
     }
 
     /**

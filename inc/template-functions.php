@@ -748,6 +748,17 @@ function promptless_get_topbar_classes() {
         $classes[] = 'promptless-topbar--sticky';
     }
 
+    // Mobile behavior modifier. When set to 'inline', this class opts the
+    // top bar OUT of the default mobile-hide rule so utility links remain
+    // visible on small screens (mirroring desktop). When set to 'collapse',
+    // the bar is hidden on mobile and rendered inside the hamburger drawer
+    // via promptless_mobile_topbar_section() instead. Stays as a BEM
+    // modifier on the same element to match the theme's existing
+    // --sticky / --layout-stacked conventions.
+    if ( 'inline' === promptless_get_topbar_mobile_behavior() ) {
+        $classes[] = 'promptless-topbar--mobile-inline';
+    }
+
     return implode( ' ', $classes );
 }
 
@@ -818,10 +829,38 @@ function promptless_topbar() {
 /**
  * Get top bar mobile behavior setting
  *
- * @return string 'hide' or 'collapse'
+ * Possible return values:
+ *   - 'inline'   : Top bar stays at the top of the page on mobile, mirroring
+ *                  the desktop layout. The mobile-collapsed block is NOT
+ *                  rendered into the hamburger drawer.
+ *   - 'collapse' : Top bar is hidden on mobile (display:none) and its menus
+ *                  are rendered inside the hamburger drawer via
+ *                  promptless_mobile_topbar_section().
+ *
+ * Legacy compatibility (1.1.5 → 1.1.6+):
+ *   The pre-1.1.6 setting offered a third value, 'hide', which hid the top
+ *   bar on mobile AND skipped rendering it in the hamburger drawer. That
+ *   option was removed because hiding important utility links by default
+ *   is poor UX. Existing sites with 'hide' stored in wp_options are
+ *   migrated at read time to 'collapse' so their utility links remain
+ *   accessible (just routed through the hamburger). No database write
+ *   happens here — the migration is purely runtime, so users can still
+ *   re-select 'inline' in the Customizer without us having clobbered an
+ *   intentional preference.
+ *
+ * @return string 'inline' or 'collapse'
  */
 function promptless_get_topbar_mobile_behavior() {
-    return get_theme_mod( 'promptless_topbar_mobile', 'hide' );
+    $value = get_theme_mod( 'promptless_topbar_mobile', 'collapse' );
+
+    // Legacy 'hide' → 'collapse' migration. Anything else outside the
+    // canonical set also falls back to 'collapse' (defensive — a future
+    // database write from an external tool could plant an unexpected value).
+    if ( ! in_array( $value, array( 'inline', 'collapse' ), true ) ) {
+        return 'collapse';
+    }
+
+    return $value;
 }
 
 /**

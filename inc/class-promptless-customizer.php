@@ -459,7 +459,11 @@ class Promptless_Customizer {
         $wp_customize->add_setting(
             'promptless_topbar_mobile',
             array(
-                'default'           => 'hide',
+                // Default routes utility links into the hamburger drawer so
+                // they stay reachable on small screens without competing for
+                // header real estate. See promptless_get_topbar_mobile_behavior()
+                // for the legacy 'hide' value migration.
+                'default'           => 'collapse',
                 'sanitize_callback' => array( $this, 'sanitize_topbar_mobile' ),
                 'transport'         => 'refresh',
             )
@@ -473,7 +477,13 @@ class Promptless_Customizer {
                 'section'     => 'promptless_topbar_settings',
                 'type'        => 'select',
                 'choices'     => array(
-                    'hide'     => __( 'Hide on Mobile', 'promptless-theme' ),
+                    // 'inline' keeps the bar at the top of the page on mobile,
+                    // mirroring desktop. 'collapse' moves the utility links
+                    // into the hamburger drawer. The legacy 'hide' option was
+                    // removed because hiding important utility links by default
+                    // is poor UX — users with 'hide' stored are migrated to
+                    // 'collapse' at read time (see template-functions.php).
+                    'inline'   => __( 'Always Show at Top', 'promptless-theme' ),
                     'collapse' => __( 'Collapse into Hamburger Menu', 'promptless-theme' ),
                 ),
             )
@@ -683,17 +693,23 @@ class Promptless_Customizer {
     /**
      * Sanitize top bar mobile behavior setting
      *
+     * 'hide' was removed in 1.1.6 — sites with that value stored continue
+     * to round-trip 'hide' through the option getter but are migrated to
+     * 'collapse' at the call site (see promptless_get_topbar_mobile_behavior()).
+     * The whitelist here is the new canonical set; anything outside it
+     * (including the legacy 'hide') falls back to 'collapse'.
+     *
      * @param string $value Setting value.
      * @return string Sanitized value.
      */
     public function sanitize_topbar_mobile( $value ) {
-        $valid = array( 'hide', 'collapse' );
+        $valid = array( 'inline', 'collapse' );
 
         if ( in_array( $value, $valid, true ) ) {
             return $value;
         }
 
-        return 'hide';
+        return 'collapse';
     }
 
     /**
