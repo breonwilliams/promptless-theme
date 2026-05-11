@@ -4,7 +4,7 @@ Tags: one-column, custom-logo, custom-menu, featured-images, full-width-template
 Requires at least: 6.6
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.1.4
+Stable tag: 1.1.5
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -88,6 +88,12 @@ This theme is optimized for the Promptless WP page builder. It may work with oth
 Use the Promptless WP plugin's Canvas display mode, which provides a full-screen layout without the header and footer.
 
 == Changelog ==
+
+= 1.1.5 =
+* Added: Plugin bridge class for improved Promptless WP plugin integration
+* Improved: WooCommerce body class filter now uses named function for child theme compatibility
+* Improved: Header, footer, archive, and WooCommerce CSS refinements
+* Improved: Simplified canvas and fullwidth template code
 
 = 1.1.4 =
 * Added: Color mode options for stacked header variant
