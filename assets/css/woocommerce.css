@@ -2594,23 +2594,184 @@ body.woocommerce-page .aisb-section--dark .widget_shopping_cart .cart_list li:no
    ========================================================================== */
 
 @media (max-width: 768px) {
-    /* Stack cart table on mobile */
-    .woocommerce table.shop_table_responsive tr {
+    /* ==========================================================================
+       Generic shop_table mobile polish
+       --------------------------------------------------------------------------
+       Applies to ALL `shop_table_responsive` instances EXCEPT cart items (which
+       get their own card layout below). Covers: checkout review, my-account
+       orders, my-account downloads, order details (thank-you page), order view.
+
+       The `:not(.cart_item)` guard is critical — it scopes these rules to "all
+       rows that are NOT cart product rows", so the cart's card layout below
+       isn't fighting these rules.
+       ========================================================================== */
+
+    .woocommerce table.shop_table_responsive tr:not(.cart_item) {
         display: block;
         border-bottom: 1px solid var(--wc-border);
-        padding: var(--aisb-section-space-md, 1rem) 0;
+        padding: var(--aisb-section-space-sm, 1rem) 0;
     }
 
-    .woocommerce table.shop_table_responsive tr td {
+    .woocommerce table.shop_table_responsive tr:not(.cart_item) td {
+        display: block;
+        text-align: right;
+        border: none;
+        /* Horizontal padding so values don't touch viewport edges. The original
+           rule had `0` horizontal padding, causing values like "Album" to be
+           clipped at the viewport boundary on narrow phones. */
+        padding: var(--aisb-section-space-xs, 0.5rem) var(--aisb-section-space-sm, 1rem);
+    }
+
+    .woocommerce table.shop_table_responsive tr:not(.cart_item) td::before {
+        font-weight: 600;
+        color: var(--wc-text);
+    }
+
+    /* ==========================================================================
+       Cart page — card-per-item mobile layout
+       --------------------------------------------------------------------------
+       Each `tr.cart_item` becomes a self-contained card with the product image
+       on the left and product info stacked on the right. Pattern mirrors how
+       Shopify, Stripe Checkout, and most modern e-commerce experiences render
+       cart items on mobile.
+
+       Scoped strictly to `.woocommerce-cart` body class + `tr.cart_item`, so
+       only the cart page is affected — checkout review, account orders, and
+       other shop_tables keep the standard "label-floats-left" pattern (via the
+       generic rules above).
+
+       Implementation: CSS Grid with named template areas so the 6 cells of the
+       cart row (`product-remove`, `product-thumbnail`, `product-name`,
+       `product-price`, `product-quantity`, `product-subtotal`) lay out
+       predictably. The order of cells in HTML is determined by WooCommerce's
+       cart template, not the visual layout — Grid template areas decouple
+       visual order from DOM order without needing a template override.
+       ========================================================================== */
+
+    /* Remove default table chrome around the cart on mobile — each item now has
+       its own card surface. */
+    .woocommerce-cart table.shop_table.cart {
+        border: none;
+        background: transparent;
+    }
+
+    /* Hide the table header on mobile (the labels are repeated per-card via
+       ::before pseudo-elements where useful). */
+    .woocommerce-cart table.shop_table.cart thead {
+        display: none;
+    }
+
+    /* The card itself */
+    .woocommerce-cart table.shop_table.cart tr.cart_item {
+        display: grid;
+        grid-template-columns: 72px 1fr auto;
+        grid-template-areas:
+            "image name    remove"
+            "image price   price"
+            "image qty     qty"
+            "image sub     sub";
+        column-gap: var(--aisb-section-space-sm, 1rem);
+        row-gap: var(--aisb-section-space-xs, 0.5rem);
+        padding: var(--aisb-section-space-sm, 1rem);
+        margin-bottom: var(--aisb-section-space-sm, 1rem);
+        background: var(--wc-surface, var(--aisb-color-surface));
+        border: 1px solid var(--wc-border, var(--aisb-color-border));
+        border-radius: var(--aisb-section-radius-card, 0.5rem);
+        align-items: center;
+    }
+
+    /* All cells inside the card reset to block / left-aligned / no padding;
+       grid handles spacing via gap. */
+    .woocommerce-cart table.shop_table.cart tr.cart_item td {
         display: block;
         text-align: left;
         border: none;
-        padding: var(--aisb-section-space-xs, 0.5rem) 0;
+        padding: 0;
+        /* Clear WooCommerce's default `tr:nth-child(2n+1) td { background: ... }`
+           row-striping rule, which adds a subtle dark tint to alternating cells
+           and fights with our card surface color (creates a visible stripe
+           inside the card). */
+        background: transparent;
     }
 
-    .woocommerce table.shop_table_responsive tr td::before {
+    /* Product image — re-enabled (was `display: none` from WooCommerce defaults
+       on mobile). Sized as a 72px square thumbnail to match Shopify/Stripe. */
+    .woocommerce-cart table.shop_table.cart tr.cart_item td.product-thumbnail {
+        grid-area: image;
+    }
+    /* Hide the auto-generated `::before` label — the product-thumbnail cell
+       has no `data-title` attribute, so WooCommerce's default
+       `content: attr(data-title) ": "` resolves to just `": "` and shows a
+       stray colon next to the image. */
+    .woocommerce-cart table.shop_table.cart tr.cart_item td.product-thumbnail::before {
+        display: none;
+    }
+    .woocommerce-cart table.shop_table.cart tr.cart_item td.product-thumbnail img {
+        width: 72px;
+        height: 72px;
+        max-width: none; /* Override WooCommerce's default `max-width: 100%` which would shrink the thumbnail */
+        object-fit: cover;
+        border-radius: var(--aisb-section-radius-md, 0.25rem);
+        display: block;
+    }
+
+    /* Product name — the headline of the card. Label is suppressed because the
+       name itself is the visual heading. */
+    .woocommerce-cart table.shop_table.cart tr.cart_item td.product-name {
+        grid-area: name;
         font-weight: 600;
-        color: var(--wc-text);
+        line-height: 1.4;
+    }
+    .woocommerce-cart table.shop_table.cart tr.cart_item td.product-name::before {
+        display: none;
+    }
+
+    /* Remove (×) — top right of card. Label suppressed (× icon is universal). */
+    .woocommerce-cart table.shop_table.cart tr.cart_item td.product-remove {
+        grid-area: remove;
+        text-align: right;
+    }
+    .woocommerce-cart table.shop_table.cart tr.cart_item td.product-remove::before {
+        display: none;
+    }
+
+    /* Price / Quantity / Subtotal — each is a row inside the card with the
+       label on the left and value on the right (small layout shift from the
+       grid columns to a flex row inside the cell). */
+    .woocommerce-cart table.shop_table.cart tr.cart_item td.product-price,
+    .woocommerce-cart table.shop_table.cart tr.cart_item td.product-quantity,
+    .woocommerce-cart table.shop_table.cart tr.cart_item td.product-subtotal {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: var(--aisb-section-text-sm, 0.875rem);
+    }
+    .woocommerce-cart table.shop_table.cart tr.cart_item td.product-price {
+        grid-area: price;
+    }
+    .woocommerce-cart table.shop_table.cart tr.cart_item td.product-quantity {
+        grid-area: qty;
+    }
+    .woocommerce-cart table.shop_table.cart tr.cart_item td.product-subtotal {
+        grid-area: sub;
+        font-weight: 600; /* Slightly emphasized — this is the per-item line total */
+    }
+
+    /* Re-render the `data-title` labels as inline labels (default WooCommerce
+       behavior is `float: left` which conflicts with our flex layout). */
+    .woocommerce-cart table.shop_table.cart tr.cart_item td.product-price::before,
+    .woocommerce-cart table.shop_table.cart tr.cart_item td.product-quantity::before,
+    .woocommerce-cart table.shop_table.cart tr.cart_item td.product-subtotal::before {
+        float: none;
+        font-weight: 400;
+        color: var(--wc-text-muted, var(--aisb-color-text-muted));
+    }
+
+    /* The cart's "actions" row (coupon code + Update cart button). Not a
+       `.cart_item`, so the generic shop_table_responsive rules above apply.
+       Add horizontal padding so the inputs/buttons don't touch the edge. */
+    .woocommerce-cart table.shop_table.cart tr:not(.cart_item) td.actions {
+        padding: var(--aisb-section-space-md, 1rem) var(--aisb-section-space-sm, 1rem);
     }
 
     /* Account navigation stacks on mobile */
