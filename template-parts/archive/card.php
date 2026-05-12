@@ -31,8 +31,31 @@
             <p><?php echo esc_html( promptless_get_excerpt( 20 ) ); ?></p>
         </div>
 
-        <a href="<?php the_permalink(); ?>" class="aisb-features__item-link">
-            <?php esc_html_e( 'Read more', 'promptless' ); ?>
-        </a>
+        <?php
+        /*
+         * Read more CTA — respects the plugin's global Card CTA Style setting
+         * (Global Settings → Borders → Card CTA Style) so the archive cards
+         * stay visually consistent with PostGrid sections.
+         *
+         * `aisb_render_card_cta()` is the plugin's public API (loaded from
+         * `includes/public-api.php` in the plugin main file). When the plugin
+         * is deactivated the function won't exist, so we fall back to the
+         * historical plain text link.
+         */
+        if ( function_exists( 'aisb_render_card_cta' ) ) {
+            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- aisb_render_card_cta() handles all escaping internally
+            echo aisb_render_card_cta(
+                get_permalink(),
+                __( 'Read more', 'promptless' ),
+                'aisb-features__item-link'
+            );
+        } else {
+            ?>
+            <a href="<?php the_permalink(); ?>" class="aisb-features__item-link">
+                <?php esc_html_e( 'Read more', 'promptless' ); ?>
+            </a>
+            <?php
+        }
+        ?>
     </div>
 </article>
