@@ -25,6 +25,8 @@
     <?php esc_html_e( 'Skip to content', 'promptless' ); ?>
 </a>
 
+<?php promptless_announcement_bar(); ?>
+
 <?php promptless_topbar(); ?>
 
 <?php $header_layout = promptless_get_header_layout(); ?>

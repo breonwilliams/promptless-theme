@@ -1,0 +1,253 @@
+/**
+ * Promptless Theme — Announcement Bar (Wave 6)
+ *
+ * Promotional/marketing bar that renders at the very top of every page,
+ * above the existing utility Top Bar and Header. Independent of the topbar.
+ *
+ * Architecture: mirrors the topbar's CSS conventions exactly so the bar
+ * inherits the same theme-variant behavior (light/dark) the editor and
+ * topbar already produce. All colors, fonts, radii, and smart-link colors
+ * resolve through the plugin's design tokens (--aisb-*) — the bar
+ * automatically picks up the active palette without any per-bar overrides.
+ *
+ * @package Promptless_Theme
+ * @since   1.2.0
+ */
+
+/* ==========================================================================
+   Theme Variant Scoped Variables
+   Same pattern as the topbar — each modifier class redefines the scoped
+   tokens that the rest of the rules consume. Keeps light/dark switching
+   to a single class change with no per-property duplication below.
+   ========================================================================== */
+
+.promptless-announcement-bar.aisb-section--light {
+    --announcement-bg: var(--aisb-color-surface, #f9fafb);
+    --announcement-text: var(--aisb-color-text, #1f2937);
+    --announcement-text-muted: var(--aisb-color-text-muted, #6b7280);
+    --announcement-border: var(--aisb-color-border, #e5e7eb);
+    --announcement-primary: var(--aisb-color-primary, #6366f1);
+    --announcement-link: var(--aisb-smart-light-section-link, var(--announcement-primary));
+}
+
+.promptless-announcement-bar.aisb-section--dark {
+    --announcement-bg: var(--aisb-color-dark-surface, #1f2937);
+    --announcement-text: var(--aisb-color-dark-text, #f9fafb);
+    --announcement-text-muted: var(--aisb-color-dark-text-muted, #9ca3af);
+    --announcement-border: var(--aisb-color-dark-border, #374151);
+    --announcement-primary: var(--aisb-color-primary, #6366f1);
+    --announcement-link: var(--aisb-smart-dark-section-link, var(--announcement-primary));
+}
+
+/* ==========================================================================
+   Container
+   z-index sits ABOVE the topbar (101) so when both are sticky the
+   announcement bar wins the layering battle.
+   ========================================================================== */
+
+.promptless-announcement-bar {
+    position: relative;
+    z-index: 102;
+    background-color: var(--announcement-bg);
+    color: var(--announcement-text);
+    border-bottom: 1px solid var(--announcement-border);
+    font-size: 0.875rem;
+    font-family: var(--aisb-section-font-body, inherit);
+    line-height: 1.4;
+    transition: background-color 0.2s ease, border-color 0.2s ease, max-height 0.25s ease, opacity 0.2s ease;
+}
+
+/* Smooth dismiss animation. The dismiss JS toggles the
+   `is-dismissing` class which collapses height + fades out before removal. */
+.promptless-announcement-bar.is-dismissing {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    pointer-events: none;
+    border-bottom-width: 0;
+}
+
+/* ==========================================================================
+   Inner Layout
+   message takes available width; CTA stays put; dismiss is anchored right.
+   ========================================================================== */
+
+.promptless-announcement-bar__inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    min-height: 40px;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    text-align: center;
+}
+
+.promptless-announcement-bar__message {
+    flex: 0 1 auto;
+    color: inherit;
+}
+
+.promptless-announcement-bar__message a {
+    color: var(--announcement-link);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.promptless-announcement-bar__message a:hover,
+.promptless-announcement-bar__message a:focus-visible {
+    color: var(--announcement-link);
+    text-decoration: none;
+}
+
+.promptless-announcement-bar__message strong {
+    font-weight: 600;
+}
+
+/* ==========================================================================
+   CTA Button
+   Reuses the plugin's button radius + primary text color tokens so it
+   matches the buttons rendered elsewhere on the site.
+   ========================================================================== */
+
+.promptless-announcement-bar__cta {
+    display: inline-flex;
+    align-items: center;
+    flex: 0 0 auto;
+    padding: 0.375rem 0.875rem;
+    background-color: var(--announcement-primary);
+    color: var(--aisb-button-primary-text, #ffffff);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: var(--aisb-section-radius-button, 6px);
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    white-space: nowrap;
+}
+
+.promptless-announcement-bar__cta:hover,
+.promptless-announcement-bar__cta:focus-visible {
+    opacity: 0.9;
+    color: var(--aisb-button-primary-text, #ffffff);
+    text-decoration: none;
+    outline: 2px solid var(--announcement-primary);
+    outline-offset: 2px;
+}
+
+/* ==========================================================================
+   Dismiss Button
+   Sits at the absolute right; doesn't shove the centered message off-axis
+   thanks to a matching invisible spacer rendered via ::before on the inner.
+   ========================================================================== */
+
+.promptless-announcement-bar--dismissible .promptless-announcement-bar__inner {
+    /* Reserve space on both sides so the message stays optically centered
+       even with the dismiss button on the right. The invisible left spacer
+       matches the dismiss button's nominal width. */
+    padding-left: 32px;
+    padding-right: 32px;
+    position: relative;
+}
+
+.promptless-announcement-bar__dismiss {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    background: transparent;
+    color: var(--announcement-text-muted);
+    border: 0;
+    border-radius: 50%;
+    cursor: pointer;
+    line-height: 0; /* prevents inline-flex baseline from nudging the SVG */
+    transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.promptless-announcement-bar__dismiss-icon {
+    /* Block display + auto margins is the most reliable way to keep an
+       inline SVG perfectly centered inside a flex container — works across
+       Chromium / Firefox / Safari without baseline-alignment quirks. */
+    display: block;
+    width: 14px;
+    height: 14px;
+}
+
+.promptless-announcement-bar__dismiss:hover,
+.promptless-announcement-bar__dismiss:focus-visible {
+    color: var(--announcement-text);
+    background-color: rgba(0, 0, 0, 0.06);
+    outline: none;
+}
+
+.promptless-announcement-bar.aisb-section--dark .promptless-announcement-bar__dismiss:hover,
+.promptless-announcement-bar.aisb-section--dark .promptless-announcement-bar__dismiss:focus-visible {
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* ==========================================================================
+   Sticky behavior
+   Mirrors topbar's sticky pattern — only meaningful when the header is
+   also sticky. v1 doesn't expose this as a Customizer toggle; the bar
+   scrolls away with the page by default. Future enhancement: per-Customizer
+   sticky toggle.
+   ========================================================================== */
+
+.admin-bar .promptless-announcement-bar {
+    /* No sticky offset for v1 — bar is non-sticky by default. */
+}
+
+/* ==========================================================================
+   Responsive
+   On small screens, stack the message above the CTA for legibility.
+   Dismiss stays in the corner.
+   ========================================================================== */
+
+@media (max-width: 640px) {
+    .promptless-announcement-bar__inner {
+        flex-direction: column;
+        gap: 0.5rem;
+        padding-top: 0.625rem;
+        padding-bottom: 0.625rem;
+        text-align: center;
+    }
+
+    .promptless-announcement-bar--dismissible .promptless-announcement-bar__inner {
+        padding-left: 40px;
+        padding-right: 40px;
+    }
+
+    .promptless-announcement-bar__message {
+        font-size: 0.8125rem;
+    }
+
+    .promptless-announcement-bar__cta {
+        font-size: 0.75rem;
+        padding: 0.3125rem 0.75rem;
+    }
+
+    .promptless-announcement-bar__dismiss {
+        top: 0.5rem;
+        transform: none;
+    }
+}
+
+/* ==========================================================================
+   Reduced motion
+   Respect the user's motion preference — skip the collapse animation on
+   dismiss and just hide the bar.
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    .promptless-announcement-bar {
+        transition: none;
+    }
+    .promptless-announcement-bar.is-dismissing {
+        display: none;
+    }
+}

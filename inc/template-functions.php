@@ -826,6 +826,316 @@ function promptless_topbar() {
     <?php
 }
 
+// =============================================================================
+// Announcement Bar (Wave 6)
+//
+// Promotional/marketing bar that renders at the very top of every page, ABOVE
+// the existing utility Top Bar and ABOVE the Header. Independent of the topbar
+// — both can show together, one, or neither.
+//
+// Visibility decision flow (server-side):
+//   1. Master toggle (promptless_announcement_enabled) must be true
+//   2. Schedule window must include "now" (if either start/end date is set)
+//   3. Visitor's dismiss cookie must NOT match the current message-content hash
+//
+// All three are AND-combined: any single false short-circuits to no render.
+// The schedule + hash checks happen in PHP so there's no flash-of-bar-then-
+// disappear and no client-clock-skew bugs.
+// =============================================================================
+
+/**
+ * Master visibility check for the announcement bar.
+ *
+ * Combines the enable toggle, schedule window, message presence, and dismissal
+ * cookie state. Returns true only when ALL of these allow the bar to render.
+ *
+ * @return bool True if the bar should render on this request.
+ */
+function promptless_has_announcement() {
+    // Master toggle.
+    if ( ! get_theme_mod( 'promptless_announcement_enabled', false ) ) {
+        return false;
+    }
+
+    // Empty message → nothing meaningful to show. wp_strip_all_tags catches
+    // the case where the user typed only formatting whitespace / empty tags.
+    $message = (string) get_theme_mod( 'promptless_announcement_message', '' );
+    if ( trim( wp_strip_all_tags( $message ) ) === '' ) {
+        return false;
+    }
+
+    // Schedule window (server-side, site timezone — no flash-of-bar).
+    if ( ! promptless_announcement_in_schedule() ) {
+        return false;
+    }
+
+    // Visitor dismissed THIS specific message text (not just "any" message).
+    if ( promptless_announcement_is_dismissed() ) {
+        return false;
+    }
+
+    return true;
+}
+
+/**
+ * Compute the cookie key suffix for the current announcement message.
+ *
+ * Returns a sha1 hash of the normalized message HTML. The dismiss cookie's
+ * name embeds this hash, so when the site owner edits the message text the
+ * hash changes and all previously-set dismiss cookies stop matching —
+ * visitors see the new announcement automatically (Shopify pattern).
+ *
+ * Normalization: trim whitespace and collapse runs of internal whitespace.
+ * Avoids "different cookie key for the same message just because it has
+ * trailing newlines" failure mode.
+ *
+ * @return string The 40-char sha1 hex digest, or empty string if no message.
+ */
+function promptless_announcement_get_hash() {
+    $message = (string) get_theme_mod( 'promptless_announcement_message', '' );
+    $message = trim( $message );
+    $message = preg_replace( '/\s+/', ' ', $message );
+
+    if ( $message === '' ) {
+        return '';
+    }
+
+    return sha1( $message );
+}
+
+/**
+ * Build the dismissal cookie name for the current message.
+ *
+ * Centralized so the renderer (which writes the data attribute), the
+ * frontend JS (which sets the cookie on click), and the visibility check
+ * (which reads the cookie) all agree on the name format.
+ *
+ * @return string Cookie name. Empty string if no message hash is computable.
+ */
+function promptless_announcement_cookie_name() {
+    $hash = promptless_announcement_get_hash();
+    if ( $hash === '' ) {
+        return '';
+    }
+    // Truncate hash to 16 chars — plenty of entropy to avoid collisions
+    // across realistic message variants on a single site, and keeps the
+    // cookie name short. Full sha1 (40 chars) would inflate cookie headers
+    // unnecessarily.
+    return 'promptless_announcement_dismissed_' . substr( $hash, 0, 16 );
+}
+
+/**
+ * Has the current visitor dismissed THIS specific announcement message?
+ *
+ * "This specific" = matches the current message-content hash. Editing the
+ * message text invalidates all prior dismissals automatically; the visitor
+ * sees the new announcement without the site owner having to manually
+ * "reset dismissals."
+ *
+ * @return bool True if the dismiss cookie is set for the current message.
+ */
+function promptless_announcement_is_dismissed() {
+    // Non-dismissible bars are never "dismissed" — they always render
+    // (subject to enabled + schedule).
+    if ( ! get_theme_mod( 'promptless_announcement_dismissible', true ) ) {
+        return false;
+    }
+
+    $cookie_name = promptless_announcement_cookie_name();
+    if ( $cookie_name === '' ) {
+        return false;
+    }
+
+    return isset( $_COOKIE[ $cookie_name ] ) && $_COOKIE[ $cookie_name ] === '1';
+}
+
+/**
+ * Is "now" inside the announcement's schedule window?
+ *
+ * Both start_date and end_date are optional. Semantics:
+ *   - both empty → always (no schedule constraint)
+ *   - only start → visible from start onward
+ *   - only end → visible until end
+ *   - both → visible only inside [start, end]
+ *
+ * Comparisons use the WP site timezone (wp_timezone) so an "ends Friday at
+ * midnight" announcement actually ends at midnight LOCAL time, not UTC.
+ * Datetime values are stored in HTML5 datetime-local format (no timezone
+ * suffix) and are interpreted as wall-clock times in the site's timezone.
+ *
+ * @return bool True if "now" falls within the configured window.
+ */
+function promptless_announcement_in_schedule() {
+    $start_raw = (string) get_theme_mod( 'promptless_announcement_start_date', '' );
+    $end_raw   = (string) get_theme_mod( 'promptless_announcement_end_date', '' );
+
+    // Fast path: no schedule configured at all.
+    if ( $start_raw === '' && $end_raw === '' ) {
+        return true;
+    }
+
+    $tz  = wp_timezone();
+    $now = new DateTimeImmutable( 'now', $tz );
+
+    if ( $start_raw !== '' ) {
+        $start = promptless_announcement_parse_datetime( $start_raw, $tz );
+        if ( $start instanceof DateTimeImmutable && $now < $start ) {
+            return false;
+        }
+    }
+
+    if ( $end_raw !== '' ) {
+        $end = promptless_announcement_parse_datetime( $end_raw, $tz );
+        if ( $end instanceof DateTimeImmutable && $now > $end ) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+/**
+ * Parse an announcement-bar datetime string into a DateTimeImmutable.
+ *
+ * The Customizer accepts HTML5 `datetime-local` format (YYYY-MM-DDTHH:MM)
+ * with optional seconds (YYYY-MM-DDTHH:MM:SS). Browsers vary — Chrome
+ * omits :SS by default, Safari includes it, etc. We try the more-specific
+ * format first, then fall back to the shorter one.
+ *
+ * Returns false on unparseable input. The schedule check treats false as
+ * "no constraint" so a malformed value (defensive — should already be
+ * filtered by the sanitizer) doesn't fatal the page render.
+ *
+ * @param string       $value Raw datetime string.
+ * @param DateTimeZone $tz    Timezone to interpret the value in.
+ * @return DateTimeImmutable|false
+ */
+function promptless_announcement_parse_datetime( $value, DateTimeZone $tz ) {
+    $parsed = DateTimeImmutable::createFromFormat( 'Y-m-d\TH:i:s', $value, $tz );
+    if ( ! $parsed ) {
+        $parsed = DateTimeImmutable::createFromFormat( 'Y-m-d\TH:i', $value, $tz );
+    }
+    return $parsed;
+}
+
+/**
+ * CSS classes for the announcement bar element.
+ *
+ * Mirrors promptless_get_topbar_classes() conventions exactly so the bar
+ * inherits the same theme-variant tokens (`aisb-section--light/dark`) the
+ * editor and topbar already produce — visual consistency for free.
+ *
+ * @return string Space-separated class string.
+ */
+function promptless_get_announcement_classes() {
+    $classes = array( 'promptless-announcement-bar' );
+
+    $theme = get_theme_mod( 'promptless_announcement_theme', 'dark' );
+    if ( ! in_array( $theme, array( 'light', 'dark' ), true ) ) {
+        $theme = 'dark';
+    }
+    $classes[] = 'aisb-section--' . esc_attr( $theme );
+
+    if ( get_theme_mod( 'promptless_announcement_dismissible', true ) ) {
+        $classes[] = 'promptless-announcement-bar--dismissible';
+    }
+
+    return implode( ' ', $classes );
+}
+
+/**
+ * Render the announcement bar HTML.
+ *
+ * Called from header.php BEFORE promptless_topbar() so it sits at the very
+ * top of the page. Outputs nothing when promptless_has_announcement() is
+ * false — meaning the bar is hidden, scheduled out, or dismissed.
+ *
+ * The container carries `data-cookie-key` so the dismiss JS knows which
+ * cookie to set without re-deriving the hash on the client (defensive:
+ * avoids any mismatch between PHP's sha1 and JS's hashing).
+ */
+function promptless_announcement_bar() {
+    if ( ! promptless_has_announcement() ) {
+        return;
+    }
+
+    $classes      = promptless_get_announcement_classes();
+    $cookie_name  = promptless_announcement_cookie_name();
+    $message_html = (string) get_theme_mod( 'promptless_announcement_message', '' );
+
+    // Resolve [re:KEY] reusable element shortcodes if the Promptless plugin
+    // is active and exposes its processor. Falls back to the raw message
+    // when the plugin isn't there — the bar still renders, the shortcodes
+    // just appear as literal text (acceptable degradation).
+    if ( class_exists( '\\AISB\\Modern\\Core\\ReusableElementsProcessor' ) ) {
+        try {
+            $processor    = new \AISB\Modern\Core\ReusableElementsProcessor();
+            $message_html = $processor->process( $message_html );
+        } catch ( \Throwable $e ) {
+            // Ignore — render the raw message rather than failing the page.
+        }
+    }
+
+    // wp_kses_post is the same allow-list the Customizer applied at save
+    // time. Re-running it here is defense-in-depth — protects against any
+    // option-write that bypassed the Customizer (e.g. via wp_options manipulation).
+    $message_html = wp_kses_post( $message_html );
+
+    $cta_text = trim( (string) get_theme_mod( 'promptless_announcement_cta_text', '' ) );
+    $cta_url  = trim( (string) get_theme_mod( 'promptless_announcement_cta_url', '' ) );
+    $has_cta  = $cta_text !== '' && $cta_url !== '';
+
+    $dismissible = (bool) get_theme_mod( 'promptless_announcement_dismissible', true );
+    ?>
+    <div
+        class="<?php echo esc_attr( $classes ); ?>"
+        role="region"
+        aria-label="<?php esc_attr_e( 'Site announcement', 'promptless' ); ?>"
+        <?php if ( $dismissible && $cookie_name !== '' ) : ?>
+        data-cookie-key="<?php echo esc_attr( $cookie_name ); ?>"
+        <?php endif; ?>
+    >
+        <div class="promptless-container">
+            <div class="promptless-announcement-bar__inner">
+                <div class="promptless-announcement-bar__message">
+                    <?php echo $message_html; // Already kses-sanitized. ?>
+                </div>
+
+                <?php if ( $has_cta ) : ?>
+                <a class="promptless-announcement-bar__cta" href="<?php echo esc_url( $cta_url ); ?>">
+                    <?php echo esc_html( $cta_text ); ?>
+                </a>
+                <?php endif; ?>
+
+                <?php if ( $dismissible ) : ?>
+                <button
+                    type="button"
+                    class="promptless-announcement-bar__dismiss"
+                    aria-label="<?php esc_attr_e( 'Dismiss announcement', 'promptless' ); ?>"
+                >
+                    <?php /* Inline SVG instead of &times; — fonts position the × glyph at typographic x-height (not bbox center), which puts it visually high inside the hover pill. SVG gives perfect geometric centering and inherits currentColor through both light and dark theme variants. */ ?>
+                    <svg
+                        class="promptless-announcement-bar__dismiss-icon"
+                        width="14"
+                        height="14"
+                        viewBox="0 0 14 14"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.75"
+                        stroke-linecap="round"
+                        aria-hidden="true"
+                        focusable="false"
+                    >
+                        <path d="M3 3 L11 11 M11 3 L3 11" />
+                    </svg>
+                </button>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+    <?php
+}
+
 /**
  * Get top bar mobile behavior setting
  *

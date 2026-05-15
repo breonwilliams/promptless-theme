@@ -86,6 +86,19 @@ class Promptless_Assets {
                 PROMPTLESS_THEME_VERSION
             );
         }
+
+        // Announcement bar styles — only enqueue when the bar will actually
+        // render (master toggle on, message non-empty, in schedule, not
+        // dismissed by this visitor). Same gatekeeper the renderer uses, so
+        // the CSS only ships on requests where the markup will be present.
+        if ( function_exists( 'promptless_has_announcement' ) && promptless_has_announcement() ) {
+            wp_enqueue_style(
+                'promptless-theme-announcement-bar',
+                PROMPTLESS_THEME_URI . '/assets/css/announcement-bar.css',
+                array( 'promptless-theme-style' ),
+                PROMPTLESS_THEME_VERSION
+            );
+        }
     }
 
     /**
@@ -100,6 +113,67 @@ class Promptless_Assets {
             PROMPTLESS_THEME_VERSION,
             true
         );
+
+        // Inject --aisb-page-header-height on document.documentElement so
+        // the plugin's section-container.css can size full-height sections
+        // (.aisb-section--height-full) correctly — calc(100dvh - header -
+        // 2*gutter). The value comes from main.offsetTop, which captures
+        // the cumulative height of everything above the content area:
+        // optional topbar + header + (stacked layout's separate nav element
+        // when present). One measurement, one source of truth.
+        //
+        // We attach this to the navigation script (rather than emitting a
+        // standalone inline tag) so we get the standard WP dependency +
+        // footer-placement guarantees: navigation is enqueued in_footer,
+        // so this script runs after the DOM has been parsed.
+        //
+        // Three measurement triggers cover the realistic edge cases:
+        //   1. Immediate run (DOM ready, JS in footer) — primary path
+        //   2. window 'load' — handles cases where fonts/images push the
+        //      header taller after initial render
+        //   3. window 'resize' — handles breakpoint transitions that
+        //      change header layout (mobile menu vs desktop nav)
+        //
+        // The CSS-side fallback (var(--aisb-page-header-height, 80px))
+        // covers the brief moment before this script runs and any non-
+        // Promptless theme that doesn't provide this integration.
+        $header_height_script = <<<JS
+(function () {
+    function setPromptlessHeaderHeight() {
+        var main = document.querySelector('main');
+        if (!main) { return; }
+        document.documentElement.style.setProperty(
+            '--aisb-page-header-height',
+            main.offsetTop + 'px'
+        );
+    }
+    setPromptlessHeaderHeight();
+    window.addEventListener('load', setPromptlessHeaderHeight);
+    window.addEventListener('resize', setPromptlessHeaderHeight);
+})();
+JS;
+        wp_add_inline_script(
+            'promptless-theme-navigation',
+            $header_height_script,
+            'after'
+        );
+
+        // Announcement bar dismiss script — enqueue only when the bar will
+        // render AND it's actually dismissible. Saves an HTTP request on
+        // pages where the bar is hidden, scheduled out, or non-dismissible.
+        if (
+            function_exists( 'promptless_has_announcement' ) &&
+            promptless_has_announcement() &&
+            (bool) get_theme_mod( 'promptless_announcement_dismissible', true )
+        ) {
+            wp_enqueue_script(
+                'promptless-theme-announcement-bar',
+                PROMPTLESS_THEME_URI . '/assets/js/announcement-bar.js',
+                array(),
+                PROMPTLESS_THEME_VERSION,
+                true
+            );
+        }
 
         // WooCommerce cart fragments for AJAX updates
         if ( function_exists( 'promptless_has_header_cart' ) && promptless_has_header_cart() ) {

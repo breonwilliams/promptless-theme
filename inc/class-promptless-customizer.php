@@ -54,6 +54,26 @@ class Promptless_Customizer {
             )
         );
 
+        // Announcement Bar Panel (Wave 6)
+        //
+        // The announcement bar is a marketing/promotional bar that renders at
+        // the very top of every page, ABOVE the existing utility Top Bar and
+        // ABOVE the Header. The two are independent: a site can run both
+        // (announcement on top, utility nav below it), one, or neither.
+        //
+        // Schedule visibility is evaluated server-side against the site's
+        // timezone so there's no flash-of-announcement-then-disappear.
+        // Dismissal uses a content-hashed cookie key (sha1 of the message
+        // HTML), so changing the message text invalidates all previously-set
+        // dismiss cookies and visitors see the new announcement automatically.
+        $wp_customize->add_panel(
+            'promptless_announcement_panel',
+            array(
+                'title'    => __( 'Announcement Bar', 'promptless' ),
+                'priority' => 32,
+            )
+        );
+
         // Footer Panel
         $wp_customize->add_panel(
             'promptless_footer_panel',
@@ -115,6 +135,16 @@ class Promptless_Customizer {
             array(
                 'title'    => __( 'Top Bar Settings', 'promptless' ),
                 'panel'    => 'promptless_topbar_panel',
+                'priority' => 10,
+            )
+        );
+
+        // Announcement Bar Settings Section (Wave 6)
+        $wp_customize->add_section(
+            'promptless_announcement_settings',
+            array(
+                'title'    => __( 'Announcement Bar Settings', 'promptless' ),
+                'panel'    => 'promptless_announcement_panel',
                 'priority' => 10,
             )
         );
@@ -490,6 +520,191 @@ class Promptless_Customizer {
         );
 
         // =============================================
+        // Announcement Bar Settings (Wave 6)
+        // =============================================
+        //
+        // Master enable toggle. Default false so a freshly-installed theme
+        // doesn't surprise users with a placeholder banner — they have to
+        // opt in by composing a real message and ticking the box.
+        $wp_customize->add_setting(
+            'promptless_announcement_enabled',
+            array(
+                'default'           => false,
+                'sanitize_callback' => array( $this, 'sanitize_checkbox' ),
+                'transport'         => 'refresh',
+            )
+        );
+
+        $wp_customize->add_control(
+            'promptless_announcement_enabled',
+            array(
+                'label'       => __( 'Enable Announcement Bar', 'promptless' ),
+                'description' => __( 'Display a promotional bar above the Top Bar and Header. Use sparingly for sales, launches, holidays, or critical notices.', 'promptless' ),
+                'section'     => 'promptless_announcement_settings',
+                'type'        => 'checkbox',
+            )
+        );
+
+        // Message HTML. wp_kses_post limits to safe inline tags; supports
+        // [re:KEY] reusable element shortcodes resolved at render time
+        // (same processor that handles section content).
+        $wp_customize->add_setting(
+            'promptless_announcement_message',
+            array(
+                'default'           => '',
+                'sanitize_callback' => 'wp_kses_post',
+                'transport'         => 'refresh',
+            )
+        );
+
+        $wp_customize->add_control(
+            'promptless_announcement_message',
+            array(
+                'label'       => __( 'Message', 'promptless' ),
+                'description' => __( 'The announcement text. Basic HTML allowed (bold, italic, links). Supports [re:KEY] reusable element shortcodes — e.g. [re:phone_number].', 'promptless' ),
+                'section'     => 'promptless_announcement_settings',
+                'type'        => 'textarea',
+            )
+        );
+
+        // Optional CTA button. Both fields are independent — empty CTA text
+        // hides the button entirely; empty URL renders as plain bold text
+        // for cases where the announcement is purely informational.
+        $wp_customize->add_setting(
+            'promptless_announcement_cta_text',
+            array(
+                'default'           => '',
+                'sanitize_callback' => 'sanitize_text_field',
+                'transport'         => 'refresh',
+            )
+        );
+
+        $wp_customize->add_control(
+            'promptless_announcement_cta_text',
+            array(
+                'label'       => __( 'CTA Button Text', 'promptless' ),
+                'description' => __( 'Optional. The button label. Leave empty to omit the button.', 'promptless' ),
+                'section'     => 'promptless_announcement_settings',
+                'type'        => 'text',
+            )
+        );
+
+        $wp_customize->add_setting(
+            'promptless_announcement_cta_url',
+            array(
+                'default'           => '',
+                'sanitize_callback' => 'esc_url_raw',
+                'transport'         => 'refresh',
+            )
+        );
+
+        $wp_customize->add_control(
+            'promptless_announcement_cta_url',
+            array(
+                'label'       => __( 'CTA Button URL', 'promptless' ),
+                'description' => __( 'Optional. Where the button links. Site-relative (/sale) or full URL (https://...).', 'promptless' ),
+                'section'     => 'promptless_announcement_settings',
+                'type'        => 'url',
+            )
+        );
+
+        // Theme variant. Reuses the existing `aisb-section--light/dark`
+        // modifier classes so the bar inherits the same color tokens the
+        // editor and topbar already produce. Default 'dark' for visual
+        // emphasis (announcements typically want to stand out).
+        $wp_customize->add_setting(
+            'promptless_announcement_theme',
+            array(
+                'default'           => 'dark',
+                'sanitize_callback' => array( $this, 'sanitize_theme_variant' ),
+                'transport'         => 'refresh',
+            )
+        );
+
+        $wp_customize->add_control(
+            'promptless_announcement_theme',
+            array(
+                'label'       => __( 'Theme', 'promptless' ),
+                'description' => __( 'Light uses the site\'s background color; dark uses the dark-background token. Inherits all colors from the active palette.', 'promptless' ),
+                'section'     => 'promptless_announcement_settings',
+                'type'        => 'select',
+                'choices'     => array(
+                    'light' => __( 'Light', 'promptless' ),
+                    'dark'  => __( 'Dark', 'promptless' ),
+                ),
+            )
+        );
+
+        // Dismissible toggle. Default true — most modern sites let visitors
+        // close announcements after reading. Sites running critical notices
+        // (e.g. service outage) can turn it off so the bar persists.
+        $wp_customize->add_setting(
+            'promptless_announcement_dismissible',
+            array(
+                'default'           => true,
+                'sanitize_callback' => array( $this, 'sanitize_checkbox' ),
+                'transport'         => 'refresh',
+            )
+        );
+
+        $wp_customize->add_control(
+            'promptless_announcement_dismissible',
+            array(
+                'label'       => __( 'Allow Visitors to Dismiss', 'promptless' ),
+                'description' => __( 'Show a close button. Visitors who dismiss the bar won\'t see it again until the message text changes.', 'promptless' ),
+                'section'     => 'promptless_announcement_settings',
+                'type'        => 'checkbox',
+            )
+        );
+
+        // Schedule fields. Both optional. Format: YYYY-MM-DDTHH:MM (HTML5
+        // datetime-local). Evaluated server-side against the WP site
+        // timezone so there's no flash-of-announcement-then-disappear and
+        // no client-clock-skew bugs.
+        //
+        // - Both empty = always show (subject to enabled + dismissed).
+        // - Only start_date = visible from that moment forward.
+        // - Only end_date = visible until that moment.
+        // - Both = visible only inside the window (start <= now <= end).
+        $wp_customize->add_setting(
+            'promptless_announcement_start_date',
+            array(
+                'default'           => '',
+                'sanitize_callback' => array( $this, 'sanitize_announcement_datetime' ),
+                'transport'         => 'refresh',
+            )
+        );
+
+        $wp_customize->add_control(
+            'promptless_announcement_start_date',
+            array(
+                'label'       => __( 'Start Date / Time', 'promptless' ),
+                'description' => __( 'Optional. Bar starts showing at this moment (site timezone). Leave empty to start immediately.', 'promptless' ),
+                'section'     => 'promptless_announcement_settings',
+                'type'        => 'datetime-local',
+            )
+        );
+
+        $wp_customize->add_setting(
+            'promptless_announcement_end_date',
+            array(
+                'default'           => '',
+                'sanitize_callback' => array( $this, 'sanitize_announcement_datetime' ),
+                'transport'         => 'refresh',
+            )
+        );
+
+        $wp_customize->add_control(
+            'promptless_announcement_end_date',
+            array(
+                'label'       => __( 'End Date / Time', 'promptless' ),
+                'description' => __( 'Optional. Bar stops showing at this moment (site timezone). Leave empty for no end date.', 'promptless' ),
+                'section'     => 'promptless_announcement_settings',
+                'type'        => 'datetime-local',
+            )
+        );
+
+        // =============================================
         // Footer Brand Text (Rich Text Area)
         // =============================================
         $wp_customize->add_setting(
@@ -752,5 +967,52 @@ class Promptless_Customizer {
         }
 
         return '';
+    }
+
+    /**
+     * Sanitize an announcement-bar datetime field.
+     *
+     * Accepts the HTML5 `datetime-local` format `YYYY-MM-DDTHH:MM` (with
+     * optional `:SS` seconds). Anything else — including stray garbage,
+     * non-numeric input, or impossible dates — is normalized to an empty
+     * string, which the renderer treats as "no schedule set on this side".
+     *
+     * Stored as a literal string. The renderer parses it against the WP
+     * site timezone at render time via promptless_announcement_in_schedule()
+     * — see template-functions.php for the timezone-correct comparison.
+     *
+     * @param string $value Setting value (HTML5 datetime-local format).
+     * @return string Sanitized value or empty string if invalid.
+     */
+    public function sanitize_announcement_datetime( $value ) {
+        if ( ! is_string( $value ) || $value === '' ) {
+            return '';
+        }
+
+        // Match YYYY-MM-DDTHH:MM with optional :SS. The trailing seconds are
+        // accepted but not required because some browsers omit them in the
+        // datetime-local input.
+        if ( ! preg_match( '/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(?::(\d{2}))?$/', $value, $matches ) ) {
+            return '';
+        }
+
+        // Validate that the date/time components are real (e.g. not Feb 30).
+        // checkdate() catches impossible calendar dates; the hour/minute/sec
+        // bounds catch typos in the time portion.
+        $year   = (int) $matches[1];
+        $month  = (int) $matches[2];
+        $day    = (int) $matches[3];
+        $hour   = (int) $matches[4];
+        $minute = (int) $matches[5];
+        $second = isset( $matches[6] ) ? (int) $matches[6] : 0;
+
+        if ( ! checkdate( $month, $day, $year ) ) {
+            return '';
+        }
+        if ( $hour < 0 || $hour > 23 || $minute < 0 || $minute > 59 || $second < 0 || $second > 59 ) {
+            return '';
+        }
+
+        return $value;
     }
 }
