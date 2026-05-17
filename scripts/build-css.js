@@ -16,6 +16,7 @@ const cssnano = require('cssnano');
 // CSS files to minify (relative to theme root)
 const cssFiles = [
     'assets/css/header.css',
+    'assets/css/header-breakpoint.css',
     'assets/css/footer.css',
     'assets/css/archive.css',
     'assets/css/woocommerce.css'

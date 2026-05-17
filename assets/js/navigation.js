@@ -11,6 +11,65 @@
     'use strict';
 
     /**
+     * Default menu collapse breakpoint in pixels.
+     *
+     * Matches the hardcoded value in assets/css/header.css. Kept as a constant
+     * here so the JS path has a sensible fallback when the body class is
+     * missing (e.g., the theme is loaded outside of a normal WP page render,
+     * or a third-party plugin filters body_class and strips ours).
+     */
+    var DEFAULT_MENU_BREAKPOINT = 768;
+
+    /**
+     * Cache for the resolved breakpoint value.
+     *
+     * The value is read once from document.body's class list and cached for
+     * the lifetime of the page. The customizer setting can't change without
+     * a full page reload (transport: 'refresh'), so re-reading on every
+     * resize/hover/keypress would be wasted work.
+     */
+    var cachedMenuBreakpoint = null;
+
+    /**
+     * Returns the viewport width at which the main nav collapses into the
+     * mobile hamburger.
+     *
+     * Reads the value from a body class set server-side by
+     * Promptless_Mobile_Menu_Breakpoint::add_breakpoint_body_class() — looks
+     * for "promptless-menu-breakpoint-{value}". Falls back to
+     * DEFAULT_MENU_BREAKPOINT if the class isn't found (covers the case
+     * where the theme is loaded without that PHP class active, e.g. during
+     * an upgrade window).
+     *
+     * @returns {number} Breakpoint in pixels.
+     */
+    function getMenuBreakpoint() {
+        if (cachedMenuBreakpoint !== null) {
+            return cachedMenuBreakpoint;
+        }
+
+        if (!document.body || !document.body.classList) {
+            cachedMenuBreakpoint = DEFAULT_MENU_BREAKPOINT;
+            return cachedMenuBreakpoint;
+        }
+
+        var classes = document.body.classList;
+        for (var i = 0; i < classes.length; i++) {
+            var match = classes[i].match(/^promptless-menu-breakpoint-(\d+)$/);
+            if (match) {
+                var value = parseInt(match[1], 10);
+                if (!isNaN(value) && value > 0) {
+                    cachedMenuBreakpoint = value;
+                    return cachedMenuBreakpoint;
+                }
+            }
+        }
+
+        cachedMenuBreakpoint = DEFAULT_MENU_BREAKPOINT;
+        return cachedMenuBreakpoint;
+    }
+
+    /**
      * Initialize navigation functionality
      */
     function initNavigation() {
@@ -118,7 +177,7 @@
         window.addEventListener('resize', function() {
             clearTimeout(resizeTimer);
             resizeTimer = setTimeout(function() {
-                if (window.innerWidth >= 768 && navWrapper.classList.contains('is-open')) {
+                if (window.innerWidth >= getMenuBreakpoint() && navWrapper.classList.contains('is-open')) {
                     menuToggle.setAttribute('aria-expanded', 'false');
                     menuToggle.setAttribute('aria-label', 'Open menu');
                     navWrapper.classList.remove('is-open');
@@ -214,13 +273,13 @@
 
             // Desktop: Update aria-expanded on hover (toggle button hidden via CSS)
             item.addEventListener('mouseenter', function() {
-                if (window.innerWidth >= 768) {
+                if (window.innerWidth >= getMenuBreakpoint()) {
                     toggleBtn.setAttribute('aria-expanded', 'true');
                 }
             });
 
             item.addEventListener('mouseleave', function() {
-                if (window.innerWidth >= 768) {
+                if (window.innerWidth >= getMenuBreakpoint()) {
                     toggleBtn.setAttribute('aria-expanded', 'false');
                 }
             });
@@ -247,7 +306,7 @@
             const link = parentItem.querySelector(':scope > a');
 
             // ArrowRight: Open submenu and focus first item (desktop only)
-            if (event.key === 'ArrowRight' && submenu && window.innerWidth >= 768) {
+            if (event.key === 'ArrowRight' && submenu && window.innerWidth >= getMenuBreakpoint()) {
                 event.preventDefault();
                 link.setAttribute('aria-expanded', 'true');
                 const firstSubLink = submenu.querySelector('a');
@@ -257,7 +316,7 @@
             }
 
             // ArrowLeft: Close submenu and focus parent (desktop only)
-            if (event.key === 'ArrowLeft' && window.innerWidth >= 768) {
+            if (event.key === 'ArrowLeft' && window.innerWidth >= getMenuBreakpoint()) {
                 const parentSubmenu = target.closest('.sub-menu');
                 if (parentSubmenu) {
                     event.preventDefault();

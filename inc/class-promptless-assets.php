@@ -56,6 +56,38 @@ class Promptless_Assets {
             PROMPTLESS_THEME_VERSION
         );
 
+        // Breakpoint-dependent header rules (Mobile Menu Breakpoint customizer).
+        //
+        // The 13 @media (min-width: 768px) / (max-width: 767px) blocks that
+        // control where the main nav collapses live in a SEPARATE file —
+        // header-breakpoint.css — so there is only ever one source of those
+        // rules in the cascade.
+        //
+        // Branch:
+        //   - User on DEFAULT (768) → load the static .min.css file (cached
+        //     by the browser, no inline CSS bloat on every page).
+        //   - User on NON-DEFAULT (640 / 900 / 1024 / 1200) → DO NOT load
+        //     the static file. Promptless_Mobile_Menu_Breakpoint emits an
+        //     inline <style> block in <head> with the same rules rewritten
+        //     at the chosen breakpoint. Loading both would re-introduce the
+        //     cascade flaw the v1 implementation hit (original 768 rule
+        //     still firing in the gap range).
+        //
+        // The class_exists guard keeps the theme functional if someone
+        // strips that class out — without the inline override the static
+        // file is still the safest default.
+        if (
+            ! class_exists( 'Promptless_Mobile_Menu_Breakpoint' )
+            || Promptless_Mobile_Menu_Breakpoint::is_default()
+        ) {
+            wp_enqueue_style(
+                'promptless-theme-header-breakpoint',
+                PROMPTLESS_THEME_URI . '/assets/css/header-breakpoint.min.css',
+                array( 'promptless-theme-header' ),
+                PROMPTLESS_THEME_VERSION
+            );
+        }
+
         // Footer styles (minified for PageSpeed optimization)
         wp_enqueue_style(
             'promptless-theme-footer',
