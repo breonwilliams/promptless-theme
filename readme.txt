@@ -4,7 +4,7 @@ Tags: one-column, custom-logo, custom-menu, featured-images, full-width-template
 Requires at least: 6.6
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.1.8
+Stable tag: 1.1.9
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -150,6 +150,11 @@ Use the Promptless WP plugin's Canvas display mode, which provides a full-screen
 Yes. The theme includes WooCommerce-aware styling that inherits colors and typography from the Promptless WP plugin's Global Settings. The cart icon in the header can be configured to either open a mini-cart dropdown or link directly to the cart page (Appearance > Customize > Header > Cart). Mobile cart, checkout, and account pages render as grid-based cards instead of overflowing the viewport with default WooCommerce table styling. WooCommerce assets are only loaded on shop-related pages to keep non-shop pages fast.
 
 == Changelog ==
+
+= 1.1.9 =
+* Improved: Footer container padding now aligns with the Promptless WP plugin's section padding tokens (--aisb-section-space-lg on desktop, --aisb-section-space-md on mobile) so footer content lines up flush with sections built by the plugin instead of using a separate spacing scale
+* Improved: Header menu alignment across all variants (default single-row, stacked two-row, top-bar utility menus) — menu items now align with the site title's left edge instead of inheriting the unrelated default theme spacing
+* Improved: Announcement bar CTA button now inherits the active button cascade from the Promptless WP plugin (color, hover behavior, border radius adapt to global settings) while preserving its compact size — previously the button rendered with hard-coded styling that didn't adapt to brand color changes
 
 = 1.1.8 =
 * Improved: Mobile menu breakpoint handling for better responsive behavior
