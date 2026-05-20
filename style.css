@@ -284,26 +284,43 @@ button {
    Container
    ========================================================================== */
 
+/*
+ * `.promptless-container` is the theme's content container — used by the
+ * header, footer, archive cards, single-post / single-page templates, and
+ * comments. Its padding determines how far theme content insets from the
+ * viewport edges.
+ *
+ * The padding HERE is tuned to match the inner container padding of
+ * Promptless plugin (AISB) sections, so that on every page where theme
+ * chrome (header/footer/archive) sits next to AISB plugin sections, the
+ * content's left/right edges line up pixel-perfect. AISB's standard
+ * section padding follows a 2-tier responsive scheme:
+ *
+ *   ≤640px : `--aisb-section-space-md` (24px)
+ *   >640px : `--aisb-section-space-lg` (32px)
+ *
+ * Previously this theme used a 3-tier scheme (16/24/32) that was 8px
+ * tighter than AISB at every breakpoint below 1024px — visible as a
+ * misalignment between section content and footer/archive content on
+ * mobile and tablet. Switching to the same 2-tier values fixes it.
+ *
+ * Tokens are referenced with literal fallbacks so the theme degrades
+ * gracefully when the AISB plugin is inactive (the fallbacks resolve to
+ * the same px values the tokens carry by default).
+ */
 .promptless-container {
   width: 100%;
-  max-width: var(--aisb-section-max-width, 1280px);
+  max-width: var(--aisb-section-max-width, 1200px);
   margin-left: auto;
   margin-right: auto;
-  padding-left: 1rem;
-  padding-right: 1rem;
+  padding-left: var(--aisb-section-space-lg, 2rem);
+  padding-right: var(--aisb-section-space-lg, 2rem);
 }
 
-@media (min-width: 640px) {
+@media (max-width: 640px) {
   .promptless-container {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  .promptless-container {
-    padding-left: 2rem;
-    padding-right: 2rem;
+    padding-left: var(--aisb-section-space-md, 1.5rem);
+    padding-right: var(--aisb-section-space-md, 1.5rem);
   }
 }
 

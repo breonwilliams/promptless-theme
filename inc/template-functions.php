@@ -1102,7 +1102,33 @@ function promptless_announcement_bar() {
                 </div>
 
                 <?php if ( $has_cta ) : ?>
-                <a class="promptless-announcement-bar__cta" href="<?php echo esc_url( $cta_url ); ?>">
+                <?php
+                /*
+                 * Announcement CTA uses the AISB plugin's button classes —
+                 * `aisb-btn aisb-btn--compact aisb-btn-primary` — the same
+                 * set the header CTA uses (see promptless_header_cta()).
+                 *
+                 * Without these classes, the button rendered with just the
+                 * theme's own `.promptless-announcement-bar__cta` rule and
+                 * missed every global-settings adaptation the plugin's
+                 * button system handles: neo-brutalist outline/lifted modes,
+                 * button border-radius from global settings, button font
+                 * weight / text-transform / letter-spacing tokens, the
+                 * smart-color hover state, and the focus ring. Adding the
+                 * plugin's classes routes the announcement CTA through
+                 * the same cascade that styles every other button on the
+                 * site — so toggling a global setting in the Customizer
+                 * now updates the announcement button alongside everything
+                 * else.
+                 *
+                 * The theme's `.promptless-announcement-bar__cta` class is
+                 * kept on the element for layout-only properties (flex
+                 * sizing inside the bar's flex row + nowrap). All visual
+                 * styling (color, padding, radius, weight, transitions,
+                 * hover) is delegated to the plugin's `.aisb-btn*` rules.
+                 */
+                ?>
+                <a class="promptless-announcement-bar__cta aisb-btn aisb-btn--compact aisb-btn-primary" href="<?php echo esc_url( $cta_url ); ?>">
                     <?php echo esc_html( $cta_text ); ?>
                 </a>
                 <?php endif; ?>

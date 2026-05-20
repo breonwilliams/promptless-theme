@@ -110,28 +110,40 @@
    matches the buttons rendered elsewhere on the site.
    ========================================================================== */
 
+/*
+ * The announcement CTA's visual styling — background, text color, border,
+ * border-radius, font-weight, text-transform, letter-spacing, hover state,
+ * focus ring, neo-brutalist outline/lifted variants, and every other
+ * global-settings adaptation — is delegated to the AISB plugin's button
+ * system via the classes the PHP renderer adds (`aisb-btn aisb-btn--compact
+ * aisb-btn-primary`). See the docblock in `promptless_announcement_bar()`
+ * for the rationale.
+ *
+ * This local class owns two responsibilities:
+ *
+ *   1. Layout inside the announcement bar's flex row — don't shrink, don't
+ *      wrap text.
+ *
+ *   2. Size override for the announcement-bar context. The plugin's compact
+ *      button (`.aisb-btn--compact`) is sized for the header/footer/section
+ *      contexts where there's more vertical room. The announcement bar is a
+ *      thin strip (~40px tall) where that compact size still reads as
+ *      oversized and crowds the message text. Smaller padding (0.375rem
+ *      0.875rem) and a slightly tighter font-size (0.8125rem) restore the
+ *      tighter visual hierarchy the bar's design calls for.
+ *
+ *      Critically, these overrides ONLY touch size. Every other property
+ *      stays inherited from the plugin's button cascade, so toggling
+ *      neo-brutalist mode, changing button radius / font-weight in
+ *      Customizer, switching theme variant, etc. all still flow through
+ *      uniformly with the rest of the site's buttons.
+ */
 .promptless-announcement-bar__cta {
-    display: inline-flex;
-    align-items: center;
     flex: 0 0 auto;
-    padding: 0.375rem 0.875rem;
-    background-color: var(--announcement-primary);
-    color: var(--aisb-button-primary-text, #ffffff);
-    font-size: 0.8125rem;
-    font-weight: 600;
-    text-decoration: none;
-    border-radius: var(--aisb-section-radius-button, 6px);
-    transition: opacity 0.15s ease, transform 0.15s ease;
     white-space: nowrap;
-}
-
-.promptless-announcement-bar__cta:hover,
-.promptless-announcement-bar__cta:focus-visible {
-    opacity: 0.9;
-    color: var(--aisb-button-primary-text, #ffffff);
-    text-decoration: none;
-    outline: 2px solid var(--announcement-primary);
-    outline-offset: 2px;
+    /* Size-only override of .aisb-btn--compact for the bar's thinner row. */
+    padding: 0.375rem 0.875rem;
+    font-size: 0.8125rem;
 }
 
 /* ==========================================================================

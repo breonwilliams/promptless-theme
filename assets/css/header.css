@@ -1018,6 +1018,21 @@ body.woocommerce-checkout .promptless-header__mini-cart .promptless-cart-item__r
     list-style: none;
 }
 
+/* Edge alignment — see "Menu Edge Alignment" docblock below.
+
+   Topbar has two separate nav lists (left + right) that anchor to opposite
+   container edges. Each gets a negative margin on its anchoring side equal
+   to the link's horizontal padding (0.5rem), so the first item on the left
+   and the last item on the right have their TEXT aligned flush with the
+   container's content edge — matching the site title / page sections that
+   share the same container. */
+.promptless-topbar__nav--left .promptless-topbar__nav-list {
+    margin-left: -0.5rem;
+}
+.promptless-topbar__nav--right .promptless-topbar__nav-list {
+    margin-right: -0.5rem;
+}
+
 .promptless-topbar__nav-list li {
     margin: 0;
 }
@@ -1315,6 +1330,47 @@ body.woocommerce-checkout .promptless-header__mini-cart .promptless-cart-item__r
 
 .promptless-header-nav--right .promptless-header__nav-wrapper {
     justify-content: flex-end;
+}
+
+/* ==========================================================================
+   Menu Edge Alignment — STACKED HEADER LAYOUT
+
+   In the stacked layout (Customizer → header layout = "stacked"), the
+   primary nav renders in its own row below the brand/actions row, inside
+   `<nav class="promptless-header-nav">`. Both the brand row and the nav
+   row share the same `.promptless-container`, which provides the
+   container-edge inset. The site title (`.promptless-header__brand`)
+   sits at the container content edge with no inner padding, so its
+   left edge IS the container edge.
+
+   The nav list, on the other hand, has padding on each `<a>` element
+   (0.5rem 0.75rem) to form a comfortable hover hit-target. That padding
+   pushes the first/last item's TEXT inward from the container edge,
+   producing a visible misalignment between the title's text and the
+   nav's text (about 12px each side).
+
+   Fix: negative margin on the nav list equal to the link's horizontal
+   padding. The hit-target stays the same; only the leading/trailing
+   items' text shifts outward to align flush with the container edge.
+   This produces pixel-perfect alignment between:
+     - the site title (above)
+     - the topbar nav (above, via its own edge-alignment rule)
+     - the primary nav (this rule)
+     - AISB page sections (below, via .promptless-container's padding
+       that matches AISB section padding)
+
+   Why scoped to `.promptless-header-nav` (stacked layout only):
+   In the default single-row layout the primary nav sits inside
+   `.promptless-header__inner` BETWEEN the logo and the actions — the
+   alignment question there is about gap from neighbors, not from the
+   container edge. Applying negative margin in that context would push
+   the nav's first item visually into the logo's space (and the last
+   item into the actions space). Stacked is the only variant where the
+   nav row independently anchors to the container edges.
+   ========================================================================== */
+.promptless-header-nav .promptless-header__nav-list {
+    margin-left: -0.75rem;
+    margin-right: -0.75rem;
 }
 
 /* Desktop: Show navigation */
