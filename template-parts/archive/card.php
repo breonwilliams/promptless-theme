@@ -5,10 +5,22 @@
  * Uses EXACT same class names and structure as Post Grid section from
  * the Promptless WP plugin for perfect visual consistency.
  *
+ * Fires the `promptless_archive_card_section` action at 5 semantically-
+ * meaningful positions inside each card so companion plugins (notably
+ * Post Runtime Engine) can inject per-position content without replacing
+ * the card body. Each fire passes the position name as the first arg
+ * so a single listener can branch on it. Positions, in render order:
+ * image_overlay (inside image wrapper), headline (above meta), subtitle
+ * (under title), meta_strip (after excerpt, before CTA), footer_meta
+ * (last). Companion-plugin listeners must echo (not return) — output
+ * is emitted at the point the action fires. Listeners should silently
+ * no-op when the post type isn't one they manage.
+ *
  * @package Promptless_Theme
  * @since 1.0.0
  */
 
+$promptless_post_id = get_the_ID();
 ?>
 
 <article id="post-<?php the_ID(); ?>" <?php post_class( 'aisb-features__item aisb-postgrid__item' ); ?>>
@@ -17,19 +29,26 @@
             <a href="<?php the_permalink(); ?>">
                 <?php the_post_thumbnail( 'promptless-card', array( 'class' => 'aisb-features__item-image' ) ); ?>
             </a>
+            <?php do_action( 'promptless_archive_card_section', 'image_overlay', $promptless_post_id ); ?>
         </div>
     <?php endif; ?>
 
     <div class="aisb-features__item-content">
+        <?php do_action( 'promptless_archive_card_section', 'headline', $promptless_post_id ); ?>
+
         <?php promptless_post_meta_with_categories(); ?>
 
         <h3 class="aisb-features__item-title">
             <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
         </h3>
 
+        <?php do_action( 'promptless_archive_card_section', 'subtitle', $promptless_post_id ); ?>
+
         <div class="aisb-features__item-description">
             <p><?php echo esc_html( promptless_get_excerpt( 20 ) ); ?></p>
         </div>
+
+        <?php do_action( 'promptless_archive_card_section', 'meta_strip', $promptless_post_id ); ?>
 
         <?php
         /*
@@ -57,5 +76,7 @@
             <?php
         }
         ?>
+
+        <?php do_action( 'promptless_archive_card_section', 'footer_meta', $promptless_post_id ); ?>
     </div>
 </article>
