@@ -4,7 +4,7 @@ Tags: one-column, custom-logo, custom-menu, featured-images, full-width-template
 Requires at least: 6.6
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.1.9
+Stable tag: 1.2.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -150,6 +150,10 @@ Use the Promptless WP plugin's Canvas display mode, which provides a full-screen
 Yes. The theme includes WooCommerce-aware styling that inherits colors and typography from the Promptless WP plugin's Global Settings. The cart icon in the header can be configured to either open a mini-cart dropdown or link directly to the cart page (Appearance > Customize > Header > Cart). Mobile cart, checkout, and account pages render as grid-based cards instead of overflowing the viewport with default WooCommerce table styling. WooCommerce assets are only loaded on shop-related pages to keep non-shop pages fast.
 
 == Changelog ==
+
+= 1.2.0 =
+* Added: `promptless_archive_card_show_date` and `promptless_archive_card_show_author` filter hooks in `promptless_post_meta_with_categories()` (rendered by the archive card template). Both default to `true` so existing sites behave unchanged. Plugins (notably Post Runtime Engine) can return `false` per-post or per-CPT to suppress the post create-date and/or author byline on archive cards — useful when a CPT exposes its own meaningful date through a custom field (an event's `event_date`, a session's start time) and showing both is duplicative.
+* Improved: When all three meta items (date, author, categories) are suppressed by filters, the wrapping `<div class="aisb-postgrid__metadata">` is also skipped so the card markup stays semantically clean.
 
 = 1.1.9 =
 * Improved: Footer container padding now aligns with the Promptless WP plugin's section padding tokens (--aisb-section-space-lg on desktop, --aisb-section-space-md on mobile) so footer content lines up flush with sections built by the plugin instead of using a separate spacing scale
