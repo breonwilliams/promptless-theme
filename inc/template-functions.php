@@ -209,30 +209,65 @@ function promptless_post_meta() {
  * Uses plugin-matching class names for visual consistency.
  */
 function promptless_post_meta_with_categories() {
+    $post_id = get_the_ID();
+
+    /**
+     * Whether to show the date in the archive card meta strip.
+     *
+     * Defaults to true (backward compatible). Plugins (notably Post
+     * Runtime Engine) can return false per-CPT so that registered CPTs
+     * which already have their own date field defined don't display
+     * the post's create-date alongside the field.
+     *
+     * @param bool $show    True to render the date.
+     * @param int  $post_id The post being rendered.
+     */
+    $show_date = apply_filters( 'promptless_archive_card_show_date', true, $post_id );
+
+    /**
+     * Whether to show the author in the archive card meta strip.
+     *
+     * Defaults to true. Same pattern as promptless_archive_card_show_date
+     * — return false from a plugin filter to hide author on a per-CPT
+     * basis.
+     *
+     * @param bool $show    True to render the author.
+     * @param int  $post_id The post being rendered.
+     */
+    $show_author = apply_filters( 'promptless_archive_card_show_author', true, $post_id );
+
+    $categories     = get_the_category();
+    $has_categories = ! empty( $categories );
+
+    // Render the wrapper only if at least one meta item is going to land in it.
+    if ( ! $show_date && ! $show_author && ! $has_categories ) {
+        return;
+    }
     ?>
     <div class="aisb-postgrid__metadata">
-        <span class="aisb-postgrid__date">
-            <svg class="aisb-postgrid__meta-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false">
-                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                <line x1="16" y1="2" x2="16" y2="6"></line>
-                <line x1="8" y1="2" x2="8" y2="6"></line>
-                <line x1="3" y1="10" x2="21" y2="10"></line>
-            </svg>
-            <time datetime="<?php echo esc_attr( get_the_date( 'c' ) ); ?>">
-                <?php echo esc_html( get_the_date() ); ?>
-            </time>
-        </span>
-        <span class="aisb-postgrid__author">
-            <svg class="aisb-postgrid__meta-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                <circle cx="12" cy="7" r="4"></circle>
-            </svg>
-            <?php echo esc_html( get_the_author() ); ?>
-        </span>
-        <?php
-        $categories = get_the_category();
-        if ( ! empty( $categories ) ) :
-            ?>
+        <?php if ( $show_date ) : ?>
+            <span class="aisb-postgrid__date">
+                <svg class="aisb-postgrid__meta-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+                <time datetime="<?php echo esc_attr( get_the_date( 'c' ) ); ?>">
+                    <?php echo esc_html( get_the_date() ); ?>
+                </time>
+            </span>
+        <?php endif; ?>
+        <?php if ( $show_author ) : ?>
+            <span class="aisb-postgrid__author">
+                <svg class="aisb-postgrid__meta-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <?php echo esc_html( get_the_author() ); ?>
+            </span>
+        <?php endif; ?>
+        <?php if ( $has_categories ) : ?>
             <span class="aisb-postgrid__categories">
                 <?php
                 // Show only first category (matching PostGrid behavior)
