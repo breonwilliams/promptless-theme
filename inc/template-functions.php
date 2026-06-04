@@ -354,22 +354,189 @@ function promptless_mobile_menu_toggle() {
 }
 
 /**
- * Output CTA button in header
+ * Map a CTA style key to its Promptless WP button class.
+ *
+ * Styles inherit their colors from the Promptless WP plugin's Global
+ * Settings via the shared button classes. Falls back to a sensible default
+ * when the plugin is inactive (the theme ships fallback button styles).
+ *
+ * @param string $style Style key: 'primary', 'secondary', or 'ghost'.
+ * @return string Button class.
+ */
+function promptless_get_cta_style_class( $style ) {
+    $map = array(
+        'primary'   => 'aisb-btn-primary',
+        'secondary' => 'aisb-btn-secondary',
+        'ghost'     => 'aisb-btn-ghost',
+    );
+
+    return isset( $map[ $style ] ) ? $map[ $style ] : $map['primary'];
+}
+
+/**
+ * Get the normalized, ordered list of configured header CTA buttons.
+ *
+ * A button is included only when BOTH its text and URL are set. Each
+ * returned entry carries its resolved style and an *effective* mobile
+ * placement.
+ *
+ * No-clutter invariant: at most ONE button may remain in the header bar on
+ * mobile (two buttons beside the logo and hamburger is too crowded). The
+ * first button whose placement is 'bar' keeps the bar; any subsequent
+ * 'bar' button is downgraded to 'menu'. Desktop always shows every button
+ * in the bar regardless of placement — placement only governs mobile.
+ *
+ * The renderer is data-driven (not hardcoded to two buttons), so adding
+ * more buttons in future is a Customizer-only change.
+ *
+ * @return array<int, array{text:string,url:string,style:string,placement:string}>
+ */
+function promptless_get_header_ctas() {
+    $defs = array(
+        array(
+            'text'      => get_theme_mod( 'promptless_header_cta_text', '' ),
+            'url'       => get_theme_mod( 'promptless_header_cta_url', '' ),
+            'style'     => get_theme_mod( 'promptless_header_cta_style', 'primary' ),
+            'placement' => get_theme_mod( 'promptless_header_cta_mobile_placement', 'bar' ),
+        ),
+        array(
+            'text'      => get_theme_mod( 'promptless_header_cta_2_text', '' ),
+            'url'       => get_theme_mod( 'promptless_header_cta_2_url', '' ),
+            'style'     => get_theme_mod( 'promptless_header_cta_2_style', 'secondary' ),
+            'placement' => get_theme_mod( 'promptless_header_cta_2_mobile_placement', 'menu' ),
+        ),
+    );
+
+    $valid_styles     = array( 'primary', 'secondary', 'ghost' );
+    $valid_placements = array( 'bar', 'menu' );
+
+    $ctas      = array();
+    $bar_taken = false;
+
+    foreach ( $defs as $def ) {
+        if ( empty( $def['text'] ) || empty( $def['url'] ) ) {
+            continue;
+        }
+
+        $style     = in_array( $def['style'], $valid_styles, true ) ? $def['style'] : 'primary';
+        $placement = in_array( $def['placement'], $valid_placements, true ) ? $def['placement'] : 'bar';
+
+        // Enforce the no-clutter invariant.
+        if ( 'bar' === $placement ) {
+            if ( $bar_taken ) {
+                $placement = 'menu';
+            } else {
+                $bar_taken = true;
+            }
+        }
+
+        $ctas[] = array(
+            'text'      => $def['text'],
+            'url'       => $def['url'],
+            'style'     => $style,
+            'placement' => $placement,
+        );
+    }
+
+    /**
+     * Filter the resolved header CTA buttons.
+     *
+     * @param array $ctas Normalized CTA definitions.
+     */
+    return apply_filters( 'promptless_header_ctas', $ctas );
+}
+
+/**
+ * Render a single CTA anchor.
+ *
+ * @param array  $cta         Normalized CTA entry from promptless_get_header_ctas().
+ * @param string $extra_class Optional extra class(es) for the anchor.
+ * @return string Anchor HTML.
+ */
+function promptless_render_cta_button( array $cta, $extra_class = '' ) {
+    $classes = array(
+        'promptless-header__cta',
+        'aisb-btn',
+        'aisb-btn--compact',
+        promptless_get_cta_style_class( $cta['style'] ),
+    );
+
+    if ( '' !== $extra_class ) {
+        $classes[] = $extra_class;
+    }
+
+    return sprintf(
+        '<a href="%s" class="%s">%s</a>',
+        esc_url( $cta['url'] ),
+        esc_attr( implode( ' ', $classes ) ),
+        esc_html( $cta['text'] )
+    );
+}
+
+/**
+ * Output the CTA button(s) in the header actions area.
+ *
+ * Every configured button renders here for desktop. Each anchor gets a
+ * mobile-visibility modifier so the breakpoint CSS can hide the ones that
+ * belong in the mobile menu instead:
+ *   - placement 'bar'  → promptless-header__cta--keep (visible at all widths)
+ *   - placement 'menu' → promptless-header__cta--to-menu (hidden below the
+ *                        menu breakpoint, shown again in the mobile menu by
+ *                        promptless_header_menu_cta()).
  */
 function promptless_header_cta() {
-    // Get CTA settings from theme customizer
-    $cta_text = get_theme_mod( 'promptless_header_cta_text', '' );
-    $cta_url  = get_theme_mod( 'promptless_header_cta_url', '' );
+    $ctas = promptless_get_header_ctas();
 
-    if ( empty( $cta_text ) || empty( $cta_url ) ) {
+    if ( empty( $ctas ) ) {
         return;
     }
 
-    printf(
-        '<a href="%s" class="promptless-header__cta aisb-btn aisb-btn--compact aisb-btn-primary">%s</a>',
-        esc_url( $cta_url ),
-        esc_html( $cta_text )
+    foreach ( $ctas as $cta ) {
+        $modifier = ( 'menu' === $cta['placement'] )
+            ? 'promptless-header__cta--to-menu'
+            : 'promptless-header__cta--keep';
+
+        // Anchor HTML is fully escaped inside promptless_render_cta_button().
+        echo promptless_render_cta_button( $cta, $modifier ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+    }
+}
+
+/**
+ * Output the CTA button group inside the mobile menu panel.
+ *
+ * Renders only the buttons whose effective mobile placement is 'menu',
+ * pinned to the bottom of the mobile menu and laid out side by side. Hidden
+ * on desktop via the breakpoint CSS (where these buttons already appear in
+ * the header bar). Outputs nothing when no button is routed to the menu, so
+ * it is safe to call unconditionally from every header layout.
+ */
+function promptless_header_menu_cta() {
+    $ctas = promptless_get_header_ctas();
+
+    if ( empty( $ctas ) ) {
+        return;
+    }
+
+    $menu_ctas = array_filter(
+        $ctas,
+        static function ( $cta ) {
+            return 'menu' === $cta['placement'];
+        }
     );
+
+    if ( empty( $menu_ctas ) ) {
+        return;
+    }
+    ?>
+    <div class="promptless-header__menu-cta">
+        <?php
+        foreach ( $menu_ctas as $cta ) {
+            // Anchor HTML is fully escaped inside promptless_render_cta_button().
+            echo promptless_render_cta_button( $cta ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+        }
+        ?>
+    </div>
+    <?php
 }
 
 /**

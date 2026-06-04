@@ -366,6 +366,34 @@
 }
 
 /* ==========================================================================
+   Header CTA — mobile menu group
+
+   Buttons whose mobile placement is "menu" are rendered (by
+   promptless_header_menu_cta()) at the bottom of the mobile drawer, laid
+   out side by side with equal width. Hidden on desktop — the breakpoint
+   rules that govern bar-vs-drawer visibility live in header-breakpoint.css
+   so they track the user's chosen "Mobile Menu Breakpoint" setting. The
+   21px padding + top border match the mobile topbar drawer rhythm so the
+   drawer reads as one continuous block.
+   ========================================================================== */
+
+.promptless-header__menu-cta {
+    display: flex;
+    gap: 0.75rem;
+    padding: 1.3125rem; /* 21px — matches .promptless-mobile-topbar drawer padding */
+    border-top: 1px solid var(--section-border);
+}
+
+/* Equal-width, centered buttons side by side. The plugin's .aisb-btn
+   supplies the visual styling and its own padding; flex:1 distributes the
+   row evenly so two buttons align cleanly regardless of label length. */
+.promptless-header__menu-cta .promptless-header__cta {
+    flex: 1 1 0;
+    justify-content: center;
+    text-align: center;
+}
+
+/* ==========================================================================
    Mobile Menu Toggle
    ========================================================================== */
 

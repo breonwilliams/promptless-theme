@@ -311,8 +311,26 @@ class Promptless_Customizer {
         );
 
         // =============================================
-        // Header CTA Settings
+        // Header CTA Settings (up to two buttons)
+        //
+        // Buttons are independent: a button renders only when BOTH its text
+        // and URL are filled. Each button picks a style (primary / secondary /
+        // ghost) that maps to the Promptless WP button classes, so colors are
+        // inherited from the plugin's Global Settings. Each button also picks
+        // a mobile placement (header bar vs. mobile menu). Defaults preserve
+        // the prior single-primary-button behavior for existing sites.
         // =============================================
+        $cta_style_choices     = array(
+            'primary'   => __( 'Primary', 'promptless' ),
+            'secondary' => __( 'Secondary', 'promptless' ),
+            'ghost'     => __( 'Ghost / Outline', 'promptless' ),
+        );
+        $cta_placement_choices = array(
+            'bar'  => __( 'Keep in header bar', 'promptless' ),
+            'menu' => __( 'Move into mobile menu', 'promptless' ),
+        );
+
+        // ---- Button 1 (existing keys preserved for backward compatibility) ----
         $wp_customize->add_setting(
             'promptless_header_cta_text',
             array(
@@ -325,8 +343,8 @@ class Promptless_Customizer {
         $wp_customize->add_control(
             'promptless_header_cta_text',
             array(
-                'label'       => __( 'Header CTA Text', 'promptless' ),
-                'description' => __( 'Button text for the header call-to-action. Leave empty to hide.', 'promptless' ),
+                'label'       => __( 'Button 1 Text', 'promptless' ),
+                'description' => __( 'Button text for the primary header call-to-action. Leave empty to hide.', 'promptless' ),
                 'section'     => 'promptless_header_cta',
                 'type'        => 'text',
             )
@@ -344,10 +362,129 @@ class Promptless_Customizer {
         $wp_customize->add_control(
             'promptless_header_cta_url',
             array(
-                'label'       => __( 'Header CTA URL', 'promptless' ),
-                'description' => __( 'Link URL for the header call-to-action button.', 'promptless' ),
+                'label'       => __( 'Button 1 URL', 'promptless' ),
+                'description' => __( 'Link URL for button 1.', 'promptless' ),
                 'section'     => 'promptless_header_cta',
                 'type'        => 'url',
+            )
+        );
+
+        $wp_customize->add_setting(
+            'promptless_header_cta_style',
+            array(
+                'default'           => 'primary',
+                'sanitize_callback' => array( $this, 'sanitize_cta_style' ),
+                'transport'         => 'refresh',
+            )
+        );
+
+        $wp_customize->add_control(
+            'promptless_header_cta_style',
+            array(
+                'label'       => __( 'Button 1 Style', 'promptless' ),
+                'description' => __( 'Colors are inherited from Promptless WP Global Settings.', 'promptless' ),
+                'section'     => 'promptless_header_cta',
+                'type'        => 'select',
+                'choices'     => $cta_style_choices,
+            )
+        );
+
+        $wp_customize->add_setting(
+            'promptless_header_cta_mobile_placement',
+            array(
+                'default'           => 'bar',
+                'sanitize_callback' => array( $this, 'sanitize_cta_mobile_placement' ),
+                'transport'         => 'refresh',
+            )
+        );
+
+        $wp_customize->add_control(
+            'promptless_header_cta_mobile_placement',
+            array(
+                'label'       => __( 'Button 1 on Mobile', 'promptless' ),
+                'description' => __( 'On phones, keep this button next to the menu icon or move it into the mobile menu. To avoid crowding, only one button can stay in the header bar on mobile; if both are set to stay, button 2 moves into the menu.', 'promptless' ),
+                'section'     => 'promptless_header_cta',
+                'type'        => 'select',
+                'choices'     => $cta_placement_choices,
+            )
+        );
+
+        // ---- Button 2 (optional second button) ----
+        $wp_customize->add_setting(
+            'promptless_header_cta_2_text',
+            array(
+                'default'           => '',
+                'sanitize_callback' => 'sanitize_text_field',
+                'transport'         => 'refresh',
+            )
+        );
+
+        $wp_customize->add_control(
+            'promptless_header_cta_2_text',
+            array(
+                'label'       => __( 'Button 2 Text', 'promptless' ),
+                'description' => __( 'Optional second button. Leave empty to use a single button.', 'promptless' ),
+                'section'     => 'promptless_header_cta',
+                'type'        => 'text',
+            )
+        );
+
+        $wp_customize->add_setting(
+            'promptless_header_cta_2_url',
+            array(
+                'default'           => '',
+                'sanitize_callback' => 'esc_url_raw',
+                'transport'         => 'refresh',
+            )
+        );
+
+        $wp_customize->add_control(
+            'promptless_header_cta_2_url',
+            array(
+                'label'       => __( 'Button 2 URL', 'promptless' ),
+                'description' => __( 'Link URL for button 2.', 'promptless' ),
+                'section'     => 'promptless_header_cta',
+                'type'        => 'url',
+            )
+        );
+
+        $wp_customize->add_setting(
+            'promptless_header_cta_2_style',
+            array(
+                'default'           => 'secondary',
+                'sanitize_callback' => array( $this, 'sanitize_cta_style' ),
+                'transport'         => 'refresh',
+            )
+        );
+
+        $wp_customize->add_control(
+            'promptless_header_cta_2_style',
+            array(
+                'label'       => __( 'Button 2 Style', 'promptless' ),
+                'description' => __( 'Colors are inherited from Promptless WP Global Settings.', 'promptless' ),
+                'section'     => 'promptless_header_cta',
+                'type'        => 'select',
+                'choices'     => $cta_style_choices,
+            )
+        );
+
+        $wp_customize->add_setting(
+            'promptless_header_cta_2_mobile_placement',
+            array(
+                'default'           => 'menu',
+                'sanitize_callback' => array( $this, 'sanitize_cta_mobile_placement' ),
+                'transport'         => 'refresh',
+            )
+        );
+
+        $wp_customize->add_control(
+            'promptless_header_cta_2_mobile_placement',
+            array(
+                'label'       => __( 'Button 2 on Mobile', 'promptless' ),
+                'description' => __( 'On phones, keep this button next to the menu icon or move it into the mobile menu.', 'promptless' ),
+                'section'     => 'promptless_header_cta',
+                'type'        => 'select',
+                'choices'     => $cta_placement_choices,
             )
         );
 
@@ -861,6 +998,41 @@ class Promptless_Customizer {
         }
 
         return 'light';
+    }
+
+    /**
+     * Sanitize a header CTA button style.
+     *
+     * Maps to the Promptless WP button classes (aisb-btn-primary /
+     * aisb-btn-secondary / aisb-btn-ghost).
+     *
+     * @param string $value Setting value.
+     * @return string Sanitized value.
+     */
+    public function sanitize_cta_style( $value ) {
+        $valid = array( 'primary', 'secondary', 'ghost' );
+
+        if ( in_array( $value, $valid, true ) ) {
+            return $value;
+        }
+
+        return 'primary';
+    }
+
+    /**
+     * Sanitize a header CTA button mobile placement.
+     *
+     * @param string $value Setting value.
+     * @return string Sanitized value ('bar' or 'menu').
+     */
+    public function sanitize_cta_mobile_placement( $value ) {
+        $valid = array( 'bar', 'menu' );
+
+        if ( in_array( $value, $valid, true ) ) {
+            return $value;
+        }
+
+        return 'bar';
     }
 
     /**

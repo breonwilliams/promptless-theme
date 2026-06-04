@@ -49,6 +49,7 @@
             <div class="promptless-header__nav-wrapper promptless-header__nav-wrapper--mobile-only">
                 <?php promptless_mobile_topbar_section(); ?>
                 <?php promptless_primary_nav(); ?>
+                <?php promptless_header_menu_cta(); ?>
             </div>
         <?php else : ?>
             <!-- Default: Single-row layout -->
@@ -62,6 +63,7 @@
                 <div class="promptless-header__nav-wrapper">
                     <?php promptless_mobile_topbar_section(); ?>
                     <?php promptless_primary_nav(); ?>
+                    <?php promptless_header_menu_cta(); ?>
                 </div>
 
                 <!-- Header Actions (Cart, CTA, Mobile Menu) -->

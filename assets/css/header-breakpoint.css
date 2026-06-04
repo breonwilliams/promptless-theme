@@ -710,3 +710,38 @@
         opacity: 0.7;
     }
 }
+
+/* ==========================================================================
+   Header CTA — breakpoint visibility
+
+   These two blocks key off the menu-collapse breakpoint (768/767), so they
+   are placed in this file (not header.css) and therefore track the
+   Customizer "Mobile Menu Breakpoint" setting automatically — same as the
+   hamburger-toggle and mobile-drawer rules above.
+
+   Authored by hand. Do NOT run scripts/split-header-breakpoint.js to add
+   them: that one-off splitter OVERWRITES this file with whatever @media
+   blocks remain in header.css (none, post-split), which would wipe every
+   rule here. Add breakpoint rules directly to this file, then run
+   `npm run build:css` to regenerate header-breakpoint.min.css.
+
+   Desktop (nav inline): every configured CTA shows in the header bar, so
+   the in-drawer group is hidden.
+
+   Mobile (hamburger drawer): a CTA routed to the mobile menu is hidden in
+   the bar (it appears in the drawer group instead). A CTA kept in the bar
+   stays visible. The no-clutter invariant (at most one CTA in the bar on
+   mobile) is enforced in PHP by promptless_get_header_ctas().
+   ========================================================================== */
+
+@media (min-width: 768px) {
+    .promptless-header__menu-cta {
+        display: none;
+    }
+}
+
+@media (max-width: 767px) {
+    .promptless-header__cta--to-menu {
+        display: none;
+    }
+}
