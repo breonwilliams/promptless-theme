@@ -385,6 +385,10 @@
 .promptless-header__mega-item {
     margin: 0;
     width: 100%;
+    /* The grid stretches items to equal height per row; make the item a flex
+       container so the link inside can fill that height (so the hover surface
+       matches the tallest card in the row instead of stopping at its text). */
+    display: flex;
 }
 
 /* Scoped under .promptless-header__mega so these beat the nav-list's own
@@ -393,6 +397,7 @@
    the cascade and fall back to display:block. No !important needed. */
 .promptless-header__mega .promptless-header__mega-link {
     display: flex;
+    flex: 1; /* fill the item's width and (via the flex item) its stretched height */
     align-items: flex-start;
     gap: 0.875rem;
     padding: 0.75rem;

@@ -78,6 +78,96 @@ class Promptless_Mega_Menu {
 		// mega icons. Priority 20 so it runs after the Promptless plugin's own
 		// asset enqueue, letting us dedupe against its handle.
 		add_action( 'wp_enqueue_scripts', array( $this, 'maybe_enqueue_iconify' ), 20 );
+
+		// Connector bridge: let the Promptless WP connector populate and export
+		// mega-menu fields when it builds/reads menus. These hooks only exist
+		// when the connector-capable plugin is active; if it isn't, the handlers
+		// simply never fire (no hard dependency, consistent with the one-way
+		// coupling the theme keeps with the plugin).
+		add_action( 'aisb_connector_menu_item_created', array( $this, 'connector_apply_fields' ), 10, 2 );
+		add_filter( 'aisb_connector_menu_item_export', array( $this, 'connector_export_fields' ), 10, 2 );
+	}
+
+	/**
+	 * Persist mega-menu fields from a connector menu-item definition.
+	 *
+	 * Hooked to the Promptless WP connector's per-item creation action. Only
+	 * acts on the keys actually present in the definition, so it is safe for
+	 * create-or-replace payloads and never clobbers fields the caller didn't
+	 * mention. Values pass through the same validation as the admin save — the
+	 * Iconify `set:name` shape for the icon, plain text for supporting text — so
+	 * a malformed connector value can never reach an HTML attribute.
+	 *
+	 * Accepted definition fields: `mega` (bool), `icon` (Iconify name),
+	 * `description` (supporting text).
+	 *
+	 * @param int   $menu_item_id Nav menu item ID.
+	 * @param array $item         Raw connector item definition.
+	 * @return void
+	 */
+	public function connector_apply_fields( $menu_item_id, $item ) {
+		if ( ! is_array( $item ) ) {
+			return;
+		}
+
+		if ( array_key_exists( 'mega', $item ) ) {
+			if ( ! empty( $item['mega'] ) ) {
+				update_post_meta( $menu_item_id, self::META_ENABLED, '1' );
+			} else {
+				delete_post_meta( $menu_item_id, self::META_ENABLED );
+			}
+		}
+
+		if ( array_key_exists( 'icon', $item ) ) {
+			$icon = $this->sanitize_icon( (string) $item['icon'] );
+			if ( '' !== $icon ) {
+				update_post_meta( $menu_item_id, self::META_ICON, $icon );
+			} else {
+				delete_post_meta( $menu_item_id, self::META_ICON );
+			}
+		}
+
+		if ( array_key_exists( 'description', $item ) ) {
+			$desc = sanitize_text_field( (string) $item['description'] );
+			if ( '' !== $desc ) {
+				update_post_meta( $menu_item_id, self::META_DESCRIPTION, $desc );
+			} else {
+				delete_post_meta( $menu_item_id, self::META_DESCRIPTION );
+			}
+		}
+	}
+
+	/**
+	 * Add mega-menu fields to a connector menu-item export entry.
+	 *
+	 * Read-side counterpart to connector_apply_fields(): only emits keys that
+	 * are actually set, so a regular (non-mega) menu round-trips byte-for-byte
+	 * unchanged. Mirrors the field names the write side accepts.
+	 *
+	 * @param array   $entry Exported item entry (POST /menu input shape).
+	 * @param WP_Post $item  Nav menu item object being exported.
+	 * @return array Filtered entry.
+	 */
+	public function connector_export_fields( $entry, $item ) {
+		if ( ! is_array( $entry ) || ! isset( $item->ID ) ) {
+			return $entry;
+		}
+
+		if ( '1' === get_post_meta( $item->ID, self::META_ENABLED, true ) ) {
+			$entry['mega'] = true;
+		}
+
+		$icon = (string) get_post_meta( $item->ID, self::META_ICON, true );
+		if ( '' !== $icon ) {
+			$entry['icon'] = $icon;
+		}
+
+		$desc = (string) get_post_meta( $item->ID, self::META_DESCRIPTION, true );
+		if ( '' !== $desc ) {
+			$entry['description'] = $desc;
+		}
+
+		return $entry;
 	}
 
 	/**
