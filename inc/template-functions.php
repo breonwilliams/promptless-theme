@@ -50,6 +50,7 @@ function promptless_primary_nav() {
                 'container_id'    => 'primary-navigation',
                 'depth'           => 3,
                 'fallback_cb'     => false,
+                'walker'          => new Promptless_Walker_Mega_Menu(),
             )
         );
     }

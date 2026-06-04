@@ -53,6 +53,14 @@ class Promptless_Mega_Menu {
 	const META_DESCRIPTION = '_promptless_menu_description';
 
 	/**
+	 * Version of the vendored iconify-icon web component (assets/js/).
+	 * Used for cache-busting; bump when the vendored file is updated.
+	 *
+	 * @var string
+	 */
+	const ICONIFY_VERSION = '3.0.1';
+
+	/**
 	 * Constructor — wire admin hooks.
 	 */
 	public function __construct() {
@@ -61,6 +69,131 @@ class Promptless_Mega_Menu {
 
 		// Persist them when the menu is saved.
 		add_action( 'wp_update_nav_menu_item', array( $this, 'save_fields' ), 10, 2 );
+
+		// Tag mega parents on the primary menu so the walker + CSS can target
+		// them, while reusing core's class pipeline (preserving item states).
+		add_filter( 'nav_menu_css_class', array( $this, 'add_mega_parent_class' ), 10, 4 );
+
+		// Ensure the Iconify runtime is present wherever the header renders
+		// mega icons. Priority 20 so it runs after the Promptless plugin's own
+		// asset enqueue, letting us dedupe against its handle.
+		add_action( 'wp_enqueue_scripts', array( $this, 'maybe_enqueue_iconify' ), 20 );
+	}
+
+	/**
+	 * Load the Iconify web-component runtime when the primary menu uses icons.
+	 *
+	 * The header (and therefore the mega menu) renders on every page, but the
+	 * Promptless plugin only registers the `<iconify-icon>` element on pages
+	 * that contain its sections — it imports the component inside its frontend
+	 * entry (`aisb-frontend`). On section-less pages (blog, archive,
+	 * WooCommerce, …) the element would never upgrade. The theme therefore
+	 * ships its own copy of the self-registering `iconify-icon` web component
+	 * and loads it on demand, keeping the header self-sufficient.
+	 *
+	 * When the plugin's frontend entry is already loading on this page it
+	 * registers the element itself, so we skip our copy to avoid a redundant
+	 * download. The component self-guards double-definition, so this is purely
+	 * an optimization, not a correctness requirement.
+	 *
+	 * @return void
+	 */
+	public function maybe_enqueue_iconify() {
+		if ( ! $this->primary_menu_has_icons() ) {
+			return;
+		}
+
+		// The plugin's frontend entry registers <iconify-icon> on section pages.
+		if ( wp_script_is( 'aisb-frontend', 'enqueued' ) ) {
+			return;
+		}
+
+		$relative = 'assets/js/iconify-icon.min.js';
+		$path     = get_theme_file_path( $relative );
+
+		/**
+		 * Filter the Iconify web-component runtime URL the theme enqueues.
+		 *
+		 * Return '' to opt out and keep the mega menu text-only.
+		 *
+		 * @param string $url Script URL.
+		 */
+		$src = apply_filters( 'promptless_iconify_runtime_url', get_theme_file_uri( $relative ) );
+
+		if ( '' === $src || ! file_exists( $path ) ) {
+			return; // No runtime available → icons gracefully omitted.
+		}
+
+		wp_enqueue_script(
+			'promptless-iconify-icon',
+			$src,
+			array(),
+			self::ICONIFY_VERSION,
+			true
+		);
+	}
+
+	/**
+	 * Whether the menu assigned to the `primary` location uses any mega icon.
+	 *
+	 * Runs once per request (on wp_enqueue_scripts). Menus are small and
+	 * WordPress caches the item query + meta, so the scan is cheap.
+	 *
+	 * @return bool
+	 */
+	private function primary_menu_has_icons() {
+		$locations = get_nav_menu_locations();
+		if ( empty( $locations['primary'] ) ) {
+			return false;
+		}
+
+		$items = wp_get_nav_menu_items( (int) $locations['primary'] );
+		if ( ! $items ) {
+			return false;
+		}
+
+		foreach ( $items as $item ) {
+			if ( '' !== (string) get_post_meta( $item->ID, self::META_ICON, true ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Append the mega-parent class to qualifying top-level items.
+	 *
+	 * Scoped to the `primary` menu location (the only place the mega walker
+	 * runs) so other menus skip the extra meta lookups entirely. A mega parent
+	 * must be flagged AND have children.
+	 *
+	 * @param string[] $classes Item CSS classes.
+	 * @param WP_Post  $item    Menu item.
+	 * @param stdClass $args    wp_nav_menu args.
+	 * @param int      $depth   Item depth.
+	 * @return string[] Filtered classes.
+	 */
+	public function add_mega_parent_class( $classes, $item, $args, $depth = 0 ) {
+		if ( 0 !== (int) $depth ) {
+			return $classes;
+		}
+
+		if ( empty( $args->theme_location ) || 'primary' !== $args->theme_location ) {
+			return $classes;
+		}
+
+		// Only items that actually have children can be a mega panel.
+		if ( ! in_array( 'menu-item-has-children', $classes, true ) ) {
+			return $classes;
+		}
+
+		$config = self::get_item_config( $item->ID, $item );
+		if ( $config['is_mega'] ) {
+			$classes[] = 'promptless-header__mega-parent';
+		}
+
+		return $classes;
 	}
 
 	/**

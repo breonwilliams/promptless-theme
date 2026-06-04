@@ -190,6 +190,49 @@
 
         // Initialize scroll-aware gradient for the mobile inline top bar
         initTopbarScrollGradient();
+
+        // Keep mega-menu panels inside the viewport (right-edge flip)
+        initMegaMenuPositioning();
+    }
+
+    /**
+     * Position desktop mega-menu panels so they never overflow the right edge.
+     *
+     * The panel is a fixed-width absolute overlay anchored to its trigger's
+     * left edge by default. For a trigger near the right of the viewport that
+     * would spill off-screen, so we flip it to right-aligned. Measured on load
+     * and (debounced) on resize. On mobile the panel is full-width and static,
+     * so the flip class is inert there.
+     */
+    function initMegaMenuPositioning() {
+        const parents = document.querySelectorAll('.promptless-header__mega-parent');
+        if (!parents.length) {
+            return;
+        }
+
+        function position() {
+            const vw = document.documentElement.clientWidth;
+            parents.forEach(function(parent) {
+                const panel = parent.querySelector(':scope > .promptless-header__mega');
+                if (!panel) {
+                    return;
+                }
+                parent.classList.remove('promptless-header__mega--flip');
+                const triggerLeft = parent.getBoundingClientRect().left;
+                const panelWidth = panel.offsetWidth || 560;
+                if (triggerLeft + panelWidth > vw - 8) {
+                    parent.classList.add('promptless-header__mega--flip');
+                }
+            });
+        }
+
+        position();
+
+        let megaResizeTimer;
+        window.addEventListener('resize', function() {
+            clearTimeout(megaResizeTimer);
+            megaResizeTimer = setTimeout(position, 100);
+        });
     }
 
     /**
@@ -206,7 +249,10 @@
 
         menuItemsWithChildren.forEach(function(item) {
             const link = item.querySelector(':scope > a');  // Direct child link only
-            const submenu = item.querySelector(':scope > .sub-menu');  // Direct child submenu only
+            // A mega parent uses .promptless-header__mega instead of .sub-menu;
+            // treat it as the toggleable panel so it collapses in the drawer
+            // exactly like a standard dropdown (consistent mobile behavior).
+            const submenu = item.querySelector(':scope > .sub-menu, :scope > .promptless-header__mega');
 
             if (!submenu || !link) {
                 return;
@@ -238,7 +284,7 @@
                 siblings.forEach(function(sibling) {
                     if (sibling !== item) {
                         const siblingToggle = sibling.querySelector(':scope > .submenu-toggle');
-                        const siblingSubmenu = sibling.querySelector(':scope > .sub-menu');
+                        const siblingSubmenu = sibling.querySelector(':scope > .sub-menu, :scope > .promptless-header__mega');
                         if (siblingToggle && siblingSubmenu) {
                             siblingToggle.setAttribute('aria-expanded', 'false');
                             siblingSubmenu.style.display = '';

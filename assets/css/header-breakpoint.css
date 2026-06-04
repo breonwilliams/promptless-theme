@@ -745,3 +745,62 @@
         display: none;
     }
 }
+
+/* ==========================================================================
+   Mega Menu — mobile drawer treatment
+
+   Inside the hamburger drawer the mega panel becomes a collapsible section,
+   identical in behaviour to the standard dropdowns: navigation.js gives the
+   parent the same `.submenu-toggle`, and the panel expands/collapses via
+   `.is-expanded` (plus the inline display the toggle sets). Cards stack
+   full-width with the drawer's padding rhythm, ≥44px tap targets, and the
+   same `--section-border` dividers the nav items use. Keyed to the
+   menu-collapse breakpoint so it tracks the Customizer setting.
+   ========================================================================== */
+
+@media (max-width: 767px) {
+    /* Collapsed by default; revealed only when the parent is expanded. */
+    .promptless-header__nav-list .menu-item-has-children > .promptless-header__mega {
+        display: none;
+    }
+
+    .promptless-header__nav-list .menu-item-has-children.is-expanded > .promptless-header__mega {
+        display: block;
+    }
+
+    /* Full-width, chrome-free block that drops onto its own row beneath the
+       parent link — mirrors how .sub-menu wraps in the flex drawer row. */
+    .promptless-header__mega {
+        order: 3;
+        flex-basis: 100%;
+        width: 100%;
+        position: static;
+        max-width: none;
+        margin: 0;
+        padding: 0;
+        background: transparent;
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+    }
+
+    .promptless-header__mega-grid {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    /* Card rows: drawer padding rhythm, comfortable tap target, icon kept
+       inline. Scoped under .promptless-header__mega so they beat the
+       nav-list's own `a` rules. No inter-card dividers — regular sub-menu
+       items don't have them, so the mega cards stay visually consistent. */
+    .promptless-header__mega .promptless-header__mega-link {
+        gap: 0.875rem;
+        min-height: 44px;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0;
+        align-items: flex-start;
+    }
+}

@@ -324,6 +324,143 @@
 }
 
 /* ==========================================================================
+   Mega Menu Panel (desktop)
+
+   A top-level item flagged "Display as mega menu" (Promptless_Mega_Menu)
+   renders its direct children as a multi-column panel of icon + title +
+   supporting-text cards. It mirrors the .sub-menu dropdown's positioning,
+   surface tokens, and hover/focus-within reveal so it stays visually
+   consistent with the rest of the header and adapts to the header theme
+   (light/dark) automatically via the --section-* intermediates.
+
+   Phase 1 = markup + CSS reveal. The disclosure / keyboard a11y layer
+   (aria-expanded, Esc, arrow keys) lands in Phase 2; the polished mobile
+   accordion lands in Phase 3. The minimal mobile stopgap that keeps the
+   panel's links reachable lives in header-breakpoint.css.
+   ========================================================================== */
+
+.promptless-header__mega {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 100;
+    width: 560px;
+    max-width: 90vw;
+    margin: 0;
+    padding: 1.25rem;
+    background-color: var(--section-surface);
+    border: 1px solid var(--section-border);
+    border-radius: var(--aisb-section-radius-card, 8px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
+}
+
+.promptless-header__mega-parent:hover > .promptless-header__mega,
+.promptless-header__mega-parent:focus-within > .promptless-header__mega {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* Right-edge flip: when the panel would overflow the viewport's right edge,
+   navigation.js adds `--flip` so it anchors to the trigger's right instead of
+   its left. Inert on mobile (the panel is static there). */
+.promptless-header__mega--flip > .promptless-header__mega {
+    left: auto;
+    right: 0;
+}
+
+.promptless-header__mega-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.25rem 1.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.promptless-header__mega-item {
+    margin: 0;
+    width: 100%;
+}
+
+/* Scoped under .promptless-header__mega so these beat the nav-list's own
+   `.promptless-header__nav-list a` rules (0,1,1) — the panel lives inside the
+   nav list, so an unscoped .promptless-header__mega-link (0,1,0) would lose
+   the cascade and fall back to display:block. No !important needed. */
+.promptless-header__mega .promptless-header__mega-link {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.875rem;
+    padding: 0.75rem;
+    border-radius: var(--aisb-section-radius-card, 8px);
+    text-decoration: none;
+    transition: background-color 0.15s ease;
+}
+
+.promptless-header__mega .promptless-header__mega-link:hover,
+.promptless-header__mega .promptless-header__mega-link:focus-visible {
+    background-color: var(--section-bg);
+    text-decoration: none;
+}
+
+.promptless-header__mega-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    margin-top: 0.125rem;
+    color: var(--section-text);
+    font-size: 24px;
+    line-height: 1;
+}
+
+/* When NO card in the panel has an icon, collapse the reserved gutter so the
+   titles sit flush rather than carrying an empty icon column. The gutter is
+   only needed to keep icon and icon-less cards aligned in a MIXED panel.
+   :has() degrades to "always reserved" on engines without support, which is
+   still aligned — just slightly indented. */
+.promptless-header__mega-grid:not(:has(iconify-icon)) .promptless-header__mega-icon {
+    display: none;
+}
+
+.promptless-header__mega-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    min-width: 0;
+}
+
+.promptless-header__mega-title {
+    font-family: var(--aisb-section-font-heading, inherit);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--section-text);
+}
+
+.promptless-header__mega-desc {
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    color: var(--section-text-muted);
+}
+
+/* Keep the title/description in the link's own color contract regardless of
+   the plugin's catch-all link paint (which is layered @layer aisb-defaults,
+   so these normal-specificity rules win). */
+.promptless-header.aisb-section--light .promptless-header__mega-link[href],
+.promptless-header.aisb-section--dark .promptless-header__mega-link[href],
+.promptless-header-nav.aisb-section--light .promptless-header__mega-link[href],
+.promptless-header-nav.aisb-section--dark .promptless-header__mega-link[href] {
+    text-decoration: none;
+}
+
+/* ==========================================================================
    Tertiary Submenu (3rd Level) - Desktop Flyout
    Appears to the right of parent submenu item on hover
    ========================================================================== */

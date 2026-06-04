@@ -36,6 +36,7 @@ require_once PROMPTLESS_THEME_DIR . '/inc/class-promptless-plugin-bridge.php';
 require_once PROMPTLESS_THEME_DIR . '/inc/class-promptless-customizer.php';
 require_once PROMPTLESS_THEME_DIR . '/inc/class-promptless-mobile-menu-breakpoint.php';
 require_once PROMPTLESS_THEME_DIR . '/inc/class-promptless-mega-menu.php';
+require_once PROMPTLESS_THEME_DIR . '/inc/class-promptless-walker-mega-menu.php';
 require_once PROMPTLESS_THEME_DIR . '/inc/template-functions.php';
 
 /**
