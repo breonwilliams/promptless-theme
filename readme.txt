@@ -4,7 +4,7 @@ Tags: one-column, custom-logo, custom-menu, featured-images, full-width-template
 Requires at least: 6.6
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.2.0
+Stable tag: 1.2.1
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -150,6 +150,10 @@ Use the Promptless WP plugin's Canvas display mode, which provides a full-screen
 Yes. The theme includes WooCommerce-aware styling that inherits colors and typography from the Promptless WP plugin's Global Settings. The cart icon in the header can be configured to either open a mini-cart dropdown or link directly to the cart page (Appearance > Customize > Header > Cart). Mobile cart, checkout, and account pages render as grid-based cards instead of overflowing the viewport with default WooCommerce table styling. WooCommerce assets are only loaded on shop-related pages to keep non-shop pages fast.
 
 == Changelog ==
+
+= 1.2.1 =
+* Added: Second Header CTA Button - configure a secondary call-to-action button with its own label, URL, and style variant (solid or outline)
+* Added: Mobile CTA Placement option - choose whether secondary CTA appears next to primary in desktop header or only inside the mobile hamburger menu
 
 = 1.2.0 =
 * Added: `promptless_archive_card_show_date` and `promptless_archive_card_show_author` filter hooks in `promptless_post_meta_with_categories()` (rendered by the archive card template). Both default to `true` so existing sites behave unchanged. Plugins (notably Post Runtime Engine) can return `false` per-post or per-CPT to suppress the post create-date and/or author byline on archive cards — useful when a CPT exposes its own meaningful date through a custom field (an event's `event_date`, a session's start time) and showing both is duplicative.

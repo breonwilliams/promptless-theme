@@ -1,6 +1,6 @@
 {
   "name": "promptless-theme",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Promptless WordPress Theme - Build scripts for asset optimization",
   "private": true,
   "scripts": {
