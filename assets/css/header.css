@@ -824,6 +824,13 @@
     border-bottom: none;
 }
 
+/* First item sits flush against the container padding so the top gap matches
+   the bottom (16px frame both ends) instead of stacking the item's own
+   top padding on top of the frame. */
+.promptless-header__mini-cart .promptless-cart-item:first-child {
+    padding-top: 0;
+}
+
 /* Product Image */
 .promptless-header__mini-cart .promptless-cart-item__image {
     grid-area: image;
@@ -990,8 +997,11 @@ body.woocommerce-checkout .promptless-header__mini-cart .promptless-cart-item__r
 .promptless-header__mini-cart .woocommerce-mini-cart__total {
     display: flex;
     justify-content: space-between;
+    /* 12px top padding sits above the border divider; with the last item's
+       12px bottom padding that makes the item->subtotal gap 24px — the same
+       rhythm as between items. No extra top margin (it compounded into 32px). */
     padding: 0.75rem 0;
-    margin: 0.5rem 0 0 0;
+    margin: 0;
     border-top: 1px solid var(--section-border);
     font-weight: 600;
     color: var(--section-text);
@@ -1002,8 +1012,11 @@ body.woocommerce-checkout .promptless-header__mini-cart .promptless-cart-item__r
     display: flex;
     flex-direction: row;
     gap: 0.5rem;
+    /* 12px top margin + the subtotal's 12px bottom padding = a 24px gap,
+       matching the rest of the rhythm. Drop the extra padding-top that
+       previously pushed this to 32px. */
     margin-top: 0.75rem;
-    padding-top: 0.5rem;
+    padding-top: 0;
 }
 
 /* Mini-cart buttons share equal width - targets both aisb-btn and WooCommerce .button classes */
