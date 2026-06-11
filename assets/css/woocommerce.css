@@ -1057,6 +1057,15 @@ body.woocommerce-page .aisb-section--dark ul.products li.product {
     border-color: var(--wc-border, var(--aisb-color-dark-border, #4b5563));
 }
 
+/* Borderless product cards (plugin Card Style = "None")
+ * Mirrors the plugin's .aisb-cards-borderless behavior on theme product cards.
+ * border:0 is theme-agnostic, so this single rule covers light and dark. The
+ * surface background still separates the card from the section. */
+body.aisb-cards-borderless.woocommerce ul.products li.product,
+body.aisb-cards-borderless.woocommerce-page ul.products li.product {
+    border: 0;
+}
+
 /* Dark mode card hover effect */
 body.aisb-section--dark.woocommerce ul.products li.product:hover,
 body.aisb-section--dark.woocommerce-page ul.products li.product:hover,

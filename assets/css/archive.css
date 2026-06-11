@@ -387,6 +387,14 @@
     box-shadow: var(--aisb-neo-shadow-offset, 8px) var(--aisb-neo-shadow-offset, 8px) 0 var(--section-border, var(--aisb-color-border));
 }
 
+/* Borderless card support for archive pages (plugin Card Style = "None").
+   Archive cards use .promptless-archive__grid (not .aisb-features), so the
+   plugin's borderless rule can't reach them — this theme rule mirrors it.
+   border:0 is theme-agnostic, covering light and dark in one rule. */
+.aisb-cards-borderless .promptless-archive__grid .aisb-features__item {
+    border: 0;
+}
+
 /* Dark mode Neo-Brutalist support */
 .aisb-neo-brutalist-cards .promptless-content.aisb-section--dark .promptless-archive__grid .aisb-features__item {
     border-color: var(--aisb-color-dark-border);
