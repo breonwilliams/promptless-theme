@@ -488,6 +488,31 @@ class Promptless_Customizer {
             )
         );
 
+        // ---- Position of buttons moved into the mobile menu ----
+        $wp_customize->add_setting(
+            'promptless_header_menu_cta_position',
+            array(
+                'default'           => 'bottom',
+                'sanitize_callback' => array( $this, 'sanitize_cta_menu_position' ),
+                'transport'         => 'refresh',
+            )
+        );
+
+        $wp_customize->add_control(
+            'promptless_header_menu_cta_position',
+            array(
+                'label'       => __( 'Mobile Menu Button Position', 'promptless' ),
+                'description' => __( 'Where buttons moved into the mobile menu appear in the drawer. "Between top bar and menu" falls back to the top when there is no collapsed top bar. Only affects buttons set to "Move into mobile menu" above.', 'promptless' ),
+                'section'     => 'promptless_header_cta',
+                'type'        => 'select',
+                'choices'     => array(
+                    'top'    => __( 'Top of menu', 'promptless' ),
+                    'middle' => __( 'Between top bar and menu', 'promptless' ),
+                    'bottom' => __( 'Bottom of menu (default)', 'promptless' ),
+                ),
+            )
+        );
+
         // =============================================
         // Navigation Position
         // =============================================
@@ -1033,6 +1058,22 @@ class Promptless_Customizer {
         }
 
         return 'bar';
+    }
+
+    /**
+     * Sanitize the mobile-menu CTA position setting.
+     *
+     * @param string $value Setting value.
+     * @return string Sanitized value ('top', 'middle', or 'bottom').
+     */
+    public function sanitize_cta_menu_position( $value ) {
+        $valid = array( 'top', 'middle', 'bottom' );
+
+        if ( in_array( $value, $valid, true ) ) {
+            return $value;
+        }
+
+        return 'bottom';
     }
 
     /**

@@ -47,9 +47,11 @@
             </div>
             <!-- Mobile-only nav wrapper (hidden on desktop, used for hamburger menu) -->
             <div class="promptless-header__nav-wrapper promptless-header__nav-wrapper--mobile-only">
+                <?php promptless_header_menu_cta( 'top' ); ?>
                 <?php promptless_mobile_topbar_section(); ?>
+                <?php promptless_header_menu_cta( 'middle' ); ?>
                 <?php promptless_primary_nav(); ?>
-                <?php promptless_header_menu_cta(); ?>
+                <?php promptless_header_menu_cta( 'bottom' ); ?>
             </div>
         <?php else : ?>
             <!-- Default: Single-row layout -->
@@ -61,9 +63,11 @@
 
                 <!-- Primary Navigation -->
                 <div class="promptless-header__nav-wrapper">
+                    <?php promptless_header_menu_cta( 'top' ); ?>
                     <?php promptless_mobile_topbar_section(); ?>
+                    <?php promptless_header_menu_cta( 'middle' ); ?>
                     <?php promptless_primary_nav(); ?>
-                    <?php promptless_header_menu_cta(); ?>
+                    <?php promptless_header_menu_cta( 'bottom' ); ?>
                 </div>
 
                 <!-- Header Actions (Cart, CTA, Mobile Menu) -->

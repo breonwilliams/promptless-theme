@@ -1165,6 +1165,30 @@ body.aisb-neo-brutalist-cards #reviews .comment-text {
     box-shadow: var(--aisb-neo-shadow-offset, 8px) var(--aisb-neo-shadow-offset, 8px) 0 var(--wc-border, var(--aisb-color-border, #e5e7eb));
 }
 
+/* Borderless other cards (plugin Card Style = "None").
+ *
+ * Twin of the Neo-Brutalist "other cards" rule above: the global Card Style
+ * toggle is one mutually-exclusive setting, so the SAME theme surfaces the neo
+ * variants treat as cards must also respond to "None". Without this rule the
+ * checkout payment box, the My Account navigation card, and review cards kept
+ * their default 1px border while product and archive cards went borderless —
+ * a half-applied toggle.
+ *
+ * Selectors mirror the neo rule exactly, so they inherit the same proven
+ * specificity that already beats each surface's default border in BOTH light
+ * and dark mode: the dark-mode rules for these surfaces set only border-color,
+ * so border:0 (width 0 / style none) wins the width+style sub-properties and
+ * no border is drawn regardless of the color declaration. Internal list
+ * dividers (e.g. .woocommerce-MyAccount-navigation li border-bottom) are
+ * structural, not the card frame, so they are intentionally left untouched —
+ * exactly as the neo rule leaves them.
+ */
+body.aisb-cards-borderless #payment,
+body.aisb-cards-borderless .woocommerce-MyAccount-navigation ul,
+body.aisb-cards-borderless #reviews .comment-text {
+    border: 0;
+}
+
 /* ==========================================================================
    Neo-Brutalist OUTLINE Variant - WooCommerce Cards
    Thick borders without the 3D shadow effect

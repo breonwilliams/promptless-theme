@@ -521,7 +521,21 @@
     .promptless-mobile-topbar {
         display: flex;
         flex-direction: column;
-        gap: 0.8125rem; /* 13px — golden-ratio-aligned group separation */
+        /* gap: 0 (was 13px). The two topbar menus (topbar-left + topbar-right)
+           are stacked as separate <ul> lists inside this flex column. A
+           container gap here ADDED to each link's own 13px vertical padding,
+           so the seam between the last left-list item and the first right-list
+           item measured ~39px (13 container + 13 link-pb + 13 link-pt) while
+           every other item boundary in the drawer is ~25–26px. That single
+           outlier was the visible "extra space" between the two menus.
+
+           With no container gap the seam collapses to link-pb (13) +
+           link-pt (13) = 26px — identical to the gap between items WITHIN a
+           list and to the topbar→primary-nav seam below. The whole drawer now
+           reads as one continuous, evenly-spaced list. The two menus are still
+           distinct semantic lists; they simply share the drawer's uniform
+           vertical rhythm instead of an extra decorative gap. */
+        gap: 0;
         /* padding-bottom: 0 (was 13px → 7px → 0).
            The last topbar link already provides its own 13px padding-
            bottom from .promptless-mobile-topbar__list a. Adding more
@@ -743,6 +757,63 @@
 @media (max-width: 767px) {
     .promptless-header__cta--to-menu {
         display: none;
+    }
+}
+
+/* ==========================================================================
+   Mobile drawer — menu-CTA position (top / middle / bottom)
+
+   The CTA group can sit in one of three drawer slots, chosen via the
+   Customizer "Mobile Menu Button Position" setting and rendered into the
+   real DOM position by promptless_header_menu_cta( $slot ) — so visual order,
+   screen-reader order, and tab order always agree (no CSS `order`).
+
+   The drawer's separators follow one rule: every block except the FIRST gets
+   a single 1px top divider; within-block spacing comes from each item's own
+   padding. Because the block order changes per slot, the divider ownership is
+   expressed with adjacency selectors keyed to the --{slot} modifier rather
+   than hard-coded onto one element. Permutations (T = topbar present):
+
+     bottom,  T : [topbar][nav][cta]   nav←topbar+nav adj, cta←--bottom
+     bottom, !T : [nav][cta]           nav first (no border), cta←--bottom
+     middle,  T : [topbar][cta][nav]   cta←--middle, nav←cta+nav adj
+     top,     T : [cta][topbar][nav]   topbar←cta+topbar adj, nav←topbar+nav adj
+     top,    !T : [cta][nav]           nav←cta+nav adj
+
+   (`middle` without a topbar is promoted to `top` in PHP, so it never reaches
+   CSS — there is no "between" to occupy.) All dividers use --section-border so
+   they track the light/dark header variant, matching the nav-item dividers.
+   ========================================================================== */
+
+@media (max-width: 767px) {
+    /* CTA group as a non-first block: divider from whatever sits above it. */
+    .promptless-header__menu-cta--bottom,
+    .promptless-header__menu-cta--middle {
+        border-top: 1px solid var(--section-border);
+    }
+
+    /* CTA group as the first block (top slot): no divider against the drawer
+       top — the blocks below carry their own dividers instead. */
+    .promptless-header__menu-cta--top {
+        border-top: 0;
+    }
+
+    /* Primary nav directly below the CTA group (middle slot, or top slot with
+       no topbar) needs the same collapse treatment the topbar-adjacency rule
+       gives it: a top divider and zeroed native padding so the link padding
+       alone defines the rhythm. Mirrors `.promptless-mobile-topbar +
+       .promptless-header__nav` above. */
+    .promptless-header__menu-cta--middle + .promptless-header__nav,
+    .promptless-header__menu-cta--top + .promptless-header__nav {
+        border-top: 1px solid var(--section-border);
+        margin-top: 0;
+        padding: 0;
+    }
+
+    /* Topbar directly below the CTA group (top slot, topbar present): it is no
+       longer the first block, so it needs a divider from the CTA above. */
+    .promptless-header__menu-cta--top + .promptless-mobile-topbar {
+        border-top: 1px solid var(--section-border);
     }
 }
 

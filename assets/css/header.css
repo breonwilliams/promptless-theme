@@ -511,19 +511,24 @@
    Header CTA — mobile menu group
 
    Buttons whose mobile placement is "menu" are rendered (by
-   promptless_header_menu_cta()) at the bottom of the mobile drawer, laid
-   out side by side with equal width. Hidden on desktop — the breakpoint
-   rules that govern bar-vs-drawer visibility live in header-breakpoint.css
-   so they track the user's chosen "Mobile Menu Breakpoint" setting. The
-   21px padding + top border match the mobile topbar drawer rhythm so the
-   drawer reads as one continuous block.
+   promptless_header_menu_cta()) inside the mobile drawer, laid out side by
+   side with equal width. Hidden on desktop — the breakpoint rules that
+   govern bar-vs-drawer visibility live in header-breakpoint.css so they
+   track the user's chosen "Mobile Menu Breakpoint" setting. The 21px padding
+   matches the mobile topbar drawer rhythm so the drawer reads as one
+   continuous block.
+
+   The divider line is NOT set here because it depends on where the group
+   sits in the drawer (top / middle / bottom — see the Customizer "Mobile
+   Menu Button Position" setting). The per-slot border rules live with the
+   rest of the drawer-rhythm logic in header-breakpoint.css, keyed to the
+   .promptless-header__menu-cta--{slot} modifier the renderer emits.
    ========================================================================== */
 
 .promptless-header__menu-cta {
     display: flex;
     gap: 0.75rem;
     padding: 1.3125rem; /* 21px — matches .promptless-mobile-topbar drawer padding */
-    border-top: 1px solid var(--section-border);
 }
 
 /* Equal-width, centered buttons side by side. The plugin's .aisb-btn

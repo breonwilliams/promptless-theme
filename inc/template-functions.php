@@ -503,15 +503,85 @@ function promptless_header_cta() {
 }
 
 /**
+ * Whether the collapsed mobile top-bar section will render in the drawer.
+ *
+ * Mirrors the guard at the top of promptless_mobile_topbar_section() so other
+ * code (e.g. the menu-CTA position resolver) can ask "is there a top-bar block
+ * to sit between?" without duplicating the conditions. The top-bar section
+ * appears only when the top bar is enabled, its mobile behavior is 'collapse',
+ * and at least one top-bar menu location has an assigned menu.
+ *
+ * @since 1.4.0
+ * @return bool True when the mobile top-bar section renders.
+ */
+function promptless_has_mobile_topbar_section() {
+    if ( ! promptless_has_topbar() ) {
+        return false;
+    }
+
+    if ( 'collapse' !== promptless_get_topbar_mobile_behavior() ) {
+        return false;
+    }
+
+    return has_nav_menu( 'topbar-left' ) || has_nav_menu( 'topbar-right' );
+}
+
+/**
+ * Resolve where the menu-routed CTA group sits inside the mobile drawer.
+ *
+ * The raw Customizer value is one of 'top', 'middle', or 'bottom'. 'middle'
+ * means "between the top-bar items and the main menu items", which only has a
+ * meaning when the collapsed top-bar section is actually present. When it is
+ * not, 'middle' is promoted to 'top' so the buttons never silently vanish into
+ * a slot that is never rendered.
+ *
+ * @since 1.4.0
+ * @return string One of 'top', 'middle', 'bottom'.
+ */
+function promptless_get_header_menu_cta_position() {
+    $position = get_theme_mod( 'promptless_header_menu_cta_position', 'bottom' );
+
+    if ( ! in_array( $position, array( 'top', 'middle', 'bottom' ), true ) ) {
+        $position = 'bottom';
+    }
+
+    if ( 'middle' === $position && ! promptless_has_mobile_topbar_section() ) {
+        $position = 'top';
+    }
+
+    return $position;
+}
+
+/**
  * Output the CTA button group inside the mobile menu panel.
  *
- * Renders only the buttons whose effective mobile placement is 'menu',
- * pinned to the bottom of the mobile menu and laid out side by side. Hidden
- * on desktop via the breakpoint CSS (where these buttons already appear in
- * the header bar). Outputs nothing when no button is routed to the menu, so
- * it is safe to call unconditionally from every header layout.
+ * Renders only the buttons whose effective mobile placement is 'menu', laid out
+ * side by side. Hidden on desktop via the breakpoint CSS (where these buttons
+ * already appear in the header bar).
+ *
+ * The drawer calls this once for each of the three possible vertical slots
+ * ('top', 'middle', 'bottom'); the call is a no-op unless $slot matches the
+ * resolved position from promptless_get_header_menu_cta_position(). Rendering in
+ * the real DOM slot — rather than repositioning with CSS order — keeps the
+ * visual order, screen-reader order, and keyboard tab order in agreement.
+ *
+ * Safe to call unconditionally from every header layout: outputs nothing when
+ * no button is routed to the menu or when the slot does not match.
+ *
+ * @since 1.4.0 Added $slot parameter and position gating.
+ * @param string $slot Drawer slot this call represents: 'top', 'middle', or
+ *                     'bottom'. Defaults to 'bottom' (the historical position).
  */
-function promptless_header_menu_cta() {
+function promptless_header_menu_cta( $slot = 'bottom' ) {
+    if ( ! in_array( $slot, array( 'top', 'middle', 'bottom' ), true ) ) {
+        $slot = 'bottom';
+    }
+
+    // Only the slot matching the configured position renders.
+    if ( $slot !== promptless_get_header_menu_cta_position() ) {
+        return;
+    }
+
     $ctas = promptless_get_header_ctas();
 
     if ( empty( $ctas ) ) {
@@ -529,7 +599,7 @@ function promptless_header_menu_cta() {
         return;
     }
     ?>
-    <div class="promptless-header__menu-cta">
+    <div class="promptless-header__menu-cta promptless-header__menu-cta--<?php echo esc_attr( $slot ); ?>">
         <?php
         foreach ( $menu_ctas as $cta ) {
             // Anchor HTML is fully escaped inside promptless_render_cta_button().
@@ -1448,17 +1518,10 @@ function promptless_get_footer_grid_class() {
  * - At least one top bar menu is assigned
  */
 function promptless_mobile_topbar_section() {
-    // Only output if top bar enabled and collapse mode selected
-    if ( ! promptless_has_topbar() ) {
-        return;
-    }
-
-    if ( 'collapse' !== promptless_get_topbar_mobile_behavior() ) {
-        return;
-    }
-
-    // Check if at least one menu exists
-    if ( ! has_nav_menu( 'topbar-left' ) && ! has_nav_menu( 'topbar-right' ) ) {
+    // Only output when the top bar is enabled, in collapse mode, with at least
+    // one assigned top-bar menu. Centralized in the shared predicate so the
+    // menu-CTA position resolver stays in lock-step with what actually renders.
+    if ( ! promptless_has_mobile_topbar_section() ) {
         return;
     }
     ?>
