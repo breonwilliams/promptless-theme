@@ -428,6 +428,24 @@
     color: var(--section-text-muted);
 }
 
+/* Smart-color: muted footer text (tagline, brand text, copyright) must meet
+   WCAG AA against the footer surface. The footer paints on --section-bg
+   (= the palette surface), so the section-level muted token (checked vs the
+   page background) isn't enough on tinted surfaces. Consume the surface-muted
+   smart token, falling back to the raw muted color when smart colors are off.
+   Mirrors the link smart-color pattern used throughout this footer. */
+.promptless-footer.aisb-section--light .promptless-footer__tagline,
+.promptless-footer.aisb-section--light .promptless-footer__brand-text,
+.promptless-footer.aisb-section--light .promptless-footer__copyright {
+    color: var(--aisb-smart-light-surface-muted, var(--section-text-muted));
+}
+
+.promptless-footer.aisb-section--dark .promptless-footer__tagline,
+.promptless-footer.aisb-section--dark .promptless-footer__brand-text,
+.promptless-footer.aisb-section--dark .promptless-footer__copyright {
+    color: var(--aisb-smart-dark-surface-muted, var(--section-text-muted));
+}
+
 .promptless-footer__bottom-nav .promptless-footer__nav-list {
     display: flex;
     flex-wrap: wrap;
@@ -460,7 +478,7 @@
    Plugin catch-all is layered (see core-components.css @layer
    aisb-defaults) so normal specificity wins without hacks. */
 .promptless-footer.aisb-section--light .promptless-footer__bottom-nav .promptless-footer__nav-list a[href] {
-    color: var(--section-text-muted);
+    color: var(--aisb-smart-light-surface-muted, var(--section-text-muted));
     text-decoration: none;
 }
 
@@ -471,7 +489,7 @@
 }
 
 .promptless-footer.aisb-section--dark .promptless-footer__bottom-nav .promptless-footer__nav-list a[href] {
-    color: var(--section-text-muted);
+    color: var(--aisb-smart-dark-surface-muted, var(--section-text-muted));
     text-decoration: none;
 }
 
