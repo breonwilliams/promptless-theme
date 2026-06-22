@@ -21,3 +21,6 @@ Thumbs.db
 # OS
 .AppleDouble
 .LSOverride
+
+# Local Claude Code settings (machine-specific)
+.claude/
