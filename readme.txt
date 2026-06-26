@@ -151,6 +151,9 @@ Yes. The theme includes WooCommerce-aware styling that inherits colors and typog
 
 == Changelog ==
 
+= Unreleased =
+* Accessibility: Archive "Read more" card links now carry a disambiguated accessible name — "Read more: {Post title}" — so a screen-reader user navigating by the links list can tell the cards apart (WCAG 2.4.4 Link Purpose; the visible "Read more" stays the prefix to satisfy 2.5.3 Label in Name). When Promptless WP is active this is supplied via its `aisb_render_card_cta()` public API's new `aria_context` option; the plugin-inactive fallback link applies the same label directly.
+
 = 1.2.3 =
 * Fixed: Footer fine print (copyright, tagline, brand text, and bottom navigation links) now meets WCAG 2.2 AA contrast on tinted footer surfaces. These elements now use the smart "surface muted" color token (with a graceful fallback), so muted text on the footer surface is always dark enough to stay accessible. Requires Promptless WP 1.4.2+ for the token; older plugin versions fall back to the previous color.
 

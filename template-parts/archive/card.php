@@ -66,11 +66,24 @@ $promptless_post_id = get_the_ID();
             echo aisb_render_card_cta(
                 get_permalink(),
                 __( 'Read more', 'promptless' ),
-                'aisb-features__item-link'
+                'aisb-features__item-link',
+                // Pass the post title so the repeated "Read more" links get a
+                // disambiguated accessible name — "Read more: {Post title}"
+                // (WCAG 2.4.4 / 2.5.3). See includes/public-api.php.
+                array( 'aria_context' => get_the_title() )
             );
         } else {
+            // Plugin inactive: mirror the same disambiguation on the fallback
+            // link so the accessible name still pairs the visible label with
+            // the post title.
             ?>
-            <a href="<?php the_permalink(); ?>" class="aisb-features__item-link">
+            <a href="<?php the_permalink(); ?>" class="aisb-features__item-link"
+               aria-label="<?php echo esc_attr( sprintf(
+                   /* translators: 1: visible link label. 2: post title. */
+                   _x( '%1$s: %2$s', 'accessible card link label', 'promptless' ),
+                   __( 'Read more', 'promptless' ),
+                   get_the_title()
+               ) ); ?>">
                 <?php esc_html_e( 'Read more', 'promptless' ); ?>
             </a>
             <?php
