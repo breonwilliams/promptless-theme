@@ -761,6 +761,45 @@
 }
 
 /* ==========================================================================
+   Default (inline) layout — flush right-aligned nav when there are no actions
+
+   When the header has no desktop-visible actions (no cart, no bar-placed CTA),
+   the .promptless-header__actions slot still sits in the inner flex row on
+   desktop to hold the (desktop-hidden) mobile hamburger toggle. That empty slot
+   reserves the row's 1.5rem gap, and the nav links carry 0.75rem horizontal
+   padding — together insetting a right-aligned nav ~36px from the container
+   content edge (24px gap + 12px link padding).
+
+   Fix (desktop only): collapse the empty actions slot so it stops reserving the
+   gap, then offset the trailing link padding, so the LAST nav item's text sits
+   flush with the container content edge. This makes the inline layout match the
+   stacked nav's edge alignment (see header.css "Menu Edge Alignment — STACKED
+   HEADER LAYOUT") and the page sections below, which share the same container.
+
+   - Gated on .promptless-header--no-actions (set in PHP only when there are no
+     desktop actions) so the slot is never collapsed when a cart/CTA is present.
+   - Gated on --nav-right so left/center alignment is untouched: a left nav is
+     anchored after the brand (not the right edge), and collapsing the slot for a
+     center nav would shift its centering reference. Right alignment is the only
+     case that anchors to the right container edge, so it's the only one fixed.
+   - Keyed to the menu-collapse breakpoint (768/767), so it lives in this file
+     and tracks the Customizer "Mobile Menu Breakpoint" setting. Below the
+     breakpoint the actions slot reappears to hold the hamburger toggle and the
+     nav becomes a full-width drawer, so neither rule applies.
+
+   Authored by hand — see the note above; do NOT run split-header-breakpoint.js.
+   ========================================================================== */
+@media (min-width: 768px) {
+    .promptless-header--layout-default.promptless-header--no-actions.promptless-header--nav-right .promptless-header__inner > .promptless-header__actions {
+        display: none;
+    }
+
+    .promptless-header--layout-default.promptless-header--no-actions.promptless-header--nav-right .promptless-header__nav-list {
+        margin-right: -0.75rem;
+    }
+}
+
+/* ==========================================================================
    Mobile drawer — menu-CTA position (top / middle / bottom)
 
    The CTA group can sit in one of three drawer slots, chosen via the

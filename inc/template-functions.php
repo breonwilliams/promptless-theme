@@ -448,6 +448,38 @@ function promptless_get_header_ctas() {
 }
 
 /**
+ * Whether the header has any DESKTOP-visible action.
+ *
+ * The `.promptless-header__actions` slot in the default (inline) layout always
+ * renders in the DOM because it holds the mobile hamburger toggle (which is
+ * hidden on desktop). On desktop the slot also shows the cart and EVERY
+ * configured CTA: the CTA `placement` value is a *mobile* placement
+ * (`promptless_header_cta_mobile_placement`) — it only governs whether a CTA
+ * stays in the bar or moves into the hamburger drawer on MOBILE. On desktop a
+ * 'menu'-placement CTA still renders in the bar (its `--to-menu` class is only
+ * `display:none` below the menu breakpoint). So on desktop the slot is visually
+ * empty precisely when there is no cart and no CTA at all — regardless of
+ * placement.
+ *
+ * CSS can't detect this — the slot is never `:empty` (it contains the hidden
+ * toggle) — so this helper drives the `promptless-header--no-actions` body
+ * class, which lets the stylesheet collapse the empty slot and align a
+ * right-aligned nav flush with the container edge (header-breakpoint.css). If a
+ * future desktop-visible action is added to the actions slot, extend this check.
+ *
+ * @return bool True when a cart or any CTA renders in the desktop actions bar.
+ */
+function promptless_has_desktop_header_actions() {
+    if ( promptless_has_header_cart() ) {
+        return true;
+    }
+
+    // Any configured CTA shows in the bar on desktop (placement only affects
+    // mobile), so a non-empty CTA list means the desktop slot is not empty.
+    return ! empty( promptless_get_header_ctas() );
+}
+
+/**
  * Render a single CTA anchor.
  *
  * @param array  $cta         Normalized CTA entry from promptless_get_header_ctas().
@@ -701,6 +733,14 @@ function promptless_get_header_classes() {
     // Navigation position applies to both layouts
     $nav_position = promptless_get_nav_position();
     $classes[]    = 'promptless-header--nav-' . esc_attr( $nav_position );
+
+    // No desktop-visible actions (no cart, no bar CTA) → let CSS collapse the
+    // otherwise-empty actions slot so a right-aligned nav can sit flush with
+    // the container edge. The slot still holds the desktop-hidden mobile
+    // toggle, so it can't be detected as :empty in CSS — hence this class.
+    if ( ! promptless_has_desktop_header_actions() ) {
+        $classes[] = 'promptless-header--no-actions';
+    }
 
     // Border (no-border class when disabled)
     if ( ! promptless_has_header_border() ) {

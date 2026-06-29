@@ -4,7 +4,7 @@ Tags: one-column, custom-logo, custom-menu, featured-images, full-width-template
 Requires at least: 6.6
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.2.3
+Stable tag: 1.2.4
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -151,7 +151,9 @@ Yes. The theme includes WooCommerce-aware styling that inherits colors and typog
 
 == Changelog ==
 
-= Unreleased =
+= 1.2.4 =
+* Fixed: Header (default/inline layout) — a right-aligned navigation now sits flush with the container edge when there are no header actions (no cart, no CTA), instead of being inset by the empty actions slot. Center/left alignment and headers with a cart/CTA are unchanged.
+* Fixed: Header dropdowns — a top-level menu item near the right edge no longer lets its submenu overflow the viewport and cause horizontal scrolling; the dropdown now flips to open leftward (matching the existing mega-menu behavior). Desktop only; the mobile drawer is unaffected.
 * Accessibility: Archive "Read more" card links now carry a disambiguated accessible name — "Read more: {Post title}" — so a screen-reader user navigating by the links list can tell the cards apart (WCAG 2.4.4 Link Purpose; the visible "Read more" stays the prefix to satisfy 2.5.3 Label in Name). When Promptless WP is active this is supplied via its `aisb_render_card_cta()` public API's new `aria_context` option; the plugin-inactive fallback link applies the same label directly.
 
 = 1.2.3 =

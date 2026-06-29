@@ -318,6 +318,18 @@
     transform: translateY(0);
 }
 
+/* Right-edge flip: a top-level dropdown defaults to left-anchored (left: 0),
+   which overflows the viewport's right edge for a right-aligned nav or the
+   last item on a narrow desktop — causing horizontal scroll. navigation.js
+   (initSubmenuEdgeFlip) measures this and adds `.promptless-submenu--flip` so
+   the dropdown anchors to the item's right edge and opens leftward instead.
+   Mirrors the mega-menu `--flip` behavior. The class is desktop-only and
+   cleared below the menu breakpoint, where submenus are static in the drawer. */
+.promptless-header__nav-list > .menu-item-has-children.promptless-submenu--flip > .sub-menu {
+    left: auto;
+    right: 0;
+}
+
 .promptless-header__nav-list .sub-menu a {
     padding: 0.5rem 1rem;
     font-size: 0.875rem;

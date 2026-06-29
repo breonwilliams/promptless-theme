@@ -193,6 +193,9 @@
 
         // Keep mega-menu panels inside the viewport (right-edge flip)
         initMegaMenuPositioning();
+
+        // Keep regular dropdown submenus inside the viewport (right-edge flip)
+        initSubmenuEdgeFlip();
     }
 
     /**
@@ -232,6 +235,59 @@
         window.addEventListener('resize', function() {
             clearTimeout(megaResizeTimer);
             megaResizeTimer = setTimeout(position, 100);
+        });
+    }
+
+    /**
+     * Position desktop dropdown submenus so they never overflow the right edge.
+     *
+     * A regular `.sub-menu` is anchored to its parent item's LEFT edge
+     * (`left: 0`) with a fixed min-width. For a top-level item near the right of
+     * the viewport — a right-aligned nav, or simply the last item on a narrow
+     * desktop — that spills past the viewport's right edge and triggers
+     * horizontal scroll. We flip it to right-aligned (`left: auto; right: 0`)
+     * via a class, mirroring initMegaMenuPositioning() above.
+     *
+     * Measured on load and (debounced) on resize. Inert below the menu
+     * breakpoint, where the submenu is a static full-width block in the mobile
+     * drawer (the flip class is also cleared there so it never lingers).
+     */
+    function initSubmenuEdgeFlip() {
+        const parents = document.querySelectorAll(
+            '.promptless-header__nav-list > .menu-item-has-children'
+        );
+        if (!parents.length) {
+            return;
+        }
+
+        function position() {
+            const desktop = window.innerWidth >= getMenuBreakpoint();
+            const vw = document.documentElement.clientWidth;
+            parents.forEach(function(parent) {
+                // Regular dropdowns only — mega panels have their own flip
+                // handler (initMegaMenuPositioning) with a wider measurement.
+                const submenu = parent.querySelector(':scope > .sub-menu');
+                if (!submenu || parent.querySelector(':scope > .promptless-header__mega')) {
+                    return;
+                }
+                parent.classList.remove('promptless-submenu--flip');
+                if (!desktop) {
+                    return;
+                }
+                const triggerLeft = parent.getBoundingClientRect().left;
+                const width = submenu.offsetWidth || 200;
+                if (triggerLeft + width > vw - 8) {
+                    parent.classList.add('promptless-submenu--flip');
+                }
+            });
+        }
+
+        position();
+
+        let submenuResizeTimer;
+        window.addEventListener('resize', function() {
+            clearTimeout(submenuResizeTimer);
+            submenuResizeTimer = setTimeout(position, 100);
         });
     }
 
