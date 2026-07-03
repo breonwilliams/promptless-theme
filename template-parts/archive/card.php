@@ -26,7 +26,18 @@ $promptless_post_id = get_the_ID();
 <article id="post-<?php the_ID(); ?>" <?php post_class( 'aisb-features__item aisb-postgrid__item' ); ?>>
     <?php if ( has_post_thumbnail() ) : ?>
         <div class="aisb-features__item-image-wrapper">
-            <a href="<?php the_permalink(); ?>">
+            <?php
+            /*
+             * The image link needs its own accessible name: the featured
+             * image's alt comes from the media library and is frequently empty,
+             * which would leave this <a> with no discernible name (Lighthouse
+             * "Links do not have a discernible name"). Label it with the post
+             * title — mirroring the plugin's PostGrid card image link
+             * (PostGridRenderer sets aria-label + alt to the title) so the
+             * theme archive card and the plugin section behave identically.
+             */
+            ?>
+            <a href="<?php the_permalink(); ?>" aria-label="<?php the_title_attribute(); ?>">
                 <?php the_post_thumbnail( 'promptless-card', array( 'class' => 'aisb-features__item-image' ) ); ?>
             </a>
             <?php do_action( 'promptless_archive_card_section', 'image_overlay', $promptless_post_id ); ?>
@@ -74,8 +85,12 @@ $promptless_post_id = get_the_ID();
             );
         } else {
             // Plugin inactive: mirror the same disambiguation on the fallback
-            // link so the accessible name still pairs the visible label with
-            // the post title.
+            // link. The aria-label pairs the visible label with the post title
+            // for screen readers; the visually-hidden <span> makes the link's
+            // RENDERED text descriptive too, because search crawlers (and
+            // Lighthouse's "descriptive link text" SEO audit) read the text,
+            // not the aria-label. Hidden via the theme's `.aisb-visually-hidden`
+            // utility (style.css), which is always loaded.
             ?>
             <a href="<?php the_permalink(); ?>" class="aisb-features__item-link"
                aria-label="<?php echo esc_attr( sprintf(
@@ -84,7 +99,11 @@ $promptless_post_id = get_the_ID();
                    __( 'Read more', 'promptless' ),
                    get_the_title()
                ) ); ?>">
-                <?php esc_html_e( 'Read more', 'promptless' ); ?>
+                <?php esc_html_e( 'Read more', 'promptless' ); ?><span class="aisb-visually-hidden"><?php echo esc_html( sprintf(
+                    /* translators: %s: post title, appended (visually hidden) after the link label so the rendered link text is descriptive. */
+                    _x( ': %s', 'hidden card link context suffix', 'promptless' ),
+                    get_the_title()
+                ) ); ?></span>
             </a>
             <?php
         }

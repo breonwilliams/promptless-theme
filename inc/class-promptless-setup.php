@@ -229,9 +229,22 @@ class Promptless_Setup {
     }
 
     /**
-     * Enhance custom logo image accessibility attributes
+     * Filter the custom logo image attributes: accessibility + right-sizing.
      *
-     * Adds role="img" for better SVG logo accessibility support.
+     * Two jobs:
+     *  1. Accessibility — adds role="img" for better SVG logo support.
+     *  2. Performance — corrects the `sizes` attribute. WordPress derives the
+     *     logo's `sizes` from the SOURCE image width (e.g. a 1100px logo →
+     *     `(max-width: 1100px) 100vw, 1100px`), which tells the browser the
+     *     logo is full-viewport-width. The header logo actually renders tiny
+     *     (capped at the registered custom-logo height, ~40–60px tall), so the
+     *     browser was downloading the largest srcset candidate — e.g. a 1100w
+     *     source (~540 KiB) for a 40px logo, which PageSpeed flags under
+     *     "Improve image delivery". We replace `sizes` with the logo's real
+     *     rendered slot width, computed from the registered logo height and the
+     *     attachment's aspect ratio so it's correct for square AND wide
+     *     wordmark logos (no upscaling/blur). The browser then picks a small
+     *     srcset candidate instead of the full-resolution file.
      *
      * @since 1.0.0
      * @param array $custom_logo_attr Custom logo image attributes.
@@ -240,8 +253,36 @@ class Promptless_Setup {
      * @return array Modified attributes.
      */
     public function enhance_logo_accessibility( $custom_logo_attr, $custom_logo_id, $blog_id ) {
-        // Add role="img" for SVG logos and general accessibility
+        // Add role="img" for SVG logos and general accessibility.
         $custom_logo_attr['role'] = 'img';
+
+        // Never touch SVG logos. They're vector — infinitely crisp at any size,
+        // with no raster srcset — so there is nothing to "right-size" and no
+        // quality to lose. Leave their markup exactly as WordPress emitted it.
+        if ( 'image/svg+xml' === get_post_mime_type( $custom_logo_id ) ) {
+            return $custom_logo_attr;
+        }
+
+        // Right-size the `sizes` attribute so the browser fetches a logo-sized
+        // srcset candidate rather than the full-resolution source. This changes
+        // only WHICH candidate is chosen — never the pixels — and errs toward a
+        // slightly larger slot so the logo never upscales or blurs (the browser
+        // still fetches a 2× candidate on retina displays). Skipped when there
+        // is no pixel metadata (defensive; SVGs already returned above).
+        $meta = wp_get_attachment_metadata( $custom_logo_id );
+        if ( is_array( $meta ) && ! empty( $meta['width'] ) && ! empty( $meta['height'] ) ) {
+            $logo_support = get_theme_support( 'custom-logo' );
+            $max_height   = ( is_array( $logo_support ) && ! empty( $logo_support[0]['height'] ) )
+                ? (int) $logo_support[0]['height']
+                : 60;
+
+            // Rendered width = capped height × aspect ratio; clamp to sane
+            // bounds so an unusual logo can't produce a degenerate value.
+            $slot = (int) ceil( $max_height * ( (int) $meta['width'] / (int) $meta['height'] ) );
+            $slot = max( 32, min( $slot, 400 ) );
+
+            $custom_logo_attr['sizes'] = $slot . 'px';
+        }
 
         return $custom_logo_attr;
     }

@@ -3,7 +3,7 @@ Theme Name: Promptless
 Author: Promptless WP
 Author URI: https://promptlesswp.com
 Description: A minimal, accessibility-focused companion theme for the Promptless WP page builder. Inherits colors, typography, and border styling from the plugin's Global Settings. Ships with single-row and stacked header layouts, an optional utility top bar with separate left/right menus and mobile inline-or-collapse behavior, sticky header coordination, an accessible hamburger drawer with full keyboard focus trap, a built-in dark mode toggle, WooCommerce-aware styling with a mini-cart dropdown, a three-column footer with HTML-capable brand description, and a configurable announcement bar (light/dark theme, optional CTA, server-side scheduled visibility, content-hash dismissal that auto-resets when the message text changes).
-Version: 1.2.4
+Version: 1.2.5
 Requires at least: 6.6
 Tested up to: 6.9
 Requires PHP: 7.4
@@ -278,6 +278,31 @@ button {
   background: var(--aisb-color-surface, #f9fafb);
   color: var(--aisb-color-text, #1f2937);
   z-index: 9999;
+}
+
+/*
+ * Visually-hidden utility for supplementary link/context text.
+ *
+ * Mirrors `.screen-reader-text` but intentionally has NO `:focus` reveal:
+ * it wraps non-interactive context appended inside a link (e.g. the post
+ * title after a generic "Read more"), which is never focusable itself, so
+ * revealing it on focus would be wrong. Kept in sync with the plugin's
+ * `.aisb-visually-hidden` (Promptless WP frontend.css) so the same class works
+ * whether a card CTA is rendered by the plugin or by the theme's archive card
+ * / plugin-inactive fallback. This lives in the always-loaded theme stylesheet
+ * so archive pages (where the plugin's frontend CSS may not be enqueued) still
+ * hide the context correctly.
+ */
+.aisb-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 /* ==========================================================================

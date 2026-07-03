@@ -1398,6 +1398,19 @@ function promptless_announcement_bar() {
     $cta_url  = trim( (string) get_theme_mod( 'promptless_announcement_cta_url', '' ) );
     $has_cta  = $cta_text !== '' && $cta_url !== '';
 
+    // The announcement CTA label is author-set and often generic ("Learn
+    // more"), which fails Lighthouse's "descriptive link text" SEO audit (it
+    // reads a link's rendered text, not context). The announcement MESSAGE is
+    // the natural disambiguator, so append it to the CTA as visually-hidden
+    // context — the link's rendered text becomes "{label}: {message}"
+    // (descriptive for crawlers, invisible on screen). Capped to a sane length
+    // so the accessible name stays reasonable. Hidden via the theme's
+    // `.aisb-visually-hidden` utility (style.css), always loaded.
+    $cta_context = trim( preg_replace( '/\s+/', ' ', wp_strip_all_tags( $message_html ) ) );
+    if ( function_exists( 'mb_strlen' ) && mb_strlen( $cta_context ) > 80 ) {
+        $cta_context = rtrim( mb_substr( $cta_context, 0, 80 ) ) . '…';
+    }
+
     $dismissible = (bool) get_theme_mod( 'promptless_announcement_dismissible', true );
     ?>
     <div
@@ -1441,9 +1454,18 @@ function promptless_announcement_bar() {
                  * hover) is delegated to the plugin's `.aisb-btn*` rules.
                  */
                 ?>
-                <a class="promptless-announcement-bar__cta aisb-btn aisb-btn--compact aisb-btn-primary" href="<?php echo esc_url( $cta_url ); ?>">
-                    <?php echo esc_html( $cta_text ); ?>
-                </a>
+                <a class="promptless-announcement-bar__cta aisb-btn aisb-btn--compact aisb-btn-primary" href="<?php echo esc_url( $cta_url ); ?>"><?php
+                    echo esc_html( $cta_text );
+                    if ( $cta_context !== '' ) :
+                        ?><span class="aisb-visually-hidden"><?php
+                        echo esc_html( sprintf(
+                            /* translators: %s: announcement message text, appended (visually hidden) after the CTA label so the rendered link text is descriptive. */
+                            _x( ': %s', 'hidden announcement CTA context suffix', 'promptless' ),
+                            $cta_context
+                        ) );
+                        ?></span><?php
+                    endif;
+                ?></a>
                 <?php endif; ?>
 
                 <?php if ( $dismissible ) : ?>
