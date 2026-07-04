@@ -4,7 +4,7 @@ Tags: one-column, custom-logo, custom-menu, featured-images, full-width-template
 Requires at least: 6.6
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.2.5
+Stable tag: 1.2.6
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -150,6 +150,9 @@ Use the Promptless WP plugin's Canvas display mode, which provides a full-screen
 Yes. The theme includes WooCommerce-aware styling that inherits colors and typography from the Promptless WP plugin's Global Settings. The cart icon in the header can be configured to either open a mini-cart dropdown or link directly to the cart page (Appearance > Customize > Header > Cart). Mobile cart, checkout, and account pages render as grid-based cards instead of overflowing the viewport with default WooCommerce table styling. WooCommerce assets are only loaded on shop-related pages to keep non-shop pages fast.
 
 == Changelog ==
+
+= 1.2.6 =
+* Fixed: Critical — the v1.2.5 distribution package was built with a flattened directory structure (files from `inc/`, `assets/`, `template-parts/`, and `woocommerce/` were placed at the theme root), causing a fatal error on activation/update: `require_once(): Failed opening required '.../inc/class-promptless-setup.php'`. The theme code itself was unaffected; this release repackages the identical 1.2.5 source with the correct directory structure. If your site is running the broken 1.2.5 package, update to 1.2.6 immediately (or reinstall the theme).
 
 = 1.2.5 =
 * Performance: The site custom logo no longer downloads its full-resolution source. WordPress derives the logo's `sizes` attribute from the source image width (e.g. a 1100px logo → `(max-width: 1100px) 100vw, 1100px`), which made the browser fetch the largest srcset candidate — a ~540 KiB, 1100×1100 file for a logo that renders at ~40px (PageSpeed "Improve image delivery"). `enhance_logo_accessibility()` now also rewrites `sizes` to the logo's real rendered slot width, computed from the registered custom-logo height × the attachment's aspect ratio (so it's correct for square and wide/wordmark logos with no blur). The browser now picks a small candidate (≈150–300w) instead of the full source. SVG logos (no pixel metadata) are left untouched. (`inc/class-promptless-setup.php`.)
