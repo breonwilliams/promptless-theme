@@ -192,6 +192,54 @@ echo "📦 Creating ZIP archive..."
 cd release/
 zip -r "promptless-v${VERSION}.zip" promptless -q
 
+# ============================================
+# VERIFY ZIP INTERNAL STRUCTURE
+# ============================================
+# Guards against a flattened/hand-assembled archive (the v1.2.5 incident:
+# a manually built zip lost the inc/ directory level and fataled on every
+# site at functions.php's require_once). This checks the SHIPPED ARTIFACT
+# itself, not the staging folder.
+echo ""
+echo "🔍 Verifying ZIP internal structure..."
+
+ZIP_MANIFEST=$(unzip -l "promptless-v${VERSION}.zip")
+
+REQUIRED_ZIP_PATHS=(
+    "promptless/functions.php"
+    "promptless/inc/class-promptless-setup.php"
+    "promptless/inc/template-functions.php"
+    "promptless/assets/css/header.min.css"
+    "promptless/assets/js/navigation.min.js"
+    "promptless/template-parts/archive/card.php"
+    "promptless/woocommerce/cart/mini-cart.php"
+)
+
+ZIP_STRUCTURE_OK=1
+for path in "${REQUIRED_ZIP_PATHS[@]}"; do
+    if echo "$ZIP_MANIFEST" | grep -q " ${path}$"; then
+        echo "  ✓ $path"
+    else
+        echo "  ❌ MISSING FROM ZIP: $path"
+        ZIP_STRUCTURE_OK=0
+    fi
+done
+
+# A flattened build puts inc/ files at the theme root — detect that too.
+if echo "$ZIP_MANIFEST" | grep -q " promptless/class-promptless-setup.php$"; then
+    echo "  ❌ FLATTENED STRUCTURE DETECTED: class files found at theme root"
+    ZIP_STRUCTURE_OK=0
+fi
+
+if [ $ZIP_STRUCTURE_OK -eq 0 ]; then
+    rm -f "promptless-v${VERSION}.zip"
+    echo ""
+    echo "❌ ERROR: ZIP structure verification FAILED — archive deleted."
+    echo "Do NOT hand-assemble release zips; this script is the only sanctioned packaging path."
+    exit 1
+fi
+
+echo "  ✅ ZIP structure verified"
+
 echo ""
 echo "✅ Release package created successfully!"
 echo ""

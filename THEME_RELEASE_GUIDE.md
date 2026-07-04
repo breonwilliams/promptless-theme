@@ -2,6 +2,8 @@
 
 A comprehensive guide for releasing new versions of the Promptless WordPress theme.
 
+> **⚠️ NEVER hand-assemble a release zip.** `./create-release.sh` is the only sanctioned packaging path. The v1.2.5 incident: a manually packaged zip (built with `cp -r dir/*`-style commands) flattened the directory structure, shipped without `inc/`, and fataled every site that updated. The script verifies critical files in both the staging folder and the final zip; ad-hoc `cp`/`zip` commands bypass every guard.
+
 ---
 
 ## Quick Release Steps (TL;DR)
