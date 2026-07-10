@@ -324,6 +324,30 @@ button {
   display: contents;
 }
 
+/*
+ * Native browser chrome follows the component's theme variant.
+ *
+ * CSS tokens can't reach the parts of form controls the BROWSER paints —
+ * number-input spinner arrows (WooCommerce .qty steppers in a dark header
+ * mini-cart / dark sections), date calendar indicators, native select
+ * dropdown panels, default checkboxes, textarea resize grips, inner
+ * scrollbars. Without color-scheme, all of it renders in the page's
+ * default (light) scheme inside dark components. color-scheme inherits, so
+ * the theme-variant roots fix every native control at once.
+ *
+ * Intentionally duplicates the identical pair in Promptless WP's
+ * section-tokens.css: the theme must behave correctly standalone (plugin
+ * inactive), and double-application is harmless — same selectors, same
+ * values. Keep the two in sync. (Harbor & Oak sweep, 2026-07-10.)
+ */
+.aisb-section--light {
+  color-scheme: light;
+}
+
+.aisb-section--dark {
+  color-scheme: dark;
+}
+
 /* ==========================================================================
    Container
    ========================================================================== */
