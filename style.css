@@ -305,6 +305,25 @@ button {
   border: 0;
 }
 
+/*
+ * Image-optimizer <picture> wrapper neutralizer.
+ *
+ * EWWW picture-WebP (and similar optimizers/CDNs) wrap frontend <img> tags
+ * in an inline, shrink-wrapping <picture>, which breaks any img sized with
+ * width:100%/height:100% against its wrapper — the theme's archive card
+ * images (.promptless-archive__grid .aisb-features__item-image) and the
+ * header mini-cart thumbnails use exactly that pattern. display:contents
+ * removes the wrapper from layout so the img participates as the direct
+ * child the rules were written against. The theme never emits <picture>
+ * itself. Kept in sync with the same rule in Promptless WP
+ * (.aisb-section picture) and Post Runtime Engine (.pre-* media pictures);
+ * found live on the Harbor & Oak pressure test, 2026-07-10.
+ */
+.promptless-archive__grid picture,
+.promptless-cart-item__image picture {
+  display: contents;
+}
+
 /* ==========================================================================
    Container
    ========================================================================== */
