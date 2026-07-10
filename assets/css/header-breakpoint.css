@@ -257,7 +257,23 @@
     .promptless-header__nav-list a {
         display: block;
         width: 100%;
-        padding: 0.75rem 1.5rem;
+        /* 0.625rem 1.3125rem (10px / 21px) — drawer rhythm alignment
+           (2026-07-10 mobile-drawer balance pass, measured in a 390px lab):
+
+           VERTICAL 10px (was 12px): with the nav's 24px line-height this
+           makes each link row exactly 44px tall — identical to the mobile
+           topbar rows (min-height 44, Apple HIG tap floor) — and equalizes
+           the measured ink-to-ink gap between nav items (was 31px) with the
+           topbar's (27px). Every item boundary in the drawer now measures
+           27–28px regardless of which list it belongs to.
+
+           HORIZONTAL 21px (was 24px): matches the drawer's 1.3125rem
+           padding used by the topbar links and the menu-CTA group, so the
+           topbar text, nav text, and CTA pill all start at the same 21px
+           inset — the nav text previously sat 3px right of everything else.
+           Desktop nav-link padding (header.css) is untouched; this rule is
+           scoped to the collapse breakpoint. */
+        padding: 0.625rem 1.3125rem;
         border-radius: 0;
         text-align: left;
         word-wrap: break-word; /* Long text protection */
@@ -850,9 +866,19 @@
     }
 
     /* Topbar directly below the CTA group (top slot, topbar present): it is no
-       longer the first block, so it needs a divider from the CTA above. */
+       longer the first block, so it needs a divider from the CTA above — and
+       its first-block breathing room must collapse. The topbar carries 21px
+       padding-top for when it opens the drawer; stacked under the CTA group
+       (which already ends with its own 21px padding-bottom) that produced a
+       21+1+21+13 ≈ 57px gap between the CTA pill and the first topbar item
+       vs the drawer's ~27px rhythm (Harbor & Oak mobile drawer, 2026-07-10).
+       With padding-top:0 the seam is 21(CTA pb) + 1px divider + 13(link pt)
+       ≈ 36px — symmetric with the CTA group's other boundaries (topbar→CTA
+       in the middle slot and CTA→nav measure 35–36px) and with the 21px
+       air above the pill. */
     .promptless-header__menu-cta--top + .promptless-mobile-topbar {
         border-top: 1px solid var(--section-border);
+        padding-top: 0;
     }
 }
 
