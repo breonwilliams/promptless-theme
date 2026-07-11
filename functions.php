@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Theme version constant
  */
-define( 'PROMPTLESS_THEME_VERSION', '1.2.6' );
+define( 'PROMPTLESS_THEME_VERSION', '1.2.7' );
 
 /**
  * Theme directory path

@@ -4,7 +4,7 @@ Tags: one-column, custom-logo, custom-menu, featured-images, full-width-template
 Requires at least: 6.6
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.2.6
+Stable tag: 1.2.7
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -150,6 +150,12 @@ Use the Promptless WP plugin's Canvas display mode, which provides a full-screen
 Yes. The theme includes WooCommerce-aware styling that inherits colors and typography from the Promptless WP plugin's Global Settings. The cart icon in the header can be configured to either open a mini-cart dropdown or link directly to the cart page (Appearance > Customize > Header > Cart). Mobile cart, checkout, and account pages render as grid-based cards instead of overflowing the viewport with default WooCommerce table styling. WooCommerce assets are only loaded on shop-related pages to keep non-shop pages fast.
 
 == Changelog ==
+
+= 1.2.7 =
+* Improved: Mobile menu drawer spacing is now pixel-balanced across every layout the drawer supports (CTA button in the top, middle, or bottom slot; top-bar menus present or absent) - uniform item rhythm, all rows at a 44px tap-target height, and the top-bar text, menu text, and CTA button aligned to the same left inset.
+* Fixed: The mobile menu button no longer has doubled spacing above the top-bar items when positioned at the top of the drawer.
+* Fixed: Archive card images and header mini-cart thumbnails no longer collapse when an image optimizer (e.g. EWWW WebP delivery) wraps images in <picture> tags.
+* Fixed: Native browser control chrome (number spinner arrows in the mini-cart quantity, dropdown panels, checkboxes, scrollbars) now renders in dark colors inside dark header/footer components instead of the light page default.
 
 = 1.2.6 =
 * Fixed: Critical — the v1.2.5 distribution package was built with a flattened directory structure (files from `inc/`, `assets/`, `template-parts/`, and `woocommerce/` were placed at the theme root), causing a fatal error on activation/update: `require_once(): Failed opening required '.../inc/class-promptless-setup.php'`. The theme code itself was unaffected; this release repackages the identical 1.2.5 source with the correct directory structure. If your site is running the broken 1.2.5 package, update to 1.2.6 immediately (or reinstall the theme).
