@@ -73,7 +73,7 @@ echo "🔍 Checking for minified assets..."
 MISSING_MIN=0
 
 # Check CSS files
-for css in header footer archive woocommerce; do
+for css in header header-breakpoint footer archive woocommerce breadcrumbs; do
     if [ -f "assets/css/${css}.css" ]; then
         if [ ! -f "assets/css/${css}.min.css" ]; then
             echo "  ❌ Missing: assets/css/${css}.min.css"
