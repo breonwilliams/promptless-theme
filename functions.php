@@ -37,6 +37,7 @@ require_once PROMPTLESS_THEME_DIR . '/inc/class-promptless-customizer.php';
 require_once PROMPTLESS_THEME_DIR . '/inc/class-promptless-mobile-menu-breakpoint.php';
 require_once PROMPTLESS_THEME_DIR . '/inc/class-promptless-mega-menu.php';
 require_once PROMPTLESS_THEME_DIR . '/inc/class-promptless-walker-mega-menu.php';
+require_once PROMPTLESS_THEME_DIR . '/inc/class-promptless-breadcrumbs.php';
 require_once PROMPTLESS_THEME_DIR . '/inc/template-functions.php';
 
 /**
@@ -49,6 +50,7 @@ function promptless_theme_init() {
     new Promptless_Customizer();
     new Promptless_Mobile_Menu_Breakpoint();
     new Promptless_Mega_Menu();
+    new Promptless_Breadcrumbs();
 }
 add_action( 'after_setup_theme', 'promptless_theme_init', 5 );
 

@@ -119,6 +119,20 @@ class Promptless_Assets {
             );
         }
 
+        // Breadcrumb styles — only enqueue when the trail will actually
+        // render on this request. promptless_show_breadcrumbs() is the same
+        // gatekeeper the renderer uses (master toggle, context toggles,
+        // front-page suppression, WooCommerce deference, per-post override),
+        // so disabled sites and excluded contexts ship zero extra bytes.
+        if ( function_exists( 'promptless_show_breadcrumbs' ) && promptless_show_breadcrumbs() ) {
+            wp_enqueue_style(
+                'promptless-theme-breadcrumbs',
+                PROMPTLESS_THEME_URI . '/assets/css/breadcrumbs.min.css',
+                array( 'promptless-theme-style' ),
+                PROMPTLESS_THEME_VERSION
+            );
+        }
+
         // Announcement bar styles — only enqueue when the bar will actually
         // render (master toggle on, message non-empty, in schedule, not
         // dismissed by this visitor). Same gatekeeper the renderer uses, so

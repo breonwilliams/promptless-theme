@@ -92,3 +92,20 @@
     </div>
 </nav>
 <?php endif; ?>
+
+<?php
+/**
+ * Fires after the site header (and the stacked layout's detached nav bar,
+ * when present), before each template's <main> element opens.
+ *
+ * This is the sanctioned insertion point for chrome that sits between the
+ * header and the page content — breadcrumbs, sub-headers, contextual
+ * notices. Every template that calls get_header() fires it exactly once,
+ * including plugin-provided templates (e.g. Promptless CPT Pages singles)
+ * and the theme's aisb-fullwidth template. The chrome-less aisb-canvas
+ * template skips get_header() and is therefore excluded automatically.
+ *
+ * @since 1.3.0
+ */
+do_action( 'promptless_after_header' );
+

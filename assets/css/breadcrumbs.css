@@ -1,0 +1,154 @@
+/**
+ * Breadcrumbs
+ *
+ * Hierarchy trail rendered on the promptless_after_header action —
+ * between the site header and each template's <main>.
+ *
+ * Design contract: docs/BREADCRUMBS_DESIGN_EXPLORATION.md
+ * Markup (WAI-ARIA APG breadcrumb pattern):
+ *   <nav class="promptless-breadcrumbs aisb-section--{light|dark}" aria-label="Breadcrumb">
+ *     <div class="promptless-container">
+ *       <ol class="promptless-breadcrumbs__list">
+ *         <li class="promptless-breadcrumbs__item"><a class="promptless-breadcrumbs__link">…</a></li>
+ *         <li class="promptless-breadcrumbs__item"><span aria-current="page">…</span></li>
+ *
+ * Token discipline: every color/font/spacing value reads an --aisb-* token
+ * with the contract-documented fallback (see AISB_TOKEN_CONTRACT.md). The
+ * light/dark variant comes from the aisb-section--{variant} class — the
+ * same recipe as the announcement bar, topbar, header, and footer — so
+ * Promptless WP Global Settings flow through with no breadcrumb-specific
+ * machinery.
+ *
+ * @package Promptless_Theme
+ * @since 1.3.0
+ */
+
+/* =============================================
+   Bar
+   ============================================= */
+
+.promptless-breadcrumbs {
+    font-family: var(--aisb-section-font-body, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    padding-block: var(--aisb-section-space-xs, 0.5rem);
+    /* Quiet chrome: transparent by default so the bar sits on whatever the
+       content background is. A subtle hairline separates it from content
+       without competing with the header. */
+    background: transparent;
+    border-bottom: 1px solid var(--aisb-color-divider, rgba(31, 41, 55, 0.08));
+}
+
+/* Theme variants — text + hairline. */
+.promptless-breadcrumbs.aisb-section--light {
+    color: var(--aisb-color-text-muted, #6b7280);
+    background: var(--aisb-color-background, #ffffff);
+    border-bottom-color: var(--aisb-color-divider, rgba(31, 41, 55, 0.08));
+}
+
+.promptless-breadcrumbs.aisb-section--dark {
+    color: var(--aisb-color-dark-text-muted, #9ca3af);
+    background: var(--aisb-color-dark-background, #111827);
+    border-bottom-color: var(--aisb-color-dark-divider, rgba(249, 250, 251, 0.1));
+}
+
+/* =============================================
+   Trail list
+   ============================================= */
+
+.promptless-breadcrumbs__list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.promptless-breadcrumbs__item {
+    display: inline-flex;
+    align-items: center;
+    min-width: 0;
+    margin: 0;
+}
+
+/* Separator: CSS-generated so screen readers don't announce it between
+   every crumb (the <nav>/<ol> semantics already convey the sequence).
+   The two content declarations are deliberate: the first is the fallback
+   for older engines, the second uses the alternative-text syntax
+   (content: ">" / "") which modern browsers treat as decorative. */
+.promptless-breadcrumbs__item + .promptless-breadcrumbs__item::before {
+    content: "\203A"; /* › single right-pointing angle quotation mark */
+    content: "\203A" / "";
+    margin-inline: 0.5em;
+    opacity: 0.6;
+    flex-shrink: 0;
+}
+
+/* RTL: the pointing direction flips with the reading direction. */
+[dir="rtl"] .promptless-breadcrumbs__item + .promptless-breadcrumbs__item::before {
+    content: "\2039"; /* ‹ */
+    content: "\2039" / "";
+}
+
+/* =============================================
+   Links + current page
+   ============================================= */
+
+.promptless-breadcrumbs__link {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.15s ease;
+    border-radius: 2px;
+}
+
+.promptless-breadcrumbs.aisb-section--light .promptless-breadcrumbs__link:hover,
+.promptless-breadcrumbs.aisb-section--light .promptless-breadcrumbs__link:focus-visible {
+    color: var(--aisb-link-color, var(--aisb-color-primary, #6366f1));
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.promptless-breadcrumbs.aisb-section--dark .promptless-breadcrumbs__link:hover,
+.promptless-breadcrumbs.aisb-section--dark .promptless-breadcrumbs__link:focus-visible {
+    color: var(--aisb-link-color-dark, var(--aisb-color-primary, #818cf8));
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+/* Ring-only focus treatment (matches the theme's button-state contract:
+   focus-visible gets a ring, never a color/background force; mouse focus
+   gets nothing). */
+.promptless-breadcrumbs__link:focus-visible {
+    outline: 2px solid var(--aisb-color-primary, #6366f1);
+    outline-offset: 2px;
+}
+
+.promptless-breadcrumbs__link:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* Current page: slightly heavier than the trail so "you are here" reads
+   at a glance, but still muted — the page title below is the headline. */
+.promptless-breadcrumbs__current {
+    font-weight: 500;
+}
+
+/* Leaf + long labels: ellipsize rather than wrap awkwardly. The list
+   itself may wrap to a second line on narrow viewports (orientation
+   beats truncation), but a single very long title never overflows. */
+.promptless-breadcrumbs__item > a,
+.promptless-breadcrumbs__item > span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 32ch;
+}
+
+@media (max-width: 640px) {
+    .promptless-breadcrumbs__item > a,
+    .promptless-breadcrumbs__item > span {
+        max-width: 45vw;
+    }
+}

@@ -834,6 +834,123 @@ function promptless_get_content_classes() {
 }
 
 /**
+ * Should the breadcrumb trail render on the current request?
+ *
+ * Single source of truth for the whole decision — the renderer
+ * (Promptless_Breadcrumbs::render) and the asset enqueue gate
+ * (Promptless_Assets) both call this, so the CSS only ships on requests
+ * where the markup will actually be present (announcement-bar pattern).
+ *
+ * Decision order:
+ *   1. Master toggle (off by default — enabling chrome on live sites is
+ *      always an explicit owner action, never a theme-update surprise).
+ *   2. Front page: never (universal convention — the trail's root IS home).
+ *   3. WooCommerce contexts (shop, product, product taxonomies): defer to
+ *      WooCommerce's own breadcrumb, which the theme already renders and
+ *      styles (.woocommerce-breadcrumb). Two trails would be worse than
+ *      none. Cart/checkout/account are ordinary pages (no WC breadcrumb)
+ *      and follow the normal page rules.
+ *   4. Per-context toggles (pages, posts, CPT singles, archives, search, 404).
+ *   5. Per-post override meta (_promptless_breadcrumbs = 'hide').
+ *   6. promptless_show_breadcrumbs filter — final word for child themes
+ *      and integrations.
+ *
+ * @return bool
+ * @since 1.3.0
+ */
+function promptless_show_breadcrumbs() {
+    $show = true;
+
+    // 1. Master toggle.
+    if ( ! get_theme_mod( 'promptless_breadcrumbs_enabled', false ) ) {
+        $show = false;
+    }
+
+    // 2. Never on the front page (static or latest-posts mode).
+    if ( $show && is_front_page() ) {
+        $show = false;
+    }
+
+    // 3. WooCommerce owns its own breadcrumb on true Woo contexts.
+    if ( $show && function_exists( 'is_woocommerce' ) && is_woocommerce() ) {
+        $show = false;
+    }
+
+    // 4. Per-context toggles.
+    if ( $show ) {
+        if ( is_singular( 'post' ) ) {
+            $show = (bool) get_theme_mod( 'promptless_breadcrumbs_on_posts', true );
+        } elseif ( is_page() ) {
+            $show = (bool) get_theme_mod( 'promptless_breadcrumbs_on_pages', true );
+        } elseif ( is_singular() ) {
+            $show = (bool) get_theme_mod( 'promptless_breadcrumbs_on_cpt_singles', true );
+        } elseif ( is_search() ) {
+            $show = (bool) get_theme_mod( 'promptless_breadcrumbs_on_search', true );
+        } elseif ( is_404() ) {
+            $show = (bool) get_theme_mod( 'promptless_breadcrumbs_on_404', true );
+        } elseif ( is_archive() || is_home() ) {
+            $show = (bool) get_theme_mod( 'promptless_breadcrumbs_on_archives', true );
+        } else {
+            $show = false;
+        }
+    }
+
+    // 5. Per-post kill switch (landing pages with edge-to-edge heroes).
+    if ( $show && is_singular() ) {
+        $post_id = get_queried_object_id();
+        if ( $post_id && 'hide' === get_post_meta( $post_id, Promptless_Breadcrumbs::META_KEY, true ) ) {
+            $show = false;
+        }
+    }
+
+    /**
+     * Filter the final breadcrumb visibility decision.
+     *
+     * @since 1.3.0
+     *
+     * @param bool $show Whether the trail renders on this request.
+     */
+    return (bool) apply_filters( 'promptless_show_breadcrumbs', $show );
+}
+
+/**
+ * Get the breadcrumbs theme variant.
+ *
+ * 'inherit' (the default) tracks the Content Theme setting so the bar
+ * matches the page background it sits on; explicit light/dark overrides
+ * are available for designs where the bar contrasts with the content.
+ *
+ * @return string 'light' or 'dark'
+ * @since 1.3.0
+ */
+function promptless_get_breadcrumbs_theme() {
+    $theme = get_theme_mod( 'promptless_breadcrumbs_theme', 'inherit' );
+
+    if ( 'inherit' === $theme || ! in_array( $theme, array( 'light', 'dark' ), true ) ) {
+        return promptless_get_content_theme();
+    }
+
+    return $theme;
+}
+
+/**
+ * Get breadcrumb wrapper CSS classes including theme variant.
+ *
+ * Same aisb-section--{variant} recipe as every other chrome element, so
+ * dark mode and the WCAG-derived link colors flow through the design
+ * system with zero breadcrumb-specific machinery.
+ *
+ * @return string CSS classes for the breadcrumb nav element
+ * @since 1.3.0
+ */
+function promptless_get_breadcrumbs_classes() {
+    $classes   = array( 'promptless-breadcrumbs' );
+    $classes[] = 'aisb-section--' . esc_attr( promptless_get_breadcrumbs_theme() );
+
+    return implode( ' ', $classes );
+}
+
+/**
  * Check if header cart should be displayed
  *
  * @return bool True if WooCommerce is active and cart is enabled.

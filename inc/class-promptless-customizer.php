@@ -158,6 +158,16 @@ class Promptless_Customizer {
             )
         );
 
+        // Breadcrumbs Section (standalone, no panel)
+        $wp_customize->add_section(
+            'promptless_breadcrumbs_section',
+            array(
+                'title'       => __( 'Breadcrumbs', 'promptless' ),
+                'description' => __( 'A hierarchy trail rendered between the header and page content. WooCommerce shop and product pages keep WooCommerce\'s own breadcrumb.', 'promptless' ),
+                'priority'    => 33,
+            )
+        );
+
         // Footer Appearance Section
         $wp_customize->add_section(
             'promptless_footer_appearance',
@@ -307,6 +317,151 @@ class Promptless_Customizer {
                     'light' => __( 'Light', 'promptless' ),
                     'dark'  => __( 'Dark', 'promptless' ),
                 ),
+            )
+        );
+
+        // =============================================
+        // Breadcrumbs Settings
+        //
+        // Design contract: docs/BREADCRUMBS_DESIGN_EXPLORATION.md.
+        // Master toggle defaults OFF — new chrome appearing after a theme
+        // update on a live site would violate the "never surprise live
+        // sites" principle. Everything else defaults to the most useful
+        // state so enabling is a one-click decision.
+        // =============================================
+        $wp_customize->add_setting(
+            'promptless_breadcrumbs_enabled',
+            array(
+                'default'           => false,
+                'sanitize_callback' => array( $this, 'sanitize_checkbox' ),
+                'transport'         => 'refresh',
+            )
+        );
+
+        $wp_customize->add_control(
+            'promptless_breadcrumbs_enabled',
+            array(
+                'label'       => __( 'Enable Breadcrumbs', 'promptless' ),
+                'description' => __( 'Show a breadcrumb trail after the site header. Never shown on the front page.', 'promptless' ),
+                'section'     => 'promptless_breadcrumbs_section',
+                'type'        => 'checkbox',
+            )
+        );
+
+        $wp_customize->add_setting(
+            'promptless_breadcrumbs_theme',
+            array(
+                'default'           => 'inherit',
+                'sanitize_callback' => array( $this, 'sanitize_breadcrumbs_theme' ),
+                'transport'         => 'refresh',
+            )
+        );
+
+        $wp_customize->add_control(
+            'promptless_breadcrumbs_theme',
+            array(
+                'label'           => __( 'Breadcrumbs Theme', 'promptless' ),
+                'description'     => __( 'Inherit follows the Content Theme setting. Colors come from Promptless WP Global Settings.', 'promptless' ),
+                'section'         => 'promptless_breadcrumbs_section',
+                'type'            => 'select',
+                'choices'         => array(
+                    'inherit' => __( 'Inherit (Content Theme)', 'promptless' ),
+                    'light'   => __( 'Light', 'promptless' ),
+                    'dark'    => __( 'Dark', 'promptless' ),
+                ),
+                'active_callback' => array( $this, 'is_breadcrumbs_enabled' ),
+            )
+        );
+
+        $wp_customize->add_setting(
+            'promptless_breadcrumbs_home_label',
+            array(
+                'default'           => __( 'Home', 'promptless' ),
+                'sanitize_callback' => 'sanitize_text_field',
+                'transport'         => 'refresh',
+            )
+        );
+
+        $wp_customize->add_control(
+            'promptless_breadcrumbs_home_label',
+            array(
+                'label'           => __( 'Home Label', 'promptless' ),
+                'section'         => 'promptless_breadcrumbs_section',
+                'type'            => 'text',
+                'active_callback' => array( $this, 'is_breadcrumbs_enabled' ),
+            )
+        );
+
+        // Per-context toggles. One theme_mod per context so the connector
+        // surface (a future wordpress_breadcrumbs_get/set) can read/write
+        // them individually with no packing format.
+        $breadcrumb_contexts = array(
+            'promptless_breadcrumbs_on_pages'       => __( 'Show on pages', 'promptless' ),
+            'promptless_breadcrumbs_on_posts'       => __( 'Show on blog posts', 'promptless' ),
+            'promptless_breadcrumbs_on_cpt_singles' => __( 'Show on custom post type singles', 'promptless' ),
+            'promptless_breadcrumbs_on_archives'    => __( 'Show on archives (blog, categories, custom post types)', 'promptless' ),
+            'promptless_breadcrumbs_on_search'      => __( 'Show on search results', 'promptless' ),
+            'promptless_breadcrumbs_on_404'         => __( 'Show on the 404 page', 'promptless' ),
+        );
+
+        foreach ( $breadcrumb_contexts as $setting_id => $label ) {
+            $wp_customize->add_setting(
+                $setting_id,
+                array(
+                    'default'           => true,
+                    'sanitize_callback' => array( $this, 'sanitize_checkbox' ),
+                    'transport'         => 'refresh',
+                )
+            );
+
+            $wp_customize->add_control(
+                $setting_id,
+                array(
+                    'label'           => $label,
+                    'section'         => 'promptless_breadcrumbs_section',
+                    'type'            => 'checkbox',
+                    'active_callback' => array( $this, 'is_breadcrumbs_enabled' ),
+                )
+            );
+        }
+
+        $wp_customize->add_setting(
+            'promptless_breadcrumbs_show_category',
+            array(
+                'default'           => true,
+                'sanitize_callback' => array( $this, 'sanitize_checkbox' ),
+                'transport'         => 'refresh',
+            )
+        );
+
+        $wp_customize->add_control(
+            'promptless_breadcrumbs_show_category',
+            array(
+                'label'           => __( 'Include category in blog post trails', 'promptless' ),
+                'description'     => __( 'Home > Blog > Category > Post. The default "Uncategorized" bucket is always skipped.', 'promptless' ),
+                'section'         => 'promptless_breadcrumbs_section',
+                'type'            => 'checkbox',
+                'active_callback' => array( $this, 'is_breadcrumbs_enabled' ),
+            )
+        );
+
+        $wp_customize->add_setting(
+            'promptless_breadcrumbs_schema',
+            array(
+                'default'           => true,
+                'sanitize_callback' => array( $this, 'sanitize_checkbox' ),
+                'transport'         => 'refresh',
+            )
+        );
+
+        $wp_customize->add_control(
+            'promptless_breadcrumbs_schema',
+            array(
+                'label'           => __( 'Output BreadcrumbList structured data', 'promptless' ),
+                'description'     => __( 'Helps search engines understand your site hierarchy. Automatically disabled when an SEO plugin (Yoast, Rank Math, etc.) is active, since those output their own.', 'promptless' ),
+                'section'         => 'promptless_breadcrumbs_section',
+                'type'            => 'checkbox',
+                'active_callback' => array( $this, 'is_breadcrumbs_enabled' ),
             )
         );
 
@@ -1100,6 +1255,39 @@ class Promptless_Customizer {
      */
     public function sanitize_checkbox( $value ) {
         return (bool) $value;
+    }
+
+    /**
+     * Sanitize the breadcrumbs theme variant setting.
+     *
+     * Unlike the shared theme-variant sanitizer, breadcrumbs support an
+     * 'inherit' value that tracks the Content Theme setting.
+     *
+     * @param string $value Setting value.
+     * @return string Sanitized value ('inherit', 'light', or 'dark').
+     * @since 1.3.0
+     */
+    public function sanitize_breadcrumbs_theme( $value ) {
+        $valid = array( 'inherit', 'light', 'dark' );
+
+        if ( in_array( $value, $valid, true ) ) {
+            return $value;
+        }
+
+        return 'inherit';
+    }
+
+    /**
+     * Active callback: are breadcrumbs enabled?
+     *
+     * Hides the detail controls until the master toggle is on, keeping the
+     * section scannable.
+     *
+     * @return bool
+     * @since 1.3.0
+     */
+    public function is_breadcrumbs_enabled() {
+        return (bool) get_theme_mod( 'promptless_breadcrumbs_enabled', false );
     }
 
     /**

@@ -19,7 +19,8 @@ const cssFiles = [
     'assets/css/header-breakpoint.css',
     'assets/css/footer.css',
     'assets/css/archive.css',
-    'assets/css/woocommerce.css'
+    'assets/css/woocommerce.css',
+    'assets/css/breadcrumbs.css'
 ];
 
 const themeRoot = path.resolve(__dirname, '..');
