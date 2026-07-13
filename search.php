@@ -25,7 +25,7 @@ get_header();
 
         <?php if ( have_posts() ) : ?>
 
-            <div class="promptless-archive__grid">
+            <div class="<?php echo esc_attr( promptless_get_archive_grid_classes() ); ?>">
                 <?php
                 while ( have_posts() ) :
                     the_post();

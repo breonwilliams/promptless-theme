@@ -420,6 +420,26 @@
     overflow: hidden;
 }
 
+/* Card image aspect-ratio variants.
+ * The grid carries a modifier class resolved through the
+ * promptless_archive_image_aspect filter (default 16:9 = no class; see
+ * promptless_get_archive_grid_classes()). Promptless CPT Pages answers
+ * the filter from its per-CPT archive_image_aspect setting, so e.g. an
+ * agents/team CPT can render square headshots while listings stay wide.
+ * Vocabulary mirrors the PostGrid section's card_image_aspect_ratio
+ * enum (16:9 / 4:3 / 1:1 / 4:5). */
+.promptless-archive__grid--image-four-three .aisb-features__item-image-wrapper {
+    aspect-ratio: 4 / 3;
+}
+
+.promptless-archive__grid--image-square .aisb-features__item-image-wrapper {
+    aspect-ratio: 1 / 1;
+}
+
+.promptless-archive__grid--image-four-five .aisb-features__item-image-wrapper {
+    aspect-ratio: 4 / 5;
+}
+
 /* Featured image focus indicator for keyboard navigation
    Uses ::after pseudo-element because:
    1. Parent has overflow:hidden which clips outline

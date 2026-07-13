@@ -834,6 +834,73 @@ function promptless_get_content_classes() {
 }
 
 /**
+ * Get the archive grid CSS classes, including the card image aspect-ratio
+ * modifier.
+ *
+ * The archive card image aspect defaults to 16:9 (the historical hardcoded
+ * value). The `promptless_archive_image_aspect` filter lets integrations
+ * supply a different ratio per context — Promptless CPT Pages answers it
+ * from its per-CPT `archive_image_aspect` setting, the same handshake as
+ * the existing `promptless_archive_card_show_date` / `_author` filters.
+ *
+ * The vocabulary deliberately matches the PostGrid section's
+ * `card_image_aspect_ratio` enum so the whole ecosystem speaks one
+ * aspect language: '16:9' (wide), '4:3' (standard), '1:1' (square),
+ * '4:5' (portrait — headshots/team directories).
+ *
+ * 16:9 (or any unrecognized value) emits no modifier class, so existing
+ * sites render exactly as before.
+ *
+ * @return string Space-separated classes for the archive grid element.
+ * @since 1.3.0
+ */
+function promptless_get_archive_grid_classes() {
+    $classes = array( 'promptless-archive__grid' );
+
+    $queried_post_type = '';
+    if ( is_post_type_archive() ) {
+        $queried_post_type = (string) get_query_var( 'post_type' );
+        if ( is_array( get_query_var( 'post_type' ) ) ) {
+            $types             = get_query_var( 'post_type' );
+            $queried_post_type = (string) reset( $types );
+        }
+    } elseif ( is_home() ) {
+        $queried_post_type = 'post';
+    } elseif ( is_category() || is_tag() || is_tax() ) {
+        $taxonomy = get_queried_object();
+        if ( $taxonomy instanceof WP_Term ) {
+            $tax_object = get_taxonomy( $taxonomy->taxonomy );
+            if ( $tax_object && ! empty( $tax_object->object_type ) ) {
+                $queried_post_type = (string) reset( $tax_object->object_type );
+            }
+        }
+    }
+
+    /**
+     * Filter the archive card image aspect ratio.
+     *
+     * @since 1.3.0
+     *
+     * @param string $aspect    One of '16:9', '4:3', '1:1', '4:5'. Default '16:9'.
+     * @param string $post_type The archive's post type ('' when indeterminate,
+     *                          e.g. search results).
+     */
+    $aspect = apply_filters( 'promptless_archive_image_aspect', '16:9', $queried_post_type );
+
+    $aspect_class_map = array(
+        '4:3' => 'promptless-archive__grid--image-four-three',
+        '1:1' => 'promptless-archive__grid--image-square',
+        '4:5' => 'promptless-archive__grid--image-four-five',
+    );
+
+    if ( isset( $aspect_class_map[ $aspect ] ) ) {
+        $classes[] = $aspect_class_map[ $aspect ];
+    }
+
+    return implode( ' ', $classes );
+}
+
+/**
  * Should the breadcrumb trail render on the current request?
  *
  * Single source of truth for the whole decision — the renderer

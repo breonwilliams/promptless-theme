@@ -24,7 +24,7 @@ get_header();
                     <h1 class="promptless-archive__title"><?php esc_html_e( 'Latest Posts', 'promptless' ); ?></h1>
                 <?php endif; ?>
             </header>
-            <div class="promptless-archive__grid">
+            <div class="<?php echo esc_attr( promptless_get_archive_grid_classes() ); ?>">
                 <?php
                 while ( have_posts() ) :
                     the_post();
