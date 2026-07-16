@@ -151,7 +151,7 @@ Yes. The theme includes WooCommerce-aware styling that inherits colors and typog
 
 == Changelog ==
 
-= Unreleased =
+= 1.2.8 =
 * New: Breadcrumbs. An opt-in, hierarchy-based breadcrumb trail rendered between the site header and page content, following the WAI-ARIA APG breadcrumb pattern. Enable under Customize > Breadcrumbs; per-context toggles (pages, posts, custom post type singles, archives, search, 404), light/dark/inherit theme variant driven by Promptless WP design tokens, an editable Home label, and a per-page "Hide on this page" override for landing pages. Never shown on the front page; WooCommerce shop and product pages keep WooCommerce's own breadcrumb.
 * New: BreadcrumbList structured data (JSON-LD) emitted with the visible trail, automatically suppressed when a dedicated SEO plugin (Yoast, Rank Math, AIOSEO, SEOPress, The SEO Framework, Slim SEO) is active so exactly one BreadcrumbList ever ships per page.
 * New: promptless_after_header action - fires after the site header on every template that calls get_header(), giving child themes and integrations a sanctioned insertion point for chrome between the header and content. Filters: promptless_breadcrumbs_items, promptless_show_breadcrumbs, promptless_breadcrumbs_schema_enabled.
