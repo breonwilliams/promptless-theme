@@ -1677,3 +1677,80 @@ body.woocommerce-checkout .promptless-header__mini-cart .promptless-cart-item__r
     background-color: var(--aisb-smart-dark-section-link, var(--section-primary));
     text-decoration: none;
 }
+
+/* ==========================================================================
+   LAYOUT VARIANT: Floating (rounded pill)
+
+   The "floating navbar" pattern (also called a pill or island nav): the
+   header chrome detaches from the viewport edges into a fully-rounded
+   contained bar that appears to float over the page.
+
+   Architecture: floating is a CSS TREATMENT of the default single-row
+   layout — header.php renders the exact same DOM as `default` (brand +
+   nav + actions inside .promptless-header__inner). Only the classes
+   differ. That keeps every existing behavior (nav position, menu CTAs,
+   cart, mobile drawer mechanics, sticky, admin-bar offsets) working
+   unchanged; this section only restyles the shell.
+
+   Token contract (all inherited from Promptless WP Global Settings, with
+   literal fallbacks for plugin-inactive degradation — same policy as
+   .promptless-container):
+     - Surface / text / border  → --section-* (mapped from --aisb-color-*)
+     - Pill radius              → --aisb-section-radius-full
+     - Elevation                → --aisb-section-shadow-sm / -md
+     - Spacing                  → --aisb-section-space-* scale
+
+   Setting semantics carried over:
+     - Header Theme light/dark  → flips the pill's --section-* tokens via
+       the shared aisb-section--{theme} class; the transparent wrapper
+       lets the page background show around the pill in both modes.
+     - Header Border on/off     → the pill's 1px outline (shadow stays,
+       so the pill still reads as elevated with the border off).
+     - Sticky                   → inherited: the wrapper sticks at top 0
+       and its own block padding becomes the floating gap, so the pill
+       hovers below the viewport edge while content scrolls behind it
+       through the transparent wrapper.
+     - Nav position L/C/R       → inherited from the single-row rules.
+   ========================================================================== */
+
+.promptless-header--layout-floating {
+    background-color: transparent;
+    border-bottom: none;
+    padding-top: var(--aisb-section-space-sm, 1rem);
+    padding-bottom: var(--aisb-section-space-sm, 1rem);
+}
+
+.promptless-header--layout-floating .promptless-header__inner {
+    background-color: var(--section-bg);
+    border: 1px solid var(--section-border);
+    border-radius: var(--aisb-section-radius-full, 9999px);
+    padding: 0.5rem var(--aisb-section-space-md, 1.5rem);
+    box-shadow: var(--aisb-section-shadow-sm, 0 1px 2px 0 rgba(0, 0, 0, 0.05));
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+/* Border setting maps to the pill outline. The wrapper's own border-bottom
+   is already suppressed above, so the generic --no-border rule is a no-op
+   here; this is the rule that actually responds to the toggle. */
+.promptless-header--layout-floating.promptless-header--no-border .promptless-header__inner {
+    border-color: transparent;
+}
+
+/* Mobile drawer gutter alignment (fixed 640px tier, NOT the menu
+   breakpoint): the drawer card (see header-breakpoint.css) insets from
+   the viewport by the same two-tier gutter as .promptless-container, so
+   its edges track the pill's edges at every width. This is the ≤640px
+   tier where the container switches from space-lg to space-md; it lives
+   here (not header-breakpoint.css) because 640 is anchored to the
+   container scheme and must NOT move with the Customizer "Mobile Menu
+   Breakpoint" setting. It retunes a custom property (consumed by the
+   breakpoint file's left/right declarations) rather than declaring
+   left/right directly, because an equal-specificity declaration here
+   would lose to the later-loaded breakpoint stylesheet — caught in live
+   verification at 320px. Custom-property overrides win independent of
+   stylesheet load order. */
+@media (max-width: 640px) {
+    .promptless-header--layout-floating .promptless-header__nav-wrapper {
+        --promptless-floating-drawer-gutter: var(--aisb-section-space-md, 1.5rem);
+    }
+}

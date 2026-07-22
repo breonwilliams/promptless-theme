@@ -54,7 +54,11 @@
                 <?php promptless_header_menu_cta( 'bottom' ); ?>
             </div>
         <?php else : ?>
-            <!-- Default: Single-row layout -->
+            <!-- Default + Floating: Single-row layout. The floating variant
+                 intentionally shares this DOM — it is a CSS-only pill
+                 treatment of the single row (see header.css, LAYOUT
+                 VARIANT: Floating), so nav position, CTAs, cart, and the
+                 mobile drawer all behave identically to default. -->
             <div class="promptless-header__inner">
                 <!-- Logo / Site Title -->
                 <div class="promptless-header__brand" data-home-url="<?php echo esc_url( home_url( '/' ) ); ?>">

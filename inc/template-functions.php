@@ -690,7 +690,13 @@ function promptless_get_nav_position() {
 /**
  * Get the header layout setting
  *
- * @return string 'default' or 'stacked'
+ * 'default'  — single row, full-width bar.
+ * 'stacked'  — two rows (logo/actions row + detached nav bar).
+ * 'floating' — the single-row DOM restyled as a rounded pill detached
+ *              from the viewport edges (CSS-only treatment; shares every
+ *              default-layout behavior including the mobile drawer).
+ *
+ * @return string 'default', 'stacked', or 'floating'
  */
 function promptless_get_header_layout() {
     return get_theme_mod( 'promptless_header_layout', 'default' );

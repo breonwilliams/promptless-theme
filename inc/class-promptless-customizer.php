@@ -204,12 +204,13 @@ class Promptless_Customizer {
             'promptless_header_layout',
             array(
                 'label'       => __( 'Header Layout', 'promptless' ),
-                'description' => __( 'Choose the header layout style.', 'promptless' ),
+                'description' => __( 'Choose the header layout style. Floating renders the single-row header as a rounded pill that detaches from the viewport edges.', 'promptless' ),
                 'section'     => 'promptless_header_layout_section',
                 'type'        => 'select',
                 'choices'     => array(
-                    'default' => __( 'Default (Single Row)', 'promptless' ),
-                    'stacked' => __( 'Stacked (Two Rows)', 'promptless' ),
+                    'default'  => __( 'Default (Single Row)', 'promptless' ),
+                    'stacked'  => __( 'Stacked (Two Rows)', 'promptless' ),
+                    'floating' => __( 'Floating (Rounded Pill)', 'promptless' ),
                 ),
             )
         );
@@ -1335,7 +1336,7 @@ class Promptless_Customizer {
      * @return string Sanitized value.
      */
     public function sanitize_header_layout( $value ) {
-        $valid = array( 'default', 'stacked' );
+        $valid = array( 'default', 'stacked', 'floating' );
 
         if ( in_array( $value, $valid, true ) ) {
             return $value;

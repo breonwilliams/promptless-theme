@@ -940,3 +940,63 @@
         align-items: flex-start;
     }
 }
+
+/* ==========================================================================
+   FLOATING LAYOUT (pill) — breakpoint-dependent rules
+
+   Same policy as the empty-actions-slot block above: split-header-
+   breakpoint.js OVERWRITES this file when run, so new breakpoint rules
+   are authored here by hand (do NOT run the split script). Keyed to the
+   768/767 menu-collapse boundary so the Customizer "Mobile Menu
+   Breakpoint" override rewrites them automatically.
+
+   Non-breakpoint floating rules live in header.css (LAYOUT VARIANT:
+   Floating section), including the fixed ≤640px drawer-gutter tier.
+   ========================================================================== */
+@media (min-width: 768px) {
+    /* Empty-actions collapse — identical DOM and rationale as the
+       --layout-default twin above: floating renders the same single-row
+       markup, so a right-aligned nav with no desktop actions needs the
+       same slot collapse to sit flush with the pill's inner edge. */
+    .promptless-header--layout-floating.promptless-header--no-actions.promptless-header--nav-right .promptless-header__inner > .promptless-header__actions {
+        display: none;
+    }
+
+    .promptless-header--layout-floating.promptless-header--no-actions.promptless-header--nav-right .promptless-header__nav-list {
+        margin-right: -0.75rem;
+    }
+}
+
+@media (max-width: 767px) {
+    /* The drawer becomes a detached rounded card under the pill. The
+       default full-width flush drawer reads wrong against a bar that
+       doesn't touch the viewport edges, so the card insets by the same
+       gutter as the pill's container (space-lg tier here; the ≤640px
+       space-md tier lives in header.css because it must not move with
+       the menu-breakpoint setting). Open/close mechanics (max-height,
+       visibility, scroll) are inherited untouched from the base
+       .promptless-header__nav-wrapper rules above. */
+    .promptless-header--layout-floating .promptless-header__nav-wrapper {
+        /* Gutter via custom property so header.css's fixed 640px tier can
+           retune it to space-md without a load-order fight — see the
+           matching comment in header.css. */
+        left: var(--promptless-floating-drawer-gutter, var(--aisb-section-space-lg, 2rem));
+        right: var(--promptless-floating-drawer-gutter, var(--aisb-section-space-lg, 2rem));
+        border: 1px solid var(--section-border);
+        border-radius: var(--aisb-section-radius-card, 8px);
+        box-shadow: var(--aisb-section-shadow-md, 0 4px 6px -1px rgba(0, 0, 0, 0.1));
+    }
+
+    /* Border toggle parity with the pill: border off keeps the shadow. */
+    .promptless-header--layout-floating.promptless-header--no-border .promptless-header__nav-wrapper {
+        border-color: transparent;
+    }
+
+    /* Small gap between pill and open drawer card (the base rule anchors
+       the drawer flush to the header's bottom edge; the floating wrapper's
+       bottom padding already provides part of the gap, so this just tucks
+       the card up to sit consistently below the pill). */
+    .promptless-header--layout-floating .promptless-header__nav-wrapper {
+        top: calc(100% - var(--aisb-section-space-sm, 1rem) + 0.5rem);
+    }
+}
