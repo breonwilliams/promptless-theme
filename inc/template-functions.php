@@ -703,6 +703,105 @@ function promptless_get_header_layout() {
 }
 
 /**
+ * Should the floating header overlay the first section on this request?
+ *
+ * The overlay mode (Customizer: "Float Over First Section") pulls the
+ * page content up underneath the floating pill so it hovers over the
+ * first section — the modern island-nav pattern. Because the theme can
+ * introspect what a page opens with, eligibility is AUTOMATIC policy
+ * rather than a per-page-type settings surface (contrast: Astra ships
+ * five disable toggles because it cannot know):
+ *
+ *   1. Setting on + layout is 'floating'. Overlay is meaningless for
+ *      default/stacked bars (they need their own band).
+ *   2. Singular content whose sections render FULL-WIDTH: `_aisb_sections`
+ *      non-empty and `_aisb_display_mode` fullwidth (empty meta defaults
+ *      to fullwidth — mirrors the plugin's TemplateHandler). Boxed
+ *      contexts (archives, search, 404, blog, Woo, shortcode-mode pages)
+ *      open with a title on the page background where an overlay always
+ *      reads broken — they keep today's rendering.
+ *   3. Breadcrumbs suppress overlay (founder decision 2026-07-24): the
+ *      trail lives in the band between header and content that overlay
+ *      removes, and breadcrumb pages are interior pages where the
+ *      composition matters least. promptless_show_breadcrumbs() is the
+ *      single source of truth, so the two features can never disagree.
+ *
+ * Canvas mode never reaches this code (it skips get_header()). The
+ * chrome offset itself is CSS: the header wrapper pulls following
+ * content up by --promptless-header-height (measured by navigation.js,
+ * with a static fallback) and the first section's padding compensates —
+ * see header.css "overlay mode" and the same-named test-matrix section.
+ *
+ * Memoized per request: called from header classes, body_class, and the
+ * asset layer; the answer cannot change mid-request.
+ *
+ * @since 1.3.0 (overlay)
+ * @return bool
+ */
+function promptless_is_header_overlay_active() {
+    static $active = null;
+    if ( null !== $active ) {
+        return $active;
+    }
+
+    if ( 'floating' !== promptless_get_header_layout() ) {
+        return $active = false;
+    }
+    if ( ! get_theme_mod( 'promptless_header_overlay', false ) ) {
+        return $active = false;
+    }
+    if ( ! is_singular() ) {
+        return $active = false;
+    }
+
+    $post_id = get_the_ID();
+    if ( ! $post_id ) {
+        return $active = false;
+    }
+
+    // Full-width sections page? (Mirrors the plugin's TemplateHandler
+    // exactly: builder enabled + sections present + display mode
+    // fullwidth, empty mode meta = fullwidth. The _aisb_enabled check
+    // matters: leftover sections meta WITHOUT the enabled flag renders
+    // the normal boxed template — title-first, where overlay must not
+    // engage.)
+    if ( empty( get_post_meta( $post_id, '_aisb_enabled', true ) ) ) {
+        return $active = false;
+    }
+    $sections = get_post_meta( $post_id, '_aisb_sections', true );
+    if ( empty( $sections ) ) {
+        return $active = false;
+    }
+    $display_mode = get_post_meta( $post_id, '_aisb_display_mode', true );
+    if ( ! empty( $display_mode ) && 'fullwidth' !== $display_mode ) {
+        return $active = false;
+    }
+
+    // Breadcrumb trail needs the band the overlay removes.
+    if ( function_exists( 'promptless_show_breadcrumbs' ) && promptless_show_breadcrumbs() ) {
+        return $active = false;
+    }
+
+    return $active = true;
+}
+
+/**
+ * Body class for overlay-active requests. The first-section padding
+ * compensation keys off the body (the header class can't reach the
+ * section in CSS).
+ *
+ * @param array $classes Body classes.
+ * @return array
+ */
+function promptless_header_overlay_body_class( $classes ) {
+    if ( promptless_is_header_overlay_active() ) {
+        $classes[] = 'promptless-has-header-overlay';
+    }
+    return $classes;
+}
+add_filter( 'body_class', 'promptless_header_overlay_body_class' );
+
+/**
  * Check if header border should be displayed
  *
  * @return bool True if header border is enabled.
@@ -739,6 +838,11 @@ function promptless_get_header_classes() {
     // Navigation position applies to both layouts
     $nav_position = promptless_get_nav_position();
     $classes[]    = 'promptless-header--nav-' . esc_attr( $nav_position );
+
+    // Floating overlay (per-request eligibility — see the function docs).
+    if ( promptless_is_header_overlay_active() ) {
+        $classes[] = 'promptless-header--overlay';
+    }
 
     // No desktop-visible actions (no cart, no bar CTA) → let CSS collapse the
     // otherwise-empty actions slot so a right-aligned nav can sit flush with

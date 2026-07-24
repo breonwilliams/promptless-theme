@@ -743,3 +743,42 @@
         initNavigation();
     }
 })();
+
+/**
+ * Floating-overlay height sync.
+ *
+ * When the floating header overlays the first section (see header.css
+ * "FLOATING OVERLAY MODE"), the negative pull-under margin and the first
+ * section's compensating padding both consume --promptless-header-height.
+ * A hard-coded value would drift with fonts, settings, and viewport width
+ * (the pill wraps on narrow screens), so the real rendered height is
+ * observed and published as the custom property. Runs only when an
+ * overlay header exists; everything else keeps the static CSS fallback.
+ *
+ * Enqueued in the footer, so the DOM is parseable at execution time.
+ */
+(function() {
+    'use strict';
+
+    var header = document.querySelector('.promptless-header--overlay');
+    if (!header) {
+        return;
+    }
+
+    var setHeight = function() {
+        document.documentElement.style.setProperty(
+            '--promptless-header-height',
+            header.offsetHeight + 'px'
+        );
+    };
+
+    setHeight();
+
+    if ('ResizeObserver' in window) {
+        new ResizeObserver(setHeight).observe(header);
+    } else {
+        // Ancient-browser fallback: viewport resize is the only realistic
+        // way the header's height changes after load.
+        window.addEventListener('resize', setHeight);
+    }
+})();

@@ -216,6 +216,38 @@ class Promptless_Customizer {
         );
 
         // =============================================
+        // Floating Overlay (floating layout only)
+        // =============================================
+        // Opt-in: the pill floats OVER the page's first section instead of
+        // sitting in its own band above it (the modern island-nav pattern).
+        // Default OFF so existing sites see zero layout change on update.
+        // Eligibility is decided per-request by
+        // promptless_is_header_overlay_active() — full-width section pages
+        // only, auto-suppressed when breadcrumbs render (see that function
+        // for the policy rationale). The pill's own surface guarantees
+        // contrast over any first section, so no transparent-state colors
+        // or logo variants are needed (founder decision 2026-07-24:
+        // Header Theme stays authoritative; no auto-match).
+        $wp_customize->add_setting(
+            'promptless_header_overlay',
+            array(
+                'default'           => false,
+                'sanitize_callback' => array( $this, 'sanitize_checkbox' ),
+                'transport'         => 'refresh',
+            )
+        );
+
+        $wp_customize->add_control(
+            'promptless_header_overlay',
+            array(
+                'label'       => __( 'Float Over First Section', 'promptless' ),
+                'description' => __( 'Floating layout only. The pill overlays the top of the page\'s first section instead of sitting above it. Applies on full-width section pages; pages that show breadcrumbs keep the standard placement automatically.', 'promptless' ),
+                'section'     => 'promptless_header_layout_section',
+                'type'        => 'checkbox',
+            )
+        );
+
+        // =============================================
         // Header Theme Variant
         // =============================================
         $wp_customize->add_setting(

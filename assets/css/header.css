@@ -1754,3 +1754,65 @@ body.woocommerce-checkout .promptless-header__mini-cart .promptless-cart-item__r
         --promptless-floating-drawer-gutter: var(--aisb-section-space-md, 1.5rem);
     }
 }
+
+/* ==========================================================================
+   FLOATING OVERLAY MODE (opt-in — Customizer "Float Over First Section")
+
+   The pill floats OVER the first section instead of sitting in its own
+   band above it. Mechanic: NEGATIVE BOTTOM MARGIN equal to the header's
+   rendered height — the wrapper keeps its place in flow (so sticky
+   re-pinning, admin-bar offsets, topbar stacking, and drawer mechanics
+   all survive byte-identical), while following content is pulled up
+   underneath it. No position:fixed, no JS scroll listeners.
+
+   --promptless-header-height is measured by navigation.js (ResizeObserver
+   on the header; fonts/settings make a hard-coded calc fragile — the
+   Kadence lesson). The 5.5rem fallback ≈ pill (~56px) + wrapper padding
+   (2 × space-sm) and only matters no-JS; because the compensation below
+   consumes the SAME variable, header and section stay consistent even
+   when the fallback is a few px off.
+
+   Eligibility is server-side (promptless_is_header_overlay_active():
+   floating layout + full-width section pages + no breadcrumbs) — these
+   selectors only ever match when the composition is known-correct.
+
+   Contrast needs nothing here: the pill carries its own surface, border,
+   and shadow, so it reads correctly over dark and light first sections
+   alike — the reason this pattern needs no transparent-state logo or
+   color forks (see docs/FLOATING_HEADER_OVERLAY.md).
+   ========================================================================== */
+
+.promptless-header--layout-floating.promptless-header--overlay {
+    margin-bottom: calc(-1 * var(--promptless-header-height, 5.5rem));
+}
+
+/* Non-sticky overlay still needs a stacking context above the section it
+   floats over. Scoped with :not() so it can never override the sticky
+   rule's position (sticky already carries z-index 100). */
+.promptless-header--overlay:not(.promptless-header--sticky) {
+    position: relative;
+    z-index: 100;
+}
+
+/* Anchor links must not land under the floating pill (2026 best-practice
+   item that also fixes plain sticky pages that opt into overlay). */
+html:has(.promptless-header--overlay) {
+    scroll-padding-top: calc(var(--promptless-header-height, 5.5rem) + var(--aisb-section-space-sm, 1rem));
+}
+
+/* First-section compensation is DELEGATED TO THE PLUGIN via the chrome
+   offset contract: the theme publishes one custom property and AISB's
+   components/chrome-offset.css decides how each section family absorbs
+   it — the knowledge of which variants carry the standard band and
+   which are full-bleed (e.g. .aisb-hero--split-screen zeroes its band
+   and pads its columns internally) lives with the sections, not here.
+   A theme-side padding override was structurally wrong: CSS cannot
+   express "beat the base band rule but lose to a variant's zero-band
+   rule" (both are one-class selectors), so it double-padded split-screen
+   heroes (founder-reported 2026-07-24). Requires Promptless WP ≥ 1.5.2;
+   with an older plugin the overlay still renders, but tall headers may
+   sit tight against banded first-section content (~8px at defaults) —
+   documented in docs/FLOATING_HEADER_OVERLAY.md. */
+body.promptless-has-header-overlay {
+    --aisb-chrome-offset-top: var(--promptless-header-height, 5.5rem);
+}
