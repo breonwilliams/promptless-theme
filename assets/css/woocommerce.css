@@ -2173,6 +2173,32 @@ body.woocommerce-page .aisb-section--dark div.product .woocommerce-tabs ul.tabs 
     border-bottom-color: var(--wc-link);
 }
 
+/* Small viewports: the flex tab row had no mobile handling, so longer labels
+ * ("Additional information") wrapped to two lines and the active underline
+ * misaligned against the row's border (kitchen-sink pressure test,
+ * 2026-07-25). Same treatment as the design system's scrollable tab rows:
+ * one line, horizontal swipe, hidden scrollbar. */
+@media (max-width: 767px) {
+    .woocommerce div.product .woocommerce-tabs ul.tabs {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+
+    .woocommerce div.product .woocommerce-tabs ul.tabs::-webkit-scrollbar {
+        display: none;
+    }
+
+    .woocommerce div.product .woocommerce-tabs ul.tabs li {
+        flex: 0 0 auto;
+    }
+
+    .woocommerce div.product .woocommerce-tabs ul.tabs li a {
+        white-space: nowrap;
+    }
+}
+
 .woocommerce div.product .woocommerce-tabs .panel {
     padding: var(--aisb-section-space-md, 1.5rem) 0;
     color: var(--wc-text);

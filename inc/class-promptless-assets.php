@@ -39,13 +39,29 @@ class Promptless_Assets {
     /**
      * Enqueue stylesheets
      */
+    /**
+     * Cache-busting asset version: theme version + the file's own mtime.
+     *
+     * A static ?ver=THEME_VERSION means an updated stylesheet keeps an
+     * identical URL until the theme version bumps, so returning browsers
+     * serve their stale cached copy of a file that is new on disk
+     * (kitchen-sink pressure test, 2026-07-25). Appending the file mtime
+     * mints a new URL the moment the file changes, with zero config.
+     *
+     * @param string $relative Path relative to the theme root, e.g. '/assets/css/header.min.css'.
+     * @return string Version string for wp_enqueue_style/script.
+     */
+    private function asset_version( $relative ) {
+        return PROMPTLESS_THEME_VERSION . '.' . (int) @filemtime( PROMPTLESS_THEME_DIR . $relative );
+    }
+
     public function enqueue_styles() {
         // Main theme stylesheet (style.css with theme header and base reset)
         wp_enqueue_style(
             'promptless-theme-style',
             get_stylesheet_uri(),
             array(),
-            PROMPTLESS_THEME_VERSION
+            $this->asset_version( '/style.css' )
         );
 
         // Header styles (minified for PageSpeed optimization)
@@ -53,7 +69,7 @@ class Promptless_Assets {
             'promptless-theme-header',
             PROMPTLESS_THEME_URI . '/assets/css/header.min.css',
             array( 'promptless-theme-style' ),
-            PROMPTLESS_THEME_VERSION
+            $this->asset_version( '/assets/css/header.min.css' )
         );
 
         // Breakpoint-dependent header rules (Mobile Menu Breakpoint customizer).
@@ -84,7 +100,7 @@ class Promptless_Assets {
                 'promptless-theme-header-breakpoint',
                 PROMPTLESS_THEME_URI . '/assets/css/header-breakpoint.min.css',
                 array( 'promptless-theme-header' ),
-                PROMPTLESS_THEME_VERSION
+                $this->asset_version( '/assets/css/header-breakpoint.min.css' )
             );
         }
 
@@ -93,7 +109,7 @@ class Promptless_Assets {
             'promptless-theme-footer',
             PROMPTLESS_THEME_URI . '/assets/css/footer.min.css',
             array( 'promptless-theme-style' ),
-            PROMPTLESS_THEME_VERSION
+            $this->asset_version( '/assets/css/footer.min.css' )
         );
 
         // Archive and content styles - only load on blog/archive pages
@@ -104,7 +120,7 @@ class Promptless_Assets {
                 'promptless-theme-archive',
                 PROMPTLESS_THEME_URI . '/assets/css/archive.min.css',
                 array( 'promptless-theme-style' ),
-                PROMPTLESS_THEME_VERSION
+                $this->asset_version( '/assets/css/archive.min.css' )
             );
         }
 
@@ -115,7 +131,7 @@ class Promptless_Assets {
                 'promptless-theme-woocommerce',
                 PROMPTLESS_THEME_URI . '/assets/css/woocommerce.min.css',
                 array( 'promptless-theme-style', 'woocommerce-general' ),
-                PROMPTLESS_THEME_VERSION
+                $this->asset_version( '/assets/css/woocommerce.min.css' )
             );
         }
 
@@ -129,7 +145,7 @@ class Promptless_Assets {
                 'promptless-theme-breadcrumbs',
                 PROMPTLESS_THEME_URI . '/assets/css/breadcrumbs.min.css',
                 array( 'promptless-theme-style' ),
-                PROMPTLESS_THEME_VERSION
+                $this->asset_version( '/assets/css/breadcrumbs.min.css' )
             );
         }
 
@@ -142,7 +158,7 @@ class Promptless_Assets {
                 'promptless-theme-announcement-bar',
                 PROMPTLESS_THEME_URI . '/assets/css/announcement-bar.css',
                 array( 'promptless-theme-style' ),
-                PROMPTLESS_THEME_VERSION
+                $this->asset_version( '/assets/css/announcement-bar.css' )
             );
         }
     }
@@ -156,7 +172,7 @@ class Promptless_Assets {
             'promptless-theme-navigation',
             PROMPTLESS_THEME_URI . '/assets/js/navigation.min.js',
             array(),
-            PROMPTLESS_THEME_VERSION,
+            $this->asset_version( '/assets/js/navigation.min.js' ),
             true
         );
 
@@ -216,7 +232,7 @@ JS;
                 'promptless-theme-announcement-bar',
                 PROMPTLESS_THEME_URI . '/assets/js/announcement-bar.js',
                 array(),
-                PROMPTLESS_THEME_VERSION,
+                $this->asset_version( '/assets/js/announcement-bar.js' ),
                 true
             );
         }
@@ -244,7 +260,7 @@ JS;
             'promptless-theme-customizer-preview',
             PROMPTLESS_THEME_URI . '/assets/js/customizer-preview.js',
             array( 'customize-preview', 'jquery' ),
-            PROMPTLESS_THEME_VERSION,
+            $this->asset_version( '/assets/js/customizer-preview.js' ),
             true
         );
     }
