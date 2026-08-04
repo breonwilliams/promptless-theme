@@ -2116,16 +2116,13 @@ function promptless_search_overlay() {
 	<div id="promptless-search-overlay" class="promptless-search-overlay" hidden>
 		<div class="promptless-search-overlay__backdrop" data-search-close></div>
 		<div class="promptless-search-overlay__panel" role="dialog" aria-modal="true" aria-label="<?php esc_attr_e( 'Search this site', 'promptless' ); ?>">
-			<button type="button" class="promptless-search-overlay__close" data-search-close aria-label="<?php esc_attr_e( 'Close search', 'promptless' ); ?>">
-				<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-			</button>
 			<form role="search" method="get" action="<?php echo esc_url( home_url( '/' ) ); ?>" class="promptless-search-overlay__form">
 				<?php promptless_search_icon(); ?>
 				<input
 					type="search"
 					name="s"
 					class="promptless-search-overlay__input"
-					placeholder="<?php esc_attr_e( 'Search\u2026', 'promptless' ); ?>"
+					placeholder="<?php esc_attr_e( 'Search…', 'promptless' ); ?>"
 					autocomplete="off"
 					role="combobox"
 					aria-expanded="false"
@@ -2133,6 +2130,11 @@ function promptless_search_overlay() {
 					aria-autocomplete="list"
 				/>
 				<button type="submit" class="screen-reader-text"><?php esc_html_e( 'Search', 'promptless' ); ?></button>
+				<?php // Close lives IN the flex row: align-items centers it against
+				      // the input pixel-perfectly with zero positioning math. ?>
+				<button type="button" class="promptless-search-overlay__close" data-search-close aria-label="<?php esc_attr_e( 'Close search', 'promptless' ); ?>">
+					<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+				</button>
 			</form>
 			<div class="promptless-search-overlay__status screen-reader-text" role="status" aria-live="polite"></div>
 			<ul id="promptless-search-results" class="promptless-search-overlay__results" role="listbox" aria-label="<?php esc_attr_e( 'Search results', 'promptless' ); ?>" hidden></ul>
@@ -2140,7 +2142,7 @@ function promptless_search_overlay() {
 				<p><?php esc_html_e( 'No results found. Try a different word, or start from a main page:', 'promptless' ); ?></p>
 			</div>
 			<div class="promptless-search-overlay__footer" hidden>
-				<a class="promptless-search-overlay__view-all" href="#"><?php esc_html_e( 'View all results \u2192', 'promptless' ); ?></a>
+				<a class="promptless-search-overlay__view-all" href="#"><?php esc_html_e( 'View all results →', 'promptless' ); ?></a>
 			</div>
 		</div>
 	</div>

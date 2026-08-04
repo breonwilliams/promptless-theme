@@ -68,10 +68,7 @@ html.promptless-search-open body {
 }
 
 .promptless-search-overlay__close {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    z-index: 2;
+    flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -97,7 +94,6 @@ html.promptless-search-open body {
     align-items: center;
     gap: var(--aisb-section-space-sm, 12px);
     padding: var(--aisb-section-space-md, 16px) var(--aisb-section-space-lg, 24px);
-    padding-right: 60px; /* Clear the close button */
     border-bottom: 1px solid var(--aisb-color-border, #e5e7eb);
 }
 
@@ -123,9 +119,15 @@ html.promptless-search-open body {
     opacity: 1;
 }
 
-/* WebKit adds its own clear/decoration chrome to type=search */
-.promptless-search-overlay__input::-webkit-search-decoration {
+/* WebKit adds its own clear/decoration chrome to type=search - hide ALL
+   of it: the native blue clear X rendered beside our close button and
+   read as a duplicate control (founder screenshot, 2026-08-04). */
+.promptless-search-overlay__input::-webkit-search-decoration,
+.promptless-search-overlay__input::-webkit-search-cancel-button,
+.promptless-search-overlay__input::-webkit-search-results-button,
+.promptless-search-overlay__input::-webkit-search-results-decoration {
     -webkit-appearance: none;
+    display: none;
 }
 
 /* Results */
