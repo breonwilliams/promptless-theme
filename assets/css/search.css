@@ -20,6 +20,14 @@ html.promptless-search-open body {
     overflow: hidden;
 }
 
+/* CRITICAL: the [hidden] attribute's UA display:none loses to any author
+   display value - without this rule the closed overlay would sit as an
+   invisible full-viewport layer at z-index 100000 and swallow every click
+   on the page (founder-caught on the live customizer test, 2026-08-04). */
+.promptless-search-overlay[hidden] {
+    display: none;
+}
+
 .promptless-search-overlay {
     position: fixed;
     inset: 0;
