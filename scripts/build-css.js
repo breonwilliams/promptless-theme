@@ -20,7 +20,8 @@ const cssFiles = [
     'assets/css/footer.css',
     'assets/css/archive.css',
     'assets/css/woocommerce.css',
-    'assets/css/breadcrumbs.css'
+    'assets/css/breadcrumbs.css',
+    'assets/css/search.css'
 ];
 
 const themeRoot = path.resolve(__dirname, '..');

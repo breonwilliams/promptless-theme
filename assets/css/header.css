@@ -669,7 +669,11 @@
     position: relative;
 }
 
-/* Cart Toggle Button & Link - shared styles */
+/* Cart Toggle Button & Link - shared styles.
+   The SEARCH toggle deliberately shares every rule in this family
+   (docs/SEARCH_DESIGN.md): the actions slot reads as one set of
+   controls - same size, hover, focus, and light/dark treatment. */
+.promptless-header__search-toggle,
 .promptless-header__cart-toggle,
 .promptless-header__cart-link {
     display: flex;
@@ -687,12 +691,26 @@
     text-decoration: none;
 }
 
+.promptless-header__search-toggle:hover,
+.promptless-header__search-toggle:focus,
 .promptless-header__cart-toggle:hover,
 .promptless-header__cart-toggle:focus,
 .promptless-header__cart-link:hover,
 .promptless-header__cart-link:focus {
     color: var(--section-primary);
     text-decoration: none;
+}
+
+/* Labeled search toggle: icon + "Search" text (opt-in setting) */
+.promptless-header__search-toggle--labeled {
+    width: auto;
+    gap: 6px;
+    padding: 0 10px;
+}
+
+.promptless-header__search-label {
+    font-size: var(--aisb-section-text-sm, 0.875rem);
+    font-weight: 500;
 }
 
 /* Cart Icon */
@@ -748,13 +766,17 @@
    not an anchor element and doesn't get [href] specificity overrides
    ========================================================================== */
 
-/* Light mode - cart toggle hover/focus */
+/* Light mode - cart + search toggle hover/focus */
+.promptless-header.aisb-section--light .promptless-header__search-toggle:hover,
+.promptless-header.aisb-section--light .promptless-header__search-toggle:focus,
 .promptless-header.aisb-section--light .promptless-header__cart-toggle:hover,
 .promptless-header.aisb-section--light .promptless-header__cart-toggle:focus {
     color: var(--aisb-smart-light-section-link, var(--section-primary));
 }
 
-/* Dark mode - cart toggle hover/focus */
+/* Dark mode - cart + search toggle hover/focus */
+.promptless-header.aisb-section--dark .promptless-header__search-toggle:hover,
+.promptless-header.aisb-section--dark .promptless-header__search-toggle:focus,
 .promptless-header.aisb-section--dark .promptless-header__cart-toggle:hover,
 .promptless-header.aisb-section--dark .promptless-header__cart-toggle:focus {
     color: var(--aisb-smart-dark-section-link, var(--section-primary));

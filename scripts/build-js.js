@@ -15,7 +15,8 @@ const { minify } = require('terser');
 // JavaScript files to minify (relative to theme root)
 const jsFiles = [
     'assets/js/navigation.js',
-    'assets/js/customizer-preview.js'
+    'assets/js/customizer-preview.js',
+    'assets/js/search-overlay.js'
 ];
 
 const themeRoot = path.resolve(__dirname, '..');

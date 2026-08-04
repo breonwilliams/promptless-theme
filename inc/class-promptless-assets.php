@@ -105,6 +105,17 @@ class Promptless_Assets {
         }
 
         // Footer styles (minified for PageSpeed optimization)
+        // Search overlay styles - only when header search is enabled
+        // (customizer toggle, default off; see docs/SEARCH_DESIGN.md).
+        if ( function_exists( 'promptless_has_header_search' ) && promptless_has_header_search() ) {
+            wp_enqueue_style(
+                'promptless-theme-search',
+                PROMPTLESS_THEME_URI . '/assets/css/search.min.css',
+                array(),
+                $this->asset_version( '/assets/css/search.min.css' )
+            );
+        }
+
         wp_enqueue_style(
             'promptless-theme-footer',
             PROMPTLESS_THEME_URI . '/assets/css/footer.min.css',
@@ -167,6 +178,33 @@ class Promptless_Assets {
      * Enqueue scripts
      */
     public function enqueue_scripts() {
+        // Search overlay behavior - only when header search is enabled.
+        if ( function_exists( 'promptless_has_header_search' ) && promptless_has_header_search() ) {
+            wp_enqueue_script(
+                'promptless-theme-search-overlay',
+                PROMPTLESS_THEME_URI . '/assets/js/search-overlay.min.js',
+                array(),
+                $this->asset_version( '/assets/js/search-overlay.min.js' ),
+                true
+            );
+            wp_localize_script(
+                'promptless-theme-search-overlay',
+                'promptlessSearch',
+                array(
+                    'restUrl'   => esc_url_raw( rest_url( 'wp/v2/search' ) ),
+                    'searchUrl' => esc_url_raw( add_query_arg( 's', '', home_url( '/' ) ) ),
+                    'perPage'   => 6,
+                    'minChars'  => 2,
+                    'strings'   => array(
+                        'one'  => __( '1 result', 'promptless' ),
+                        /* translators: %d is the number of search results */
+                        'many' => __( '%d results', 'promptless' ),
+                        'none' => __( 'No results found.', 'promptless' ),
+                    ),
+                )
+            );
+        }
+
         // Navigation script (mobile menu toggle, mini-cart) - minified for PageSpeed
         wp_enqueue_script(
             'promptless-theme-navigation',

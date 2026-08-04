@@ -1,0 +1,249 @@
+/**
+ * Promptless Search Overlay (docs/SEARCH_DESIGN.md)
+ *
+ * Full-screen search: dark backdrop, light panel card in the top third
+ * (the DocSearch-era convention), instant results below the input.
+ *
+ * Sizing rule (modal finding #12): the fixed inset:0 container tracks the
+ * VISUAL viewport, so `height: 100%` here follows the iOS keyboard -
+ * never size against 100vh.
+ *
+ * Contrast rules (finding #15 discipline): panel surfaces use theme
+ * tokens with light defaults; every text role pairs with the surface it
+ * actually renders on. The backdrop scrim is 0.6 black + blur, and all
+ * panel text sits on the solid card, never on the scrim.
+ */
+
+/* Scroll lock while open */
+html.promptless-search-open,
+html.promptless-search-open body {
+    overflow: hidden;
+}
+
+.promptless-search-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100000; /* Above sticky/floating headers and mega menu */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    padding: max(8vh, 48px) var(--aisb-section-space-md, 16px) var(--aisb-section-space-md, 16px);
+    opacity: 0;
+    transition: opacity 0.18s ease;
+}
+
+.promptless-search-overlay.is-open {
+    opacity: 1;
+}
+
+.promptless-search-overlay__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+    cursor: pointer;
+}
+
+.promptless-search-overlay__panel {
+    position: relative;
+    width: min(680px, 100%);
+    max-height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: var(--aisb-color-background, #ffffff);
+    color: var(--aisb-color-text, #1f2937);
+    border-radius: var(--aisb-section-radius-lg, 12px);
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.35);
+    overflow: hidden;
+}
+
+.promptless-search-overlay__close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: var(--aisb-section-radius-sm, 6px);
+    color: var(--aisb-color-text-muted, #6b7280);
+    cursor: pointer;
+}
+
+.promptless-search-overlay__close:hover,
+.promptless-search-overlay__close:focus-visible {
+    color: var(--aisb-color-text, #1f2937);
+    background: rgba(0, 0, 0, 0.06);
+}
+
+/* Input row */
+.promptless-search-overlay__form {
+    display: flex;
+    align-items: center;
+    gap: var(--aisb-section-space-sm, 12px);
+    padding: var(--aisb-section-space-md, 16px) var(--aisb-section-space-lg, 24px);
+    padding-right: 60px; /* Clear the close button */
+    border-bottom: 1px solid var(--aisb-color-border, #e5e7eb);
+}
+
+.promptless-search-overlay__form .promptless-header__search-icon {
+    flex-shrink: 0;
+    color: var(--aisb-color-text-muted, #6b7280);
+}
+
+.promptless-search-overlay__input {
+    flex: 1;
+    min-width: 0;
+    padding: 6px 0;
+    font-family: var(--aisb-section-font-body, inherit);
+    font-size: var(--aisb-section-text-lg, 1.125rem);
+    color: inherit;
+    background: transparent;
+    border: none;
+    outline: none;
+}
+
+.promptless-search-overlay__input::placeholder {
+    color: var(--aisb-color-text-muted, #6b7280);
+    opacity: 1;
+}
+
+/* WebKit adds its own clear/decoration chrome to type=search */
+.promptless-search-overlay__input::-webkit-search-decoration {
+    -webkit-appearance: none;
+}
+
+/* Results */
+.promptless-search-overlay__results {
+    margin: 0;
+    padding: var(--aisb-section-space-xs, 8px);
+    list-style: none;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+.promptless-search-overlay__result a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--aisb-section-space-sm, 12px);
+    padding: 10px var(--aisb-section-space-md, 16px);
+    border-radius: var(--aisb-section-radius-sm, 6px);
+    text-decoration: none;
+    color: inherit;
+}
+
+.promptless-search-overlay__result.is-active a,
+.promptless-search-overlay__result a:hover {
+    background: var(--aisb-color-surface, #f3f4f6);
+}
+
+.promptless-search-overlay__result-title {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: var(--aisb-section-text-base, 1rem);
+}
+
+.promptless-search-overlay__result-type {
+    flex-shrink: 0;
+    padding: 2px 8px;
+    font-size: var(--aisb-section-text-xs, 0.75rem);
+    text-transform: capitalize;
+    color: var(--aisb-color-text-muted, #6b7280);
+    background: var(--aisb-color-surface, #f3f4f6);
+    border-radius: var(--aisb-section-radius-full, 999px);
+}
+
+.promptless-search-overlay__result.is-active .promptless-search-overlay__result-type,
+.promptless-search-overlay__result a:hover .promptless-search-overlay__result-type {
+    background: var(--aisb-color-background, #ffffff);
+}
+
+/* Empty state */
+.promptless-search-overlay__empty {
+    padding: var(--aisb-section-space-lg, 24px);
+    color: var(--aisb-color-text-muted, #6b7280);
+    font-size: var(--aisb-section-text-sm, 0.875rem);
+}
+
+.promptless-search-overlay__empty p {
+    margin: 0;
+}
+
+/* Footer: view all results */
+.promptless-search-overlay__footer {
+    padding: var(--aisb-section-space-sm, 12px) var(--aisb-section-space-lg, 24px);
+    border-top: 1px solid var(--aisb-color-border, #e5e7eb);
+}
+
+.promptless-search-overlay__view-all {
+    font-size: var(--aisb-section-text-sm, 0.875rem);
+    font-weight: 500;
+    text-decoration: none;
+    color: var(--aisb-smart-light-section-link, var(--aisb-color-primary, #4f46e5));
+}
+
+.promptless-search-overlay__view-all:hover,
+.promptless-search-overlay__view-all:focus-visible {
+    text-decoration: underline;
+}
+
+/* Loading shimmer on the input row */
+.promptless-search-overlay.is-loading .promptless-search-overlay__form {
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(0, 0, 0, 0.03) 50%,
+        transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: promptless-search-shimmer 1s linear infinite;
+}
+
+@keyframes promptless-search-shimmer {
+    from { background-position: 200% 0; }
+    to { background-position: -200% 0; }
+}
+
+/* Focus visibility inside the panel */
+.promptless-search-overlay__close:focus-visible,
+.promptless-search-overlay__view-all:focus-visible,
+.promptless-search-overlay__result a:focus-visible {
+    outline: 2px solid var(--aisb-color-primary, #4f46e5);
+    outline-offset: 2px;
+}
+
+/* Mobile: panel becomes a top sheet with safe-area padding */
+@media (max-width: 640px) {
+    .promptless-search-overlay {
+        padding: 0;
+    }
+
+    .promptless-search-overlay__panel {
+        width: 100%;
+        max-height: 100%;
+        border-radius: 0 0 var(--aisb-section-radius-lg, 12px) var(--aisb-section-radius-lg, 12px);
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+}
+
+/* Reduced motion: no fade, no shimmer */
+@media (prefers-reduced-motion: reduce) {
+    .promptless-search-overlay {
+        transition: none;
+    }
+
+    .promptless-search-overlay.is-loading .promptless-search-overlay__form {
+        animation: none;
+        background: none;
+    }
+}

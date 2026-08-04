@@ -1137,6 +1137,56 @@ class Promptless_Customizer {
         );
 
         // =============================================
+        // =============================================
+        // Header Search Settings (docs/SEARCH_DESIGN.md)
+        // =============================================
+        $wp_customize->add_section(
+            'promptless_header_search',
+            array(
+                'title'    => __( 'Search', 'promptless' ),
+                'panel'    => 'promptless_header_panel',
+                'priority' => 39,
+            )
+        );
+
+        $wp_customize->add_setting(
+            'promptless_header_search_enabled',
+            array(
+                'default'           => false,
+                'sanitize_callback' => array( $this, 'sanitize_checkbox' ),
+                'transport'         => 'refresh',
+            )
+        );
+
+        $wp_customize->add_control(
+            'promptless_header_search_enabled',
+            array(
+                'label'       => __( 'Show Search Icon', 'promptless' ),
+                'description' => __( 'Display a search icon in the header that opens a full-screen search overlay with instant results.', 'promptless' ),
+                'section'     => 'promptless_header_search',
+                'type'        => 'checkbox',
+            )
+        );
+
+        $wp_customize->add_setting(
+            'promptless_header_search_show_label',
+            array(
+                'default'           => false,
+                'sanitize_callback' => array( $this, 'sanitize_checkbox' ),
+                'transport'         => 'refresh',
+            )
+        );
+
+        $wp_customize->add_control(
+            'promptless_header_search_show_label',
+            array(
+                'label'       => __( 'Show "Search" Text Label', 'promptless' ),
+                'description' => __( 'Display the word "Search" beside the icon. Recommended for content-heavy sites where search is a primary way people navigate.', 'promptless' ),
+                'section'     => 'promptless_header_search',
+                'type'        => 'checkbox',
+            )
+        );
+
         // WooCommerce Header Cart Settings
         // Only show if WooCommerce is active
         // =============================================

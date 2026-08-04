@@ -2028,3 +2028,122 @@ function promptless_needs_woocommerce_assets() {
 
     return $cache[ $cache_key ] = false;
 }
+
+
+/**
+ * Check if header search should be displayed
+ *
+ * Mirrors promptless_has_header_cart(): a customizer toggle, default OFF.
+ * Search is a header SETTING, not a default - small nav-driven sites never
+ * grow an unused magnifying glass (see docs/SEARCH_DESIGN.md section 1).
+ *
+ * @return bool True if header search is enabled.
+ */
+function promptless_has_header_search() {
+	return (bool) get_theme_mod( 'promptless_header_search_enabled', false );
+}
+
+/**
+ * Whether the search trigger shows a visible "Search" text label.
+ *
+ * Icon-only is the default (actions-slot family consistency with the cart
+ * icon); the visible label is the NN/g-friendly opt-in for search-critical
+ * sites (higher ed, associations).
+ *
+ * @return bool
+ */
+function promptless_header_search_show_label() {
+	return (bool) get_theme_mod( 'promptless_header_search_show_label', false );
+}
+
+/**
+ * Output the header search trigger button.
+ *
+ * Sibling of promptless_header_cart() in the actions slot - same size,
+ * hover, focus, and light/dark treatment via the shared toggle styles in
+ * header.css. Clicking opens the full-screen search overlay (rendered
+ * once in wp_footer by promptless_search_overlay()).
+ */
+function promptless_header_search() {
+	if ( ! promptless_has_header_search() ) {
+		return;
+	}
+	?>
+	<button
+		type="button"
+		class="promptless-header__search-toggle<?php echo promptless_header_search_show_label() ? ' promptless-header__search-toggle--labeled' : ''; ?>"
+		aria-label="<?php esc_attr_e( 'Search this site', 'promptless' ); ?>"
+		aria-haspopup="dialog"
+		aria-expanded="false"
+		aria-controls="promptless-search-overlay"
+	>
+		<?php promptless_search_icon(); ?>
+		<?php if ( promptless_header_search_show_label() ) : ?>
+			<span class="promptless-header__search-label"><?php esc_html_e( 'Search', 'promptless' ); ?></span>
+		<?php endif; ?>
+	</button>
+	<?php
+}
+
+/**
+ * Output search (magnifying glass) icon SVG - matches the cart icon's
+ * stroke style and 20px sizing.
+ */
+function promptless_search_icon() {
+	?>
+	<svg class="promptless-header__search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+		<circle cx="11" cy="11" r="8"></circle>
+		<line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+	</svg>
+	<?php
+}
+
+/**
+ * Render the full-screen search overlay once, in the footer.
+ *
+ * Markup contract with assets/js/search-overlay.js and search.css.
+ * The no-JS path degrades honestly: the form is a plain GET to the
+ * site root, so submitting lands on search.php. ARIA follows the APG
+ * combobox pattern; the JS owns aria-expanded / aria-activedescendant.
+ * Sizing rule (modal finding #12): the fixed inset container tracks the
+ * VISUAL viewport - never size against 100vh.
+ */
+function promptless_search_overlay() {
+	if ( ! promptless_has_header_search() ) {
+		return;
+	}
+	?>
+	<div id="promptless-search-overlay" class="promptless-search-overlay" hidden>
+		<div class="promptless-search-overlay__backdrop" data-search-close></div>
+		<div class="promptless-search-overlay__panel" role="dialog" aria-modal="true" aria-label="<?php esc_attr_e( 'Search this site', 'promptless' ); ?>">
+			<button type="button" class="promptless-search-overlay__close" data-search-close aria-label="<?php esc_attr_e( 'Close search', 'promptless' ); ?>">
+				<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+			</button>
+			<form role="search" method="get" action="<?php echo esc_url( home_url( '/' ) ); ?>" class="promptless-search-overlay__form">
+				<?php promptless_search_icon(); ?>
+				<input
+					type="search"
+					name="s"
+					class="promptless-search-overlay__input"
+					placeholder="<?php esc_attr_e( 'Search\u2026', 'promptless' ); ?>"
+					autocomplete="off"
+					role="combobox"
+					aria-expanded="false"
+					aria-controls="promptless-search-results"
+					aria-autocomplete="list"
+				/>
+				<button type="submit" class="screen-reader-text"><?php esc_html_e( 'Search', 'promptless' ); ?></button>
+			</form>
+			<div class="promptless-search-overlay__status screen-reader-text" role="status" aria-live="polite"></div>
+			<ul id="promptless-search-results" class="promptless-search-overlay__results" role="listbox" aria-label="<?php esc_attr_e( 'Search results', 'promptless' ); ?>" hidden></ul>
+			<div class="promptless-search-overlay__empty" hidden>
+				<p><?php esc_html_e( 'No results found. Try a different word, or start from a main page:', 'promptless' ); ?></p>
+			</div>
+			<div class="promptless-search-overlay__footer" hidden>
+				<a class="promptless-search-overlay__view-all" href="#"><?php esc_html_e( 'View all results \u2192', 'promptless' ); ?></a>
+			</div>
+		</div>
+	</div>
+	<?php
+}
+add_action( 'wp_footer', 'promptless_search_overlay' );
