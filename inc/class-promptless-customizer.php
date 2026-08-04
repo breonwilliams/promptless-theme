@@ -328,6 +328,50 @@ class Promptless_Customizer {
         );
 
         // =============================================
+        // Archive & Search Result Card Meta
+        // Feeds the promptless_archive_card_show_date/author filters -
+        // one control governs blog archives AND search results (same
+        // card template), instead of per-context layout variants.
+        // =============================================
+        $wp_customize->add_setting(
+            'promptless_archive_show_date',
+            array(
+                'default'           => true,
+                'sanitize_callback' => array( $this, 'sanitize_checkbox' ),
+                'transport'         => 'refresh',
+            )
+        );
+
+        $wp_customize->add_control(
+            'promptless_archive_show_date',
+            array(
+                'label'       => __( 'Show Date on Post Cards', 'promptless' ),
+                'description' => __( 'Display the publish date on cards in blog archives and search results. Pages never show it.', 'promptless' ),
+                'section'     => 'promptless_content_section',
+                'type'        => 'checkbox',
+            )
+        );
+
+        $wp_customize->add_setting(
+            'promptless_archive_show_author',
+            array(
+                'default'           => true,
+                'sanitize_callback' => array( $this, 'sanitize_checkbox' ),
+                'transport'         => 'refresh',
+            )
+        );
+
+        $wp_customize->add_control(
+            'promptless_archive_show_author',
+            array(
+                'label'       => __( 'Show Author on Post Cards', 'promptless' ),
+                'description' => __( 'Display the author on cards in blog archives and search results. Pages never show it.', 'promptless' ),
+                'section'     => 'promptless_content_section',
+                'type'        => 'checkbox',
+            )
+        );
+
+        // =============================================
         // Content Theme Variant
         // =============================================
         $wp_customize->add_setting(

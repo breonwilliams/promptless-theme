@@ -2149,3 +2149,55 @@ function promptless_search_overlay() {
 	<?php
 }
 add_action( 'wp_footer', 'promptless_search_overlay' );
+
+
+/**
+ * Default visibility rules for the archive-card meta strip.
+ *
+ * Two layers, hooked at priority 5 so companion plugins (PRE per-CPT
+ * overrides at default priority) still get the final word:
+ *
+ *  1. PAGES never show date/author. A page's publish date and author are
+ *     workflow metadata, not visitor information - "by admin, March 2026"
+ *     on a Services page in search results reads as noise (founder-caught
+ *     on the first search-results review, 2026-08-04). Posts and CPTs
+ *     keep meta by default because recency/attribution IS information
+ *     there.
+ *  2. Site-wide customizer toggles (Content section) let the owner hide
+ *     date and/or author everywhere the archive card renders - blog
+ *     archives and search results alike, one control, no per-context
+ *     layout variants.
+ *
+ * @param bool $show    Current visibility.
+ * @param int  $post_id Post being rendered.
+ * @return bool
+ */
+function promptless_archive_card_date_default( $show, $post_id ) {
+	if ( 'page' === get_post_type( $post_id ) ) {
+		return false;
+	}
+	if ( ! get_theme_mod( 'promptless_archive_show_date', true ) ) {
+		return false;
+	}
+	return $show;
+}
+add_filter( 'promptless_archive_card_show_date', 'promptless_archive_card_date_default', 5, 2 );
+
+/**
+ * Author variant of promptless_archive_card_date_default() - same two
+ * layers, same priority-5 placement. See that docblock.
+ *
+ * @param bool $show    Current visibility.
+ * @param int  $post_id Post being rendered.
+ * @return bool
+ */
+function promptless_archive_card_author_default( $show, $post_id ) {
+	if ( 'page' === get_post_type( $post_id ) ) {
+		return false;
+	}
+	if ( ! get_theme_mod( 'promptless_archive_show_author', true ) ) {
+		return false;
+	}
+	return $show;
+}
+add_filter( 'promptless_archive_card_show_author', 'promptless_archive_card_author_default', 5, 2 );
