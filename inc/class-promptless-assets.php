@@ -192,7 +192,11 @@ class Promptless_Assets {
                 'promptlessSearch',
                 array(
                     'restUrl'   => esc_url_raw( rest_url( 'wp/v2/search' ) ),
-                    'searchUrl' => esc_url_raw( add_query_arg( 's', '', home_url( '/' ) ) ),
+                    // NOTE: add_query_arg with an empty value emits '?s' (no '='),
+                    // which broke the view-all URL into '?sdemo' (founder-caught,
+                    // 2026-08-04). The JS builds the final URL via URLSearchParams,
+                    // so this base just needs to be the site root.
+                    'searchUrl' => esc_url_raw( home_url( '/' ) ),
                     'perPage'   => 6,
                     'minChars'  => 2,
                     'strings'   => array(

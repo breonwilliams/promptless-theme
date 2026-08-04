@@ -213,7 +213,17 @@
 		options = [];
 		input.removeAttribute('aria-activedescendant');
 
-		var viewAllUrl = cfg.searchUrl + encodeURIComponent(q);
+		// Build via URL/URLSearchParams rather than string concatenation:
+		// immune to whatever shape the localized base takes ('/', '/?s',
+		// '/?s=') and encodes the query correctly (finding: '?sdemo').
+		var viewAllUrl;
+		try {
+			var u = new URL(cfg.searchUrl || '/', window.location.origin);
+			u.searchParams.set('s', q);
+			viewAllUrl = u.toString();
+		} catch (e) {
+			viewAllUrl = window.location.origin + '/?s=' + encodeURIComponent(q);
+		}
 
 		if (!data.length) {
 			resultsEl.hidden = true;
