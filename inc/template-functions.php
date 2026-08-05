@@ -2116,7 +2116,7 @@ function promptless_search_overlay() {
 	<div id="promptless-search-overlay" class="promptless-search-overlay" hidden>
 		<div class="promptless-search-overlay__backdrop" data-search-close></div>
 		<div class="promptless-search-overlay__panel" role="dialog" aria-modal="true" aria-label="<?php esc_attr_e( 'Search this site', 'promptless' ); ?>">
-			<form role="search" method="get" action="<?php echo esc_url( home_url( '/' ) ); ?>" class="promptless-search-overlay__form">
+			<form role="search" method="get" action="<?php echo esc_url( wp_make_link_relative( home_url( '/' ) ) ); ?>" class="promptless-search-overlay__form">
 				<?php promptless_search_icon(); ?>
 				<input
 					type="search"

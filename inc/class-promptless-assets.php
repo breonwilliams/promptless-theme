@@ -191,12 +191,19 @@ class Promptless_Assets {
                 'promptless-theme-search-overlay',
                 'promptlessSearch',
                 array(
-                    'restUrl'   => esc_url_raw( rest_url( 'wp/v2/search' ) ),
+                    // Root-relative on purpose: an absolute URL bakes the server-side
+					// host into the page, which breaks whenever the page is served
+					// through another origin (Local live links, proxies, staging
+					// clones, CDN fronts) - the phone fetches a host it cannot
+					// reach and search reports "no results" (observed 2026-08-05).
+					// Relative paths always target the origin that served the page;
+					// subdirectory installs keep their path prefix.
+					'restUrl'   => esc_url_raw( wp_make_link_relative( rest_url( 'wp/v2/search' ) ) ),
                     // NOTE: add_query_arg with an empty value emits '?s' (no '='),
                     // which broke the view-all URL into '?sdemo' (founder-caught,
                     // 2026-08-04). The JS builds the final URL via URLSearchParams,
                     // so this base just needs to be the site root.
-                    'searchUrl' => esc_url_raw( home_url( '/' ) ),
+                    'searchUrl' => esc_url_raw( wp_make_link_relative( home_url( '/' ) ) ),
                     'perPage'   => 6,
                     'minChars'  => 2,
                     'strings'   => array(
