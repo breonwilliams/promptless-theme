@@ -72,12 +72,26 @@
 		return overlay && !overlay.hidden;
 	}
 
+	// iOS keyboard: the layout viewport (which position:fixed tracks) does
+	// NOT shrink when the keyboard opens - only window.visualViewport does.
+	// Without this sync the bottom of the results list hides behind the
+	// keyboard on phones (SEARCH_DESIGN.md, finding #12 discipline).
+	function syncViewportHeight() {
+		if (window.visualViewport) {
+			overlay.style.height = window.visualViewport.height + 'px';
+		}
+	}
+
 	function open(trigger) {
 		if (isOpen()) {
 			return;
 		}
 		lastFocus = trigger || document.activeElement;
 		overlay.hidden = false;
+		if (window.visualViewport) {
+			window.visualViewport.addEventListener('resize', syncViewportHeight);
+			syncViewportHeight();
+		}
 		document.documentElement.classList.add('promptless-search-open');
 		document.querySelectorAll('.promptless-header__search-toggle').forEach(function (btn) {
 			btn.setAttribute('aria-expanded', 'true');
@@ -98,6 +112,10 @@
 		}
 		overlay.classList.remove('is-open');
 		overlay.hidden = true;
+		if (window.visualViewport) {
+			window.visualViewport.removeEventListener('resize', syncViewportHeight);
+		}
+		overlay.style.height = '';
 		document.documentElement.classList.remove('promptless-search-open');
 		document.querySelectorAll('.promptless-header__search-toggle').forEach(function (btn) {
 			btn.setAttribute('aria-expanded', 'false');

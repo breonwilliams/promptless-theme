@@ -232,7 +232,14 @@ html.promptless-search-open body {
     outline-offset: 2px;
 }
 
-/* Mobile: panel becomes a top sheet with safe-area padding */
+/* Mobile: search takes over the whole screen as a solid sheet.
+ *
+ * A content-hugging panel floating over the blurred page reads as broken
+ * on a phone (observed on the founder's device, 2026-08-05) - the 2026
+ * mobile convention (DocSearch, GitHub, iOS system search) is a
+ * full-screen takeover: input pinned top, results filling the middle,
+ * "view all" pinned bottom in thumb reach. Desktop keeps the floating
+ * card; this block only owns phones. */
 @media (max-width: 640px) {
     .promptless-search-overlay {
         padding: 0;
@@ -240,9 +247,28 @@ html.promptless-search-open body {
 
     .promptless-search-overlay__panel {
         width: 100%;
-        max-height: 100%;
-        border-radius: 0 0 var(--aisb-section-radius-lg, 12px) var(--aisb-section-radius-lg, 12px);
+        height: 100%;
+        max-height: none;
+        border-radius: 0;
         padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    /* Clear the notch/status bar in standalone contexts. */
+    .promptless-search-overlay__form {
+        padding-top: max(var(--aisb-section-space-md, 16px), env(safe-area-inset-top, 0px));
+    }
+
+    /* Results own the space between input row and footer; min-height: 0
+     * keeps the flex item scrollable instead of overflowing the panel. */
+    .promptless-search-overlay__results {
+        flex: 1 1 auto;
+        min-height: 0;
+    }
+
+    /* With results present the footer pins to the bottom of the sheet -
+     * "View all results" lands in thumb reach. */
+    .promptless-search-overlay__footer {
+        margin-top: auto;
     }
 }
 
