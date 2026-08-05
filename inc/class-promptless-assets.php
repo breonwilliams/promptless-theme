@@ -210,7 +210,8 @@ class Promptless_Assets {
                         'one'  => __( '1 result', 'promptless' ),
                         /* translators: %d is the number of search results */
                         'many' => __( '%d results', 'promptless' ),
-                        'none' => __( 'No results found.', 'promptless' ),
+                        'none'  => __( 'No results found.', 'promptless' ),
+                        'error' => __( 'Instant results are unavailable here. Press Enter to see all matching results.', 'promptless' ),
                     ),
                 )
             );

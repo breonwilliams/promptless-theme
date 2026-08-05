@@ -32,6 +32,7 @@
 	var controller = null;
 	var activeIndex = -1;
 	var options = [];
+	var emptyDefaultText = '';
 
 	function qs(sel, ctx) {
 		return (ctx || document).querySelector(sel);
@@ -47,6 +48,8 @@
 		resultsEl = qs('.promptless-search-overlay__results', overlay);
 		statusEl = qs('.promptless-search-overlay__status', overlay);
 		emptyEl = qs('.promptless-search-overlay__empty', overlay);
+		var emptyP = emptyEl && emptyEl.querySelector('p');
+		emptyDefaultText = emptyP ? emptyP.textContent : '';
 		footerEl = qs('.promptless-search-overlay__footer', overlay);
 		viewAllEl = qs('.promptless-search-overlay__view-all', overlay);
 
@@ -197,7 +200,16 @@
 			'search=' + encodeURIComponent(q) + '&per_page=' + PER_PAGE;
 		fetch(url, { signal: controller.signal })
 			.then(function (r) {
-				return r.ok ? r.json() : [];
+				// A non-2xx is a FAILED request, not an empty result set.
+				// Sites behind HTTP Basic Auth (Local live links, protected
+				// staging) 401 every REST call because the proxy's auth
+				// header reads as a bad Application Password to WordPress
+				// core - reporting that as "no results" hides a working
+				// fallback (observed 2026-08-05).
+				if (!r.ok) {
+					throw new Error('HTTP ' + r.status);
+				}
+				return r.json();
 			})
 			.then(function (data) {
 				overlay.classList.remove('is-loading');
@@ -208,7 +220,7 @@
 					return; // A newer keystroke owns the overlay state.
 				}
 				overlay.classList.remove('is-loading');
-				render(q, []);
+				renderError(q);
 			});
 	}
 
@@ -223,6 +235,32 @@
 		input.removeAttribute('aria-activedescendant');
 		activeIndex = -1;
 		options = [];
+	}
+
+	// Instant results could not be fetched. Say so honestly and hand the
+	// user the path that still works: Enter (form GET) and "view all" both
+	// go to the server-rendered /?s= page, which needs no REST access.
+	function renderError(q) {
+		resultsEl.innerHTML = '';
+		activeIndex = -1;
+		options = [];
+		input.removeAttribute('aria-activedescendant');
+		input.setAttribute('aria-expanded', 'false');
+
+		var message = strings.error || 'Instant results are unavailable here. Press Enter to see all matching results.';
+		var p = emptyEl.querySelector('p');
+		if (p) {
+			p.textContent = message;
+		}
+		resultsEl.hidden = true;
+		emptyEl.hidden = false;
+
+		var u = new URL(cfg.searchUrl || '/', window.location.origin);
+		u.searchParams.set('s', q);
+		viewAllEl.href = u.href;
+		footerEl.hidden = false;
+
+		statusEl.textContent = message;
 	}
 
 	function render(q, data) {
@@ -244,6 +282,10 @@
 		}
 
 		if (!data.length) {
+			var p = emptyEl.querySelector('p');
+			if (p) {
+				p.textContent = emptyDefaultText;
+			}
 			resultsEl.hidden = true;
 			emptyEl.hidden = false;
 			footerEl.hidden = true;
