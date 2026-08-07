@@ -474,6 +474,16 @@ function promptless_has_desktop_header_actions() {
         return true;
     }
 
+    // The search trigger lives in this same slot (2026-08-07, founder-
+    // caught on the demo): a header with search enabled but no cart and no
+    // CTA hid the desktop slot entirely -- the ONLY search trigger then sat
+    // in the mobile bar, so desktop had no way to open search at all. Any
+    // site testing with WooCommerce active masks this, because the cart
+    // alone keeps the slot visible.
+    if ( function_exists( 'promptless_has_header_search' ) && promptless_has_header_search() ) {
+        return true;
+    }
+
     // Any configured CTA shows in the bar on desktop (placement only affects
     // mobile), so a non-empty CTA list means the desktop slot is not empty.
     return ! empty( promptless_get_header_ctas() );
