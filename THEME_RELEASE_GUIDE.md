@@ -310,3 +310,24 @@ promptless/
 | 1.0.9 | 2025-XX-XX | Page header spacing fix |
 | 1.0.8 | 2025-XX-XX | Performance optimization |
 | ... | ... | ... |
+
+
+## Verifying an upload actually took (added 2026-08-07)
+
+The theme's asset URLs are versioned by FILE MODIFICATION TIME, and uploading
+a zip re-stamps every file's mtime. That means version query strings look
+fresh even when the zip you uploaded contained OLD code — which is exactly
+what happened with the search feature (an early-build zip was uploaded; days
+of "cache clearing" followed because the `?ver=` numbers kept looking new).
+
+Never verify an upload by version stamps. Verify by CONTENT:
+
+1. Fetch a changed asset directly (e.g. `assets/css/search.min.css`) with a
+   throwaway query param and grep its body for a marker unique to the change.
+2. Render-check the actual behavior on the live site as a logged-out visitor.
+
+Also remember the header actions-slot contract (see header.php): anything
+rendered in `promptless-header__actions` must be registered in
+`promptless_has_desktop_header_actions()`, and header features must be tested
+with WooCommerce deactivated and no CTA configured — the cart alone keeps the
+desktop slot visible and masks a missing predicate.

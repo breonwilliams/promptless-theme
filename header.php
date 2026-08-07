@@ -39,6 +39,14 @@
                 <div class="promptless-header__brand" data-home-url="<?php echo esc_url( home_url( '/' ) ); ?>">
                     <?php promptless_site_logo(); ?>
                 </div>
+                <?php // ACTIONS SLOT CONTRACT: this container is HIDDEN on
+                      // desktop unless promptless_has_desktop_header_actions()
+                      // returns true (template-functions.php). Adding a new
+                      // element here without adding its predicate there makes
+                      // it desktop-invisible on sites with no cart and no CTA
+                      // -- exactly how the search trigger shipped broken
+                      // (2026-08-07). Update BOTH places together, and test
+                      // with WooCommerce deactivated and no CTA configured. ?>
                 <div class="promptless-header__actions">
                     <?php promptless_header_search(); ?>
                     <?php promptless_header_cart(); ?>
@@ -76,6 +84,14 @@
                 </div>
 
                 <!-- Header Actions (Cart, CTA, Mobile Menu) -->
+                <?php // ACTIONS SLOT CONTRACT: this container is HIDDEN on
+                      // desktop unless promptless_has_desktop_header_actions()
+                      // returns true (template-functions.php). Adding a new
+                      // element here without adding its predicate there makes
+                      // it desktop-invisible on sites with no cart and no CTA
+                      // -- exactly how the search trigger shipped broken
+                      // (2026-08-07). Update BOTH places together, and test
+                      // with WooCommerce deactivated and no CTA configured. ?>
                 <div class="promptless-header__actions">
                     <?php promptless_header_search(); ?>
                     <?php promptless_header_cart(); ?>
