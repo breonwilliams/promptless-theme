@@ -2126,26 +2126,12 @@ function promptless_search_overlay() {
 	<div id="promptless-search-overlay" class="promptless-search-overlay" hidden>
 		<div class="promptless-search-overlay__backdrop" data-search-close></div>
 		<div class="promptless-search-overlay__panel" role="dialog" aria-modal="true" aria-label="<?php esc_attr_e( 'Search this site', 'promptless' ); ?>">
-			<form role="search" method="get" action="<?php echo esc_url( wp_make_link_relative( home_url( '/' ) ) ); ?>" class="promptless-search-overlay__form">
-				<?php promptless_search_icon(); ?>
-				<input
-					type="search"
-					name="s"
-					class="promptless-search-overlay__input"
-					placeholder="<?php esc_attr_e( 'Search…', 'promptless' ); ?>"
-					autocomplete="off"
-					role="combobox"
-					aria-expanded="false"
-					aria-controls="promptless-search-results"
-					aria-autocomplete="list"
-				/>
-				<button type="submit" class="screen-reader-text"><?php esc_html_e( 'Search', 'promptless' ); ?></button>
-				<?php // Close lives IN the flex row: align-items centers it against
-				      // the input pixel-perfectly with zero positioning math. ?>
-				<button type="button" class="promptless-search-overlay__close" data-search-close aria-label="<?php esc_attr_e( 'Close search', 'promptless' ); ?>">
-					<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-				</button>
-			</form>
+			<?php
+			// The form itself lives in searchform.php (overlay branch) and is
+			// rendered through get_search_form() so it stays filterable —
+			// Theme Review prohibits hardcoded search forms in template code.
+			get_search_form( array( 'promptless_context' => 'overlay' ) );
+			?>
 			<div class="promptless-search-overlay__status screen-reader-text" role="status" aria-live="polite"></div>
 			<ul id="promptless-search-results" class="promptless-search-overlay__results" role="listbox" aria-label="<?php esc_attr_e( 'Search results', 'promptless' ); ?>" hidden></ul>
 			<div class="promptless-search-overlay__empty" hidden>
