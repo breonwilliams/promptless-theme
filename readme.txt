@@ -4,7 +4,7 @@ Tags: one-column, custom-logo, custom-menu, featured-images, full-width-template
 Requires at least: 6.6
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.3.0
+Stable tag: 1.3.1
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -150,6 +150,9 @@ Use the Promptless WP plugin's Canvas display mode, which provides a full-screen
 Yes. The theme includes WooCommerce-aware styling that inherits colors and typography from the Promptless WP plugin's Global Settings. The cart icon in the header can be configured to either open a mini-cart dropdown or link directly to the cart page (Appearance > Customize > Header > Cart). Mobile cart, checkout, and account pages render as grid-based cards instead of overflowing the viewport with default WooCommerce table styling. WooCommerce assets are only loaded on shop-related pages to keep non-shop pages fast.
 
 == Changelog ==
+
+= 1.3.1 =
+* Improved: all search forms now render through the theme's searchform.php template via get_search_form(), for consistent search markup and easier customization.
 
 = 1.3.0 =
 * New: Header Search — magnifying-glass trigger in the header actions (enable in Customizer or via the Connector), full-screen overlay with instant results as you type, full keyboard support ("/" or Cmd/Ctrl+K), and an accessible combobox for screen readers. Mobile gets a full-screen search sheet that stays above the keyboard
