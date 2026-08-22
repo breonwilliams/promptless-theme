@@ -4,7 +4,7 @@ Tags: one-column, custom-logo, custom-menu, featured-images, full-width-template
 Requires at least: 6.6
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.3.1
+Stable tag: 1.3.2
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -150,6 +150,10 @@ Use the Promptless WP plugin's Canvas display mode, which provides a full-screen
 Yes. The theme includes WooCommerce-aware styling that inherits colors and typography from the Promptless WP plugin's Global Settings. The cart icon in the header can be configured to either open a mini-cart dropdown or link directly to the cart page (Appearance > Customize > Header > Cart). Mobile cart, checkout, and account pages render as grid-based cards instead of overflowing the viewport with default WooCommerce table styling. WooCommerce assets are only loaded on shop-related pages to keep non-shop pages fast.
 
 == Changelog ==
+
+= 1.3.2 =
+* New: Light/dark logo variants. Add an optional dark-background version of your logo (Appearance > Customize > Site Identity), and the header and footer each automatically use the version matching their own light or dark theme — so a dark header and a light footer can both show a correctly-contrasting logo. Optional footer-only logo overrides cover brands whose footer uses a different lockup. Fully optional; sites that don't set the new logos are unchanged.
+* Fixed: on pages using the floating "pill" header in Float Over First Section (overlay) mode without breadcrumbs, the first section could render partly beneath the floating header when that section used a custom colour palette — the header's clearance was lost. The first section now reserves space for the floating header again on both mobile and desktop, across all section layouts (standard, boxed, and split-screen).
 
 = 1.3.1 =
 * Improved: all search forms now render through the theme's searchform.php template via get_search_form(), for consistent search markup and easier customization.

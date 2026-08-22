@@ -20,20 +20,148 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Adds aria-current="page" on homepage (matching WordPress core pattern)
  * - Logo images get role="img" via filter in class-promptless-setup.php
  */
-function promptless_site_logo() {
-    if ( has_custom_logo() ) {
+function promptless_site_logo( $context = 'header' ) {
+    $logo_id = promptless_resolve_logo_id( $context );
+    $core_id = (int) get_theme_mod( 'custom_logo', 0 );
+
+    // Base / default logo -> core path, preserving WordPress's markup + srcset
+    // byte-for-byte (the overwhelmingly common case).
+    if ( $logo_id && $logo_id === $core_id ) {
         the_custom_logo();
-    } else {
-        $site_name    = get_bloginfo( 'name' );
-        $aria_current = ( is_front_page() && ! is_paged() ) ? ' aria-current="page"' : '';
-        ?>
-        <a href="<?php echo esc_url( home_url( '/' ) ); ?>"
-           class="promptless-header__site-title"
-           rel="home"<?php echo $aria_current; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
-            <?php echo esc_html( $site_name ); ?>
-        </a>
-        <?php
+        return;
     }
+
+    // Alternate asset (dark base logo, or a footer override).
+    if ( $logo_id && promptless_render_logo_image( $logo_id ) ) {
+        return;
+    }
+
+    // No usable logo -> linked site title (unchanged fallback).
+    $site_name    = get_bloginfo( 'name' );
+    $aria_current = ( is_front_page() && ! is_paged() ) ? ' aria-current="page"' : '';
+    ?>
+    <a href="<?php echo esc_url( home_url( '/' ) ); ?>"
+       class="promptless-header__site-title"
+       rel="home"<?php echo $aria_current; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+        <?php echo esc_html( $site_name ); ?>
+    </a>
+    <?php
+}
+
+/**
+ * Resolve which logo attachment a chrome context should render.
+ *
+ * Implements the resolution chain in docs/LOGO_VARIANTS_DESIGN.md #4.2. Each
+ * context renders the logo matching its OWN resolved light/dark variant, so a
+ * dark header and a light footer each get a correctly-contrasting mark. All
+ * new settings are optional; empty settings fall back to the core Site Identity
+ * logo, so existing sites are unchanged.
+ *
+ * @param string $context 'header' (default) or 'footer'.
+ * @return int Attachment ID to render, or 0 to fall back to the site title.
+ */
+function promptless_resolve_logo_id( $context = 'header' ) {
+    $core = (int) get_theme_mod( 'custom_logo', 0 );
+
+    if ( 'footer' === $context ) {
+        $variant  = promptless_get_footer_theme();
+        // Footer-only override for this variant wins when set.
+        $override = (int) get_theme_mod( 'promptless_footer_logo_' . $variant, 0 );
+        if ( promptless_logo_id_is_valid( $override ) ) {
+            return $override;
+        }
+    } else {
+        $variant = promptless_get_header_theme();
+    }
+
+    // Dark contexts use the dark base logo when present.
+    if ( 'dark' === $variant ) {
+        $dark = (int) get_theme_mod( 'promptless_logo_dark', 0 );
+        if ( promptless_logo_id_is_valid( $dark ) ) {
+            return $dark;
+        }
+    }
+
+    return promptless_logo_id_is_valid( $core ) ? $core : 0;
+}
+
+/**
+ * True when an attachment ID references an existing attachment (guards against
+ * a setting that points at a since-deleted image).
+ *
+ * @param int $attachment_id
+ * @return bool
+ */
+function promptless_logo_id_is_valid( $attachment_id ) {
+    $attachment_id = (int) $attachment_id;
+    if ( $attachment_id <= 0 ) {
+        return false;
+    }
+    return 'attachment' === get_post_type( $attachment_id );
+}
+
+/**
+ * Right-sized `sizes` value for a logo attachment (PageSpeed image delivery).
+ *
+ * Shared by the core-logo attributes filter (class-promptless-setup.php) and
+ * the alternate-logo render path below, so the two can never drift. Returns ''
+ * for SVG or when pixel metadata is unavailable, leaving `sizes` untouched.
+ *
+ * @param int $attachment_id
+ * @return string e.g. "48px", or '' to leave `sizes` as-is.
+ */
+function promptless_logo_slot_width( $attachment_id ) {
+    if ( 'image/svg+xml' === get_post_mime_type( $attachment_id ) ) {
+        return '';
+    }
+    $meta = wp_get_attachment_metadata( $attachment_id );
+    if ( ! is_array( $meta ) || empty( $meta['width'] ) || empty( $meta['height'] ) ) {
+        return '';
+    }
+    $logo_support = get_theme_support( 'custom-logo' );
+    $max_height   = ( is_array( $logo_support ) && ! empty( $logo_support[0]['height'] ) )
+        ? (int) $logo_support[0]['height']
+        : 60;
+
+    // Rendered width = capped height x aspect ratio; clamp to sane bounds so an
+    // unusual logo can't produce a degenerate value.
+    $slot = (int) ceil( $max_height * ( (int) $meta['width'] / (int) $meta['height'] ) );
+    $slot = max( 32, min( $slot, 400 ) );
+
+    return $slot . 'px';
+}
+
+/**
+ * Render an ALTERNATE logo attachment (dark base logo or footer override) with
+ * the same markup, accessibility (role="img"), linked-home anchor, and
+ * right-sizing the core custom logo receives. Returns false (no output) when
+ * the attachment can't be rendered, so the caller falls through the chain.
+ *
+ * @param int $attachment_id
+ * @return bool
+ */
+function promptless_render_logo_image( $attachment_id ) {
+    $attr = array(
+        'class' => 'custom-logo',
+        'role'  => 'img',
+        'alt'   => get_bloginfo( 'name' ),
+    );
+    $slot = promptless_logo_slot_width( $attachment_id );
+    if ( '' !== $slot ) {
+        $attr['sizes'] = $slot;
+    }
+
+    $img = wp_get_attachment_image( $attachment_id, 'full', false, $attr );
+    if ( '' === $img ) {
+        return false;
+    }
+
+    printf(
+        '<a href="%1$s" class="custom-logo-link" rel="home">%2$s</a>',
+        esc_url( home_url( '/' ) ),
+        $img // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_get_attachment_image returns trusted, escaped markup
+    );
+    return true;
 }
 
 /**

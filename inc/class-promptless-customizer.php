@@ -328,6 +328,80 @@ class Promptless_Customizer {
         );
 
         // =============================================
+        // Logo Variants (light/dark + optional footer override)
+        // docs/LOGO_VARIANTS_DESIGN.md. Additive/opt-in: empty settings fall
+        // back to the core Site Identity logo, so existing sites are unchanged.
+        // Each chrome context renders the logo matching its own resolved
+        // light/dark theme variant.
+        // =============================================
+
+        // Dark-background base logo — beside the core Logo in Site Identity.
+        $wp_customize->add_setting(
+            'promptless_logo_dark',
+            array(
+                'default'           => 0,
+                'sanitize_callback' => 'absint',
+                'transport'         => 'refresh',
+            )
+        );
+        $wp_customize->add_control(
+            new WP_Customize_Media_Control(
+                $wp_customize,
+                'promptless_logo_dark',
+                array(
+                    'label'       => __( 'Logo — dark backgrounds', 'promptless' ),
+                    'description' => __( 'Shown wherever the header or footer uses the Dark theme. Falls back to your main logo when empty.', 'promptless' ),
+                    'section'     => 'title_tagline',
+                    'mime_type'   => 'image',
+                    'priority'    => 9,
+                )
+            )
+        );
+
+        // Footer logo overrides (optional) — for brands whose footer uses a
+        // different lockup than the header.
+        $wp_customize->add_setting(
+            'promptless_footer_logo_light',
+            array(
+                'default'           => 0,
+                'sanitize_callback' => 'absint',
+                'transport'         => 'refresh',
+            )
+        );
+        $wp_customize->add_control(
+            new WP_Customize_Media_Control(
+                $wp_customize,
+                'promptless_footer_logo_light',
+                array(
+                    'label'       => __( 'Footer logo — light backgrounds', 'promptless' ),
+                    'description' => __( 'Optional. Overrides the site logo in the footer only — for brands whose footer uses a different lockup. Falls back to the site logo.', 'promptless' ),
+                    'section'     => 'promptless_footer_appearance',
+                    'mime_type'   => 'image',
+                )
+            )
+        );
+        $wp_customize->add_setting(
+            'promptless_footer_logo_dark',
+            array(
+                'default'           => 0,
+                'sanitize_callback' => 'absint',
+                'transport'         => 'refresh',
+            )
+        );
+        $wp_customize->add_control(
+            new WP_Customize_Media_Control(
+                $wp_customize,
+                'promptless_footer_logo_dark',
+                array(
+                    'label'       => __( 'Footer logo — dark backgrounds', 'promptless' ),
+                    'description' => __( 'Optional. Used when the footer uses the Dark theme. Falls back to the dark-background logo, then your main logo.', 'promptless' ),
+                    'section'     => 'promptless_footer_appearance',
+                    'mime_type'   => 'image',
+                )
+            )
+        );
+
+        // =============================================
         // Archive & Search Result Card Meta
         // Feeds the promptless_archive_card_show_date/author filters -
         // one control governs blog archives AND search results (same

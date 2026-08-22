@@ -253,35 +253,16 @@ class Promptless_Setup {
      * @return array Modified attributes.
      */
     public function enhance_logo_accessibility( $custom_logo_attr, $custom_logo_id, $blog_id ) {
-        // Add role="img" for SVG logos and general accessibility.
+        // role + right-sized `sizes` now come from the shared helper
+        // promptless_logo_slot_width() so the core logo and the alternate
+        // light/dark logos (docs/LOGO_VARIANTS_DESIGN.md) never drift. The
+        // helper returns '' for SVG / missing metadata, leaving `sizes`
+        // untouched exactly as before.
         $custom_logo_attr['role'] = 'img';
 
-        // Never touch SVG logos. They're vector — infinitely crisp at any size,
-        // with no raster srcset — so there is nothing to "right-size" and no
-        // quality to lose. Leave their markup exactly as WordPress emitted it.
-        if ( 'image/svg+xml' === get_post_mime_type( $custom_logo_id ) ) {
-            return $custom_logo_attr;
-        }
-
-        // Right-size the `sizes` attribute so the browser fetches a logo-sized
-        // srcset candidate rather than the full-resolution source. This changes
-        // only WHICH candidate is chosen — never the pixels — and errs toward a
-        // slightly larger slot so the logo never upscales or blurs (the browser
-        // still fetches a 2× candidate on retina displays). Skipped when there
-        // is no pixel metadata (defensive; SVGs already returned above).
-        $meta = wp_get_attachment_metadata( $custom_logo_id );
-        if ( is_array( $meta ) && ! empty( $meta['width'] ) && ! empty( $meta['height'] ) ) {
-            $logo_support = get_theme_support( 'custom-logo' );
-            $max_height   = ( is_array( $logo_support ) && ! empty( $logo_support[0]['height'] ) )
-                ? (int) $logo_support[0]['height']
-                : 60;
-
-            // Rendered width = capped height × aspect ratio; clamp to sane
-            // bounds so an unusual logo can't produce a degenerate value.
-            $slot = (int) ceil( $max_height * ( (int) $meta['width'] / (int) $meta['height'] ) );
-            $slot = max( 32, min( $slot, 400 ) );
-
-            $custom_logo_attr['sizes'] = $slot . 'px';
+        $slot = promptless_logo_slot_width( $custom_logo_id );
+        if ( '' !== $slot ) {
+            $custom_logo_attr['sizes'] = $slot;
         }
 
         return $custom_logo_attr;

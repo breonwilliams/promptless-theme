@@ -16,7 +16,7 @@
         <div class="promptless-footer__main <?php echo esc_attr( promptless_get_footer_grid_class() ); ?>">
             <!-- Footer Brand Column -->
             <div class="promptless-footer__brand">
-                <?php promptless_site_logo(); ?>
+                <?php promptless_site_logo( 'footer' ); ?>
                 <?php
                 // Get custom brand text (supports HTML) or fall back to tagline
                 $brand_text = get_theme_mod( 'promptless_footer_brand_text', '' );

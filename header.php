@@ -37,7 +37,7 @@
             <!-- Stacked: Row 1 only (nav is separate element below) -->
             <div class="promptless-header__row promptless-header__row--primary">
                 <div class="promptless-header__brand" data-home-url="<?php echo esc_url( home_url( '/' ) ); ?>">
-                    <?php promptless_site_logo(); ?>
+                    <?php promptless_site_logo( 'header' ); ?>
                 </div>
                 <?php // ACTIONS SLOT CONTRACT: this container is HIDDEN on
                       // desktop unless promptless_has_desktop_header_actions()
@@ -71,7 +71,7 @@
             <div class="promptless-header__inner">
                 <!-- Logo / Site Title -->
                 <div class="promptless-header__brand" data-home-url="<?php echo esc_url( home_url( '/' ) ); ?>">
-                    <?php promptless_site_logo(); ?>
+                    <?php promptless_site_logo( 'header' ); ?>
                 </div>
 
                 <!-- Primary Navigation -->

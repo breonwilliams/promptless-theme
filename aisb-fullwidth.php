@@ -29,9 +29,19 @@ get_header();
 ?>
 
 <main id="main-content" class="site-main promptless-fullwidth">
-    <div id="aisb-fullwidth-wrapper" class="aisb-fullwidth-wrapper">
-        <?php Promptless_Plugin_Bridge::render_sections( get_the_ID(), __( 'Full Width Mode', 'promptless' ) ); ?>
-    </div>
+    <?php
+    // The bridge owns the wrapper element so the collected <style> it emits
+    // lands OUTSIDE .aisb-fullwidth-wrapper — keeping the first section as the
+    // wrapper's :first-child for the plugin's floating-header overlay clearance.
+    Promptless_Plugin_Bridge::render_sections(
+        get_the_ID(),
+        __( 'Full Width Mode', 'promptless' ),
+        array(
+            'id'    => 'aisb-fullwidth-wrapper',
+            'class' => 'aisb-fullwidth-wrapper',
+        )
+    );
+    ?>
 </main>
 
 <?php
