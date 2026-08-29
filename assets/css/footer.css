@@ -271,8 +271,8 @@
 
 .promptless-footer__nav-heading {
     font-family: var(--aisb-section-font-heading);
-    font-size: var(--aisb-section-text-lg);
-    font-weight: var(--aisb-section-font-heading-weight);
+    font-size: var(--aisb-section-text-lg, 1.125rem);
+    font-weight: var(--aisb-section-font-heading-weight, 700);
     color: var(--section-text);
     margin: 0 0 1rem 0;
 }
@@ -396,8 +396,8 @@
 
 .promptless-footer__widget-title {
     font-family: var(--aisb-section-font-heading);
-    font-size: var(--aisb-section-text-lg);
-    font-weight: var(--aisb-section-font-heading-weight);
+    font-size: var(--aisb-section-text-lg, 1.125rem);
+    font-weight: var(--aisb-section-font-heading-weight, 700);
     color: var(--section-text);
     margin-bottom: 1rem;
 }

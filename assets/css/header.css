@@ -945,7 +945,7 @@
     align-items: center;
     justify-content: center;
     color: var(--aisb-smart-light-icon, var(--aisb-color-primary));
-    background-color: var(--aisb-smart-light-icon-bg, var(--aisb-color-primary-bg));
+    background-color: var(--aisb-smart-light-icon-bg, var(--aisb-color-primary-bg, rgba(99, 102, 241, 0.1)));
     font-size: 18px;
     text-decoration: none;
     border-radius: 4px;
@@ -954,7 +954,7 @@
 
 .promptless-header__mini-cart .promptless-cart-item__remove:hover {
     color: var(--aisb-smart-light-icon, var(--aisb-color-primary));
-    background-color: var(--aisb-smart-light-icon-bg, var(--aisb-color-primary-bg));
+    background-color: var(--aisb-smart-light-icon-bg, var(--aisb-color-primary-bg, rgba(99, 102, 241, 0.1)));
     filter: brightness(0.92);
     text-decoration: none;
 }
@@ -962,12 +962,12 @@
 /* Dark theme remove button */
 .promptless-header.aisb-section--dark .promptless-cart-item__remove {
     color: var(--aisb-smart-dark-icon, var(--aisb-color-primary));
-    background-color: var(--aisb-smart-dark-icon-bg, var(--aisb-color-primary-bg));
+    background-color: var(--aisb-smart-dark-icon-bg, var(--aisb-color-primary-bg, rgba(99, 102, 241, 0.1)));
 }
 
 .promptless-header.aisb-section--dark .promptless-cart-item__remove:hover {
     color: var(--aisb-smart-dark-icon, var(--aisb-color-primary));
-    background-color: var(--aisb-smart-dark-icon-bg, var(--aisb-color-primary-bg));
+    background-color: var(--aisb-smart-dark-icon-bg, var(--aisb-color-primary-bg, rgba(99, 102, 241, 0.1)));
     filter: brightness(1.15);
     text-decoration: none;
 }
@@ -1005,7 +1005,7 @@
 /* Remove button - Light theme hover */
 .promptless-header.aisb-section--light .promptless-cart-item__remove[href]:hover {
     color: var(--aisb-smart-light-icon, var(--aisb-color-primary));
-    background-color: var(--aisb-smart-light-icon-bg, var(--aisb-color-primary-bg));
+    background-color: var(--aisb-smart-light-icon-bg, var(--aisb-color-primary-bg, rgba(99, 102, 241, 0.1)));
     filter: brightness(0.92);
     text-decoration: none;
 }
@@ -1019,7 +1019,7 @@
 /* Remove button - Dark theme hover */
 .promptless-header.aisb-section--dark .promptless-cart-item__remove[href]:hover {
     color: var(--aisb-smart-dark-icon, var(--aisb-color-primary));
-    background-color: var(--aisb-smart-dark-icon-bg, var(--aisb-color-primary-bg));
+    background-color: var(--aisb-smart-dark-icon-bg, var(--aisb-color-primary-bg, rgba(99, 102, 241, 0.1)));
     filter: brightness(1.15);
     text-decoration: none;
 }
@@ -1082,13 +1082,13 @@ body.woocommerce-checkout .promptless-header__mini-cart .promptless-cart-item__r
     justify-content: center;
     flex: 1;
     box-sizing: border-box;
-    padding: var(--aisb-section-space-xs) var(--aisb-section-space-md);
+    padding: var(--aisb-section-space-xs, 0.5rem) var(--aisb-section-space-md, 1rem);
     font-family: var(--aisb-section-font-button, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif);
-    font-size: var(--aisb-section-text-sm);
-    font-weight: var(--aisb-section-font-button-weight, var(--aisb-section-font-medium));
+    font-size: var(--aisb-section-text-sm, 0.875rem);
+    font-weight: var(--aisb-section-font-button-weight, var(--aisb-section-font-medium, 500));
     text-decoration: none;
-    border-radius: var(--aisb-section-radius-button, var(--aisb-section-radius-md));
-    transition: all var(--aisb-section-transition-base);
+    border-radius: var(--aisb-section-radius-button, var(--aisb-section-radius-md, 0.25rem));
+    transition: all var(--aisb-section-transition-base, 200ms ease);
     cursor: pointer;
 }
 
