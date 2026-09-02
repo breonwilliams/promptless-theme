@@ -53,7 +53,22 @@
     border-bottom: 1px solid var(--announcement-border);
     font-size: 0.875rem;
     font-family: var(--aisb-section-font-body, inherit);
-    line-height: 1.4;
+    /* Integer line-height, deliberately, not the usual unitless ratio.
+       1.4 x 14px = 19.6px, and below the 640px breakpoint the inner switches
+       to a stacked column whose height is content-driven, so those fractional
+       line boxes summed to a fractional element height (measured: 75.1953px).
+       At dpr 2 that puts the bottom edge on device row 150.39, so the 1px
+       border only half-covers its pixel row and the rest blends with whatever
+       is behind — and what is behind is the page background, because the
+       header below is transparent by design so the floating pill can overlay
+       the hero. On a dark bar over a light page that reads as a white hairline
+       that appears and disappears as the window is resized.
+       A rem value inherits as a COMPUTED LENGTH, so every child line box gets
+       the same integer height regardless of its own font-size (the message
+       drops to 0.8125rem on mobile, which as a ratio would have been 18.2px).
+       Above 640px the single-row layout was already an exact 48px and is
+       unaffected. */
+    line-height: 1.25rem;
     transition: background-color 0.2s ease, border-color 0.2s ease, max-height 0.25s ease, opacity 0.2s ease;
 }
 
