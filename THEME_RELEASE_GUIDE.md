@@ -40,8 +40,27 @@ gh release create v1.X.X-theme \
 | `style.css` | Line 6 | `Version: X.X.X` |
 | `readme.txt` | Line 7 | `Stable tag: X.X.X` |
 | `functions.php` | Line 17 | `define( 'PROMPTLESS_THEME_VERSION', 'X.X.X' );` |
+| `package.json` | `version` field | `"version": "X.X.X"` |
 
-The release script will verify these match before creating the ZIP.
+The release script verifies the first three match before creating the ZIP.
+
+### readme.txt size check (run before every release)
+
+WordPress truncates `== Changelog ==` at 5000 characters and silently drops
+whatever falls past it, so a long changelog loses its most recent entries
+without any warning. `readme.txt` keeps a rolling window of the most recent
+releases and `CHANGELOG.md` holds the full history — delete the oldest
+readme entry as you add the new one, then confirm:
+
+```bash
+awk '/^== Changelog ==/{f=1;next} /^== /{f=0} f' readme.txt | wc -c
+```
+
+Under 5000 passes. The theme's entries run long, so this is usually five
+entries rather than six; trim further if the count comes back close to the
+limit. Nothing in `create-release.sh` checks this. It does
+**not** check `package.json`, which is why that file silently drifted to 1.3.0 while
+the theme shipped 1.3.1 and 1.3.2 — bump it by hand.
 
 ---
 
