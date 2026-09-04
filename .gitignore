@@ -5,7 +5,13 @@ node_modules/
 release/
 
 # Testing
-tests/
+# `tests/*` rather than `tests/`: git does not descend into an excluded
+# directory, so a negation below it never matches.
+tests/*
+# ...except the accessibility contract. The rest of tests/ is local scratch
+# work, but a gate that is not version-controlled cannot run in CI and cannot
+# protect anyone else's checkout — which is the whole reason it exists.
+!tests/test-accessibility.php
 
 # System files
 .DS_Store

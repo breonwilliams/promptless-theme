@@ -1746,7 +1746,8 @@ body.woocommerce-checkout .promptless-header__mini-cart .promptless-cart-item__r
     background-color: var(--section-bg);
     border: 1px solid var(--section-border);
     border-radius: var(--aisb-section-radius-full, 9999px);
-    padding: 0.5rem var(--aisb-section-space-md, 1.5rem);
+    --promptless-header-pill-gutter: var(--aisb-section-space-md, 1.5rem);
+    padding: 0.5rem var(--promptless-header-pill-gutter);
     box-shadow: var(--aisb-section-shadow-sm, 0 1px 2px 0 rgba(0, 0, 0, 0.05));
     transition: background-color 0.2s ease, border-color 0.2s ease;
 }
@@ -1774,6 +1775,38 @@ body.woocommerce-checkout .promptless-header__mini-cart .promptless-cart-item__r
 @media (max-width: 640px) {
     .promptless-header--layout-floating .promptless-header__nav-wrapper {
         --promptless-floating-drawer-gutter: var(--aisb-section-space-md, 1.5rem);
+    }
+}
+
+/* ==========================================================================
+   REFLOW (WCAG 1.4.10) — the header at 320 CSS pixels
+
+   320px is the width of a 1280px desktop at 400% zoom, which is what a
+   low-vision user actually does. It is not a phone check: phones are wider.
+
+   `.promptless-header__actions` is `flex-shrink: 0` by design — the CTA and
+   the menu toggle must never squash into each other. At 320px that made the
+   row wider than the pill: logo (64) + gap (24) + actions (211) = 299 in a
+   272px content box, so the page gained 4px of horizontal scroll and the
+   hamburger was clipped at the right edge. Measured, then seen in a browser
+   at 320px before and after.
+
+   The fix takes the space back from padding and gap rather than from the
+   controls. 1.4.10 forbids losing information OR functionality, so hiding the
+   CTA at narrow widths would trade one failure for another; every control
+   stays on screen and reachable.
+   ========================================================================== */
+@media (max-width: 400px) {
+    .promptless-header__inner {
+        gap: var(--aisb-section-space-sm, 0.75rem);
+    }
+
+    .promptless-header--layout-floating .promptless-header__inner {
+        --promptless-header-pill-gutter: var(--aisb-section-space-sm, 0.75rem);
+    }
+
+    .promptless-header__actions {
+        gap: var(--aisb-section-space-xs, 0.5rem);
     }
 }
 

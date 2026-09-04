@@ -1,0 +1,55 @@
+# CI for the Promptless theme.
+#
+# This repository had no workflow at all. Two jobs:
+#   lint — php -l over every theme file across the supported PHP range. A file
+#          that does not parse is not a failing test, it is a fatal on every
+#          request that renders it.
+#   a11y — the accessibility contract (tests/test-accessibility.php): the
+#          header's 320px reflow rule, that the built stylesheet is not older
+#          than its source, and that every template rendering #main-content
+#          makes that landmark focusable.
+#
+# The browser-level accessibility gates for this theme live in the Promptless WP
+# repo (tests/a11y/run-live.js and run-reflow.js) because they need a running
+# WordPress site. This is the part that can run without one.
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  lint:
+    name: PHP syntax (${{ matrix.php }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['7.4', '8.2']
+    steps:
+      - uses: actions/checkout@v5
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+      - name: PHP syntax check
+        run: |
+          set -e
+          find . -name '*.php' -not -path './node_modules/*' -not -path './release/*' -print0 \
+            | xargs -0 -n1 -P4 php -l > /dev/null
+
+  a11y:
+    name: Accessibility contract
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          coverage: none
+      # The built stylesheet is committed, so the staleness check compares what
+      # is in the repo rather than what a fresh build would produce.
+      - name: Run accessibility contract
+        run: php tests/test-accessibility.php
