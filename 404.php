@@ -9,7 +9,7 @@
 get_header();
 ?>
 
-<main id="main-content" class="site-main <?php echo esc_attr( promptless_get_content_classes() ); ?>">
+<main id="main-content" tabindex="-1" class="site-main <?php echo esc_attr( promptless_get_content_classes() ); ?>">
     <div class="promptless-container">
         <div class="promptless-404">
             <header class="promptless-404__header">

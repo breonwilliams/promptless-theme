@@ -8,6 +8,22 @@ Entries up to and including 1.3.2 were migrated from `readme.txt`, which was the
 
 ## [Unreleased]
 
+### Fixed
+
+- **The skip link scrolled but did not move focus.** Activating "Skip to
+  content" jumped the page to `<main id="main-content">`, but focus stayed on
+  the document body, so the next Tab took a keyboard user straight back into
+  the header — the link skipped nothing for the people who need it. `<main>`
+  now carries `tabindex="-1"` in all nine templates that render it, including
+  `aisb-fullwidth.php`, which is the one that renders every Promptless page.
+
+- **The announcement bar's dismiss button had no visible focus indicator.**
+  `outline: none` was grouped onto a shared `:hover, :focus-visible` rule, so a
+  keyboard user got the hover background tint and nothing else. A background
+  shift alone is not a focus indicator (WCAG 2.4.7, Level AA). Focus now has
+  its own ring in `currentColor` so it stays visible on both the light and
+  dark bar.
+
 ## [1.3.3] — 2026-09-02
 
 - Fixed: a faint hairline appeared under the announcement bar on screens narrower than 640px.

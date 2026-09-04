@@ -39,7 +39,7 @@ if ( ! defined( 'ABSPATH' ) ) {
         <?php esc_html_e( 'Skip to content', 'promptless' ); ?>
     </a>
 
-    <main id="main-content" class="site-main promptless-canvas__content">
+    <main id="main-content" tabindex="-1" class="site-main promptless-canvas__content">
         <div id="aisb-canvas-wrapper" class="aisb-canvas-wrapper">
             <?php Promptless_Plugin_Bridge::render_sections( get_the_ID(), __( 'Canvas Mode', 'promptless' ) ); ?>
         </div>

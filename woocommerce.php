@@ -16,7 +16,7 @@
 get_header();
 ?>
 
-<main id="main-content" class="site-main <?php echo esc_attr( promptless_get_content_classes() ); ?>">
+<main id="main-content" tabindex="-1" class="site-main <?php echo esc_attr( promptless_get_content_classes() ); ?>">
     <?php
     /**
      * woocommerce_before_main_content hook

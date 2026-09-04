@@ -209,7 +209,17 @@
 .promptless-announcement-bar__dismiss:focus-visible {
     color: var(--announcement-text);
     background-color: rgba(0, 0, 0, 0.06);
-    outline: none;
+}
+
+/* Keyboard focus needs a RING, not just the hover tint.
+   `outline: none` used to be grouped onto the rule above, so a keyboard user
+   got the hover background and nothing else — a background shift alone is not
+   a focus indicator and fails WCAG 2.4.7 (AA). Verified in a real browser:
+   :focus-visible matched while outline-style computed to `none`. The ring uses
+   currentColor so it stays visible on both the light and dark bar. */
+.promptless-announcement-bar__dismiss:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
 }
 
 .promptless-announcement-bar.aisb-section--dark .promptless-announcement-bar__dismiss:hover,

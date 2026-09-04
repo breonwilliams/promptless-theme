@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 get_header();
 ?>
 
-<main id="main-content" class="site-main promptless-fullwidth">
+<main id="main-content" tabindex="-1" class="site-main promptless-fullwidth">
     <?php
     // The bridge owns the wrapper element so the collected <style> it emits
     // lands OUTSIDE .aisb-fullwidth-wrapper — keeping the first section as the
