@@ -49,9 +49,22 @@ $promptless_post_id = get_the_ID();
 
         <?php promptless_post_meta_with_categories(); ?>
 
-        <h3 class="aisb-features__item-title">
+        <?php
+        /*
+         * h2, not h3. On an archive each result is a top-level item beneath
+         * the page's single h1 ("Workshops"), and nothing renders an h2 in
+         * between — so h3 skipped a level, which a screen-reader user
+         * navigating by heading reads as a missing section. Caught by the
+         * heading audit in the Promptless WP accessibility runner, which
+         * reported "heading level skipped: 1->3" on every CPT archive.
+         *
+         * The size comes from .aisb-features__item-title, so the tag change is
+         * semantic only and the card looks identical.
+         */
+        ?>
+        <h2 class="aisb-features__item-title">
             <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
-        </h3>
+        </h2>
 
         <?php do_action( 'promptless_archive_card_section', 'subtitle', $promptless_post_id ); ?>
 
