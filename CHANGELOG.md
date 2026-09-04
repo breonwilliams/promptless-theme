@@ -10,6 +10,15 @@ Entries up to and including 1.3.2 were migrated from `readme.txt`, which was the
 
 ### Fixed
 
+- **Archive card titles skipped a heading level.** Each result rendered as `h3`
+  directly beneath the archive's `h1`, with no `h2` between, so a screen-reader
+  user navigating by heading perceived a missing section. On an archive each
+  result is a top-level item under the page title, so the card title is now
+  `h2`. The size comes from `.aisb-features__item-title`, so this is a semantic
+  change only — the card looks identical.
+
+### Fixed
+
 - **The skip link scrolled but did not move focus.** Activating "Skip to
   content" jumped the page to `<main id="main-content">`, but focus stayed on
   the document body, so the next Tab took a keyboard user straight back into
