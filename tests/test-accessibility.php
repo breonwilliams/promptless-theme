@@ -169,6 +169,106 @@ class AccessibilityTestRunner {
         );
     }
 
+
+    /**
+     * WCAG 1.3.1 — the archive heading ladder.
+     *
+     * Every archive rendered its results as h3 directly beneath the page's
+     * single h1, with nothing emitting an h2 in between. Someone navigating by
+     * heading reads that gap as a missing section: the structure claims a level
+     * that does not exist. Fixed by making the card title an h2, which is the
+     * correct level anyway — on an archive each result IS a top-level item
+     * under the page title.
+     *
+     * WHY IT NEEDS A GUARD OF ITS OWN. axe does not fail this at AA;
+     * `heading-order` is a best-practice rule, so the browser gates stay green
+     * while the ladder is broken. The only thing that caught it was the heading
+     * audit in Promptless WP's live runner, and that needs a running site. The
+     * tag is one character away from regressing and nothing here would notice.
+     *
+     * It asserts BOTH ENDS of the ladder, not just the card. Guarding the h2
+     * alone would let someone demote the archive h1 to an h2 and leave the same
+     * gap pointing the other way — a check that only holds one end of a
+     * relationship does not hold the relationship.
+     */
+    private function test_archive_heading_ladder() {
+        echo "\nArchive heading ladder (WCAG 1.3.1)\n";
+
+        $card = $this->read( 'template-parts/archive/card.php' );
+
+        $this->check(
+            false !== $card,
+            'template-parts/archive/card.php exists',
+            'The archive card template is missing, so its heading level cannot be verified.'
+        );
+
+        if ( false !== $card ) {
+            // The heading that carries the permalink is the card TITLE. Matched
+            // by that pairing rather than by "the first heading in the file",
+            // so adding an unrelated heading above it does not silently move
+            // what this test is looking at.
+            $matched = preg_match(
+                '/<h([1-6])[^>]*>\s*(?:<\?php.*?\?>\s*)*<a\s+href="<\?php\s+the_permalink/s',
+                $card,
+                $m
+            );
+
+            $this->check(
+                (bool) $matched,
+                'card.php has a linked title heading',
+                'No heading wrapping a the_permalink() link was found. Either the card '
+                . 'title stopped being a heading — which removes every archive result '
+                . 'from heading navigation — or this test is matching the wrong shape.'
+            );
+
+            if ( $matched ) {
+                $this->check(
+                    '2' === $m[1],
+                    'card.php renders the result title as h2 (found h' . $m[1] . ')',
+                    'Archive results sit directly beneath the archive h1 and nothing emits '
+                    . 'an h2 between them, so any level below 2 skips one. A screen-reader '
+                    . 'user navigating by heading reads the gap as a missing section.'
+                );
+            }
+        }
+
+        // The other end: the archive templates must still emit the h1 that the
+        // card's h2 is a level below.
+        foreach ( array( 'archive.php', 'index.php' ) as $file ) {
+            $template = $this->read( $file );
+
+            $this->check(
+                false !== $template,
+                "{$file} exists",
+                'The archive template is missing, so the top of the ladder cannot be verified.'
+            );
+            if ( false === $template ) {
+                continue;
+            }
+
+            $h1_count = preg_match_all( '/<h1[\s>]/', $template );
+
+            $this->check(
+                $h1_count > 0,
+                "{$file} emits an h1",
+                'The archive page has no h1, so it states no subject and the card h2 '
+                . 'headings hang below nothing.'
+            );
+
+            // index.php legitimately carries two h1 branches — a blog-page title
+            // and a "Latest Posts" fallback — in an if/else, so only ONE ever
+            // renders. Counting source occurrences cannot tell branches apart,
+            // which is why this asserts a small ceiling rather than exactly one.
+            $this->check(
+                $h1_count <= 2,
+                "{$file} does not stack h1 elements",
+                'More than two h1 elements appear in the source. Two pages worth of '
+                . 'subject on one page is two subjects, and a reader cannot tell which '
+                . 'is the page.'
+            );
+        }
+    }
+
     /**
      * Runs everything and exits non-zero on any failure.
      */
@@ -178,6 +278,7 @@ class AccessibilityTestRunner {
 
         $this->test_header_reflow();
         $this->test_skip_link_targets_are_focusable();
+        $this->test_archive_heading_ladder();
 
         echo "\n" . str_repeat( '=', 56 ) . "\n";
         echo "Passed: {$this->passed}\n";
