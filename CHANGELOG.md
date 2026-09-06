@@ -33,6 +33,48 @@ Entries up to and including 1.3.2 were migrated from `readme.txt`, which was the
   its own ring in `currentColor` so it stays visible on both the light and
   dark bar.
 
+## [1.3.4] - 2026-09-06
+
+### Fixed
+
+- **The header ran off the screen at 320px** — a 1280px desktop at 400% zoom,
+  which is what a low-vision user actually does, not a phone width. The row did
+  not fit and the menu toggle was pushed past the right edge where no scroll
+  reached it, leaving the navigation unreachable on every page (WCAG 1.4.10).
+  The pill's horizontal padding is now a custom property so the breakpoint
+  stylesheet can override it at equal specificity.
+
+- **"Skip to content" scrolled without moving focus.** A `<main>` is not
+  focusable by default, so the browser moved the viewport and left focus where
+  it was — the next Tab returned the user to the top of the navigation. The
+  link skipped nothing, which axe cannot see. `tabindex="-1"` on every
+  skip-link target, verified by ACTIVATING the link rather than by its presence.
+
+- **Archive card titles were h3 directly beneath the page h1**, with nothing
+  emitting an h2 between them, so every archive skipped a level. On an archive
+  each result IS a top-level item under the page title, so h2 is the correct
+  level rather than a workaround. Purely semantic — the size comes from
+  `.aisb-features__item-title` and the card renders identically.
+
+- **The primary navigation had no accessible name.** One unnamed `<nav>` is
+  unambiguous; on any page that also renders a post grid's pager the landmark
+  list read "navigation, navigation" with no way to tell the site menu from the
+  pager. Uses `wp_nav_menu`'s `container_aria_label`.
+
+- **The announcement bar's dismiss button lost its keyboard focus ring.**
+  `outline: none` had been grouped onto the hover rule, so a keyboard user got
+  the hover tint and nothing else — a background shift alone is not a focus
+  indicator (WCAG 2.4.7).
+
+### Added
+
+- **`tests/test-accessibility.php`** — a standalone accessibility contract test,
+  25 assertions, wired into CI. It checks the BUILT `header.min.css` as well as
+  the source, because a fix present in the source and absent from the build
+  ships as no fix at all. It also guards the archive heading ladder at both
+  ends: the card's h2 and the templates' h1, since guarding one end does not
+  hold the relationship.
+
 ## [1.3.3] — 2026-09-02
 
 - Fixed: a faint hairline appeared under the announcement bar on screens narrower than 640px.
