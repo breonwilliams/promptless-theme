@@ -176,6 +176,16 @@ function promptless_primary_nav() {
                 'container'       => 'nav',
                 'container_class' => 'promptless-header__nav',
                 'container_id'    => 'primary-navigation',
+                /*
+                 * A NAMED navigation landmark (WCAG 2.4.1). A screen reader
+                 * offers landmarks as a list, and this <nav> was unnamed — on
+                 * any page that also renders a second nav (the post-grid
+                 * section's pager, for one) the list reads "navigation,
+                 * navigation" with no way to tell the site menu from the
+                 * pager. Neither element is wrong alone, which is why this
+                 * surfaced only once both were on one page.
+                 */
+                'container_aria_label' => __( 'Main navigation', 'promptless' ),
                 'depth'           => 3,
                 'fallback_cb'     => false,
                 'walker'          => new Promptless_Walker_Mega_Menu(),
