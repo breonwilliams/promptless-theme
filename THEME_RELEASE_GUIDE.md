@@ -31,6 +31,51 @@ gh release create v1.X.X-theme \
 
 ---
 
+## Theme Check — run it against the ARTIFACT, not this directory
+
+**This is the single most misleading step in the release, and it has already
+cost a round of triage.** Theme Check scans the theme directory WordPress has
+installed. On a Local dev site that is this git working tree — tests, build
+scripts, the `release/` folder, and the release ZIP itself.
+
+Run against this checkout, Theme Check reported 20+ findings including two
+REQUIRED ones. Every single one was against a file that **does not ship**:
+
+| Reported | Actually in the ZIP? |
+| --- | --- |
+| REQUIRED: `create-release.sh` must not be in production | **no** |
+| REQUIRED: Zip file found (`promptless-v1.3.4.zip`) | **no** — it is the release output, in `release/` |
+| WARNING: wrong directory for the theme name (slug is `promptless`) | **no** — the ZIP's folder IS `promptless`; this checkout is `promptless-theme` |
+| 8 × translation / `fwrite` / `wp_nav_menu` warnings in `tests/…` | **no** — `tests/` is excluded |
+| WARNING: hardcoded form in `release/promptless/searchform.php` | that path is the STAGED BUILD inside this checkout |
+
+Two findings survived and were real, both cosmetic: a missing `Theme URI:` and
+a `Tested up to:` that had fallen behind the plugins. Both fixed in 1.3.4's
+follow-up.
+
+### How to check the real thing
+
+Theme Check has no WP-CLI command — it is admin-only — so the artifact has to be
+put somewhere it can see:
+
+1. `bash create-release.sh` — produces `release/promptless/` and the ZIP.
+2. Copy or symlink `release/promptless/` into a **scratch** site's
+   `wp-content/themes/`, activate it there, and run Theme Check on that.
+
+The folder name matters: it must be `promptless`, or Theme Check derives the
+wrong slug and invents text-domain errors.
+
+### One finding that is a false positive even in the artifact
+
+> `role="search"` was found in `searchform.php`. Use `get_search_form()` instead
+> of hard coding forms.
+
+`searchform.php` **is** the template `get_search_form()` loads — it is the
+sanctioned override point, and the file's own docblock says so. The rule is
+aimed at forms hardcoded into page templates. `role="search"` on the form is
+also the correct ARIA landmark and matches WordPress core's own markup. No
+change; do not "fix" this.
+
 ## Version Update Checklist
 
 **CRITICAL**: Version numbers must match in ALL 3 locations:

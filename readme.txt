@@ -2,7 +2,7 @@
 Contributors: promptlesswp
 Tags: one-column, custom-logo, custom-menu, featured-images, full-width-template, block-styles, wide-blocks, blog, portfolio
 Requires at least: 6.6
-Tested up to: 6.9
+Tested up to: 7.1
 Requires PHP: 7.4
 Stable tag: 1.3.4
 License: GPL-2.0-or-later
