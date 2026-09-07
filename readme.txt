@@ -4,7 +4,7 @@ Tags: one-column, custom-logo, custom-menu, featured-images, full-width-template
 Requires at least: 6.6
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.3.3
+Stable tag: 1.3.4
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -150,6 +150,13 @@ Use the Promptless WP plugin's Canvas display mode, which provides a full-screen
 Yes. The theme includes WooCommerce-aware styling that inherits colors and typography from the Promptless WP plugin's Global Settings. The cart icon in the header can be configured to either open a mini-cart dropdown or link directly to the cart page (Appearance > Customize > Header > Cart). Mobile cart, checkout, and account pages render as grid-based cards instead of overflowing the viewport with default WooCommerce table styling. WooCommerce assets are only loaded on shop-related pages to keep non-shop pages fast.
 
 == Changelog ==
+
+= 1.3.4 =
+* Fixed: the header no longer runs off the screen at 320px, which is what a 1280px desktop looks like at 400% zoom (WCAG 1.4.10).
+* Fixed: "Skip to content" now moves keyboard focus instead of only scrolling, so the next Tab continues from the content.
+* Fixed: archive card titles are now h2 rather than h3, so archives no longer skip a heading level.
+* Fixed: the primary navigation now has an accessible name, so it can be told apart from a post grid's pagination in the landmark list.
+* Fixed: the announcement bar's dismiss button has a visible keyboard focus ring again.
 
 = 1.3.3 =
 * Fixed: a faint hairline appeared under the announcement bar on screens narrower than 640px.
