@@ -745,22 +745,27 @@
 })();
 
 /**
- * Floating-overlay height sync.
+ * Header height sync.
  *
  * When the floating header overlays the first section (see header.css
  * "FLOATING OVERLAY MODE"), the negative pull-under margin and the first
  * section's compensating padding both consume --promptless-header-height.
  * A hard-coded value would drift with fonts, settings, and viewport width
  * (the pill wraps on narrow screens), so the real rendered height is
- * observed and published as the custom property. Runs only when an
- * overlay header exists; everything else keeps the static CSS fallback.
+ * observed and published as the custom property.
+ *
+ * Since 1.3.5 a plain STICKY header publishes it too: header.css uses it
+ * for scroll-padding-top, so a focused element or anchor target scrolls
+ * clear of the bar (WCAG 2.4.11). Nothing else consumes it outside the
+ * overlay-scoped rules, so a sticky header gains only that. Every other
+ * header keeps the static CSS fallback.
  *
  * Enqueued in the footer, so the DOM is parseable at execution time.
  */
 (function() {
     'use strict';
 
-    var header = document.querySelector('.promptless-header--overlay');
+    var header = document.querySelector('.promptless-header--overlay, .promptless-header--sticky');
     if (!header) {
         return;
     }

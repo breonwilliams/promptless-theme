@@ -1849,10 +1849,45 @@ body.woocommerce-checkout .promptless-header__mini-cart .promptless-cart-item__r
     z-index: 100;
 }
 
-/* Anchor links must not land under the floating pill (2026 best-practice
-   item that also fixes plain sticky pages that opt into overlay). */
-html:has(.promptless-header--overlay) {
+/* Anchor links and FOCUSED elements must not land under sticky chrome.
+   WCAG 2.4.11 Focus Not Obscured (2.2, AA): when the browser scrolls a
+   focused element into view it aligns it to the nearest edge, and for a
+   keyboard user tabbing back up a page that edge is the top — directly
+   under a sticky header. Measured on the demo before this rule covered
+   plain sticky headers: six stops on the home page and two form fields
+   fully hidden. scroll-padding-top is the browser's own answer: every
+   scroll-into-view, from focus, from anchors, from find-in-page, keeps
+   the padded band clear. The overlay header already carried it; sticky
+   headers and sticky top bars now do too, stacked the way the sticky
+   rules stack them. --promptless-header-height is published by
+   navigation.js for both overlay and sticky headers. */
+html:has(.promptless-header--overlay),
+html:has(.promptless-header--sticky) {
     scroll-padding-top: calc(var(--promptless-header-height, 5.5rem) + var(--aisb-section-space-sm, 1rem));
+}
+
+html:has(.promptless-topbar--sticky + .promptless-header--sticky) {
+    scroll-padding-top: calc(var(--topbar-height, 0px) + var(--promptless-header-height, 5.5rem) + var(--aisb-section-space-sm, 1rem));
+}
+
+/* Logged-in staff see the admin bar above everything sticky (see "Admin
+   Bar Offset"); the padded band grows by the same amount. */
+html:has(.admin-bar .promptless-header--sticky) {
+    scroll-padding-top: calc(32px + var(--promptless-header-height, 5.5rem) + var(--aisb-section-space-sm, 1rem));
+}
+
+html:has(.admin-bar .promptless-topbar--sticky + .promptless-header--sticky) {
+    scroll-padding-top: calc(32px + var(--topbar-height, 0px) + var(--promptless-header-height, 5.5rem) + var(--aisb-section-space-sm, 1rem));
+}
+
+@media (max-width: 782px) {
+    html:has(.admin-bar .promptless-header--sticky) {
+        scroll-padding-top: calc(46px + var(--promptless-header-height, 5.5rem) + var(--aisb-section-space-sm, 1rem));
+    }
+
+    html:has(.admin-bar .promptless-topbar--sticky + .promptless-header--sticky) {
+        scroll-padding-top: calc(46px + var(--topbar-height, 0px) + var(--promptless-header-height, 5.5rem) + var(--aisb-section-space-sm, 1rem));
+    }
 }
 
 /* First-section compensation is DELEGATED TO THE PLUGIN via the chrome
