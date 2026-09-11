@@ -10,6 +10,19 @@ Entries up to and including 1.3.2 were migrated from `readme.txt`, which was the
 
 ### Fixed
 
+- **Keyboard focus no longer lands under a plain sticky header (WCAG 2.4.11
+  Focus Not Obscured, new in 2.2).** `scroll-padding-top` was set only for the
+  floating overlay header. With a plain sticky header, a keyboard user tabbing
+  back up a page had each stop scrolled to the top edge of the viewport,
+  directly under the bar: measured on the demo, six stops on the home page and
+  two form fields on a forms page fully hidden. Every sticky header and sticky
+  top bar now sets the padding, stacked the way the sticky rules stack them
+  and with the admin bar added for signed-in staff. `navigation.js` publishes
+  `--promptless-header-height` for sticky headers as well as overlay ones so
+  the padding tracks the rendered height. Re-measured after: zero. The plugin's
+  focus gate (tier 9) now tests for this on every run.
+
+
 - **Archive card titles skipped a heading level.** Each result rendered as `h3`
   directly beneath the archive's `h1`, with no `h2` between, so a screen-reader
   user navigating by heading perceived a missing section. On an archive each
