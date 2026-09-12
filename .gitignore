@@ -12,6 +12,8 @@ tests/*
 # work, but a gate that is not version-controlled cannot run in CI and cannot
 # protect anyone else's checkout — which is the whole reason it exists.
 !tests/test-accessibility.php
+# ...and the right-to-left stylesheet guard, which CI also runs.
+!tests/test-rtl-stylesheets.php
 
 # System files
 .DS_Store
