@@ -53,3 +53,7 @@ jobs:
       # is in the repo rather than what a fresh build would produce.
       - name: Run accessibility contract
         run: php tests/test-accessibility.php
+      # The rtlcss siblings are committed too; this fails when a stylesheet
+      # changed without `npm run build` regenerating its -rtl.css.
+      - name: Right-to-left stylesheets are generated, fresh and registered
+        run: php tests/test-rtl-stylesheets.php

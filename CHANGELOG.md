@@ -8,6 +8,20 @@ Entries up to and including 1.3.2 were migrated from `readme.txt`, which was the
 
 ## [Unreleased]
 
+### Added
+
+- **Right-to-left locales load right-to-left stylesheets.** `npm run build`
+  now generates an rtlcss sibling of every stylesheet the theme enqueues
+  (`style-rtl.css`, `assets/css/header.min-rtl.css`, …; committed) and each
+  handle registers it with `wp_style_add_data( …, 'rtl', 'replace' )`, so an
+  Arabic or Hebrew site gets a mirrored header, footer, archive cards and
+  announcement bar instead of 148 `left`/`right` declarations pointing the
+  wrong way. The block editor's `editor-style-rtl.css` is picked up by core.
+  `tests/test-rtl-stylesheets.php` (CI) fails when a stylesheet changed
+  without its sibling being regenerated, is enqueued without being listed
+  in the generator, or is enqueued without the registration. Verified on
+  Local with the Arabic language pack.
+
 ### Fixed
 
 - **Keyboard focus no longer lands under a plain sticky header (WCAG 2.4.11
