@@ -8,6 +8,8 @@ Entries up to and including 1.3.2 were migrated from `readme.txt`, which was the
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-09-12
+
 ### Added
 
 - **Right-to-left locales load right-to-left stylesheets.** `npm run build`
@@ -35,30 +37,6 @@ Entries up to and including 1.3.2 were migrated from `readme.txt`, which was the
   `--promptless-header-height` for sticky headers as well as overlay ones so
   the padding tracks the rendered height. Re-measured after: zero. The plugin's
   focus gate (tier 9) now tests for this on every run.
-
-
-- **Archive card titles skipped a heading level.** Each result rendered as `h3`
-  directly beneath the archive's `h1`, with no `h2` between, so a screen-reader
-  user navigating by heading perceived a missing section. On an archive each
-  result is a top-level item under the page title, so the card title is now
-  `h2`. The size comes from `.aisb-features__item-title`, so this is a semantic
-  change only — the card looks identical.
-
-### Fixed
-
-- **The skip link scrolled but did not move focus.** Activating "Skip to
-  content" jumped the page to `<main id="main-content">`, but focus stayed on
-  the document body, so the next Tab took a keyboard user straight back into
-  the header — the link skipped nothing for the people who need it. `<main>`
-  now carries `tabindex="-1"` in all nine templates that render it, including
-  `aisb-fullwidth.php`, which is the one that renders every Promptless page.
-
-- **The announcement bar's dismiss button had no visible focus indicator.**
-  `outline: none` was grouped onto a shared `:hover, :focus-visible` rule, so a
-  keyboard user got the hover background tint and nothing else. A background
-  shift alone is not a focus indicator (WCAG 2.4.7, Level AA). Focus now has
-  its own ring in `currentColor` so it stays visible on both the light and
-  dark bar.
 
 ## [1.3.4] - 2026-09-06
 

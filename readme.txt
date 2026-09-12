@@ -4,7 +4,7 @@ Tags: one-column, custom-logo, custom-menu, featured-images, full-width-template
 Requires at least: 6.6
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.3.4
+Stable tag: 1.4.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -151,6 +151,10 @@ Yes. The theme includes WooCommerce-aware styling that inherits colors and typog
 
 == Changelog ==
 
+= 1.4.0 =
+* Added: right-to-left languages load right-to-left stylesheets, so an Arabic or Hebrew site gets a mirrored header, footer, archive cards and announcement bar.
+* Fixed: keyboard focus no longer lands under a plain sticky header (WCAG 2.4.11).
+
 = 1.3.4 =
 * Fixed: the header no longer runs off the screen at 320px, which is what a 1280px desktop looks like at 400% zoom (WCAG 1.4.10).
 * Fixed: "Skip to content" now moves keyboard focus instead of only scrolling, so the next Tab continues from the content.
@@ -177,11 +181,6 @@ Yes. The theme includes WooCommerce-aware styling that inherits colors and typog
 * Improved: Scrollable WooCommerce product tabs on mobile; all assets now cache-bust by file modification time
 * Fixed: header search icon now shows on desktop when search is the only header action (no cart, no CTA)
 
-= 1.2.8 =
-* New: Breadcrumbs. An opt-in, hierarchy-based breadcrumb trail rendered between the site header and page content, following the WAI-ARIA APG breadcrumb pattern. Enable under Customize > Breadcrumbs; per-context toggles (pages, posts, custom post type singles, archives, search, 404), light/dark/inherit theme variant driven by Promptless WP design tokens, an editable Home label, and a per-page "Hide on this page" override for landing pages. Never shown on the front page; WooCommerce shop and product pages keep WooCommerce's own breadcrumb.
-* New: BreadcrumbList structured data (JSON-LD) emitted with the visible trail, automatically suppressed when a dedicated SEO plugin (Yoast, Rank Math, AIOSEO, SEOPress, The SEO Framework, Slim SEO) is active so exactly one BreadcrumbList ever ships per page.
-* New: promptless_after_header action - fires after the site header on every template that calls get_header(), giving child themes and integrations a sanctioned insertion point for chrome between the header and content. Filters: promptless_breadcrumbs_items, promptless_show_breadcrumbs, promptless_breadcrumbs_schema_enabled.
-* New: Archive card image aspect ratio. The archive grid's featured-image crop (previously hardcoded 16:9) is now resolved through the promptless_archive_image_aspect filter - 16:9 (default), 4:3, 1:1, or 4:5 - matching the PostGrid section's aspect vocabulary. Promptless CPT Pages answers the filter per custom post type, so e.g. an agents directory renders square headshots while listings stay wide. Default behavior is unchanged.
 
 Only the most recent releases are listed here; readme.txt truncates this section
 at 5000 characters. The complete history lives in CHANGELOG.md in the theme
