@@ -63,6 +63,8 @@ class Promptless_Assets {
             array(),
             $this->asset_version( '/style.css' )
         );
+        // Right-to-left locales load the rtlcss sibling (X-rtl.css); see scripts/build-rtl.js.
+        wp_style_add_data( 'promptless-theme-style', 'rtl', 'replace' );
 
         // Header styles (minified for PageSpeed optimization)
         wp_enqueue_style(
@@ -71,6 +73,8 @@ class Promptless_Assets {
             array( 'promptless-theme-style' ),
             $this->asset_version( '/assets/css/header.min.css' )
         );
+        // Right-to-left locales load the rtlcss sibling (X-rtl.css); see scripts/build-rtl.js.
+        wp_style_add_data( 'promptless-theme-header', 'rtl', 'replace' );
 
         // Breakpoint-dependent header rules (Mobile Menu Breakpoint customizer).
         //
@@ -102,6 +106,8 @@ class Promptless_Assets {
                 array( 'promptless-theme-header' ),
                 $this->asset_version( '/assets/css/header-breakpoint.min.css' )
             );
+            // Right-to-left locales load the rtlcss sibling (X-rtl.css); see scripts/build-rtl.js.
+            wp_style_add_data( 'promptless-theme-header-breakpoint', 'rtl', 'replace' );
         }
 
         // Footer styles (minified for PageSpeed optimization)
@@ -114,6 +120,8 @@ class Promptless_Assets {
                 array(),
                 $this->asset_version( '/assets/css/search.min.css' )
             );
+            // Right-to-left locales load the rtlcss sibling (X-rtl.css); see scripts/build-rtl.js.
+            wp_style_add_data( 'promptless-theme-search', 'rtl', 'replace' );
         }
 
         wp_enqueue_style(
@@ -122,6 +130,8 @@ class Promptless_Assets {
             array( 'promptless-theme-style' ),
             $this->asset_version( '/assets/css/footer.min.css' )
         );
+        // Right-to-left locales load the rtlcss sibling (X-rtl.css); see scripts/build-rtl.js.
+        wp_style_add_data( 'promptless-theme-footer', 'rtl', 'replace' );
 
         // Archive and content styles - only load on blog/archive pages
         // EXCLUDED is_page(): Pages using the plugin don't need archive.css (saves ~14KB)
@@ -133,6 +143,8 @@ class Promptless_Assets {
                 array( 'promptless-theme-style' ),
                 $this->asset_version( '/assets/css/archive.min.css' )
             );
+            // Right-to-left locales load the rtlcss sibling (X-rtl.css); see scripts/build-rtl.js.
+            wp_style_add_data( 'promptless-theme-archive', 'rtl', 'replace' );
         }
 
         // WooCommerce styles - only load when page actually needs WooCommerce
@@ -144,6 +156,8 @@ class Promptless_Assets {
                 array( 'promptless-theme-style', 'woocommerce-general' ),
                 $this->asset_version( '/assets/css/woocommerce.min.css' )
             );
+            // Right-to-left locales load the rtlcss sibling (X-rtl.css); see scripts/build-rtl.js.
+            wp_style_add_data( 'promptless-theme-woocommerce', 'rtl', 'replace' );
         }
 
         // Breadcrumb styles — only enqueue when the trail will actually
@@ -158,6 +172,8 @@ class Promptless_Assets {
                 array( 'promptless-theme-style' ),
                 $this->asset_version( '/assets/css/breadcrumbs.min.css' )
             );
+            // Right-to-left locales load the rtlcss sibling (X-rtl.css); see scripts/build-rtl.js.
+            wp_style_add_data( 'promptless-theme-breadcrumbs', 'rtl', 'replace' );
         }
 
         // Announcement bar styles — only enqueue when the bar will actually
@@ -171,6 +187,8 @@ class Promptless_Assets {
                 array( 'promptless-theme-style' ),
                 $this->asset_version( '/assets/css/announcement-bar.css' )
             );
+            // Right-to-left locales load the rtlcss sibling (X-rtl.css); see scripts/build-rtl.js.
+            wp_style_add_data( 'promptless-theme-announcement-bar', 'rtl', 'replace' );
         }
     }
 
