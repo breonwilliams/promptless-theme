@@ -1799,6 +1799,38 @@ function promptless_get_announcement_classes() {
 }
 
 /**
+ * Resolve [re:KEY] reusable-element shortcodes in the announcement message.
+ *
+ * Uses the Promptless WP plugin's processor when the plugin is active; with
+ * the plugin absent the message is returned unchanged and the shortcodes
+ * show as literal text (acceptable degradation — the bar still renders).
+ *
+ * The processor's method is `process_shortcodes()`. Until 2026-09-18 this
+ * called `process()`, which does not exist: the call threw, the catch below
+ * swallowed it, and every [re:KEY] reached visitors unresolved. The
+ * method_exists() guard keeps a future rename from failing silently again;
+ * tests/test-announcement-bar.php pins the behaviour.
+ *
+ * @param string $message Raw message from the theme mod.
+ * @return string
+ */
+function promptless_resolve_announcement_message( $message ) {
+    $message = (string) $message;
+    if ( $message === '' || ! class_exists( '\\AISB\\Modern\\Core\\ReusableElementsProcessor' ) ) {
+        return $message;
+    }
+    try {
+        $processor = new \AISB\Modern\Core\ReusableElementsProcessor();
+        if ( method_exists( $processor, 'process_shortcodes' ) ) {
+            return (string) $processor->process_shortcodes( $message );
+        }
+    } catch ( \Throwable $e ) {
+        // Render the raw message rather than failing the page.
+    }
+    return $message;
+}
+
+/**
  * Render the announcement bar HTML.
  *
  * Called from header.php BEFORE promptless_topbar() so it sits at the very
@@ -1818,18 +1850,7 @@ function promptless_announcement_bar() {
     $cookie_name  = promptless_announcement_cookie_name();
     $message_html = (string) get_theme_mod( 'promptless_announcement_message', '' );
 
-    // Resolve [re:KEY] reusable element shortcodes if the Promptless plugin
-    // is active and exposes its processor. Falls back to the raw message
-    // when the plugin isn't there — the bar still renders, the shortcodes
-    // just appear as literal text (acceptable degradation).
-    if ( class_exists( '\\AISB\\Modern\\Core\\ReusableElementsProcessor' ) ) {
-        try {
-            $processor    = new \AISB\Modern\Core\ReusableElementsProcessor();
-            $message_html = $processor->process( $message_html );
-        } catch ( \Throwable $e ) {
-            // Ignore — render the raw message rather than failing the page.
-        }
-    }
+    $message_html = promptless_resolve_announcement_message( $message_html );
 
     // wp_kses_post is the same allow-list the Customizer applied at save
     // time. Re-running it here is defense-in-depth — protects against any
