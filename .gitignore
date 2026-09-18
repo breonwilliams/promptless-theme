@@ -14,6 +14,9 @@ tests/*
 !tests/test-accessibility.php
 # ...and the right-to-left stylesheet guard, which CI also runs.
 !tests/test-rtl-stylesheets.php
+# ...and the announcement bar (schedule, dismissal, [re:KEY] resolution),
+# which runs in CI since 2026-09-18.
+!tests/test-announcement-bar.php
 
 # System files
 .DS_Store

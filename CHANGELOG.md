@@ -8,6 +8,20 @@ Entries up to and including 1.3.2 were migrated from `readme.txt`, which was the
 
 ## [Unreleased]
 
+### Fixed
+
+- **`[re:KEY]` reusable elements in the announcement bar showed as raw
+  text.** The bar called `process()` on Promptless WP's
+  `ReusableElementsProcessor`; the method is `process_shortcodes()`. The call
+  threw, the `catch (\Throwable)` swallowed it, and visitors saw
+  `[re:office_phone]` instead of the phone number — while the Customizer and
+  the connector both said shortcodes work there. The step is now
+  `promptless_resolve_announcement_message()`, which calls the real method
+  behind a `method_exists()` guard so a future rename cannot fail silently.
+  Verified on Local (the bar read "Call us at (503) 555-0148 to book.").
+  `tests/test-announcement-bar.php` gains two cases and joins CI. Found
+  2026-09-18 while writing the Promptless user docs.
+
 ## [1.4.0] - 2026-09-12
 
 ### Added
