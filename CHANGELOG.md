@@ -8,6 +8,8 @@ Entries up to and including 1.3.2 were migrated from `readme.txt`, which was the
 
 ## [Unreleased]
 
+## [1.4.1] - 2026-09-19
+
 ### Changed
 
 - **A page whose only WooCommerce content is a Promptless WP Product Grid
