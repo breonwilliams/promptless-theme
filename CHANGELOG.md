@@ -8,6 +8,25 @@ Entries up to and including 1.3.2 were migrated from `readme.txt`, which was the
 
 ## [Unreleased]
 
+### Changed
+
+- **A page whose only WooCommerce content is a Promptless WP Product Grid
+  loads a 4 KB stylesheet instead of ~242 KB.** Measured on /store/ with CSS
+  coverage, after Add to cart: WooCommerce's three stylesheets and the
+  theme's woocommerce.min.css were 1–5% used — WooCommerce scopes its rules
+  to its own page classes, and the grid is styled by Promptless WP. The one
+  rule set it used, the "View cart" link the add-to-cart script inserts, is
+  now generated from woocommerce.css into assets/css/woocommerce-grid.min.css
+  by scripts/build-css.js (one source, cannot drift; RTL sibling built).
+  `promptless_woocommerce_asset_scope()` answers full / grid / none: shop
+  pages and the header cart keep everything; a grid page keeps WooCommerce's
+  scripts (its Add to cart buttons are WooCommerce AJAX buttons) and drops
+  its styles. 0 differing pixels on /store/ at 390 and 1280 px, before and
+  after Add to cart; mobile LCP 2.93 s → 2.72 s, render-blocking 500 → 388
+  ms, 46 → 43 requests. What remains is jQuery in the head, which
+  wc-add-to-cart requires. `tests/test-woocommerce-assets.php` covers the
+  scope and the subset.
+
 ### Fixed
 
 - **A Promptless WP product grid lost WooCommerce's add-to-cart script and

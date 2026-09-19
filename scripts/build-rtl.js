@@ -33,6 +33,7 @@ const sources = [
     'assets/css/search.min.css',
     'assets/css/archive.min.css',
     'assets/css/woocommerce.min.css',
+    'assets/css/woocommerce-grid.min.css',
     'assets/css/breadcrumbs.min.css',
     'assets/css/announcement-bar.css',
     'assets/css/editor-style.css',

@@ -147,9 +147,12 @@ class Promptless_Assets {
             wp_style_add_data( 'promptless-theme-archive', 'rtl', 'replace' );
         }
 
-        // WooCommerce styles - only load when page actually needs WooCommerce
-        // PageSpeed optimization: Saves ~116KB on non-shop pages
-        if ( function_exists( 'promptless_needs_woocommerce_assets' ) && promptless_needs_woocommerce_assets() ) {
+        // WooCommerce styles — only as much as the page needs
+        // (promptless_woocommerce_asset_scope()). A shop page gets the full
+        // stylesheet; a page whose only WooCommerce content is a Product Grid
+        // gets the generated grid subset (~4 KB instead of ~121 KB).
+        $woo_scope = function_exists( 'promptless_woocommerce_asset_scope' ) ? promptless_woocommerce_asset_scope() : 'none';
+        if ( 'full' === $woo_scope ) {
             wp_enqueue_style(
                 'promptless-theme-woocommerce',
                 PROMPTLESS_THEME_URI . '/assets/css/woocommerce.min.css',
@@ -158,6 +161,14 @@ class Promptless_Assets {
             );
             // Right-to-left locales load the rtlcss sibling (X-rtl.css); see scripts/build-rtl.js.
             wp_style_add_data( 'promptless-theme-woocommerce', 'rtl', 'replace' );
+        } elseif ( 'grid' === $woo_scope ) {
+            wp_enqueue_style(
+                'promptless-theme-woocommerce-grid',
+                PROMPTLESS_THEME_URI . '/assets/css/woocommerce-grid.min.css',
+                array( 'promptless-theme-style' ),
+                $this->asset_version( '/assets/css/woocommerce-grid.min.css' )
+            );
+            wp_style_add_data( 'promptless-theme-woocommerce-grid', 'rtl', 'replace' );
         }
 
         // Breadcrumb styles — only enqueue when the trail will actually
@@ -349,15 +360,26 @@ JS;
             return;
         }
 
-        // Keep assets if page needs them
-        if ( function_exists( 'promptless_needs_woocommerce_assets' ) && promptless_needs_woocommerce_assets() ) {
+        $woo_scope = function_exists( 'promptless_woocommerce_asset_scope' ) ? promptless_woocommerce_asset_scope() : 'none';
+
+        // Keep everything on shop pages and with the header cart.
+        if ( 'full' === $woo_scope ) {
             return;
         }
 
-        // Dequeue WooCommerce classic styles
+        // Dequeue WooCommerce classic styles — a Product Grid page included:
+        // their rules are scoped to WooCommerce's own page classes, and ~1%
+        // of them applied there (the grid is styled by Promptless WP and the
+        // theme's grid subset).
         wp_dequeue_style( 'woocommerce-general' );
         wp_dequeue_style( 'woocommerce-layout' );
         wp_dequeue_style( 'woocommerce-smallscreen' );
+
+        // A Product Grid keeps WooCommerce's scripts: its Add to cart buttons
+        // are WooCommerce AJAX buttons (wc-add-to-cart and what it needs).
+        if ( 'grid' === $woo_scope ) {
+            return;
+        }
 
         // Note: wc-blocks-style is intentionally NOT dequeued per WooCommerce recommendation.
         // Dequeuing it can break block rendering. See:
