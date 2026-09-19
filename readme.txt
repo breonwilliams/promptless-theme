@@ -17,13 +17,13 @@ Promptless is a clean, minimal WordPress theme built specifically as a companion
 **Key Features:**
 
 * **Global Settings Integration** - Header, footer, archive pages, and WooCommerce screens automatically inherit colors, typography, and border radius from the Promptless WP plugin's Global Settings
-* **Two Header Layouts** - Choose Default (single row) or Stacked (two rows: branding above, navigation below), each with independent light/dark color modes
+* **Three Header Layouts** - Default (single row), Stacked (two rows: branding above, navigation below) or Floating (a rounded pill that can float over the first section), each with independent light/dark color modes
 * **Utility Top Bar** - Optional bar above the header with separate left and right menu locations, its own light/dark theme, and sticky behavior that coordinates with the main header
 * **Smart Mobile Top Bar Behavior** - Choose between "Always Show at Top" (a horizontally-scrollable utility row with scroll-aware edge fades) or "Collapse into Hamburger Menu" (folds top-bar menus into the main mobile drawer)
 * **Accessible Hamburger Drawer** - Full keyboard focus trap, distinct keyboard-vs-mouse activation handling, ARIA-expanded state management, and Escape-to-close
 * **Sticky Header Coordination** - Sticky header and sticky top bar work together; offsets are calculated dynamically to keep anchor links and skip links accurate
 * **Header CTA Button** - Customizer-driven label and URL for a primary call-to-action in the header
-* **Dark Mode Toggle** - Built-in sun/moon toggle in the header that respects system preferences and remembers user choice
+* **Light and Dark Color Modes** - Choose Light or Dark for the header, top bar and footer in the Customizer; page sections follow Promptless WP's settings
 * **WooCommerce Ready** - Mini-cart dropdown (or link-to-cart-page mode), mobile-optimized cart/checkout/account layouts using grid-based cards instead of overflowing tables, and surface styling that uses your global tokens
 * **HTML-Capable Footer Brand Description** - Replace the site tagline with rich text (bold, italic, links) sanitized via wp_kses_post
 * **Three Footer Columns + Bottom Bar** - Three independent menu locations with optional headings, plus a bottom footer menu for legal/policy links
@@ -112,13 +112,13 @@ No, the theme works without the plugin. However, for the best experience with au
 
 When using the Promptless WP plugin, colors are managed in the plugin's Global Settings. The theme automatically inherits these colors. Without the plugin, the theme uses sensible defaults.
 
-= How do I enable dark mode? =
+= How do I use dark mode? =
 
-Dark mode is enabled by default. Users can click the sun/moon icon in the header to toggle between light and dark mode. The theme also respects system preferences.
+Choose Light or Dark for the header, top bar and footer in the Customizer. With Promptless WP, each page section has its own light or dark setting. There is no visitor-facing light/dark switch.
 
-= How do I switch between single-row and stacked headers? =
+= How do I choose a header layout? =
 
-Go to Appearance > Customize > Header > Header Layout and pick either "Default (Single Row)" or "Stacked (Two Rows)". The Stacked layout puts your branding on the top row and your primary navigation on a row below it, which gives wide navigation menus more horizontal room. Both layouts support light and dark color modes and work with the sticky header option.
+Go to Appearance > Customize > Header > Header Layout and pick "Default (Single Row)", "Stacked (Two Rows)" or "Floating (Rounded Pill)". The Stacked layout puts your branding on the top row and your primary navigation on a row below it, which gives wide navigation menus more horizontal room. Both layouts support light and dark color modes and work with the sticky header option.
 
 = How do I make the header stay visible when scrolling? =
 
@@ -189,7 +189,6 @@ folder, and on the GitHub releases page.
 == Resources ==
 
 * Theme by Promptless WP - https://promptlesswp.com
-* Feather Icons used for dark mode toggle - https://feathericons.com (MIT License)
 
 == Copyright ==
 

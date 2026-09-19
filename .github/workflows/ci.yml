@@ -60,3 +60,6 @@ jobs:
       # Schedule, dismissal and the [re:KEY] reusable elements in the message.
       - name: Announcement bar
         run: php tests/test-announcement-bar.php
+      # WooCommerce assets stay on a page with a Promptless WP product grid.
+      - name: WooCommerce asset gate
+        run: php tests/test-woocommerce-assets.php

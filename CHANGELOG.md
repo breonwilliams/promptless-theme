@@ -10,6 +10,19 @@ Entries up to and including 1.3.2 were migrated from `readme.txt`, which was the
 
 ### Fixed
 
+- **A Promptless WP product grid lost WooCommerce's add-to-cart script and
+  styles on sites without the header cart.** The theme keeps WooCommerce's
+  assets on a page that has a product grid, but looked for the section type
+  `productgrid`, Promptless WP's name before 1.3.2; the type is
+  `product_grid`. On Local the grid's Add to cart button had no
+  `wc-add-to-cart` script and no WooCommerce stylesheet; with the fix both
+  load. Both names now match (`promptless_sections_include_product_grid()`),
+  pinned by `tests/test-woocommerce-assets.php`, which runs in CI.
+- **`readme.txt` described features the theme does not have**: a sun/moon
+  dark-mode toggle (there is no visitor-facing switch — light or dark is
+  chosen per area in the Customizer) and two header layouts (there are
+  three, including Floating). The Feather Icons credit for the toggle is
+  removed with it. Found while writing the theme's documentation.
 - **`[re:KEY]` reusable elements in the announcement bar showed as raw
   text.** The bar called `process()` on Promptless WP's
   `ReusableElementsProcessor`; the method is `process_shortcodes()`. The call
