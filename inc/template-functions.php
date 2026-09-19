@@ -2128,32 +2128,49 @@ add_filter( 'nav_menu_css_class', 'promptless_fix_home_menu_item_classes', 10, 3
 /**
  * Check if current page needs WooCommerce assets
  *
- * Returns true if:
- * - Is a WooCommerce page (shop, product, cart, checkout, account)
- * - Mini-cart is enabled in header
- * - Page has a productgrid section from Promptless WP
- *
- * Per-request memoized: the answer for a given post ID can't change
- * mid-request (WC conditional tags, header-customizer state, and post
- * meta are all stable within one PHP process), and the function is hit
- * multiple times per page load by the asset-enqueue layer. Without
- * caching, each call re-reads `_aisb_sections` post meta and JSON-decodes
- * it just to scan for a `productgrid` section type.
- *
- * Cache key: the global `$post->ID` (or `__no_post__` when absent).
- * Object cache is request-scoped via the function's static array, which
- * is the right scope here — we don't want to persist across requests
- * because the WC conditional tags depend on the current request URL.
+ * True when promptless_woocommerce_asset_scope() is 'full' or 'grid': a
+ * WooCommerce page, the header cart, or a Promptless WP product grid. Kept
+ * for callers that only need yes/no; the asset layer uses the scope.
  *
  * @since 1.2.0
  * @return bool
  */
 function promptless_needs_woocommerce_assets() {
+    return 'none' !== promptless_woocommerce_asset_scope();
+}
+
+/**
+ * How much of WooCommerce's front-end this page needs.
+ *
+ *   'full' — a WooCommerce page (shop, product, cart, checkout, account) or
+ *            the header cart is on: every WooCommerce stylesheet and script.
+ *   'grid' — the page's only WooCommerce content is a Promptless WP Product
+ *            Grid: the add-to-cart script, and the theme's small grid
+ *            stylesheet in place of WooCommerce's and the theme's full ones.
+ *   'none' — nothing.
+ *
+ * 'grid' exists because a Product Grid page loaded ~242 KB of WooCommerce
+ * CSS and used ~2 KB of it (measured 2026-09-19 with CSS coverage on
+ * /store/, after Add to cart): WooCommerce's rules are scoped to its own
+ * page classes, and the grid is styled by Promptless WP. The one rule set it
+ * does use — the "View cart" link the add-to-cart script inserts — is
+ * generated into assets/css/woocommerce-grid.min.css from woocommerce.css
+ * by scripts/build-css.js.
+ *
+ * Per-request memoized: the answer for a given post ID can't change
+ * mid-request (WC conditional tags, header-customizer state and post meta
+ * are stable within one PHP process), and the asset layer asks several
+ * times per page load; without the cache each call re-reads and decodes
+ * `_aisb_sections`. Keyed on the global `$post->ID` (or `__no_post__`).
+ *
+ * @return string 'full' | 'grid' | 'none'
+ */
+function promptless_woocommerce_asset_scope() {
     static $cache = array();
 
     // Cache key: per-post when available, '__no_post__' otherwise. The
     // global $post is the right scope because the only branch that varies
-    // by content is the productgrid scan; the WC/mini-cart branches are
+    // by content is the product-grid scan; the WC/mini-cart branches are
     // request-global and would produce the same answer for any post in
     // the same request anyway.
     global $post;
@@ -2165,25 +2182,25 @@ function promptless_needs_woocommerce_assets() {
 
     // WooCommerce must be active
     if ( ! class_exists( 'WooCommerce' ) ) {
-        return $cache[ $cache_key ] = false;
+        return $cache[ $cache_key ] = 'none';
     }
 
     // Always load on WooCommerce pages
     if ( is_woocommerce() || is_cart() || is_checkout() || is_account_page() ) {
-        return $cache[ $cache_key ] = true;
+        return $cache[ $cache_key ] = 'full';
     }
 
     // Load if mini-cart is enabled (needs AJAX updates)
     if ( function_exists( 'promptless_has_header_cart' ) && promptless_has_header_cart() ) {
-        return $cache[ $cache_key ] = true;
+        return $cache[ $cache_key ] = 'full';
     }
 
-    // Check if the page has a Promptless WP product grid section.
+    // A Promptless WP product grid needs only its add-to-cart behaviour.
     if ( $post && promptless_sections_include_product_grid( get_post_meta( $post->ID, '_aisb_sections', true ) ) ) {
-        return $cache[ $cache_key ] = true;
+        return $cache[ $cache_key ] = 'grid';
     }
 
-    return $cache[ $cache_key ] = false;
+    return $cache[ $cache_key ] = 'none';
 }
 
 /**
