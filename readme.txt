@@ -4,7 +4,7 @@ Tags: one-column, custom-logo, custom-menu, featured-images, full-width-template
 Requires at least: 6.6
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.4.0
+Stable tag: 1.4.1
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -150,6 +150,12 @@ Use the Promptless WP plugin's Canvas display mode, which provides a full-screen
 Yes. The theme includes WooCommerce-aware styling that inherits colors and typography from the Promptless WP plugin's Global Settings. The cart icon in the header can be configured to either open a mini-cart dropdown or link directly to the cart page (Appearance > Customize > Header > Cart). Mobile cart, checkout, and account pages render as grid-based cards instead of overflowing the viewport with default WooCommerce table styling. WooCommerce assets are only loaded on shop-related pages to keep non-shop pages fast.
 
 == Changelog ==
+
+= 1.4.1 =
+* Changed: a page whose only WooCommerce content is a Promptless WP product grid loads a 4 KB stylesheet instead of about 242 KB. Verified pixel-identical.
+* Fixed: right-to-left sites (Arabic, Hebrew) got no main stylesheet from the 1.4.0 package; the package now includes it.
+* Fixed: a Promptless WP product grid lost WooCommerce's add-to-cart script and styles on sites without the header cart.
+* Fixed: reusable elements in the announcement bar showed as raw [re:KEY] text instead of their content.
 
 = 1.4.0 =
 * Added: right-to-left languages load right-to-left stylesheets, so an Arabic or Hebrew site gets a mirrored header, footer, archive cards and announcement bar.
