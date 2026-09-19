@@ -54,6 +54,18 @@ Entries up to and including 1.3.2 were migrated from `readme.txt`, which was the
   `tests/test-announcement-bar.php` gains two cases and joins CI. Found
   2026-09-18 while writing the Promptless user docs.
 
+### Fixed — found in the release check (2026-09-19)
+
+- **Right-to-left sites got no main stylesheet from a released package.**
+  The theme registers `style.css` with `'rtl' => 'replace'`, so a
+  right-to-left site requests `style-rtl.css` instead — and
+  `create-release.sh` copied only `style.css`. The 1.4.0 ZIP therefore
+  shipped every right-to-left sibling except the main one, and an Arabic or
+  Hebrew site got a 404 for it. The script now copies it, and checks after
+  copying that every right-to-left sibling is in the package (one list,
+  shared with the pre-flight check, which now includes
+  `woocommerce-grid.min`).
+
 ## [1.4.0] - 2026-09-12
 
 ### Added
