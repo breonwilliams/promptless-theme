@@ -1,0 +1,159 @@
+<?php
+/**
+ * Promptless Theme — WooCommerce asset gate recognises Promptless WP product grids.
+ *
+ * promptless_needs_woocommerce_assets() keeps WooCommerce's stylesheets and
+ * add-to-cart script on a page that has a product grid. It compared the
+ * section type against `productgrid`, Promptless WP's name before 1.3.2; the
+ * type is `product_grid`, so on a site without the header cart every product
+ * grid lost its AJAX add-to-cart and its WooCommerce styling (found
+ * 2026-09-19). Both names must match.
+ *
+ * Run: php tests/test-woocommerce-assets.php
+ *
+ * @package Promptless_Theme
+ */
+
+// ---------------------------------------------------------------------------
+// Minimal WP runtime stubs (only what the helpers under test actually call)
+// ---------------------------------------------------------------------------
+
+define( 'ABSPATH', '/tmp/wordpress/' );
+
+// In-memory theme_mod store. Tests reset this between runs via reset_test_state().
+$GLOBALS['__test_theme_mods'] = [];
+
+if ( ! function_exists( 'get_theme_mod' ) ) {
+    function get_theme_mod( $name, $default = false ) {
+        return $GLOBALS['__test_theme_mods'][ $name ] ?? $default;
+    }
+}
+
+if ( ! function_exists( 'wp_strip_all_tags' ) ) {
+    function wp_strip_all_tags( $string ) {
+        return preg_replace( '/<[^>]*>/', '', (string) $string );
+    }
+}
+
+if ( ! function_exists( 'wp_kses_post' ) ) {
+    function wp_kses_post( $string ) {
+        // Test stub — real wp_kses_post does HTML allow-list filtering.
+        // For the unit tests below we only care about pass-through behavior.
+        return (string) $string;
+    }
+}
+
+if ( ! function_exists( 'wp_timezone' ) ) {
+    function wp_timezone() {
+        // Use UTC for deterministic test results regardless of where the
+        // test machine actually lives. Real installs use the WP-configured
+        // timezone, which is the same DateTimeZone-shaped object.
+        return new DateTimeZone( 'UTC' );
+    }
+}
+
+if ( ! function_exists( 'esc_attr_e' ) ) {
+    function esc_attr_e( $text, $domain = '' ) { /* no-op in unit tests */ }
+}
+
+if ( ! function_exists( 'esc_attr__' ) ) {
+    function esc_attr__( $text, $domain = '' ) { return (string) $text; }
+}
+
+if ( ! function_exists( 'esc_attr' ) ) {
+    function esc_attr( $text ) { return htmlspecialchars( (string) $text, ENT_QUOTES, 'UTF-8' ); }
+}
+
+if ( ! function_exists( 'esc_url' ) ) {
+    function esc_url( $url ) { return (string) $url; }
+}
+
+if ( ! function_exists( 'esc_html' ) ) {
+    function esc_html( $text ) { return htmlspecialchars( (string) $text, ENT_QUOTES, 'UTF-8' ); }
+}
+
+// Hook stubs — the functions we're testing don't use hooks directly, but
+// template-functions.php has top-level add_action / add_filter calls that
+// would fatal without stubs.
+if ( ! function_exists( 'add_action' ) ) {
+    function add_action( ...$args ) { /* no-op */ }
+}
+if ( ! function_exists( 'add_filter' ) ) {
+    function add_filter( ...$args ) { /* no-op */ }
+}
+if ( ! function_exists( 'apply_filters' ) ) {
+    function apply_filters( $tag, $value, ...$args ) { return $value; }
+}
+if ( ! function_exists( 'do_action' ) ) {
+    function do_action( ...$args ) { /* no-op */ }
+}
+
+// Other WP functions the helpers might transitively reference. Keep these
+// minimal — only what's needed for the announcement-bar functions to load.
+if ( ! function_exists( 'is_user_logged_in' ) ) {
+    function is_user_logged_in() { return false; }
+}
+if ( ! function_exists( 'has_nav_menu' ) ) {
+    function has_nav_menu( $location ) { return false; }
+}
+if ( ! function_exists( 'wp_nav_menu' ) ) {
+    function wp_nav_menu( $args = [] ) { /* no-op */ }
+}
+if ( ! function_exists( '_e' ) ) {
+    function _e( $text, $domain = '' ) { /* no-op */ }
+}
+if ( ! function_exists( '__' ) ) {
+    function __( $text, $domain = '' ) { return (string) $text; }
+}
+if ( ! function_exists( 'sprintf' ) ) {
+    // sprintf is a built-in; stub guard not needed — but kept for symmetry
+}
+if ( ! function_exists( 'wp_get_environment_type' ) ) {
+    function wp_get_environment_type() { return 'production'; }
+}
+if ( ! function_exists( 'is_admin' ) ) {
+    function is_admin() { return false; }
+}
+if ( ! function_exists( 'wp_is_mobile' ) ) {
+    function wp_is_mobile() { return false; }
+}
+if ( ! function_exists( 'is_singular' ) ) {
+    function is_singular() { return false; }
+}
+if ( ! function_exists( 'comments_open' ) ) {
+    function comments_open() { return false; }
+}
+
+// ---------------------------------------------------------------------------
+// Load the helpers under test
+// ---------------------------------------------------------------------------
+
+// template-functions.php has a lot of unrelated code; loading the whole
+// file is the simplest way to keep the test in sync with the source.
+$source_file = dirname( __FILE__ ) . '/../inc/template-functions.php';
+if ( ! file_exists( $source_file ) ) {
+    fwrite( STDERR, "ERROR: Source file not found: $source_file\n" );
+    exit( 1 );
+}
+require_once $source_file;
+
+
+$run = 0; $failed = 0;
+function check( $expected, $actual, $label ) {
+    global $run, $failed;
+    $run++;
+    if ( $expected === $actual ) { echo "  ✓ {$label}\n"; return; }
+    $failed++;
+    echo "  ✗ {$label} — expected " . var_export( $expected, true ) . ', got ' . var_export( $actual, true ) . "\n";
+}
+
+echo "\nProduct grid detection\n";
+check( true,  promptless_sections_include_product_grid( array( array( 'type' => 'hero' ), array( 'type' => 'product_grid' ) ) ), 'the current type, product_grid, is recognised' );
+check( true,  promptless_sections_include_product_grid( array( array( 'type' => 'productgrid' ) ) ), 'the pre-1.3.2 name still matches' );
+check( true,  promptless_sections_include_product_grid( json_encode( array( array( 'type' => 'product_grid' ) ) ) ), 'JSON-encoded meta is decoded' );
+check( false, promptless_sections_include_product_grid( array( array( 'type' => 'postgrid' ), array( 'type' => 'features' ) ) ), 'a page without a product grid does not need WooCommerce assets' );
+check( false, promptless_sections_include_product_grid( '' ), 'no sections' );
+check( false, promptless_sections_include_product_grid( array( 'not-a-section', array() ) ), 'malformed entries are skipped' );
+
+echo "\n" . ( $run - $failed ) . "/{$run} passed\n";
+exit( $failed ? 1 : 0 );

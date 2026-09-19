@@ -17,6 +17,8 @@ tests/*
 # ...and the announcement bar (schedule, dismissal, [re:KEY] resolution),
 # which runs in CI since 2026-09-18.
 !tests/test-announcement-bar.php
+# WooCommerce asset gate recognises Promptless WP's product_grid (2026-09-19).
+!tests/test-woocommerce-assets.php
 
 # System files
 .DS_Store

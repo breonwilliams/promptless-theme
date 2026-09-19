@@ -2178,24 +2178,43 @@ function promptless_needs_woocommerce_assets() {
         return $cache[ $cache_key ] = true;
     }
 
-    // Check if page has productgrid section
-    if ( $post ) {
-        $sections = get_post_meta( $post->ID, '_aisb_sections', true );
-
-        if ( is_string( $sections ) ) {
-            $sections = json_decode( $sections, true );
-        }
-
-        if ( is_array( $sections ) ) {
-            foreach ( $sections as $section ) {
-                if ( isset( $section['type'] ) && $section['type'] === 'productgrid' ) {
-                    return $cache[ $cache_key ] = true;
-                }
-            }
-        }
+    // Check if the page has a Promptless WP product grid section.
+    if ( $post && promptless_sections_include_product_grid( get_post_meta( $post->ID, '_aisb_sections', true ) ) ) {
+        return $cache[ $cache_key ] = true;
     }
 
     return $cache[ $cache_key ] = false;
+}
+
+/**
+ * Whether a page's Promptless WP sections include a product grid.
+ *
+ * The section type is `product_grid`. This compared against `productgrid`,
+ * Promptless WP's name before 1.3.2, so on a site without the header cart a
+ * product-grid page had WooCommerce's stylesheets and add-to-cart script
+ * dequeued: the grid's Add to cart button lost its AJAX behaviour and its
+ * WooCommerce styling (found 2026-09-19 while documenting the theme; measured
+ * on Local — the page carried an ajax_add_to_cart button and no
+ * wc-add-to-cart script). Both names match, so pages saved before 1.3.2 keep
+ * working.
+ *
+ * @param mixed $sections The `_aisb_sections` meta: an array, or JSON.
+ * @return bool
+ */
+function promptless_sections_include_product_grid( $sections ) {
+    if ( is_string( $sections ) ) {
+        $sections = json_decode( $sections, true );
+    }
+    if ( ! is_array( $sections ) ) {
+        return false;
+    }
+    foreach ( $sections as $section ) {
+        $type = is_array( $section ) && isset( $section['type'] ) ? $section['type'] : '';
+        if ( 'product_grid' === $type || 'productgrid' === $type ) {
+            return true;
+        }
+    }
+    return false;
 }
 
 
