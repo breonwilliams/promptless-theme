@@ -1811,6 +1811,44 @@ body.woocommerce-checkout .promptless-header__mini-cart .promptless-cart-item__r
 }
 
 /* ==========================================================================
+   A CTA LABEL LONGER THAN THE ROW (phone widths, fixed 640px tier)
+
+   The reflow rule above takes space back from gaps and padding, which is
+   enough for a short label. It is not enough for a label the site owner
+   chose: "Book a consultation" beside a wordmark and the search icon made
+   the row 352px in a 340px pill at 390px wide, and the menu toggle was
+   clipped by the pill's rounded edge on every page (video dry run, 2026-10).
+   No fixed size can fit an arbitrary label, so the row needs ONE element that
+   gives way, and it has to be the CTA's label:
+
+   - hiding the CTA, or cutting its label with an ellipsis, loses information
+     at exactly the widths 1.4.10 is about (see the reflow note above);
+   - the logo, search and menu toggle are fixed-size controls.
+
+   So the actions group may shrink, and the CTA label WRAPS onto a second line
+   instead of overflowing. Flex only shrinks what does not fit, so a label
+   that fits stays on one line and nothing changes there. A taller pill is
+   safe for the overlay mode: its offset is measured, not assumed.
+
+   640px, not the menu breakpoint: this is the container's phone tier, and it
+   must not move with the Customizer "Mobile Menu Breakpoint" setting.
+   ========================================================================== */
+@media (max-width: 640px) {
+    .promptless-header__actions {
+        flex-shrink: 1;
+        min-width: 0;
+    }
+
+    .promptless-header__actions .promptless-header__cta {
+        flex-shrink: 1;
+        min-width: 0;
+        white-space: normal;
+        text-align: center;
+        overflow-wrap: break-word;
+    }
+}
+
+/* ==========================================================================
    FLOATING OVERLAY MODE (opt-in — Customizer "Float Over First Section")
 
    The pill floats OVER the first section instead of sitting in its own

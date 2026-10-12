@@ -8,6 +8,20 @@ Entries up to and including 1.3.2 were migrated from `readme.txt`, which was the
 
 ## [Unreleased]
 
+### Fixed
+
+- **A long header button label pushed the menu icon out of the floating
+  header on phones.** At 390px wide, a wordmark, the search icon and a
+  "Book a consultation" button made the row 352px in a 340px pill, and the
+  menu icon was clipped by the pill's rounded edge on every page (video dry
+  run, 2026-10). Below 640px the header's action group may now shrink, and
+  the button label wraps onto a second line instead of overflowing; a label
+  that fits stays on one line and nothing changes. Hiding the button or
+  cutting its label short would lose information at the widths the theme's
+  reflow rule protects, so wrapping is the one way it gives. Pinned in both
+  `header.css` and the shipped `header.min.css` by
+  `tests/test-accessibility.php`.
+
 ## [1.4.1] - 2026-09-19
 
 ### Changed

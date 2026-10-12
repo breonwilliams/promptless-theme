@@ -132,6 +132,43 @@ class AccessibilityTestRunner {
     }
 
     /**
+     * A CTA label longer than the row wraps instead of pushing the menu
+     * toggle out of the pill.
+     *
+     * "Book a consultation" beside a wordmark and the search icon made the
+     * floating header row 352px in a 340px pill at 390px wide; the menu
+     * toggle was clipped by the pill's rounded edge on every page (video dry
+     * run, 2026-10). The CTA's label is the one thing that may give way, by
+     * wrapping: hiding it or cutting it with an ellipsis would lose
+     * information at the widths 1.4.10 is about.
+     */
+    private function test_long_cta_label_wraps() {
+        echo "\nA long header CTA label wraps (phone widths)\n";
+
+        foreach ( array( 'assets/css/header.css', 'assets/css/header.min.css' ) as $file ) {
+            $css = $this->read( $file );
+            if ( false === $css ) {
+                $this->check( false, "{$file} exists", 'The stylesheet is missing.' );
+                continue;
+            }
+            $normalised = preg_replace( '/\s+/', '', $css );
+
+            // The phone-tier block: actions may shrink, and the CTA in it wraps.
+            $has_block = (bool) preg_match(
+                '/@media\(max-width:640px\)\{[^@]*\.promptless-header__actions\{[^}]*flex-shrink:1[^}]*min-width:0[^}]*\}[^@]*\.promptless-header__actions\.promptless-header__cta\{[^}]*white-space:normal/',
+                $normalised
+            );
+            $this->check(
+                $has_block,
+                "{$file}: below 640px the actions shrink and the CTA label wraps",
+                'Without it a long CTA label keeps its full width, the row overflows the '
+                . 'floating pill, and the menu toggle is clipped at the pill\'s edge — '
+                . 'the navigation unreachable on phones.'
+            );
+        }
+    }
+
+    /**
      * Skip-link targets must be able to receive focus.
      *
      * A <main> is not focusable by default: without tabindex="-1" the browser
@@ -277,6 +314,7 @@ class AccessibilityTestRunner {
         echo str_repeat( '=', 56 ) . "\n";
 
         $this->test_header_reflow();
+        $this->test_long_cta_label_wraps();
         $this->test_skip_link_targets_are_focusable();
         $this->test_archive_heading_ladder();
 
