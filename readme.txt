@@ -4,7 +4,7 @@ Tags: one-column, custom-logo, custom-menu, featured-images, full-width-template
 Requires at least: 6.6
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.4.1
+Stable tag: 1.4.2
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -151,6 +151,9 @@ Yes. The theme includes WooCommerce-aware styling that inherits colors and typog
 
 == Changelog ==
 
+= 1.4.2 =
+* Fixed: on phones, a long header button label (for example "Book a consultation") wraps onto a second line instead of pushing the menu icon out of the floating header.
+
 = 1.4.1 =
 * Changed: a page whose only WooCommerce content is a Promptless WP product grid loads a 4 KB stylesheet instead of about 242 KB. Verified pixel-identical.
 * Fixed: right-to-left sites (Arabic, Hebrew) got no main stylesheet from the 1.4.0 package; the package now includes it.
@@ -178,19 +181,6 @@ Yes. The theme includes WooCommerce-aware styling that inherits colors and typog
 
 = 1.3.1 =
 * Improved: all search forms now render through the theme's searchform.php template via get_search_form(), for consistent search markup and easier customization.
-
-= 1.3.0 =
-* New: Header Search — magnifying-glass trigger in the header actions (enable in Customizer or via the Connector), full-screen overlay with instant results as you type, full keyboard support ("/" or Cmd/Ctrl+K), and an accessible combobox for screen readers. Mobile gets a full-screen search sheet that stays above the keyboard
-* New: Search works through any serving origin (local live links, staging proxies) and shows an honest "instant results unavailable" state with a working fallback when the results API is blocked
-* New: Floating header overlay mode — the pill floats over the first section on eligible pages
-* New: Archive card date/author display toggles in the Customizer (pages never show meta)
-* Improved: Scrollable WooCommerce product tabs on mobile; all assets now cache-bust by file modification time
-* Fixed: header search icon now shows on desktop when search is the only header action (no cart, no CTA)
-
-
-Only the most recent releases are listed here; readme.txt truncates this section
-at 5000 characters. The complete history lives in CHANGELOG.md in the theme
-folder, and on the GitHub releases page.
 
 == Resources ==
 

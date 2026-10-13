@@ -8,6 +8,8 @@ Entries up to and including 1.3.2 were migrated from `readme.txt`, which was the
 
 ## [Unreleased]
 
+## [1.4.2] - 2026-10-12
+
 ### Fixed
 
 - **A long header button label pushed the menu icon out of the floating
