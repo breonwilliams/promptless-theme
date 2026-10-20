@@ -4,7 +4,7 @@ Tags: one-column, custom-logo, custom-menu, featured-images, full-width-template
 Requires at least: 6.6
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.4.2
+Stable tag: 1.4.3
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -151,6 +151,10 @@ Yes. The theme includes WooCommerce-aware styling that inherits colors and typog
 
 == Changelog ==
 
+= 1.4.3 =
+* New: a header button can open a Promptless WP popup instead of following a link (Customizer > Header > Buttons, "Action"). It is a real button announced as opening a dialog, works in the mobile menu and the mobile header bar, and the popup loads on every page. Needs Promptless WP 1.8.12.
+* Fixed: with the mobile menu open, a dialog opened on top of it (a popup, or search) now keeps the keyboard: Tab stays inside it and Escape closes only it.
+
 = 1.4.2 =
 * Fixed: on phones, a long header button label (for example "Book a consultation") wraps onto a second line instead of pushing the menu icon out of the floating header.
 
@@ -178,9 +182,6 @@ Yes. The theme includes WooCommerce-aware styling that inherits colors and typog
 = 1.3.2 =
 * New: Light/dark logo variants. Add an optional dark-background version of your logo (Appearance > Customize > Site Identity), and the header and footer each automatically use the version matching their own light or dark theme — so a dark header and a light footer can both show a correctly-contrasting logo. Optional footer-only logo overrides cover brands whose footer uses a different lockup. Fully optional; sites that don't set the new logos are unchanged.
 * Fixed: on pages using the floating "pill" header in Float Over First Section (overlay) mode without breadcrumbs, the first section could render partly beneath the floating header when that section used a custom colour palette — the header's clearance was lost. The first section now reserves space for the floating header again on both mobile and desktop, across all section layouts (standard, boxed, and split-screen).
-
-= 1.3.1 =
-* Improved: all search forms now render through the theme's searchform.php template via get_search_form(), for consistent search markup and easier customization.
 
 == Resources ==
 

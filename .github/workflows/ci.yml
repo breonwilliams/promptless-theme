@@ -63,3 +63,6 @@ jobs:
       # WooCommerce assets stay on a page with a Promptless WP product grid.
       - name: WooCommerce asset gate
         run: php tests/test-woocommerce-assets.php
+      # Header buttons that open a Promptless WP popup, and their fallbacks.
+      - name: Header popup buttons
+        run: php tests/test-header-cta-popup.php

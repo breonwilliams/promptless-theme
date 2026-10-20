@@ -19,6 +19,8 @@ tests/*
 !tests/test-announcement-bar.php
 # WooCommerce asset gate recognises Promptless WP's product_grid (2026-09-19).
 !tests/test-woocommerce-assets.php
+# Header buttons that open a Promptless WP popup (1.4.3), run in CI.
+!tests/test-header-cta-popup.php
 
 # System files
 .DS_Store
