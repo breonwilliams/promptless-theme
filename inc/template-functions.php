@@ -513,11 +513,102 @@ function promptless_get_cta_style_class( $style ) {
 }
 
 /**
+ * Header button actions the theme understands.
+ *
+ * A header button does ONE thing: follow a link ('url') or open a Promptless
+ * WP popup ('modal'). Stored per button as `promptless_header_cta{_2}_action`
+ * next to one setting per action type (`_url`, `_modal`), so a future action
+ * type is a new value here plus its own setting, not a rework. 'url' is the
+ * default, so every header saved before 1.4.3 keeps behaving exactly as it
+ * did.
+ *
+ * @since 1.4.3
+ * @return string[]
+ */
+function promptless_get_cta_actions() {
+    return array( 'url', 'modal' );
+}
+
+/**
+ * Normalize a popup id to the shape Promptless WP stores ([a-z0-9_]).
+ *
+ * Mirrors SectionRendererHelpers::render_button() in Promptless WP, which
+ * accepts "ask-a-question" and stores/looks up "ask_a_question".
+ *
+ * @since 1.4.3
+ * @param mixed $id Raw id.
+ * @return string
+ */
+function promptless_normalize_popup_id( $id ) {
+    if ( ! is_string( $id ) ) {
+        return '';
+    }
+    return str_replace( '-', '_', sanitize_key( $id ) );
+}
+
+/**
+ * The Promptless WP popups a header button can open, as id => title.
+ *
+ * Read through Promptless WP's `aisb_modal_choices` filter, so the theme
+ * stays a consumer of the plugin's hooks and works without it: with the
+ * plugin inactive (or too old to answer) the list is empty, and a button set
+ * to open a popup falls back to its URL or is not shown, never a dead button.
+ *
+ * @since 1.4.3
+ * @return array<string, string>
+ */
+function promptless_get_header_popup_choices() {
+    $raw     = apply_filters( 'aisb_modal_choices', array() );
+    $choices = array();
+    if ( is_array( $raw ) ) {
+        foreach ( $raw as $id => $title ) {
+            $id = promptless_normalize_popup_id( (string) $id );
+            if ( '' !== $id ) {
+                $choices[ $id ] = is_string( $title ) && '' !== $title ? $title : $id;
+            }
+        }
+    }
+    return $choices;
+}
+
+/**
+ * Resolve what a configured header button does, or null when it can do
+ * nothing (and so must not render).
+ *
+ * - action 'modal' with a popup Promptless WP knows: opens that popup.
+ * - action 'modal' with a missing or deleted popup: follows its URL if it
+ *   still has one, otherwise the button is dropped. A button that opens
+ *   nothing is worse than no button.
+ * - action 'url' (the default): follows the URL when one is set.
+ *
+ * @since 1.4.3
+ * @param array $def  Raw definition: action, url, modal.
+ * @param array $choices Available popups (id => title).
+ * @return array{type:string,url:string,modal:string}|null
+ */
+function promptless_resolve_cta_target( array $def, array $choices ) {
+    $action = isset( $def['action'] ) && in_array( $def['action'], promptless_get_cta_actions(), true ) ? $def['action'] : 'url';
+    $url    = isset( $def['url'] ) ? (string) $def['url'] : '';
+    $modal  = promptless_normalize_popup_id( isset( $def['modal'] ) ? $def['modal'] : '' );
+
+    if ( 'modal' === $action && '' !== $modal && isset( $choices[ $modal ] ) ) {
+        return array( 'type' => 'modal', 'url' => '', 'modal' => $modal );
+    }
+
+    if ( '' !== $url ) {
+        return array( 'type' => 'url', 'url' => $url, 'modal' => '' );
+    }
+
+    return null;
+}
+
+/**
  * Get the normalized, ordered list of configured header CTA buttons.
  *
- * A button is included only when BOTH its text and URL are set. Each
- * returned entry carries its resolved style and an *effective* mobile
- * placement.
+ * A button is included only when its text is set AND it resolves to
+ * something to do: a URL, or a popup that exists (see
+ * promptless_resolve_cta_target()). Each returned entry carries its target
+ * type, its resolved style and an *effective* mobile placement.
  *
  * No-clutter invariant: at most ONE button may remain in the header bar on
  * mobile (two buttons beside the logo and hamburger is too crowded). The
@@ -528,19 +619,23 @@ function promptless_get_cta_style_class( $style ) {
  * The renderer is data-driven (not hardcoded to two buttons), so adding
  * more buttons in future is a Customizer-only change.
  *
- * @return array<int, array{text:string,url:string,style:string,placement:string}>
+ * @return array<int, array{text:string,type:string,url:string,modal:string,style:string,placement:string}>
  */
 function promptless_get_header_ctas() {
     $defs = array(
         array(
             'text'      => get_theme_mod( 'promptless_header_cta_text', '' ),
+            'action'    => get_theme_mod( 'promptless_header_cta_action', 'url' ),
             'url'       => get_theme_mod( 'promptless_header_cta_url', '' ),
+            'modal'     => get_theme_mod( 'promptless_header_cta_modal', '' ),
             'style'     => get_theme_mod( 'promptless_header_cta_style', 'primary' ),
             'placement' => get_theme_mod( 'promptless_header_cta_mobile_placement', 'bar' ),
         ),
         array(
             'text'      => get_theme_mod( 'promptless_header_cta_2_text', '' ),
+            'action'    => get_theme_mod( 'promptless_header_cta_2_action', 'url' ),
             'url'       => get_theme_mod( 'promptless_header_cta_2_url', '' ),
+            'modal'     => get_theme_mod( 'promptless_header_cta_2_modal', '' ),
             'style'     => get_theme_mod( 'promptless_header_cta_2_style', 'secondary' ),
             'placement' => get_theme_mod( 'promptless_header_cta_2_mobile_placement', 'menu' ),
         ),
@@ -551,9 +646,14 @@ function promptless_get_header_ctas() {
 
     $ctas      = array();
     $bar_taken = false;
+    $choices   = promptless_get_header_popup_choices();
 
     foreach ( $defs as $def ) {
-        if ( empty( $def['text'] ) || empty( $def['url'] ) ) {
+        if ( empty( $def['text'] ) ) {
+            continue;
+        }
+        $target = promptless_resolve_cta_target( $def, $choices );
+        if ( null === $target ) {
             continue;
         }
 
@@ -571,7 +671,9 @@ function promptless_get_header_ctas() {
 
         $ctas[] = array(
             'text'      => $def['text'],
-            'url'       => $def['url'],
+            'type'      => $target['type'],
+            'url'       => $target['url'],
+            'modal'     => $target['modal'],
             'style'     => $style,
             'placement' => $placement,
         );
@@ -628,11 +730,18 @@ function promptless_has_desktop_header_actions() {
 }
 
 /**
- * Render a single CTA anchor.
+ * Render a single CTA: a link, or a button that opens a popup.
+ *
+ * A popup trigger is a real <button type="button"> carrying the same
+ * contract Promptless WP's section buttons use (`data-aisb-modal-open`), so
+ * the plugin's modal.js opens it, moves focus into the dialog and returns
+ * focus here on close. aria-haspopup="dialog" tells assistive technology it
+ * opens a dialog rather than navigating. Both keys work (Enter and Space),
+ * which an <a href="#"> would not give.
  *
  * @param array  $cta         Normalized CTA entry from promptless_get_header_ctas().
- * @param string $extra_class Optional extra class(es) for the anchor.
- * @return string Anchor HTML.
+ * @param string $extra_class Optional extra class(es).
+ * @return string HTML.
  */
 function promptless_render_cta_button( array $cta, $extra_class = '' ) {
     $classes = array(
@@ -646,6 +755,15 @@ function promptless_render_cta_button( array $cta, $extra_class = '' ) {
         $classes[] = $extra_class;
     }
 
+    if ( isset( $cta['type'] ) && 'modal' === $cta['type'] ) {
+        return sprintf(
+            '<button type="button" class="%s" data-aisb-modal-open="%s" aria-haspopup="dialog">%s</button>',
+            esc_attr( implode( ' ', $classes ) ),
+            esc_attr( $cta['modal'] ),
+            esc_html( $cta['text'] )
+        );
+    }
+
     return sprintf(
         '<a href="%s" class="%s">%s</a>',
         esc_url( $cta['url'] ),
@@ -653,6 +771,34 @@ function promptless_render_cta_button( array $cta, $extra_class = '' ) {
         esc_html( $cta['text'] )
     );
 }
+
+/**
+ * Tell Promptless WP which popups the header opens, so their markup and
+ * assets load on every page the header appears on.
+ *
+ * Promptless WP renders a popup (and loads its CSS/JS, and any Forms assets
+ * inside it) only on pages that reference it. Section buttons are found by
+ * scanning the page; the header is not part of the page's sections, so it
+ * declares its popups through the plugin's documented
+ * `aisb_modal_referenced_ids` filter. Only popups a rendered header button
+ * actually opens are added.
+ *
+ * @since 1.4.3
+ * @param array $ids Popup ids already referenced on this page.
+ * @return array
+ */
+function promptless_header_popup_ids( $ids ) {
+    if ( ! is_array( $ids ) ) {
+        $ids = array();
+    }
+    foreach ( promptless_get_header_ctas() as $cta ) {
+        if ( isset( $cta['type'] ) && 'modal' === $cta['type'] ) {
+            $ids[] = $cta['modal'];
+        }
+    }
+    return $ids;
+}
+add_filter( 'aisb_modal_referenced_ids', 'promptless_header_popup_ids' );
 
 /**
  * Output the CTA button(s) in the header actions area.

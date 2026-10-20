@@ -132,8 +132,20 @@
             }
         });
 
+        // A modal dialog layered ABOVE the menu owns the keyboard while it has
+        // focus: a Promptless WP popup opened from a header button in the
+        // drawer (1.4.3), or the search overlay. Without this, Escape closed
+        // the drawer along with the popup (focus then had nowhere to return),
+        // and the drawer's Tab trap pulled focus out of the popup.
+        function isInLayeredDialog(target) {
+            return !!(target && target.closest && target.closest('[aria-modal="true"]') && !navWrapper.contains(target));
+        }
+
         // Close menu on escape key
         document.addEventListener('keydown', function(event) {
+            if (isInLayeredDialog(event.target)) {
+                return;
+            }
             if (event.key === 'Escape') {
                 // Close mobile menu if open
                 if (navWrapper.classList.contains('is-open')) {
@@ -152,8 +164,12 @@
             }
         });
 
-        // Close menu when clicking outside
+        // Close menu when clicking outside (but not inside a dialog layered
+        // above it, e.g. the popup a drawer button opened).
         document.addEventListener('click', function(event) {
+            if (isInLayeredDialog(event.target) || (event.target && event.target.closest && event.target.closest('.aisb-modal'))) {
+                return;
+            }
             if (navWrapper.classList.contains('is-open')) {
                 const isClickInside = navWrapper.contains(event.target) ||
                                      menuToggle.contains(event.target);

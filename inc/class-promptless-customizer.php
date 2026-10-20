@@ -669,11 +669,13 @@ class Promptless_Customizer {
             'promptless_header_cta_url',
             array(
                 'label'       => __( 'Button 1 URL', 'promptless' ),
-                'description' => __( 'Link URL for button 1.', 'promptless' ),
+                'description' => __( 'Where button 1 links to. Also used if its popup is deleted later.', 'promptless' ),
                 'section'     => 'promptless_header_cta',
                 'type'        => 'url',
             )
         );
+
+        $this->add_cta_target_controls( $wp_customize, 'promptless_header_cta', __( 'Button 1', 'promptless' ) );
 
         $wp_customize->add_setting(
             'promptless_header_cta_style',
@@ -748,11 +750,13 @@ class Promptless_Customizer {
             'promptless_header_cta_2_url',
             array(
                 'label'       => __( 'Button 2 URL', 'promptless' ),
-                'description' => __( 'Link URL for button 2.', 'promptless' ),
+                'description' => __( 'Where button 2 links to. Also used if its popup is deleted later.', 'promptless' ),
                 'section'     => 'promptless_header_cta',
                 'type'        => 'url',
             )
         );
+
+        $this->add_cta_target_controls( $wp_customize, 'promptless_header_cta_2', __( 'Button 2', 'promptless' ) );
 
         $wp_customize->add_setting(
             'promptless_header_cta_2_style',
@@ -1398,6 +1402,84 @@ class Promptless_Customizer {
         }
 
         return 'primary';
+    }
+
+    /**
+     * Add the "what does this button do" controls for one header button:
+     * an action (link or popup) and the popup to open.
+     *
+     * The URL setting stays as it was and is still used when the action is
+     * "link", or as the fallback when the chosen popup no longer exists.
+     * A future action type adds a choice here and its own setting.
+     *
+     * @since 1.4.3
+     * @param WP_Customize_Manager $wp_customize Customizer manager.
+     * @param string               $prefix       Theme-mod prefix, e.g. promptless_header_cta.
+     * @param string               $label        Button label, e.g. "Button 1".
+     */
+    private function add_cta_target_controls( $wp_customize, $prefix, $label ) {
+        $wp_customize->add_setting(
+            "{$prefix}_action",
+            array(
+                'default'           => 'url',
+                'sanitize_callback' => array( $this, 'sanitize_cta_action' ),
+                'transport'         => 'refresh',
+            )
+        );
+
+        $wp_customize->add_control(
+            "{$prefix}_action",
+            array(
+                /* translators: %s: "Button 1" or "Button 2" */
+                'label'   => sprintf( __( '%s Action', 'promptless' ), $label ),
+                'section' => 'promptless_header_cta',
+                'type'    => 'select',
+                'choices' => array(
+                    'url'   => __( 'Link to a page or URL', 'promptless' ),
+                    'modal' => __( 'Open a popup', 'promptless' ),
+                ),
+            )
+        );
+
+        $choices = promptless_get_header_popup_choices();
+
+        $wp_customize->add_setting(
+            "{$prefix}_modal",
+            array(
+                'default'           => '',
+                'sanitize_callback' => 'promptless_normalize_popup_id',
+                'transport'         => 'refresh',
+            )
+        );
+
+        $wp_customize->add_control(
+            "{$prefix}_modal",
+            array(
+                /* translators: %s: "Button 1" or "Button 2" */
+                'label'           => sprintf( __( '%s Popup', 'promptless' ), $label ),
+                'description'     => empty( $choices )
+                    ? __( 'No popups yet. Create one in Promptless WP, then choose it here.', 'promptless' )
+                    : __( 'The popup this button opens. If it is deleted later, the button uses its URL instead, or is hidden when it has none.', 'promptless' ),
+                'section'         => 'promptless_header_cta',
+                'type'            => 'select',
+                'choices'         => array( '' => __( '— Choose a popup —', 'promptless' ) ) + $choices,
+                'active_callback' => static function ( $control ) use ( $prefix ) {
+                    $action = $control->manager->get_setting( "{$prefix}_action" );
+                    return $action && 'modal' === $action->value();
+                },
+            )
+        );
+    }
+
+    /**
+     * Sanitize a header CTA button action.
+     *
+     * @since 1.4.3
+     * @param string $value Setting value.
+     * @return string 'url' or 'modal' ('url' when unknown).
+     */
+    public function sanitize_cta_action( $value ) {
+        return in_array( $value, promptless_get_cta_actions(), true ) ? $value : 'url';
     }
 
     /**

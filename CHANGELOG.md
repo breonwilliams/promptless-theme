@@ -8,6 +8,40 @@ Entries up to and including 1.3.2 were migrated from `readme.txt`, which was the
 
 ## [Unreleased]
 
+## [1.4.3] - Unreleased
+
+From the Promptless Forms video dry run (Sparrowmere, act 2: "Add an 'Ask a
+question' button to the header that opens a short popup form"). Not released
+yet: ships with the rest of the dry run's findings.
+
+### Added
+
+- **A header button can open a popup.** Each header button now has an
+  action: `url` (the default, so every existing header is unchanged) or
+  `modal`, with one setting per action type (`promptless_header_cta{_2}_url`,
+  `promptless_header_cta{_2}_modal`), so a future action type is one more
+  value rather than a rework. A popup button is a real `<button
+  type="button" aria-haspopup="dialog" data-aisb-modal-open>` — the same
+  trigger contract as Promptless WP's section buttons, so the plugin's
+  modal.js opens it, moves focus in and returns it on close — in the bar and
+  in the mobile menu. The theme declares the header's popups through
+  Promptless WP's `aisb_modal_referenced_ids` filter, so the popup and its
+  assets (a Forms form inside it included) load on every page that shows
+  the header. The popup list comes from the plugin's `aisb_modal_choices`
+  filter; with the plugin inactive, or the popup deleted, the button
+  follows its URL, or is not shown when it has none — never a button that
+  opens nothing. Customizer: **Button 1/2 Action** and **Button 1/2 Popup**.
+  Pinned by `tests/test-header-cta-popup.php`.
+
+### Fixed
+
+- **A dialog opened over the mobile menu lost the keyboard to it.** The
+  drawer's document-level Escape and Tab handlers ran even when focus was
+  inside a dialog layered above it: Escape closed the drawer with the popup
+  (focus then had nowhere to return) and Tab was pulled back into the
+  drawer. Keys and clicks inside another `aria-modal` dialog are now left to
+  that dialog. Found testing the popup button from the mobile menu.
+
 ## [1.4.2] - 2026-10-12
 
 ### Fixed
