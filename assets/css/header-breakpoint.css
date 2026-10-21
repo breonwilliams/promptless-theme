@@ -776,6 +776,31 @@
     }
 }
 
+/* A bar-placed button the bar cannot fit (1.4.3). The drawer holds a hidden
+   copy of each bar-placed button; navigation.js adds
+   .promptless-header--cta-overflow only when the bar row overflows with both
+   the site title and the label wrapped between words (see header.css "A CTA
+   LABEL LONGER THAN THE ROW"), and the button then moves into the menu, as
+   cta_mobile_placement "menu" would. Measured, not guessed: no fixed width
+   can predict an arbitrary title beside an arbitrary label. Every rule is
+   inside the drawer breakpoint, so a stale class can never hide a desktop
+   button. */
+@media (max-width: 767px) {
+    .promptless-header__menu-cta .promptless-header__cta--bar-overflow,
+    .promptless-header__menu-cta--overflow-only,
+    .promptless-header--cta-overflow .promptless-header__actions .promptless-header__cta--keep {
+        display: none;
+    }
+
+    .promptless-header--cta-overflow .promptless-header__menu-cta--overflow-only {
+        display: flex;
+    }
+
+    .promptless-header--cta-overflow .promptless-header__menu-cta .promptless-header__cta--bar-overflow {
+        display: inline-flex;
+    }
+}
+
 /* ==========================================================================
    Default (inline) layout — flush right-aligned nav when there are no actions
 

@@ -153,5 +153,34 @@ mods( array( 'promptless_header_cta_text' => 'Call', 'promptless_header_cta_acti
 check( false !== strpos( header_html(), '<a href="/call/"' ), 'treated as a link' );
 check( array( 'url', 'modal' ) === promptless_get_cta_actions(), 'actions are url and modal' );
 
+echo "\n8. A bar button the bar cannot fit (item 8 of the video dry run)\n";
+function menu_html() {
+	ob_start();
+	promptless_header_menu_cta( 'bottom' );
+	return ob_get_clean();
+}
+plugin_active();
+mods( array( 'promptless_header_cta_text' => 'Ask a question', 'promptless_header_cta_action' => 'modal', 'promptless_header_cta_modal' => 'quick_question' ) );
+$menu = menu_html();
+check( false !== strpos( header_html(), 'promptless-header__cta--keep' ), 'the bar button is unchanged' );
+check( false !== strpos( $menu, 'promptless-header__menu-cta--overflow-only' ), 'the drawer group exists but is marked overflow-only', $menu );
+check( 1 === preg_match( '/<button type="button" class="[^"]*promptless-header__cta--bar-overflow" data-aisb-modal-open="quick_question" aria-haspopup="dialog">Ask a question<\/button>/', $menu ), 'with an overflow copy that opens the same popup', $menu );
+mods( array(
+	'promptless_header_cta_text'             => 'Ask',
+	'promptless_header_cta_url'              => '/ask/',
+	'promptless_header_cta_2_text'           => 'Tour',
+	'promptless_header_cta_2_url'            => '/tour/',
+	'promptless_header_cta_2_mobile_placement' => 'menu',
+) );
+$menu = menu_html();
+check( false === strpos( $menu, '--overflow-only' ), 'a group that holds a menu button is always shown', $menu );
+check( strpos( $menu, '/ask/' ) < strpos( $menu, '/tour/' ), 'buttons keep their configured order' );
+check( 1 === substr_count( $menu, '--bar-overflow' ), 'only the bar button gets an overflow copy' );
+mods( array() );
+check( '' === trim( menu_html() ), 'no buttons: nothing in the drawer' );
+$css = file_get_contents( dirname( __DIR__ ) . '/assets/css/header-breakpoint.css' );
+check( 1 === preg_match( '/@media \(max-width: 767px\) \{\s*\.promptless-header__menu-cta \.promptless-header__cta--bar-overflow,\s*\.promptless-header__menu-cta--overflow-only,\s*\.promptless-header--cta-overflow \.promptless-header__actions \.promptless-header__cta--keep \{\s*display: none;/', $css ), 'copies are hidden, and the swap is scoped to the drawer breakpoint' );
+check( false !== strpos( file_get_contents( dirname( __DIR__ ) . '/assets/js/navigation.min.js' ), 'promptless-header--cta-overflow' ), 'the built navigation script sets the overflow class' );
+
 echo "\n{$pass} passed, {$fail} failed\n";
 exit( $fail ? 1 : 0 );

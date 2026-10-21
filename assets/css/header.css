@@ -1830,18 +1830,32 @@ body.woocommerce-checkout .promptless-header__mini-cart .promptless-cart-item__r
    that fits stays on one line and nothing changes there. A taller pill is
    safe for the overlay mode: its offset is measured, not assumed.
 
+   Neither side may shrink below its longest word (1.4.3). In 1.4.2 the CTA
+   had `min-width: 0` beside a brand that never shrank, so with a text site
+   title the title kept its width and the button gave way to nothing:
+   "Ask a question" beside "Sparrowmere Gardens" at 390px was 52px wide with
+   a 4px content box, its second line clipped to "questio", and the row
+   overflowed the pill by 34px (Sparrowmere dry run, 2026-10). Now the brand
+   shrinks too and both keep the default `min-width: auto`, i.e. their
+   min-content width: a text title wraps between words, an image logo never
+   scales down, and the CTA wraps between words but never inside one
+   (`overflow-wrap: break-word` does not lower min-content).
+
    640px, not the menu breakpoint: this is the container's phone tier, and it
    must not move with the Customizer "Mobile Menu Breakpoint" setting.
    ========================================================================== */
 @media (max-width: 640px) {
+    .promptless-header__brand,
     .promptless-header__actions {
         flex-shrink: 1;
-        min-width: 0;
+    }
+
+    .promptless-header__site-title {
+        overflow-wrap: break-word;
     }
 
     .promptless-header__actions .promptless-header__cta {
         flex-shrink: 1;
-        min-width: 0;
         white-space: normal;
         text-align: center;
         overflow-wrap: break-word;

@@ -881,9 +881,10 @@ function promptless_get_header_menu_cta_position() {
 /**
  * Output the CTA button group inside the mobile menu panel.
  *
- * Renders only the buttons whose effective mobile placement is 'menu', laid out
- * side by side. Hidden on desktop via the breakpoint CSS (where these buttons
- * already appear in the header bar).
+ * Renders the buttons whose effective mobile placement is 'menu', laid out
+ * side by side, plus a hidden overflow copy of each bar-placed one (below).
+ * Hidden on desktop via the breakpoint CSS (where these buttons already
+ * appear in the header bar).
  *
  * The drawer calls this once for each of the three possible vertical slots
  * ('top', 'middle', 'bottom'); the call is a no-op unless $slot matches the
@@ -892,9 +893,20 @@ function promptless_get_header_menu_cta_position() {
  * visual order, screen-reader order, and keyboard tab order in agreement.
  *
  * Safe to call unconditionally from every header layout: outputs nothing when
- * no button is routed to the menu or when the slot does not match.
+ * no button is configured or when the slot does not match.
+ *
+ * Bar-placed buttons get a hidden copy here too
+ * (promptless-header__cta--bar-overflow). navigation.js shows it, and hides
+ * the bar button, only when the bar row cannot fit the button beside the
+ * logo and the menu toggle even with both labels wrapped between words: an
+ * arbitrary site title and label cannot always share a phone-width row, and
+ * a clipped button is worse than one in the menu. Hidden copies are
+ * display:none, so assistive technology meets one button at a time. When
+ * every button is bar-placed, the group carries --overflow-only and stays
+ * hidden until then.
  *
  * @since 1.4.0 Added $slot parameter and position gating.
+ * @since 1.4.3 Bar-placed buttons render a hidden overflow copy.
  * @param string $slot Drawer slot this call represents: 'top', 'middle', or
  *                     'bottom'. Defaults to 'bottom' (the historical position).
  */
@@ -914,22 +926,25 @@ function promptless_header_menu_cta( $slot = 'bottom' ) {
         return;
     }
 
-    $menu_ctas = array_filter(
-        $ctas,
-        static function ( $cta ) {
-            return 'menu' === $cta['placement'];
+    $has_menu_cta = false;
+    foreach ( $ctas as $cta ) {
+        if ( 'menu' === $cta['placement'] ) {
+            $has_menu_cta = true;
         }
-    );
+    }
 
-    if ( empty( $menu_ctas ) ) {
-        return;
+    $group_classes = 'promptless-header__menu-cta promptless-header__menu-cta--' . $slot;
+    if ( ! $has_menu_cta ) {
+        $group_classes .= ' promptless-header__menu-cta--overflow-only';
     }
     ?>
-    <div class="promptless-header__menu-cta promptless-header__menu-cta--<?php echo esc_attr( $slot ); ?>">
+    <div class="<?php echo esc_attr( $group_classes ); ?>">
         <?php
-        foreach ( $menu_ctas as $cta ) {
+        foreach ( $ctas as $cta ) {
+            $modifier = ( 'menu' === $cta['placement'] ) ? '' : 'promptless-header__cta--bar-overflow';
+
             // Anchor HTML is fully escaped inside promptless_render_cta_button().
-            echo promptless_render_cta_button( $cta ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+            echo promptless_render_cta_button( $cta, $modifier ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         }
         ?>
     </div>
