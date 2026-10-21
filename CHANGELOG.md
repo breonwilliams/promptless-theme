@@ -8,11 +8,10 @@ Entries up to and including 1.3.2 were migrated from `readme.txt`, which was the
 
 ## [Unreleased]
 
-## [1.4.3] - Unreleased
+## [1.4.3] - 2026-10-21
 
 From the Promptless Forms video dry run (Sparrowmere, act 2: "Add an 'Ask a
-question' button to the header that opens a short popup form"). Not released
-yet: ships with the rest of the dry run's findings.
+question' button to the header that opens a short popup form").
 
 ### Added
 
