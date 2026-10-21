@@ -829,6 +829,32 @@ function promptless_header_cta() {
 }
 
 /**
+ * Print the header's before-first-paint measurements inline, after </header>.
+ *
+ * Whether a bar-placed header button must move into the phone menu, and the
+ * header height the floating overlay and sticky headers consume. Run from
+ * the footer script they landed after first paint and moved the page (see
+ * assets/js/header-inline.js). navigation.js keeps both current afterwards.
+ * The script exits early on a header that needs neither.
+ *
+ * @since 1.4.3
+ */
+function promptless_header_inline_script() {
+    $path = get_template_directory() . '/assets/js/header-inline.min.js';
+    if ( ! is_readable( $path ) ) {
+        return;
+    }
+
+    // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- local theme file, not a URL.
+    $script = file_get_contents( $path );
+    if ( false === $script || '' === trim( $script ) ) {
+        return;
+    }
+
+    wp_print_inline_script_tag( $script, array( 'id' => 'promptless-header-inline' ) );
+}
+
+/**
  * Whether the collapsed mobile top-bar section will render in the drawer.
  *
  * Mirrors the guard at the top of promptless_mobile_topbar_section() so other

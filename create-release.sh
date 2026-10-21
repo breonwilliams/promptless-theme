@@ -99,7 +99,7 @@ for rtl in "${RTL_SIBLINGS[@]}"; do
 done
 
 # Check JS files
-for js in navigation customizer-preview; do
+for js in navigation customizer-preview header-inline; do
     if [ -f "assets/js/${js}.js" ]; then
         if [ ! -f "assets/js/${js}.min.js" ]; then
             echo "  ❌ Missing: assets/js/${js}.min.js"

@@ -102,6 +102,7 @@
         <?php endif; ?>
     </div>
 </header>
+<?php promptless_header_inline_script(); ?>
 
 <?php if ( 'stacked' === $header_layout ) : ?>
 <!-- Stacked: Nav bar always outside header for proper sticky positioning -->

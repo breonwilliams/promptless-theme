@@ -16,7 +16,8 @@ const { minify } = require('terser');
 const jsFiles = [
     'assets/js/navigation.js',
     'assets/js/customizer-preview.js',
-    'assets/js/search-overlay.js'
+    'assets/js/search-overlay.js',
+    'assets/js/header-inline.js'
 ];
 
 const themeRoot = path.resolve(__dirname, '..');

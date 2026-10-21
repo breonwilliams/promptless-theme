@@ -56,6 +56,16 @@ yet: ships with the rest of the dry run's findings.
   the bar, wrapped). Measured at 320, 390, 430, 600 and 1024px, RTL, and
   with a popup button (keyboard: Enter opens, Escape returns focus).
   `tests/test-header-cta-popup.php` and `tests/test-accessibility.php`.
+- **The header's first measurements now land before first paint.** The
+  button check above, and the floating/sticky header height sync, ran from
+  the footer script, after the page had painted: on a throttled mobile load
+  at 390px the swap shortened the header and the content jumped 26px (CLS
+  0.09-0.11), and the height sync moved the content 10px even with a stock
+  header (CLS 0.010). Both now run inline right after `</header>`
+  (`assets/js/header-inline.js`, minified at build time and printed by
+  `promptless_header_inline_script()`); `navigation.js` keeps them current on
+  resize, font load and through its ResizeObserver. Measured over 30 loads:
+  content shift 0; worst case 0.0038 (the header icons settling, in 3 loads).
 
 ## [1.4.2] - 2026-10-12
 

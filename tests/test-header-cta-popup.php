@@ -180,7 +180,8 @@ mods( array() );
 check( '' === trim( menu_html() ), 'no buttons: nothing in the drawer' );
 $css = file_get_contents( dirname( __DIR__ ) . '/assets/css/header-breakpoint.css' );
 check( 1 === preg_match( '/@media \(max-width: 767px\) \{\s*\.promptless-header__menu-cta \.promptless-header__cta--bar-overflow,\s*\.promptless-header__menu-cta--overflow-only,\s*\.promptless-header--cta-overflow \.promptless-header__actions \.promptless-header__cta--keep \{\s*display: none;/', $css ), 'copies are hidden, and the swap is scoped to the drawer breakpoint' );
-check( false !== strpos( file_get_contents( dirname( __DIR__ ) . '/assets/js/navigation.min.js' ), 'promptless-header--cta-overflow' ), 'the built navigation script sets the overflow class' );
+check( false !== strpos( file_get_contents( dirname( __DIR__ ) . '/assets/js/header-inline.min.js' ), 'promptless-header--cta-overflow' ), 'the built inline header script sets the overflow class' );
+check( false !== strpos( file_get_contents( dirname( __DIR__ ) . '/header.php' ), "</header>\n<?php promptless_header_inline_script(); ?>" ), 'and it is printed right after the header, before first paint' );
 
 echo "\n{$pass} passed, {$fail} failed\n";
 exit( $fail ? 1 : 0 );
