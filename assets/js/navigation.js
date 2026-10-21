@@ -803,3 +803,73 @@
         window.addEventListener('resize', setHeight);
     }
 })();
+
+/**
+ * Header button overflow (phones).
+ *
+ * header.css lets the site title and a bar-placed header button wrap between
+ * words, never inside one, so neither is clipped. When even that cannot fit
+ * the row (a long title beside a long label at 320-430px), the button moves
+ * into the phone menu: the drawer already holds a hidden copy of it
+ * (promptless_header_menu_cta()), and the class added here swaps the two.
+ * Sparrowmere dry run (2026-10): "Ask a question" beside "Sparrowmere
+ * Gardens" at 390px was squeezed to a 4px content box and clipped.
+ *
+ * The check runs with the class removed, so it always measures the bar as it
+ * would render, and only while the menu toggle is shown (the drawer
+ * breakpoint); every rule it enables is inside that breakpoint too. Without
+ * JavaScript the button stays in the bar, wrapped.
+ *
+ * @since 1.4.3
+ */
+(function() {
+    'use strict';
+
+    var header = document.querySelector('.promptless-header');
+    if (!header || !header.querySelector('.promptless-header__cta--bar-overflow')) {
+        return;
+    }
+
+    var actions = header.querySelector('.promptless-header__actions');
+    var toggle = header.querySelector('.promptless-header__menu-toggle');
+    if (!actions || !toggle || !actions.parentElement) {
+        return;
+    }
+
+    var row = actions.parentElement;
+    var OVERFLOW = 'promptless-header--cta-overflow';
+    var frame = 0;
+
+    var update = function() {
+        frame = 0;
+        header.classList.remove(OVERFLOW);
+
+        if (window.getComputedStyle(toggle).display === 'none') {
+            return;
+        }
+
+        var style = window.getComputedStyle(row);
+        var box = row.getBoundingClientRect();
+        var edge = actions.getBoundingClientRect();
+        var overflows = style.direction === 'rtl'
+            ? edge.left < box.left + parseFloat(style.paddingLeft) - 0.5
+            : edge.right > box.right - parseFloat(style.paddingRight) + 0.5;
+
+        if (overflows) {
+            header.classList.add(OVERFLOW);
+        }
+    };
+
+    var schedule = function() {
+        if (!frame) {
+            frame = window.requestAnimationFrame(update);
+        }
+    };
+
+    update();
+    window.addEventListener('resize', schedule);
+    window.addEventListener('load', schedule);
+    if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(schedule);
+    }
+})();

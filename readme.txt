@@ -154,6 +154,7 @@ Yes. The theme includes WooCommerce-aware styling that inherits colors and typog
 = 1.4.3 =
 * New: a header button can open a Promptless WP popup instead of following a link (Customizer > Header > Buttons, "Action"). It is a real button announced as opening a dialog, works in the mobile menu and the mobile header bar, and the popup loads on every page. Needs Promptless WP 1.8.12.
 * Fixed: with the mobile menu open, a dialog opened on top of it (a popup, or search) now keeps the keyboard: Tab stays inside it and Escape closes only it.
+* Fixed: a header button kept in the phone bar is no longer squeezed until its label is cut off; a long site title wraps instead, and when the bar is too narrow for both the button moves into the phone menu.
 
 = 1.4.2 =
 * Fixed: on phones, a long header button label (for example "Book a consultation") wraps onto a second line instead of pushing the menu icon out of the floating header.

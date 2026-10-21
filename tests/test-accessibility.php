@@ -153,9 +153,10 @@ class AccessibilityTestRunner {
             }
             $normalised = preg_replace( '/\s+/', '', $css );
 
-            // The phone-tier block: actions may shrink, and the CTA in it wraps.
+            // The phone-tier block: the brand and the actions may shrink, the
+            // site title and the CTA wrap between words.
             $has_block = (bool) preg_match(
-                '/@media\(max-width:640px\)\{[^@]*\.promptless-header__actions\{[^}]*flex-shrink:1[^}]*min-width:0[^}]*\}[^@]*\.promptless-header__actions\.promptless-header__cta\{[^}]*white-space:normal/',
+                '/@media\(max-width:640px\)\{[^@]*(?:\.promptless-header__brand,\.promptless-header__actions|\.promptless-header__actions,\.promptless-header__brand)\{flex-shrink:1;?\}[^@]*\.promptless-header__site-title\{overflow-wrap:break-word;?\}[^@]*\.promptless-header__actions\.promptless-header__cta\{[^}]*white-space:normal/',
                 $normalised
             );
             $this->check(
@@ -164,6 +165,15 @@ class AccessibilityTestRunner {
                 'Without it a long CTA label keeps its full width, the row overflows the '
                 . 'floating pill, and the menu toggle is clipped at the pill\'s edge — '
                 . 'the navigation unreachable on phones.'
+            );
+
+            // ...but never below its longest word (1.4.3). min-width:0 on the
+            // CTA let a text site title squeeze it to a 4px content box with
+            // its label clipped (Sparrowmere dry run, 2026-10).
+            $this->check(
+                ! preg_match( '/@media\(max-width:640px\)\{[^@]*\.promptless-header__actions\.promptless-header__cta\{[^}]*min-width:0/', $normalised ),
+                "{$file}: the CTA never shrinks below its longest word",
+                'min-width:0 lets the title squeeze the button until its label is clipped.'
             );
         }
     }

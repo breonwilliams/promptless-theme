@@ -41,6 +41,21 @@ yet: ships with the rest of the dry run's findings.
   (focus then had nowhere to return) and Tab was pulled back into the
   drawer. Keys and clicks inside another `aria-modal` dialog are now left to
   that dialog. Found testing the popup button from the mobile menu.
+- **A header button in the phone bar was squeezed until its label was
+  clipped.** 1.4.2 let the button shrink (`min-width: 0`) while the logo
+  never did, so beside a text site title the title kept its width: "Ask a
+  question" beside "Sparrowmere Gardens" at 390px was 52px wide with a 4px
+  content box, its second line cut to "questio", and the row overflowed by
+  34px (9px of page scroll). Now the title shrinks too, and both wrap
+  between words but never below their longest word (an image logo never
+  scales). When even that cannot fit, the button moves into the phone menu,
+  as **Mobile Placement: Menu** would: the drawer carries a hidden copy of
+  each bar button, and `navigation.js` measures the bar row and swaps them
+  only when it overflows (hidden copies are `display: none`; the swap is
+  scoped to the drawer breakpoint; without JavaScript the button stays in
+  the bar, wrapped). Measured at 320, 390, 430, 600 and 1024px, RTL, and
+  with a popup button (keyboard: Enter opens, Escape returns focus).
+  `tests/test-header-cta-popup.php` and `tests/test-accessibility.php`.
 
 ## [1.4.2] - 2026-10-12
 
